@@ -57,8 +57,16 @@ class SupabaseAuthRepository implements AuthRepository {
     }
   }
 
+  /// Signs out on this phone straight away, even offline. Telling the server
+  /// comes after and may fail; the session it keeps expires on its own.
   @override
-  Future<void> signOut() => _auth.signOut();
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } on supabase.AuthException {
+      // Already signed out here; only telling the server failed.
+    }
+  }
 
   static AuthUser? _toAuthUser(supabase.User? user) =>
       user == null ? null : AuthUser(id: user.id);

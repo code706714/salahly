@@ -254,6 +254,19 @@ FROM ($_summarySelect
   }
 
   @override
+  Stream<DateTime?> watchFirstFinishedAt() => _database
+      .customSelect(
+        """
+SELECT finished_at FROM jobs
+WHERE deleted_at IS NULL AND status IN ('finished', 'paid')
+  AND finished_at IS NOT NULL
+ORDER BY julianday(finished_at) LIMIT 1""",
+        readsFrom: {_database.jobs},
+      )
+      .watchSingleOrNull()
+      .map((row) => row?.read<DateTime>('finished_at').toLocal());
+
+  @override
   Future<List<ItemSuggestion>> itemSuggestions() async {
     final rows = await _database.customSelect('''
 SELECT title, unit_price_piastres FROM (
