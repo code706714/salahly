@@ -388,5 +388,28 @@
   "todayStepFirstJob": "سجّل أول شغلانة",
   "todayStepFirstJobHint": "حتى لو لعميل قديم",
   "todayStepContacts": "هات عملاءك من جهات الاتصال",
-  "todayStepContactsHint": "اختار اللي عايزهم بس"
+  "todayStepContactsHint": "اختار اللي عايزهم بس",
+  "remindCustomer": "فكّره",
+  "remindCustomerFeminine": "فكّرها",
+  "paymentReminderMessage": "أهلاً {name}، بفكّرك إن فاضل {amount} ج.م من حساب {work}. {gender, select, female{تقدري} other{تقدر}} تدفعهم كاش أو تحويل إنستاباي أو فودافون كاش. شكراً.\n{technician}",
+  "@paymentReminderMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String",
+        "example": "1,200"
+      },
+      "work": {
+        "type": "String"
+      },
+      "gender": {
+        "type": "String"
+      },
+      "technician": {
+        "type": "String"
+      }
+    }
+  }
 }

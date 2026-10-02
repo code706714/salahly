@@ -1,3 +1,5 @@
+import 'package:salahly/core/text/money.dart';
+import 'package:salahly/core/text/person_name.dart';
 import 'package:salahly/core/time/part_of_day.dart';
 import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/features/jobs/domain/entities/job.dart';
@@ -23,3 +25,18 @@ String confirmationMessage(
     technicianName,
   );
 }
+
+/// The polite WhatsApp reminder about money still owed for [job].
+String paymentReminderMessage(
+  AppLocalizations l10n, {
+  required Job job,
+  required String customerName,
+  required int balancePiastres,
+  required String technicianName,
+}) => l10n.paymentReminderMessage(
+  customerName,
+  formatPounds(balancePiastres),
+  jobTitle(l10n, job),
+  hasFeminineTitle(customerName) ? 'female' : 'male',
+  technicianName,
+);

@@ -98,4 +98,31 @@ void main() {
       'محمود عبد الله',
     );
   });
+
+  test('the payment reminder speaks to a woman as a woman', () {
+    final message = paymentReminderMessage(
+      l10n,
+      job: testJob(tags: [JobTag.installation]),
+      customerName: 'مدام سهير عبد الله',
+      balancePiastres: 140000,
+      technicianName: 'محمود عبد الله',
+    );
+
+    expect(
+      message,
+      'أهلاً مدام سهير عبد الله، بفكّرك إن فاضل 1,400 ج.م من حساب تركيب. '
+      'تقدري تدفعهم كاش أو تحويل إنستاباي أو فودافون كاش. شكراً.\n'
+      'محمود عبد الله',
+    );
+    expect(
+      paymentReminderMessage(
+        l10n,
+        job: testJob(),
+        customerName: 'أ. كريم منصور',
+        balancePiastres: 120050,
+        technicianName: 'محمود',
+      ),
+      contains('فاضل 1,200.50 ج.م من حساب تنظيف. تقدر تدفعهم'),
+    );
+  });
 }
