@@ -11,7 +11,8 @@ String formatPounds(int piastres) => piastres % 100 == 0
     : _fraction.format(piastres / 100);
 
 /// Whole pounds typed by the user, in piastres; null when not a number.
+/// Thousands separators, Western or Arabic, are ignored.
 int? parsePounds(String input) {
-  final pounds = parseWholeNumber(input.replaceAll(',', ''));
+  final pounds = parseWholeNumber(input.replaceAll(RegExp('[,٬]'), ''));
   return pounds == null ? null : pounds * 100;
 }
