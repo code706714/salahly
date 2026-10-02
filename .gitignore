@@ -1,0 +1,19 @@
+# Dart / Flutter
+.dart_tool/
+build/
+coverage/
+.flutter-plugins
+.flutter-plugins-dependencies
+*.iml
+.idea/
+.vscode/
+.fvm/flutter_sdk
+
+# Generated code (generated in CI, never committed)
+*.g.dart
+*.freezed.dart
+**/lib/l10n/generated/
+
+# Local build config (only the example file is committed)
+**/env/*.json
+!**/env/*.example.json
