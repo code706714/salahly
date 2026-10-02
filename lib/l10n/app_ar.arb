@@ -3,5 +3,232 @@
   "appName": "صلحلي",
   "@appName": {
     "description": "The brand name of the app."
-  }
+  },
+  "errorNetwork": "مفيش نت. اتأكد من النت وجرّب تاني.",
+  "errorRateLimited": "طلبات كتير ورا بعض. استنى شوية وجرّب تاني.",
+  "errorUnexpected": "حصلت مشكلة عندنا. جرّب تاني.",
+  "retry": "جرّب تاني",
+  "back": "رجوع",
+  "next": "التالي",
+  "currencyEgp": "ج.م",
+  "legalConsentLead": "لما تكمل إنت موافق على ",
+  "legalConsentTerms": "الشروط",
+  "legalConsentAnd": " و",
+  "legalConsentPrivacy": "سياسة الخصوصية",
+  "legalTermsTitle": "الشروط والأحكام",
+  "legalPrivacyTitle": "سياسة الخصوصية",
+  "phoneTitle": "ادخل برقم موبايلك",
+  "phoneSubtitle": "من غير باسورد. هنبعتلك كود على الواتساب. لو عندك حساب هتدخل عليه، ولو جديد هنعملك حساب.",
+  "phoneLabel": "رقم الموبايل",
+  "phoneHint": "لازم يكون نفس الرقم اللي عليه الواتساب",
+  "phoneInvalid": "اكتب رقم موبايل مصري صح، زي 100 234 5678",
+  "phoneSendWhatsapp": "ابعتلي الكود على الواتساب",
+  "phoneSendSms": "معنديش واتساب، ابعتوه رسالة SMS",
+  "otpTooSoon": "استنى دقيقة قبل ما تطلب كود تاني.",
+  "otpDeliveryFailedWhatsapp": "مقدرناش نبعت الكود على الواتساب. اتأكد إن الرقم عليه واتساب، أو ابعته رسالة SMS.",
+  "otpDeliveryFailedSms": "مقدرناش نبعت الرسالة. اتأكد من الرقم وجرّب تاني بعد شوية.",
+  "otpTitle": "اكتب الكود",
+  "otpSentWhatsapp": "بعتنالك كود من 6 أرقام على الواتساب على رقم ",
+  "otpSentSms": "بعتنالك كود من 6 أرقام في رسالة على رقم ",
+  "otpChangeNumber": "غيّر الرقم",
+  "otpOpenWhatsapp": "افتح الواتساب",
+  "otpResendIn": "ابعت الكود تاني بعد {time}",
+  "@otpResendIn": {
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "0:42"
+      }
+    }
+  },
+  "otpResend": "ابعت الكود تاني",
+  "otpResent": "بعتنالك كود جديد",
+  "otpSubmit": "ادخل",
+  "otpInvalid": "الكود غلط أو خلص وقته. اتأكد منه أو اطلب كود جديد.",
+  "otpDeleteDigit": "امسح",
+  "otpPasted": "حطّينا الكود اللي نسخته",
+  "welcomeTitle": "أهلاً بيك\nهتستخدم الأبلكيشن إزاي؟",
+  "welcomeSubtitle": "اختار اللي يناسبك دلوقتي، وتقدر تغيّره بعدين من حسابك.",
+  "roleConsumerTitle": "محتاج فني",
+  "roleConsumerBody": "اطلب فني تكييف لبيتك، وخد لحد 3 عروض بأسعارها قبل ما تختار.",
+  "roleTechnicianTitle": "أنا فني",
+  "roleTechnicianBody": "نظّم مواعيدك، ابعت عرض السعر والفاتورة على الواتساب، واستلم طلبات من منطقتك.",
+  "trustBadge": "كل الفنيين موثّقين بالبطاقة ورقم الموبايل",
+  "nameLabel": "اسمك",
+  "nameInvalid": "اكتب اسمك (حرفين على الأقل)",
+  "consumerOnboardingTitle": "خطوة واحدة وتبدأ",
+  "honorificQuestion": "نكلّمك إزاي؟",
+  "honorificMr": "أستاذ",
+  "honorificMs": "أستاذة",
+  "honorificHint": "عشان الكلام في الأبلكيشن يبقى موجّه ليك صح.",
+  "honorificRequired": "اختار أستاذ أو أستاذة",
+  "consumerAreaQuestion": "{honorific, select, ms{ساكنة فين؟} other{ساكن فين؟}}",
+  "@consumerAreaQuestion": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerAreaFromGps": "{honorific, select, ms{من الـGPS · العنوان بالتفصيل بتكتبيه لما تطلبي} other{من الـGPS · العنوان بالتفصيل بتكتبه لما تطلب}}",
+  "@consumerAreaFromGps": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "areaChosenByHand": "دوس عشان تغيّرها",
+  "areaPick": "اختار منطقتك",
+  "areaDetecting": "بنحدد مكانك...",
+  "areaRequired": "اختار منطقتك",
+  "areaPickerTitle": "اختار المنطقة",
+  "areaSearchHint": "دوّر على منطقة",
+  "areaSearchEmpty": "مفيش منطقة بالاسم ده",
+  "locationDenied": "مقدرناش نعرف مكانك. اختار منطقتك من القايمة.",
+  "locationServiceOff": "الـGPS مقفول. شغّله أو اختار منطقتك من القايمة.",
+  "freeRequestsCount": "{count, plural, =1{أول طلب} =2{أول طلبين} few{أول {count} طلبات} other{أول {count} طلب}}",
+  "@freeRequestsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "consumerFreeRequestsMr": "{requests} ليك ببلاش. اطلب فني وشوف العروض من غير ما تدفع حاجة.",
+  "@consumerFreeRequestsMr": {
+    "placeholders": {
+      "requests": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerFreeRequestsMs": "{requests} ليكي ببلاش. اطلبي فني وشوفي العروض من غير ما تدفعي حاجة.",
+  "@consumerFreeRequestsMs": {
+    "placeholders": {
+      "requests": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerStart": "يلا بينا",
+  "techOnboardingTitle": "حسابك كفني",
+  "techStepOf": "خطوة {step} من {total}",
+  "@techStepOf": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "techStepsDone": "خلصنا",
+  "techProfileTitle": "عرّفنا بنفسك",
+  "techPhoto": "صورتك",
+  "techPhotoHint": "صورة واضحة لوشّك. العملاء بيختاروا الفني اللي شايفينه أكتر.",
+  "techPhotoRequired": "حط صورة واضحة لوشّك",
+  "uploadLimitReached": "رفعت صور كتير النهارده. جرّب تاني بكرة.",
+  "techShopLabel": "اسم الورشة أو المحل (اختياري)",
+  "techShopHint": "مثلاً: تكييفات السيد",
+  "techShopInvalid": "اسم المحل لازم يكون حرفين على الأقل",
+  "techYearsLabel": "بقالك كام سنة في الشغلانة؟",
+  "techYearsInvalid": "اكتب عدد السنين من 0 لـ 60",
+  "techServicesTitle": "بتشتغل في إيه وبكام؟",
+  "techServicesHint": "علّم على الخدمات اللي بتعملها واكتب سعرها المبدئي. العميل بيشوفه على صفحتك، وإنت بتحدد السعر النهائي في كل عرض.",
+  "categoryComingSoon": "{name} · قريب",
+  "@categoryComingSoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "priceFrom": "من",
+  "techServicesRequired": "علّم على خدمة واحدة على الأقل",
+  "techPriceInvalid": "اكتب سعر كل خدمة علّمت عليها",
+  "techLocationTitle": "بتشتغل فين؟",
+  "techBaseArea": "مكانك: {area}",
+  "@techBaseArea": {
+    "placeholders": {
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "techBaseFromGps": "من الـGPS · دوس عشان تغيّره",
+  "techBaseRequired": "حدد مكانك",
+  "techRadiusLabel": "توصل لحد فين؟",
+  "radiusKm": "{km} كم",
+  "@radiusKm": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "techAreasLabel": "المناطق اللي بتروحها",
+  "techAreasMore": "+ منطقة تانية",
+  "techAreasRequired": "اختار منطقة واحدة على الأقل",
+  "techWorkDaysLabel": "أيام الشغل",
+  "techWorkDaysRequired": "اختار يوم واحد على الأقل",
+  "daySaturday": "سبت",
+  "daySunday": "حد",
+  "dayMonday": "اتنين",
+  "dayTuesday": "تلات",
+  "dayWednesday": "أربع",
+  "dayThursday": "خميس",
+  "dayFriday": "جمعة",
+  "techDocsTitle": "وثّق حسابك",
+  "techDocsBody": "العملاء بيطلبوا الفنيين الموثّقين بس. صوّر البطاقة من الوشّين وصورة ليك ماسكها.",
+  "techIdFront": "وش البطاقة",
+  "techIdBack": "ضهر البطاقة",
+  "techSelfieWithId": "صورة ليك ماسك البطاقة",
+  "techDocsPrivacy": "صور البطاقة مش بتظهر لأي عميل. فريق التوثيق بس اللي بيشوفها.",
+  "techDocsRequired": "صوّر البطاقة من الوشّين وصورة ليك ماسكها",
+  "techDocsRejected": "في مشكلة في الصور اللي اترفعت. صوّرها تاني وابعت.",
+  "techSubmit": "ابعت للتوثيق",
+  "techUploading": "بنرفع الصور...",
+  "techDoneTitle": "بياناتك وصلت",
+  "techDoneBody": "بنراجع البطاقة وهنبعتلك على الواتساب أول ما حسابك يتوثّق. لحد ما يتوثّق تقدر تضيف عملاءك وشغلاناتك وتبعت عروض أسعار.",
+  "freeJobsCount": "{count, plural, =1{شغلانة} =2{شغلانتين} few{{count} شغلانات} other{{count} شغلانة}}",
+  "@freeJobsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techFreeJobsLead": "أول ",
+  "techFreeJobsMiddle": " تيجي لك من عملاء المنصة ",
+  "techFreeJobsFree": "ببلاش",
+  "techStart": "يلا نبدأ",
+  "photoTake": "صوّر دلوقتي",
+  "photoChoose": "اختار من الصور",
+  "photoReplace": "غيّر الصورة",
+  "greeting": "أهلاً يا {name}",
+  "@greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "techPendingTitle": "بنراجع بطاقتك",
+  "techPendingBody": "طلبات المنصة هتبدأ توصلك أول ما تتوثّق. لحد كده الأبلكيشن شغال معاك لعملاءك.",
+  "techRejectedTitle": "التوثيق محتاج صور تانية",
+  "techRejectedBody": "فريق التوثيق هيكلمك على الواتساب يقولك تصوّر إيه تاني.",
+  "consumerCreditsLeft": "{count, plural, =0{خلصت طلباتك المجانية} =1{فاضل لك طلب واحد} =2{فاضل لك طلبين} few{فاضل لك {count} طلبات} other{فاضل لك {count} طلب}}",
+  "@consumerCreditsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sessionUnavailableTitle": "مقدرناش نفتح حسابك",
+  "sessionUnavailableBody": "محتاجين نت أول مرة عشان نجيب بياناتك. اتأكد من النت وجرّب تاني.",
+  "signOut": "سجّل خروج",
+  "photoCameraDenied": "اسمح للأبلكيشن يفتح الكاميرا من إعدادات الموبايل، أو اختار صورة من الصور."
 }

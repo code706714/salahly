@@ -55,6 +55,22 @@ jobs:
           flutter build apk --debug --flavor dev
           --dart-define-from-file=env/dev.json
 
+  database:
+    name: Database tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # Read by supabase/config.toml; the local stack never sends real SMS.
+      SUPABASE_AUTH_SMS_TWILIO_AUTH_TOKEN: unused-in-ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.119.0
+      - run: supabase db start
+      - run: supabase db lint --level warning --fail-on warning
+      - run: supabase test db
+
   secrets:
     name: Secret scan
     runs-on: ubuntu-latest
