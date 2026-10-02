@@ -484,7 +484,7 @@ declare
   v_change jsonb;
   v_entity text;
   v_id uuid;
-  v_rejected jsonb := '[]';
+  v_rejected jsonb := '[]'::jsonb;
   v_server_row jsonb;
 begin
   if v_user_id is null then
