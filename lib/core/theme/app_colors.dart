@@ -22,6 +22,9 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.warningSoft,
     required this.danger,
     required this.dangerSoft,
+    required this.fieldBorder,
+    required this.dashedBorder,
+    required this.brass,
     required this.whatsapp,
     required this.onWhatsapp,
   });
@@ -45,6 +48,9 @@ class AppColors extends ThemeExtension<AppColors> {
     warningSoft: Color(0xFFF4E8D2),
     danger: Color(0xFF9B1C31),
     dangerSoft: Color(0xFFF6DDE1),
+    fieldBorder: Color(0xFFD9CDB8),
+    dashedBorder: Color(0xFFB9AB93),
+    brass: Color(0xFFD69A2D),
     whatsapp: Color(0xFF25D366),
     onWhatsapp: Color(0xFF0B3D1E),
   );
@@ -67,6 +73,15 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color warningSoft;
   final Color danger;
   final Color dangerSoft;
+
+  /// Borders of inputs, chips and unchecked boxes.
+  final Color fieldBorder;
+
+  /// Dashed outline of empty photo slots.
+  final Color dashedBorder;
+
+  /// Accent for highlighted counts on dark surfaces.
+  final Color brass;
 
   /// Reserved for WhatsApp actions only.
   final Color whatsapp;
@@ -92,6 +107,9 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? warningSoft,
     Color? danger,
     Color? dangerSoft,
+    Color? fieldBorder,
+    Color? dashedBorder,
+    Color? brass,
     Color? whatsapp,
     Color? onWhatsapp,
   }) {
@@ -114,6 +132,9 @@ class AppColors extends ThemeExtension<AppColors> {
       warningSoft: warningSoft ?? this.warningSoft,
       danger: danger ?? this.danger,
       dangerSoft: dangerSoft ?? this.dangerSoft,
+      fieldBorder: fieldBorder ?? this.fieldBorder,
+      dashedBorder: dashedBorder ?? this.dashedBorder,
+      brass: brass ?? this.brass,
       whatsapp: whatsapp ?? this.whatsapp,
       onWhatsapp: onWhatsapp ?? this.onWhatsapp,
     );
@@ -141,6 +162,9 @@ class AppColors extends ThemeExtension<AppColors> {
       warningSoft: Color.lerp(warningSoft, other.warningSoft, t)!,
       danger: Color.lerp(danger, other.danger, t)!,
       dangerSoft: Color.lerp(dangerSoft, other.dangerSoft, t)!,
+      fieldBorder: Color.lerp(fieldBorder, other.fieldBorder, t)!,
+      dashedBorder: Color.lerp(dashedBorder, other.dashedBorder, t)!,
+      brass: Color.lerp(brass, other.brass, t)!,
       whatsapp: Color.lerp(whatsapp, other.whatsapp, t)!,
       onWhatsapp: Color.lerp(onWhatsapp, other.onWhatsapp, t)!,
     );

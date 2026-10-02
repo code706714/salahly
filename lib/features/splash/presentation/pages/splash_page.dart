@@ -21,7 +21,7 @@ class SplashPage extends StatelessWidget {
               height: 72,
               decoration: BoxDecoration(
                 color: colors.primary,
-                borderRadius: BorderRadius.circular(AppRadii.xl),
+                borderRadius: BorderRadius.circular(AppRadii.xxl),
               ),
               child: Icon(Icons.build_rounded, color: colors.onPrimary),
             ),

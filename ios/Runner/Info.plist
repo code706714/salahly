@@ -7,11 +7,15 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Salahly</string>
+	<string>صلحلي</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>ar</string>
+	</array>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -26,6 +30,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>صلحلي بيستخدم الكاميرا عشان تصوّر صورتك وبطاقتك لما تسجّل كفني.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>صلحلي بيعرف منطقتك التقريبية بس عشان يوصّلك بالفنيين القريبين منك.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>صلحلي بيفتح الصور عشان تختار صورتك أو صورة بطاقتك.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
