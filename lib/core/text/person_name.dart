@@ -49,16 +49,26 @@ const _feminineTitles = {
   'مهندسة',
 };
 
-/// Two letters for an avatar, skipping titles: "أ. كريم منصور" → "ك م".
+/// Two letters for an avatar, skipping titles and the article "ال" and
+/// reading "عبد ..." as one name: "أ. كريم منصور" → "ك م",
+/// "محمود السيد" → "م س", "عبد الله مجدي" → "ع م".
 String initialsOf(String name) {
   final words = normalizeName(name)
       .split(' ')
       .where((word) => word.isNotEmpty && !_honorifics.contains(word))
       .toList();
-  return words
-      .take(2)
-      .map((word) => String.fromCharCode(word.runes.first))
-      .join(' ');
+  final names = <String>[];
+  for (var i = 0; i < words.length; i++) {
+    names.add(words[i]);
+    if (words[i] == 'عبد' && i + 1 < words.length) i++;
+  }
+  return names.take(2).map(_initial).join(' ');
+}
+
+String _initial(String word) {
+  final letters = word.runes.toList();
+  final hasArticle = word.startsWith('ال') && letters.length > 3;
+  return String.fromCharCode(letters[hasArticle ? 2 : 0]);
 }
 
 /// Whether [name] starts with a title only women use, e.g. "مدام سهير".

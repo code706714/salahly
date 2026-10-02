@@ -51,10 +51,14 @@ void main() {
   });
 
   group('initialsOf', () {
-    test('takes two letters, skipping titles', () {
+    test('takes two letters, skipping titles and the article', () {
       expect(initialsOf('أ. كريم منصور'), 'ك م');
       expect(initialsOf('مدام سهير عبد الله'), 'س ع');
       expect(initialsOf('نورهان'), 'ن');
+      expect(initialsOf('محمود السيد'), 'م س');
+      expect(initialsOf('عبد الرحمن الشريف'), 'ع ش');
+      expect(initialsOf('محمد عبد الله'), 'م ع');
+      expect(initialsOf('ال'), 'ا');
     });
   });
 
