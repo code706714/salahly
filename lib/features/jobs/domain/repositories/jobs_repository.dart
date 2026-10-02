@@ -38,6 +38,10 @@ abstract interface class JobsRepository {
   /// Jobs finished in [month]'s calendar month (local time).
   Stream<MonthIncome> watchMonthIncome(DateTime month);
 
+  /// When the earliest job counted by [watchMonthIncome] was finished
+  /// (local time); null while no job is finished.
+  Stream<DateTime?> watchFirstFinishedAt();
+
   /// Lines used in earlier jobs, most used first.
   Future<List<ItemSuggestion>> itemSuggestions();
 

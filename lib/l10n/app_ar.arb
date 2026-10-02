@@ -411,5 +411,76 @@
         "type": "String"
       }
     }
-  }
+  },
+  "moneyIncomeToDate": "دخل الشهر لحد النهارده",
+  "moneyIncomeOf": "دخل شهر {month}",
+  "@moneyIncomeOf": {
+    "placeholders": {
+      "month": {
+        "type": "String",
+        "example": "سبتمبر"
+      }
+    }
+  },
+  "moneyFromJobs": "{count, plural, =0{مفيش شغلانات خلصت} =1{من شغلانة واحدة} =2{من شغلانتين} few{من {count} شغلانات} other{من {count} شغلانة}}",
+  "@moneyFromJobs": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "moneyCollected": "اتحصّل",
+  "moneyOutstanding": "لسه بره",
+  "moneyMonthsTitle": "اختار الشهر",
+  "moneyOwingTitle": "مين عليه فلوس",
+  "moneyOwingCustomers": "{count, plural, =1{عميل واحد} =2{عميلين} few{{count} عملاء} other{{count} عميل}}",
+  "@moneyOwingCustomers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "moneyOwedAll": "{work} · {amount} ج.م",
+  "@moneyOwedAll": {
+    "placeholders": {
+      "work": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String",
+        "example": "1,400"
+      }
+    }
+  },
+  "moneyOwedRest": "{work} · باقي {rest} من {total}",
+  "@moneyOwedRest": {
+    "placeholders": {
+      "work": {
+        "type": "String"
+      },
+      "rest": {
+        "type": "String",
+        "example": "1,200"
+      },
+      "total": {
+        "type": "String",
+        "example": "1,700"
+      }
+    }
+  },
+  "moneyPartlyPaid": "{due} · دفع جزء",
+  "@moneyPartlyPaid": {
+    "placeholders": {
+      "due": {
+        "type": "String",
+        "example": "متأخر 6 أيام"
+      }
+    }
+  },
+  "moneyRecordPayment": "سجّل دفع",
+  "moneyRemindNote": "\"فكّره\" بتفتح الواتساب برسالة مؤدبة جاهزة فيها المبلغ وطرق الدفع، وإنت اللي بتدوس إرسال.",
+  "moneyNobodyOwes": "محدش عليه فلوس",
+  "moneyNobodyOwesHint": "أي شغلانة تخلص وفاضل فيها فلوس هتظهر هنا."
 }

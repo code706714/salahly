@@ -447,6 +447,32 @@ void main() {
       expect(october.outstandingPiastres, 120000);
       expect(september, MonthIncome.empty);
     });
+
+    test('knows when the first counted job was finished', () async {
+      expect(await repository.watchFirstFinishedAt().first, isNull);
+
+      now = DateTime(2026, 8, 14, 17, 30);
+      final paid = await finishedJob(65000);
+      ok(
+        await repository.recordPayment(
+          paid,
+          amountPiastres: 65000,
+          method: PaymentMethod.cash,
+        ),
+      );
+      now = DateTime(2026, 7, 3, 10);
+      ok(await repository.cancel(await finishedJob(30000)));
+      now = DateTime(2026, 6, 1, 9);
+      ok(await repository.deleteJob(await finishedJob(30000)));
+      now = DateTime(2026, 9, 20, 12);
+      await finishedJob(170000);
+      now = DateTime(2026, 5, 2, 8);
+      await newJob();
+
+      final first = await repository.watchFirstFinishedAt().first;
+      expect(first, DateTime(2026, 8, 14, 17, 30));
+      expect(first!.isUtc, isFalse);
+    });
   });
 
   group('issueInvoice', () {
