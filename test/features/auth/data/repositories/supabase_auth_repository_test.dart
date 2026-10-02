@@ -173,4 +173,22 @@ void main() {
       });
     }
   });
+
+  group('signOut', () {
+    test('signs out through Supabase', () async {
+      when(() => auth.signOut()).thenAnswer((_) async {});
+
+      await repository.signOut();
+
+      verify(() => auth.signOut()).called(1);
+    });
+
+    test('still signs out on the phone when the server is out of reach', () {
+      when(
+        () => auth.signOut(),
+      ).thenThrow(supabase.AuthRetryableFetchException());
+
+      expect(repository.signOut(), completes);
+    });
+  });
 }

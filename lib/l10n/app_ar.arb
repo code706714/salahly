@@ -482,5 +482,18 @@
   "moneyRecordPayment": "سجّل دفع",
   "moneyRemindNote": "\"فكّره\" بتفتح الواتساب برسالة مؤدبة جاهزة فيها المبلغ وطرق الدفع، وإنت اللي بتدوس إرسال.",
   "moneyNobodyOwes": "محدش عليه فلوس",
-  "moneyNobodyOwesHint": "أي شغلانة تخلص وفاضل فيها فلوس هتظهر هنا."
+  "moneyNobodyOwesHint": "أي شغلانة تخلص وفاضل فيها فلوس هتظهر هنا.",
+  "accountVerified": "موثّق",
+  "accountHelp": "مساعدة",
+  "accountSignOutTitle": "تسجّل خروج؟",
+  "accountSignOutBody": "عشان تدخل تاني هتحتاج رقم موبايلك وكود جديد.",
+  "accountSignOutUnsent": "{count, plural, =1{فيه حاجة واحدة لسه ماتبعتتش، ولو خرجت دلوقتي هتضيع. استنى لحد ما تتبعت.} =2{فيه حاجتين لسه ماتبعتوش، ولو خرجت دلوقتي هيضيعوا. استنى لحد ما يتبعتوا.} few{فيه {count} حاجات لسه ماتبعتتش، ولو خرجت دلوقتي هتضيع. استنى لحد ما تتبعت.} other{فيه {count} حاجة لسه ماتبعتتش، ولو خرجت دلوقتي هتضيع. استنى لحد ما تتبعت.}}",
+  "@accountSignOutUnsent": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "accountSignOutStay": "مش دلوقتي"
 }
