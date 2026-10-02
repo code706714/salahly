@@ -230,5 +230,163 @@
   "sessionUnavailableTitle": "مقدرناش نفتح حسابك",
   "sessionUnavailableBody": "محتاجين نت أول مرة عشان نجيب بياناتك. اتأكد من النت وجرّب تاني.",
   "signOut": "سجّل خروج",
-  "photoCameraDenied": "اسمح للأبلكيشن يفتح الكاميرا من إعدادات الموبايل، أو اختار صورة من الصور."
+  "photoCameraDenied": "اسمح للأبلكيشن يفتح الكاميرا من إعدادات الموبايل، أو اختار صورة من الصور.",
+  "navToday": "النهارده",
+  "navJobs": "الشغلانات",
+  "navCustomers": "العملاء",
+  "navMoney": "الفلوس",
+  "myAccount": "حسابي",
+  "today": "النهارده",
+  "tomorrow": "بكره",
+  "yesterday": "امبارح",
+  "periodMorning": "الصبح",
+  "periodNoon": "الضهر",
+  "periodAfternoon": "العصر",
+  "periodSunset": "المغرب",
+  "periodNight": "بالليل",
+  "pounds": "{amount} ج.م",
+  "@pounds": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1,450"
+      }
+    }
+  },
+  "offlineTitle": "من غير نت.",
+  "offlinePending": "{count, plural, =0{كل حاجة بتتحفظ على الموبايل وهتتبعت لوحدها أول ما النت يرجع.} =1{حاجة واحدة اتحفظت وهتتبعت لوحدها أول ما النت يرجع.} =2{حاجتين اتحفظوا وهيتبعتوا لوحدهم أول ما النت يرجع.} few{{count} حاجات اتحفظت وهتتبعت لوحدها أول ما النت يرجع.} other{{count} حاجة اتحفظت وهتتبعت لوحدها أول ما النت يرجع.}}",
+  "@offlinePending": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "whatsappFailed": "الواتساب ماتفتحش.",
+  "dialFailed": "مقدرناش نفتح الاتصال.",
+  "mapFailed": "مقدرناش نفتح الخريطة.",
+  "newJob": "شغلانة جديدة",
+  "jobTagCleaning": "تنظيف",
+  "jobTagFreon": "شحن فريون",
+  "jobTagInstallation": "تركيب",
+  "jobTagNotCooling": "مش بيبرّد",
+  "jobTagLeaking": "بينقّط مية",
+  "jobTagMaintenance": "صيانة دورية",
+  "jobTagRemoval": "فك ونقل",
+  "jobUntitled": "شغلانة",
+  "jobStatusUnconfirmed": "لسه ماتأكدش",
+  "jobStatusConfirmed": "اتأكد",
+  "jobStatusStarted": "بدأت",
+  "jobStatusFinished": "خلصت",
+  "jobStatusPaid": "اتدفعت",
+  "jobStatusCancelled": "اتلغت",
+  "jobAwaitingAmount": "مستني {amount} ج.م",
+  "@jobAwaitingAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "650"
+      }
+    }
+  },
+  "jobQuoteSent": "مستني رد على العرض",
+  "jobFromPlatform": "من المنصة",
+  "jobPendingSync": "هتتبعت",
+  "jobNext": "الجاي",
+  "jobNow": "دلوقتي",
+  "jobSendConfirmation": "ابعت تأكيد",
+  "jobConfirmationMessage": "أهلاً {name}، معانا ميعاد {day} الساعة {time} {period} ({work}). لو الميعاد مناسب ابعتلي \"تمام\".\n{technician}",
+  "@jobConfirmationMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String",
+        "example": "بكره"
+      },
+      "time": {
+        "type": "String",
+        "example": "4:30"
+      },
+      "period": {
+        "type": "String",
+        "example": "العصر"
+      },
+      "work": {
+        "type": "String"
+      },
+      "technician": {
+        "type": "String"
+      }
+    }
+  },
+  "dueToday": "مستحق النهارده",
+  "dueLate": "{days, plural, =1{متأخر يوم} =2{متأخر يومين} few{متأخر {days} أيام} other{متأخر {days} يوم}}",
+  "@dueLate": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "duePromised": "وعد يدفع {day}",
+  "@duePromised": {
+    "placeholders": {
+      "day": {
+        "type": "String",
+        "example": "السبت"
+      }
+    }
+  },
+  "goodMorning": "صباح الخير يا {name}",
+  "@goodMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "goodEvening": "مساء الخير يا {name}",
+  "@goodEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "todayOwedTitle": "فلوس ليك بره",
+  "todayOwedSeeWho": "شوف مين",
+  "todayOwedCustomers": "{count, plural, =1{عند عميل واحد} =2{عند عميلين} few{عند {count} عملاء} other{عند {count} عميل}}",
+  "@todayOwedCustomers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayOwedLatest": "{days, plural, =1{، والأقدم متأخر يوم} =2{، والأقدم متأخر يومين} few{، والأقدم متأخر {days} أيام} other{، والأقدم متأخر {days} يوم}}",
+  "@todayOwedLatest": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "todayScheduleTitle": "مواعيد النهارده",
+  "jobCount": "{count, plural, =0{مفيش شغلانات} =1{شغلانة واحدة} =2{شغلانتين} few{{count} شغلانات} other{{count} شغلانة}}",
+  "@jobCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayNoJobs": "مفيش مواعيد النهارده",
+  "todayNoJobsHint": "أي شغلانة تسجّلها بميعاد النهارده هتظهر هنا.",
+  "todayFirstSteps": "ابدأ بالحاجتين دول، كل واحدة بتاخد أقل من دقيقة.",
+  "todayStepFirstJob": "سجّل أول شغلانة",
+  "todayStepFirstJobHint": "حتى لو لعميل قديم",
+  "todayStepContacts": "هات عملاءك من جهات الاتصال",
+  "todayStepContactsHint": "اختار اللي عايزهم بس"
 }

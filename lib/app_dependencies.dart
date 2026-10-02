@@ -1,12 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:salahly/core/contacts/contact_picker.dart';
 import 'package:salahly/core/database/app_database.dart';
 import 'package:salahly/core/database/local_user_data.dart';
+import 'package:salahly/core/launch/external_apps.dart';
 import 'package:salahly/core/location/geolocator_location_service.dart';
 import 'package:salahly/core/location/location_service.dart';
 import 'package:salahly/core/media/photo_picker.dart';
 import 'package:salahly/core/network/network_status.dart';
+import 'package:salahly/core/speech/speech_input.dart';
+import 'package:salahly/core/storage/json_file_cache.dart';
 import 'package:salahly/core/storage/local_photo_store.dart';
 import 'package:salahly/core/storage/user_scoped_data.dart';
 import 'package:salahly/core/sync/local_changes.dart';
@@ -45,6 +49,9 @@ class AppDependencies {
     required this.localChanges,
     required this.database,
     required this.syncEngine,
+    required this.externalApps,
+    required this.speechInput,
+    required this.contactPicker,
   });
 
   factory AppDependencies.live({
@@ -64,7 +71,12 @@ class AppDependencies {
         remote: AccountRemoteDataSource(client),
         local: AccountLocalDataSource(storage),
       ),
-      catalogRepository: SupabaseCatalogRepository(client),
+      catalogRepository: SupabaseCatalogRepository(
+        client,
+        areasCache: JsonFileCache(
+          File('${supportDirectory.path}/catalog/areas.json'),
+        ),
+      ),
       onboardingRepository: SupabaseOnboardingRepository(client),
       customersRepository: DriftCustomersRepository(
         database: database,
@@ -87,6 +99,9 @@ class AppDependencies {
         remote: SupabaseSyncRemote(client),
         photos: photos,
       ),
+      externalApps: const SystemExternalApps(),
+      speechInput: DeviceSpeechInput(),
+      contactPicker: ContactPicker(),
     );
   }
 
@@ -103,4 +118,7 @@ class AppDependencies {
   final LocalChanges localChanges;
   final AppDatabase database;
   final SyncEngine syncEngine;
+  final ExternalApps externalApps;
+  final SpeechInput speechInput;
+  final ContactPicker contactPicker;
 }

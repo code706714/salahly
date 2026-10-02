@@ -27,6 +27,17 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.brass,
     required this.whatsapp,
     required this.onWhatsapp,
+    required this.dangerDeep,
+    required this.dangerFaint,
+    required this.dangerLine,
+    required this.successBright,
+    required this.noticeSoft,
+    required this.brassLight,
+    required this.onInkFaint,
+    required this.chartCollected,
+    required this.chartOutstanding,
+    required this.whatsappOutline,
+    required this.whatsappDeep,
   });
 
   static const light = AppColors(
@@ -53,6 +64,17 @@ class AppColors extends ThemeExtension<AppColors> {
     brass: Color(0xFFD69A2D),
     whatsapp: Color(0xFF25D366),
     onWhatsapp: Color(0xFF0B3D1E),
+    dangerDeep: Color(0xFF7C1627),
+    dangerFaint: Color(0xFFFCF4F5),
+    dangerLine: Color(0xFFE8B9C1),
+    successBright: Color(0xFF3F7A3A),
+    noticeSoft: Color(0xFFFBF3E4),
+    brassLight: Color(0xFFE8B65A),
+    onInkFaint: Color(0xFF6B7764),
+    chartCollected: Color(0xFF8DBF7F),
+    chartOutstanding: Color(0xFFE07A88),
+    whatsappOutline: Color(0xFF1FA855),
+    whatsappDeep: Color(0xFF0B5C2C),
   );
 
   final Color primary;
@@ -87,6 +109,39 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color whatsapp;
   final Color onWhatsapp;
 
+  /// Text on [dangerSoft] pills, e.g. overdue.
+  final Color dangerDeep;
+
+  /// Background of a card about money owed.
+  final Color dangerFaint;
+
+  /// Border of a card about money owed.
+  final Color dangerLine;
+
+  /// Completed steps of a progress bar.
+  final Color successBright;
+
+  /// Background of the offline notice.
+  final Color noticeSoft;
+
+  /// Actions on dark surfaces, e.g. snack bars.
+  final Color brassLight;
+
+  /// Outlines on dark surfaces.
+  final Color onInkFaint;
+
+  /// Money collected, on dark surfaces.
+  final Color chartCollected;
+
+  /// Money still owed, on dark surfaces.
+  final Color chartOutstanding;
+
+  /// Border of secondary WhatsApp actions.
+  final Color whatsappOutline;
+
+  /// Text of secondary WhatsApp actions.
+  final Color whatsappDeep;
+
   @override
   AppColors copyWith({
     Color? primary,
@@ -112,6 +167,17 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? brass,
     Color? whatsapp,
     Color? onWhatsapp,
+    Color? dangerDeep,
+    Color? dangerFaint,
+    Color? dangerLine,
+    Color? successBright,
+    Color? noticeSoft,
+    Color? brassLight,
+    Color? onInkFaint,
+    Color? chartCollected,
+    Color? chartOutstanding,
+    Color? whatsappOutline,
+    Color? whatsappDeep,
   }) {
     return AppColors(
       primary: primary ?? this.primary,
@@ -137,6 +203,17 @@ class AppColors extends ThemeExtension<AppColors> {
       brass: brass ?? this.brass,
       whatsapp: whatsapp ?? this.whatsapp,
       onWhatsapp: onWhatsapp ?? this.onWhatsapp,
+      dangerDeep: dangerDeep ?? this.dangerDeep,
+      dangerFaint: dangerFaint ?? this.dangerFaint,
+      dangerLine: dangerLine ?? this.dangerLine,
+      successBright: successBright ?? this.successBright,
+      noticeSoft: noticeSoft ?? this.noticeSoft,
+      brassLight: brassLight ?? this.brassLight,
+      onInkFaint: onInkFaint ?? this.onInkFaint,
+      chartCollected: chartCollected ?? this.chartCollected,
+      chartOutstanding: chartOutstanding ?? this.chartOutstanding,
+      whatsappOutline: whatsappOutline ?? this.whatsappOutline,
+      whatsappDeep: whatsappDeep ?? this.whatsappDeep,
     );
   }
 
@@ -167,6 +244,21 @@ class AppColors extends ThemeExtension<AppColors> {
       brass: Color.lerp(brass, other.brass, t)!,
       whatsapp: Color.lerp(whatsapp, other.whatsapp, t)!,
       onWhatsapp: Color.lerp(onWhatsapp, other.onWhatsapp, t)!,
+      dangerDeep: Color.lerp(dangerDeep, other.dangerDeep, t)!,
+      dangerFaint: Color.lerp(dangerFaint, other.dangerFaint, t)!,
+      dangerLine: Color.lerp(dangerLine, other.dangerLine, t)!,
+      successBright: Color.lerp(successBright, other.successBright, t)!,
+      noticeSoft: Color.lerp(noticeSoft, other.noticeSoft, t)!,
+      brassLight: Color.lerp(brassLight, other.brassLight, t)!,
+      onInkFaint: Color.lerp(onInkFaint, other.onInkFaint, t)!,
+      chartCollected: Color.lerp(chartCollected, other.chartCollected, t)!,
+      chartOutstanding: Color.lerp(
+        chartOutstanding,
+        other.chartOutstanding,
+        t,
+      )!,
+      whatsappOutline: Color.lerp(whatsappOutline, other.whatsappOutline, t)!,
+      whatsappDeep: Color.lerp(whatsappDeep, other.whatsappDeep, t)!,
     );
   }
 }

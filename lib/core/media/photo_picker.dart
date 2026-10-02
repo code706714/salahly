@@ -8,7 +8,8 @@ enum PhotoSource { camera, gallery }
 /// How large the uploaded photo needs to be.
 enum PhotoPurpose {
   avatar(shortSide: 800),
-  document(shortSide: 1600);
+  document(shortSide: 1600),
+  job(shortSide: 1280);
 
   const PhotoPurpose({required this.shortSide});
 

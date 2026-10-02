@@ -2,6 +2,8 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Coarse only: the app needs the area, never the exact address. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- Dictating a job's problem instead of typing it. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <!-- No backups: the session lives in the Keystore, which a restore on
          another device cannot decrypt. -->
@@ -49,6 +51,22 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Speech recognition, calling customers, WhatsApp links and maps. -->
+        <intent>
+            <action android:name="android.speech.RecognitionService"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.DIAL"/>
+            <data android:scheme="tel"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="https"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="geo"/>
         </intent>
     </queries>
 </manifest>

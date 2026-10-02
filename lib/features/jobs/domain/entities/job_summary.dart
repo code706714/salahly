@@ -13,12 +13,14 @@ final class JobSummary extends Equatable {
     required this.isSynced,
     this.customerPhone,
     this.customerAreaId,
+    this.customerAddress,
   });
 
   final Job job;
   final String customerName;
   final PhoneNumber? customerPhone;
   final String? customerAreaId;
+  final String? customerAddress;
 
   /// The sum of the job's lines.
   final int totalPiastres;
@@ -27,6 +29,9 @@ final class JobSummary extends Equatable {
 
   /// False while some of the job's changes are only on this phone.
   final bool isSynced;
+
+  /// Where the work is: the job's own address, else the customer's.
+  String? get address => job.address ?? customerAddress;
 
   int get balancePiastres =>
       totalPiastres > paidPiastres ? totalPiastres - paidPiastres : 0;
@@ -41,6 +46,7 @@ final class JobSummary extends Equatable {
     customerName,
     customerPhone,
     customerAreaId,
+    customerAddress,
     totalPiastres,
     paidPiastres,
     itemCount,

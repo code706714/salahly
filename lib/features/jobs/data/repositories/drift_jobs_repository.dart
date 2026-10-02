@@ -46,7 +46,7 @@ class DriftJobsRepository implements JobsRepository {
   static const _summarySelect = '''
 SELECT j.*,
   c.name AS customer_name, c.phone AS customer_phone,
-  c.area_id AS customer_area_id,
+  c.area_id AS customer_area_id, c.address AS customer_address,
   COALESCE(i.total, 0) AS total, COALESCE(i.count, 0) AS item_count,
   COALESCE(p.paid, 0) AS paid,
   (EXISTS (
@@ -106,6 +106,7 @@ WHERE j.deleted_at IS NULL''';
       customerName: row.read<String>('customer_name'),
       customerPhone: phone == null ? null : PhoneNumber.tryParse(phone),
       customerAreaId: row.read<String?>('customer_area_id'),
+      customerAddress: row.read<String?>('customer_address'),
       totalPiastres: row.read<int>('total'),
       paidPiastres: row.read<int>('paid'),
       itemCount: row.read<int>('item_count'),
