@@ -46,7 +46,6 @@ app.*.map.json
 
 # Generated code
 *.g.dart
-*.freezed.dart
 /lib/l10n/generated/
 
 # Environment files (examples are committed)

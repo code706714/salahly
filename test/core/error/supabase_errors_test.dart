@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' show ClientException;
@@ -9,6 +10,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 void main() {
   final networkErrors = <Object>[
     ClientException('Connection refused'),
+    const SocketException('Network is unreachable'),
+    const HttpException('Connection closed before full header was received'),
     TimeoutException('No response'),
     AuthRetryableFetchException(),
   ];

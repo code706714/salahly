@@ -3,9 +3,9 @@ import 'package:http/http.dart' show ClientException;
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
+import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/features/auth/data/repositories/supabase_auth_repository.dart';
 import 'package:salahly/features/auth/domain/entities/otp_channel.dart';
-import 'package:salahly/features/auth/domain/entities/phone_number.dart';
 import 'package:salahly/features/auth/domain/failures/auth_failures.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 

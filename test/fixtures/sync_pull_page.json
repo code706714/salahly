@@ -1,0 +1,108 @@
+{
+    "changes": [
+        {
+            "row": {
+                "id": "a0000000-0000-4000-8000-000000000001",
+                "name": "م. شريف عادل",
+                "notes": null,
+                "phone": "+201002345678",
+                "source": "manual",
+                "address": "12 شارع الأهرام",
+                "area_id": "heliopolis",
+                "created_at": "2026-10-02T17:06:04.187262+00:00",
+                "deleted_at": null,
+                "updated_at": "2026-10-02T17:06:04.187262+00:00"
+            },
+            "entity": "customers"
+        },
+        {
+            "row": {
+                "id": "a0000000-0000-4000-8000-000000000002",
+                "room": "أوضة النوم",
+                "brand": "كارير",
+                "created_at": "2026-10-02T17:06:04.187262+00:00",
+                "deleted_at": null,
+                "updated_at": "2026-10-02T17:06:04.187262+00:00",
+                "capacity_hp": 2.25,
+                "customer_id": "a0000000-0000-4000-8000-000000000001",
+                "installed_year": null,
+                "next_service_on": null
+            },
+            "entity": "customer_units"
+        },
+        {
+            "row": {
+                "id": "a0000000-0000-4000-8000-000000000003",
+                "tags": [
+                    "cleaning",
+                    "installation"
+                ],
+                "source": "manual",
+                "status": "confirmed",
+                "address": null,
+                "paid_at": null,
+                "created_at": "2026-10-02T17:06:04.187262+00:00",
+                "deleted_at": null,
+                "started_at": null,
+                "updated_at": "2026-10-02T17:06:04.187262+00:00",
+                "customer_id": "a0000000-0000-4000-8000-000000000001",
+                "description": "تركيب سبليت 2.25 حصان",
+                "finished_at": null,
+                "cancelled_at": null,
+                "confirmed_at": null,
+                "quote_status": "none",
+                "scheduled_at": "2026-10-02T10:00:00+00:00",
+                "quote_sent_at": null,
+                "invoice_number": null,
+                "duration_minutes": 60,
+                "quote_valid_days": 3,
+                "payment_promised_on": null
+            },
+            "entity": "jobs"
+        },
+        {
+            "row": {
+                "id": "a0000000-0000-4000-8000-000000000004",
+                "title": "تركيب سبليت",
+                "job_id": "a0000000-0000-4000-8000-000000000003",
+                "quantity": 1,
+                "created_at": "2026-10-02T17:06:04.187262+00:00",
+                "deleted_at": null,
+                "sort_order": 0,
+                "updated_at": "2026-10-02T17:06:04.187262+00:00",
+                "unit_price_piastres": 90000
+            },
+            "entity": "job_items"
+        },
+        {
+            "row": {
+                "id": "a0000000-0000-4000-8000-000000000005",
+                "job_id": "a0000000-0000-4000-8000-000000000003",
+                "method": "cash",
+                "created_at": "2026-10-02T17:06:04.187262+00:00",
+                "deleted_at": null,
+                "updated_at": "2026-10-02T17:06:04.187262+00:00",
+                "received_at": "2026-10-02T13:00:00+00:00",
+                "amount_piastres": 50000
+            },
+            "entity": "payments"
+        },
+        {
+            "row": {
+                "id": "a0000000-0000-4000-8000-000000000006",
+                "kind": "before",
+                "job_id": "a0000000-0000-4000-8000-000000000003",
+                "created_at": "2026-10-02T17:06:04.187262+00:00",
+                "deleted_at": null,
+                "updated_at": "2026-10-02T17:06:04.187262+00:00",
+                "storage_path": "00000000-0000-4000-8000-0000000000e1/30000000-0000-4000-8000-000000000001.jpg"
+            },
+            "entity": "job_photos"
+        }
+    ],
+    "has_more": false,
+    "checkpoint": {
+        "txid": "1927",
+        "version": 12
+    }
+}

@@ -1,9 +1,9 @@
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/error/supabase_errors.dart';
+import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
 import 'package:salahly/features/auth/domain/entities/otp_channel.dart';
-import 'package:salahly/features/auth/domain/entities/phone_number.dart';
 import 'package:salahly/features/auth/domain/failures/auth_failures.dart';
 import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;

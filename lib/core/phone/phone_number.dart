@@ -22,8 +22,14 @@ final class PhoneNumber extends Equatable {
 
   String get e164 => '+20$nationalNumber';
 
-  /// Grouped the way the design shows it: "100 234 5678".
+  /// Grouped the way the design shows it after +20: "100 234 5678".
   String get grouped => groupNationalDigits(nationalNumber);
+
+  /// The way Egyptians write it: "0100 234 5678".
+  String get local => '0$grouped';
+
+  /// For wa.me links: digits only, with the country code.
+  String get international => '20$nationalNumber';
 
   @override
   List<Object?> get props => [nationalNumber];

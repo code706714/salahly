@@ -49,4 +49,20 @@ void main() {
       expect(isValidName(name), isTrue);
     });
   });
+
+  group('initialsOf', () {
+    test('takes two letters, skipping titles', () {
+      expect(initialsOf('أ. كريم منصور'), 'ك م');
+      expect(initialsOf('مدام سهير عبد الله'), 'س ع');
+      expect(initialsOf('نورهان'), 'ن');
+    });
+  });
+
+  group('hasFeminineTitle', () {
+    test('reads titles only women use', () {
+      expect(hasFeminineTitle('مدام سهير عبد الله'), isTrue);
+      expect(hasFeminineTitle('أ. كريم منصور'), isFalse);
+      expect(hasFeminineTitle('سهير'), isFalse);
+    });
+  });
 }

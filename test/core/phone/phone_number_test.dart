@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:salahly/features/auth/domain/entities/phone_number.dart';
+import 'package:salahly/core/phone/phone_number.dart';
 
 void main() {
   group('PhoneNumber.tryParse', () {
@@ -89,6 +89,14 @@ void main() {
 
     test('groups the national number as 3-3-4', () {
       expect(phone.grouped, '100 234 5678');
+    });
+
+    test('writes the local form with a leading 0', () {
+      expect(phone.local, '0100 234 5678');
+    });
+
+    test('gives the digits WhatsApp links need', () {
+      expect(phone.international, '201002345678');
     });
   });
 

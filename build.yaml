@@ -1,0 +1,13 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          # Exact, timezone-aware timestamps, matching Postgres timestamptz.
+          store_date_time_values_as_text: true
+          # Rows convert to and from the server's JSON (snake_case) as is.
+          use_sql_column_name_as_json_key: true
+          sql:
+            dialect: sqlite
+            options:
+              version: "3.45"

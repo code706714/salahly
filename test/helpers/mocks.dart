@@ -1,5 +1,6 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/location/location_service.dart';
+import 'package:salahly/core/storage/user_scoped_data.dart';
 import 'package:salahly/features/account/domain/repositories/account_repository.dart';
 import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
 import 'package:salahly/features/catalog/domain/repositories/catalog_repository.dart';
@@ -14,3 +15,5 @@ class MockCatalogRepository extends Mock implements CatalogRepository {}
 class MockOnboardingRepository extends Mock implements OnboardingRepository {}
 
 class MockLocationService extends Mock implements LocationService {}
+
+class MockUserScopedData extends Mock implements UserScopedData {}

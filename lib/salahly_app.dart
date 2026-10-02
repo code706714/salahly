@@ -22,6 +22,7 @@ class _SalahlyAppState extends State<SalahlyApp> {
   late final SessionCubit _session = SessionCubit(
     authRepository: widget.dependencies.authRepository,
     accountRepository: widget.dependencies.accountRepository,
+    userData: widget.dependencies.userData,
   );
   late final SessionRefresh _refresh = SessionRefresh(_session.stream);
   late final GoRouter _router = createRouter(_session, refresh: _refresh);
