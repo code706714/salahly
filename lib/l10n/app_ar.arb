@@ -937,6 +937,7 @@
   "jobPageStepPaid": "اتدفع",
   "jobPageMore": "اختيارات تانية",
   "jobPageCancel": "إلغي الشغلانة",
+  "jobPageReschedule": "غيّر المعاد",
   "jobPageDelete": "امسح الشغلانة",
   "jobPageDeleteTitle": "تمسح الشغلانة دي؟",
   "jobPageDeleteBody": "هتتمسح هي وعرض السعر والفاتورة والصور بتوعها، ومش هتقدر ترجّعها.",

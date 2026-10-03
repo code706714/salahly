@@ -15,7 +15,7 @@ export 'package:salahly/features/jobs/presentation/cubit/job_details_status.dart
 part 'job_details_state.dart';
 
 /// One job as its page shows it, and the moves the technician makes on it:
-/// its next step, cancelling, deleting and its photos.
+/// its next step, a new date, cancelling, deleting and its photos.
 class JobDetailsCubit extends Cubit<JobDetailsState> {
   JobDetailsCubit({
     required this._jobs,
@@ -92,6 +92,19 @@ class JobDetailsCubit extends Cubit<JobDetailsState> {
       Ok() => state.copyWith(change: () => null),
       Err(:final failure) => state.copyWith(failure: () => failure),
     });
+  }
+
+  /// Moves the visit to [scheduledAt], or leaves it with no date when null.
+  Future<void> reschedule(DateTime? scheduledAt) async {
+    final job = state.details?.job;
+    if (job == null || job.scheduledAt == scheduledAt) return;
+    await _run(
+      _jobs.reschedule(
+        _jobId,
+        scheduledAt: scheduledAt,
+        durationMinutes: job.durationMinutes,
+      ),
+    );
   }
 
   /// Deletes the job; the page closes once it is gone.

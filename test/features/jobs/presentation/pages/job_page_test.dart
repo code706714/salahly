@@ -63,6 +63,7 @@ void main() {
     ).thenReturn(const AreasState(areas: TestAreas.all));
     when(() => cubit.advance()).thenAnswer((_) async {});
     when(() => cubit.cancel()).thenAnswer((_) async {});
+    when(() => cubit.reschedule(any())).thenAnswer((_) async {});
     when(() => cubit.delete()).thenAnswer((_) async {});
     when(() => cubit.undo(any())).thenAnswer((_) async {});
     when(() => cubit.addPhoto(any(), any())).thenAnswer((_) async {});
@@ -364,6 +365,40 @@ void main() {
       await tester.pumpAndSettle();
 
       verify(() => cubit.cancel()).called(1);
+    });
+
+    testWidgets('moves the visit or takes its date off', (tester) async {
+      show(ready(visit()));
+      await pumpPage(tester);
+
+      Future<void> openReschedule() async {
+        await tester.tap(find.byTooltip(l10n.jobPageMore));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(l10n.jobPageReschedule));
+        await tester.pumpAndSettle();
+        expect(find.text(l10n.newJobScheduleTitle), findsOneWidget);
+      }
+
+      await openReschedule();
+      await tester.tap(find.text(l10n.newJobScheduleDone));
+      await tester.pumpAndSettle();
+      verify(() => cubit.reschedule(DateTime(2026, 10, 2, 13))).called(1);
+
+      await openReschedule();
+      await tester.tap(find.text(l10n.newJobNoDate));
+      await tester.pumpAndSettle();
+      verify(() => cubit.reschedule(null)).called(1);
+    });
+
+    testWidgets('a started job keeps its date', (tester) async {
+      show(ready(visit(status: JobStatus.started)));
+      await pumpPage(tester);
+
+      await tester.tap(find.byTooltip(l10n.jobPageMore));
+      await tester.pumpAndSettle();
+
+      expect(find.text(l10n.jobPageReschedule), findsNothing);
+      expect(find.text(l10n.jobPageCancel), findsOneWidget);
     });
 
     testWidgets('a finished job cannot be cancelled', (tester) async {

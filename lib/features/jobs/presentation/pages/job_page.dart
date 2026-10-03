@@ -22,6 +22,7 @@ import 'package:salahly/features/jobs/presentation/widgets/job_customer_card.dar
 import 'package:salahly/features/jobs/presentation/widgets/job_missing_view.dart';
 import 'package:salahly/features/jobs/presentation/widgets/job_photos_card.dart';
 import 'package:salahly/features/jobs/presentation/widgets/job_progress_steps.dart';
+import 'package:salahly/features/jobs/presentation/widgets/schedule_picker.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
 /// One job: where it stands, who it is for, its photos, quote and money,
@@ -288,7 +289,7 @@ class _HeaderPill extends StatelessWidget {
   }
 }
 
-enum _MoreAction { cancel, delete }
+enum _MoreAction { reschedule, cancel, delete }
 
 class _MoreMenu extends StatelessWidget {
   const _MoreMenu({required this.job});
@@ -302,10 +303,17 @@ class _MoreMenu extends StatelessWidget {
       tooltip: l10n.jobPageMore,
       icon: const Icon(Icons.more_vert_rounded),
       onSelected: (action) => switch (action) {
+        _MoreAction.reschedule => _reschedule(context),
         _MoreAction.cancel => context.read<JobDetailsCubit>().cancel(),
         _MoreAction.delete => _confirmDelete(context),
       },
       itemBuilder: (context) => [
+        if (job.status == JobStatus.unconfirmed ||
+            job.status == JobStatus.confirmed)
+          PopupMenuItem(
+            value: _MoreAction.reschedule,
+            child: Text(l10n.jobPageReschedule),
+          ),
         if (job.status.isOpen)
           PopupMenuItem(
             value: _MoreAction.cancel,
@@ -320,6 +328,12 @@ class _MoreMenu extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Future<void> _reschedule(BuildContext context) async {
+    final cubit = context.read<JobDetailsCubit>();
+    final choice = await showSchedulePicker(context, initial: job.scheduledAt);
+    if (choice != null) await cubit.reschedule(choice.scheduledAt);
   }
 
   Future<void> _confirmDelete(BuildContext context) async {

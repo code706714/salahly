@@ -173,6 +173,81 @@ void main() {
     });
   });
 
+  group('reschedule', () {
+    final job = testJob(scheduledAt: DateTime(2026, 10, 2, 13));
+
+    setUp(
+      () => when(
+        () => jobs.reschedule(
+          any(),
+          scheduledAt: any(named: 'scheduledAt'),
+          durationMinutes: any(named: 'durationMinutes'),
+        ),
+      ).thenAnswer((_) async => const Ok(null)),
+    );
+
+    test('moves the visit, keeping how long it takes', () async {
+      final cubit = await started(testDetails(job: job));
+
+      await cubit.reschedule(DateTime(2026, 10, 3, 16));
+
+      verify(
+        () => jobs.reschedule(
+          'job-1',
+          scheduledAt: DateTime(2026, 10, 3, 16),
+          durationMinutes: job.durationMinutes,
+        ),
+      ).called(1);
+      await cubit.close();
+    });
+
+    test('takes the date off', () async {
+      final cubit = await started(testDetails(job: job));
+
+      await cubit.reschedule(null);
+
+      verify(
+        () => jobs.reschedule(
+          'job-1',
+          scheduledAt: null,
+          durationMinutes: job.durationMinutes,
+        ),
+      ).called(1);
+      await cubit.close();
+    });
+
+    test('leaves the same date alone', () async {
+      final cubit = await started(testDetails(job: job));
+
+      await cubit.reschedule(DateTime(2026, 10, 2, 13));
+
+      verifyNever(
+        () => jobs.reschedule(
+          any(),
+          scheduledAt: any(named: 'scheduledAt'),
+          durationMinutes: any(named: 'durationMinutes'),
+        ),
+      );
+      await cubit.close();
+    });
+
+    test('reports a failure', () async {
+      when(
+        () => jobs.reschedule(
+          any(),
+          scheduledAt: any(named: 'scheduledAt'),
+          durationMinutes: any(named: 'durationMinutes'),
+        ),
+      ).thenAnswer((_) async => const Err(failure));
+      final cubit = await started(testDetails(job: job));
+
+      await cubit.reschedule(null);
+
+      expect(cubit.state.failure, failure);
+      await cubit.close();
+    });
+  });
+
   group('undo', () {
     final previous = testJob();
     final change = JobChange(previous: previous, to: JobStatus.started);
