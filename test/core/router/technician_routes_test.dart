@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:salahly/core/contacts/contact_picker.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/features/account/presentation/pages/technician_account_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customer_form_page.dart';
@@ -15,6 +17,7 @@ import 'package:salahly/features/jobs/presentation/pages/new_job_page.dart';
 import 'package:salahly/features/jobs/presentation/pages/quote_page.dart';
 import 'package:salahly/features/money/presentation/pages/money_page.dart';
 
+import '../../helpers/customer_fixtures.dart';
 import '../../helpers/technician_app.dart';
 import '../../pump_app.dart';
 
@@ -69,6 +72,8 @@ void main() {
         app,
       ) async {
         await app.pump(tester);
+        // Customer screens close when their customer does not exist.
+        await seedCustomer(tester, app);
 
         unawaited(app.router(tester).push(location));
         await app.settle(tester);
@@ -92,6 +97,10 @@ void main() {
       'customer-7',
     );
 
+    // The contact picker stays open, so the form does too.
+    when(
+      app.contacts.pickPhoneNumber,
+    ).thenAnswer((_) => Completer<PickedContact?>().future);
     unawaited(app.router(tester).push(AppRoutes.newCustomerFromContacts));
     await app.settle(tester);
     expect(

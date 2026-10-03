@@ -18,6 +18,7 @@ import 'package:salahly/core/widgets/whatsapp_button.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
+import 'package:salahly/features/customers/presentation/add_customer.dart';
 import 'package:salahly/features/home/presentation/cubit/today_cubit.dart';
 import 'package:salahly/features/home/presentation/widgets/verification_banner.dart';
 import 'package:salahly/features/jobs/domain/entities/job.dart';
@@ -482,7 +483,7 @@ class _FirstSteps extends StatelessWidget {
           number: 2,
           title: l10n.todayStepContacts,
           hint: l10n.todayStepContactsHint,
-          onTap: () => context.push(AppRoutes.newCustomerFromContacts),
+          onTap: () => addCustomer(context, AppRoutes.newCustomerFromContacts),
         ),
       ],
     );

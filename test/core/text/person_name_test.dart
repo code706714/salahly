@@ -50,6 +50,19 @@ void main() {
     });
   });
 
+  group('firstNameOf', () {
+    test('skips titles', () {
+      expect(firstNameOf('أ. كريم منصور'), 'كريم');
+      expect(firstNameOf('مدام  سهير عبد الله'), 'سهير');
+      expect(firstNameOf('نورهان'), 'نورهان');
+      expect(firstNameOf('عبد الرحمن علي'), 'عبد الرحمن');
+    });
+
+    test('is empty for a title alone', () {
+      expect(firstNameOf('أستاذ'), '');
+    });
+  });
+
   group('initialsOf', () {
     test('takes two letters, skipping titles and the article', () {
       expect(initialsOf('أ. كريم منصور'), 'ك م');

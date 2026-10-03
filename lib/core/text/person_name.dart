@@ -49,25 +49,32 @@ const _feminineTitles = {
   'مهندسة',
 };
 
-/// Two letters for an avatar, skipping titles and the article "ال" and
-/// reading "عبد ..." as one name: "أ. كريم منصور" → "ك م",
-/// "محمود السيد" → "م س", "عبد الله مجدي" → "ع م".
-String initialsOf(String name) {
+/// Two letters for an avatar, skipping titles and the article "ال":
+/// "أ. كريم منصور" → "ك م", "محمود السيد" → "م س", "عبد الله مجدي" → "ع م".
+String initialsOf(String name) =>
+    _namesOf(name).take(2).map(_initial).join(' ');
+
+/// The first name, skipping titles: "أ. كريم منصور" → "كريم",
+/// "عبد الرحمن علي" → "عبد الرحمن". Empty when [name] is only a title.
+String firstNameOf(String name) => _namesOf(name).firstOrNull ?? '';
+
+/// The names in [name] without titles, reading "عبد ..." as one name.
+List<String> _namesOf(String name) {
   final words = normalizeName(name)
       .split(' ')
       .where((word) => word.isNotEmpty && !_honorifics.contains(word))
       .toList();
   final names = <String>[];
   for (var i = 0; i < words.length; i++) {
-    names.add(words[i]);
-    if (words[i] == 'عبد' && i + 1 < words.length) i++;
+    final compound = words[i] == 'عبد' && i + 1 < words.length;
+    names.add(compound ? '${words[i]} ${words[++i]}' : words[i]);
   }
-  return names.take(2).map(_initial).join(' ');
+  return names;
 }
 
-String _initial(String word) {
-  final letters = word.runes.toList();
-  final hasArticle = word.startsWith('ال') && letters.length > 3;
+String _initial(String name) {
+  final letters = name.runes.toList();
+  final hasArticle = name.startsWith('ال') && letters.length > 3;
   return String.fromCharCode(letters[hasArticle ? 2 : 0]);
 }
 

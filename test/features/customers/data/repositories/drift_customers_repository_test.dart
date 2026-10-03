@@ -204,6 +204,44 @@ void main() {
       expect(next, isNotEmpty);
     });
 
+    test("gives the soonest next service of a customer's units", () async {
+      final karim = await addKarim();
+      for (final day in [DateTime(2027, 4), null, DateTime(2026, 12, 15)]) {
+        ok(
+          await repository.addUnit(
+            karim.id,
+            CustomerUnitDraft(nextServiceOn: day),
+          ),
+        );
+      }
+      final first =
+          (await repository.watchCustomer(karim.id).first)!.units.first;
+      ok(
+        await repository.updateUnit(
+          first.id,
+          CustomerUnitDraft(nextServiceOn: DateTime(2026, 11)),
+        ),
+      );
+      ok(await repository.deleteUnit(first.id));
+
+      final summary =
+          (await repository.watchCustomers(today: DateTime(2026, 10, 2)).first)
+              .single;
+
+      expect(summary.nextServiceOn, DateTime(2026, 12, 15));
+    });
+
+    test('has no next service without dated units', () async {
+      final karim = await addKarim();
+      ok(await repository.addUnit(karim.id, const CustomerUnitDraft()));
+
+      final summary =
+          (await repository.watchCustomers(today: DateTime(2026, 10, 2)).first)
+              .single;
+
+      expect(summary.nextServiceOn, isNull);
+    });
+
     test('lists the most recently active customers first', () async {
       final karim = await addKarim();
       now = now.add(const Duration(hours: 1));
