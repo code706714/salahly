@@ -55,6 +55,7 @@ class _SalahlyAppState extends State<SalahlyApp> {
         RepositoryProvider.value(value: dependencies.externalApps),
         RepositoryProvider.value(value: dependencies.speechInput),
         RepositoryProvider.value(value: dependencies.contactPicker),
+        RepositoryProvider.value(value: dependencies.sharedFiles),
       ],
       child: BlocProvider.value(
         value: _session,

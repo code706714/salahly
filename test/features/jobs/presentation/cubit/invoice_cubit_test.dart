@@ -7,6 +7,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/phone/phone_number.dart';
+import 'package:salahly/core/storage/shared_files.dart';
 import 'package:salahly/features/jobs/domain/entities/job.dart';
 import 'package:salahly/features/jobs/domain/entities/job_details.dart';
 import 'package:salahly/features/jobs/domain/entities/payment.dart';
@@ -57,7 +58,7 @@ void main() {
       apps: apps,
       jobId: 'job-1',
       pdf: pdf,
-      temporaryDirectory: () async => temporary,
+      sharedFiles: SharedFiles(temporary),
       clock: () => today,
     )..start();
     details.add(first);

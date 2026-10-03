@@ -1,13 +1,12 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/launch/external_apps.dart';
 import 'package:salahly/core/phone/phone_number.dart';
+import 'package:salahly/core/storage/shared_files.dart';
 import 'package:salahly/core/time/calendar_date.dart';
 import 'package:salahly/features/jobs/domain/entities/job_details.dart';
 import 'package:salahly/features/jobs/domain/entities/payment.dart';
@@ -27,17 +26,17 @@ class InvoiceCubit extends Cubit<InvoiceState> {
   InvoiceCubit({
     required this._jobs,
     required this._apps,
+    required this._sharedFiles,
     required this._jobId,
     this._pdf = const InvoicePdf(),
-    this._temporaryDirectory = getTemporaryDirectory,
     DateTime Function() clock = DateTime.now,
   }) : super(InvoiceState(today: clock()));
 
   final JobsRepository _jobs;
   final ExternalApps _apps;
+  final SharedFiles _sharedFiles;
   final String _jobId;
   final InvoicePdf _pdf;
-  final Future<Directory> Function() _temporaryDirectory;
   StreamSubscription<JobDetails?>? _subscription;
   bool _numbering = false;
 
@@ -151,8 +150,7 @@ class InvoiceCubit extends Cubit<InvoiceState> {
         issuedOn: details.job.finishedAt ?? state.today,
         place: place,
       );
-      final directory = await _temporaryDirectory();
-      final file = File('${directory.path}/invoice-${label ?? _jobId}.pdf');
+      final file = await _sharedFiles.file('invoice-${label ?? _jobId}.pdf');
       await file.writeAsBytes(bytes, flush: true);
       shared = await _apps.shareFile(
         file.path,

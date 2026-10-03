@@ -44,6 +44,7 @@ class InvoicePage extends StatelessWidget {
       create: (context) => InvoiceCubit(
         jobs: context.read(),
         apps: context.read(),
+        sharedFiles: context.read(),
         jobId: jobId,
       )..start(),
       child: const InvoiceView(),

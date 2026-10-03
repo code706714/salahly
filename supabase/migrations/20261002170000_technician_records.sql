@@ -255,12 +255,28 @@ as $$
     and created_at > now() - interval '1 day';
 $$;
 
+create function guard.is_technician()
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select exists (
+    select 1 from public.technician_profiles where id = (select auth.uid())
+  );
+$$;
+
+revoke execute on function guard.is_technician() from public, anon;
+grant execute on function guard.is_technician() to authenticated;
+
 create policy "Technicians upload job photos to their own folder"
   on storage.objects for insert to authenticated
   with check (
     bucket_id = 'job-photos'
     and name ~ '^[0-9a-f-]{36}/[0-9a-f-]{36}\.(jpg|png|webp)$'
     and split_part(name, '/', 1) = (select auth.uid()::text)
+    and (select guard.is_technician())
     and guard.upload_quota_left(bucket_id)
   );
 

@@ -5,12 +5,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:salahly/core/database/app_database.dart';
 import 'package:salahly/core/database/local_user_data.dart';
 import 'package:salahly/core/storage/local_photo_store.dart';
+import 'package:salahly/core/storage/shared_files.dart';
 import 'package:salahly/core/sync/sync_tables.dart';
 
 void main() {
   late AppDatabase db;
   late Directory photoDir;
   late LocalPhotoStore photos;
+  late Directory sharedDir;
   late LocalUserData userData;
   final now = DateTime.utc(2026, 10, 2);
 
@@ -18,7 +20,8 @@ void main() {
     db = AppDatabase(NativeDatabase.memory());
     photoDir = Directory('${Directory.systemTemp.createTempSync().path}/p');
     photos = LocalPhotoStore(photoDir);
-    userData = LocalUserData(db, photos);
+    sharedDir = Directory('${photoDir.parent.path}/shared');
+    userData = LocalUserData(db, photos, SharedFiles(sharedDir));
   });
 
   tearDown(() => db.close());
@@ -38,6 +41,9 @@ void main() {
     final picked = File('${Directory.systemTemp.path}/x.jpg')
       ..writeAsBytesSync([1]);
     await photos.keep('p1', picked.path);
+    (await SharedFiles(
+      sharedDir,
+    ).file('invoice-0001.pdf')).writeAsBytesSync([1]);
   }
 
   test("keeps the same user's records across launches", () async {
@@ -59,6 +65,7 @@ void main() {
     expect(await db.select(db.customers).get(), isEmpty);
     expect(await db.select(db.outbox).get(), isEmpty);
     expect(photos.fileFor('p1').existsSync(), isFalse);
+    expect(sharedDir.existsSync(), isFalse);
     expect(await db.readMeta(LocalUserData.ownerKey), 'u2');
   });
 
@@ -71,5 +78,6 @@ void main() {
     expect(await db.select(db.customers).get(), isEmpty);
     expect(await db.readMeta(LocalUserData.ownerKey), isNull);
     expect(photoDir.existsSync(), isFalse);
+    expect(sharedDir.existsSync(), isFalse);
   });
 }

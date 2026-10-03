@@ -12,6 +12,7 @@ import 'package:salahly/core/network/network_status.dart';
 import 'package:salahly/core/speech/speech_input.dart';
 import 'package:salahly/core/storage/json_file_cache.dart';
 import 'package:salahly/core/storage/local_photo_store.dart';
+import 'package:salahly/core/storage/shared_files.dart';
 import 'package:salahly/core/storage/user_scoped_data.dart';
 import 'package:salahly/core/sync/local_changes.dart';
 import 'package:salahly/core/sync/supabase_sync_remote.dart';
@@ -52,17 +53,22 @@ class AppDependencies {
     required this.externalApps,
     required this.speechInput,
     required this.contactPicker,
+    required this.sharedFiles,
   });
 
   factory AppDependencies.live({
     required SupabaseClient client,
     required FlutterSecureStorage storage,
     required Directory supportDirectory,
+    required Directory cacheDirectory,
   }) {
     final authRepository = SupabaseAuthRepository(client.auth);
     final database = AppDatabase.open();
     final photos = LocalPhotoStore(
       Directory('${supportDirectory.path}/job_photos'),
+    );
+    final sharedFiles = SharedFiles(
+      Directory('${cacheDirectory.path}/shared'),
     );
     final localChanges = LocalChanges();
     return AppDependencies(
@@ -90,7 +96,7 @@ class AppDependencies {
       ),
       locationService: const GeolocatorLocationService(),
       photoPicker: PhotoPicker(),
-      userData: LocalUserData(database, photos),
+      userData: LocalUserData(database, photos, sharedFiles),
       networkStatus: ConnectivityNetworkStatus(),
       localChanges: localChanges,
       database: database,
@@ -102,6 +108,7 @@ class AppDependencies {
       externalApps: const SystemExternalApps(),
       speechInput: DeviceSpeechInput(),
       contactPicker: ContactPicker(),
+      sharedFiles: sharedFiles,
     );
   }
 
@@ -121,4 +128,5 @@ class AppDependencies {
   final ExternalApps externalApps;
   final SpeechInput speechInput;
   final ContactPicker contactPicker;
+  final SharedFiles sharedFiles;
 }

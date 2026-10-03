@@ -12,6 +12,7 @@ import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/network/network_status.dart';
 import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/core/storage/local_photo_store.dart';
+import 'package:salahly/core/storage/shared_files.dart';
 import 'package:salahly/core/sync/local_changes.dart';
 import 'package:salahly/core/sync/sync_engine.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
@@ -101,6 +102,7 @@ class TechnicianApp {
   final contacts = MockContactPicker();
   final photoPicker = MockPhotoPicker();
   final photos = LocalPhotoStore(Directory.systemTemp.createTempSync());
+  final sharedFiles = SharedFiles(Directory.systemTemp.createTempSync());
 
   /// The repositories' clock, for recording things in the past. The
   /// screens read the real clock.
@@ -136,6 +138,7 @@ class TechnicianApp {
     externalApps: apps,
     speechInput: speech,
     contactPicker: contacts,
+    sharedFiles: sharedFiles,
   );
 
   /// Pumps the app on a small phone and opens [location].

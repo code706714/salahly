@@ -26,6 +26,7 @@ Future<void> main() async {
   );
 
   final supportDirectory = await getApplicationSupportDirectory();
+  final cacheDirectory = await getTemporaryDirectory();
 
   runApp(
     SalahlyApp(
@@ -33,6 +34,7 @@ Future<void> main() async {
         client: Supabase.instance.client,
         storage: storage,
         supportDirectory: supportDirectory,
+        cacheDirectory: cacheDirectory,
       ),
     ),
   );
