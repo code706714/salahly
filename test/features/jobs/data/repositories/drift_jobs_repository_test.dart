@@ -399,6 +399,27 @@ void main() {
       expect((await repository.watchClosed().first).single.job.id, id);
     });
 
+    test('closes a job finished with nothing to collect', () async {
+      final owing = await finishedJob(65000);
+      now = DateTime(2026, 10, 2, 10);
+      final free = await newJob();
+      for (var i = 0; i < 3; i++) {
+        ok(await repository.advance(free));
+      }
+      now = DateTime(2026, 10, 2, 11);
+      final cancelled = await newJob();
+      ok(await repository.cancel(cancelled));
+
+      final closed = await repository.watchClosed().first;
+
+      expect(closed.map((summary) => summary.job.id), [cancelled, free]);
+      expect(closed.last.job.status, JobStatus.finished);
+      expect(
+        (await repository.watchAwaitingPayment().first).single.job.id,
+        owing,
+      );
+    });
+
     test('remembers when the customer promised to pay', () async {
       final id = await finishedJob(60000);
 

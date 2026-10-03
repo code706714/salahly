@@ -23,7 +23,8 @@ abstract interface class JobsRepository {
   /// Finished jobs the customer has not fully paid, oldest first.
   Stream<List<JobSummary>> watchAwaitingPayment();
 
-  /// Paid and cancelled jobs, most recent first.
+  /// Done jobs with nothing left to collect (paid, or finished with no
+  /// money owed) and cancelled ones, most recent first.
   Stream<List<JobSummary>> watchClosed({int limit = 100});
 
   /// One customer's jobs, most recent first.

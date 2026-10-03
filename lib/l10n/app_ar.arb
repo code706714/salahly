@@ -495,5 +495,181 @@
       }
     }
   },
-  "accountSignOutStay": "مش دلوقتي"
+  "accountSignOutStay": "مش دلوقتي",
+  "jobsListCalendar": "التقويم",
+  "jobsListSearch": "دوّر",
+  "jobsListSearchHint": "اسم العميل أو رقمه أو الشغلانة",
+  "jobsListSearchClose": "اقفل البحث",
+  "jobsListUpcoming": "الجاية",
+  "jobsListFollowUp": "متابعة",
+  "jobsListDone": "خلصت",
+  "jobsListTabCount": "{tab} ({count})",
+  "@jobsListTabCount": {
+    "placeholders": {
+      "tab": {
+        "type": "String",
+        "example": "الجاية"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "jobsListAwaitingPayment": "مستنيين فلوس",
+  "jobsListQuotesWaiting": "عروض أسعار مستنية رد",
+  "jobsListMissed": "فات معادها ولسه ماخلصتش",
+  "jobsListUnscheduled": "لسه ملهاش معاد",
+  "jobsListThisWeek": "الأسبوع ده",
+  "jobsListLastWeek": "الأسبوع اللي فات",
+  "jobsListPartlyPaid": "دفع جزء",
+  "jobsListAwaitingMoney": "مستني الفلوس",
+  "jobsListQuoteSentAgo": "{days, plural, =0{اتبعت النهارده} =1{اتبعت امبارح} =2{اتبعت من يومين} few{اتبعت من {days} أيام} other{اتبعت من {days} يوم}}",
+  "@jobsListQuoteSentAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "jobsListWasDue": "كان معادها {day}",
+  "@jobsListWasDue": {
+    "placeholders": {
+      "day": {
+        "type": "String",
+        "example": "امبارح"
+      }
+    }
+  },
+  "jobsListNoAmount": "—",
+  "jobsListNoUpcoming": "مفيش مواعيد جاية",
+  "jobsListNoUpcomingHint": "أي شغلانة تسجّلها بميعاد هتظهر هنا.",
+  "jobsListNoFollowUp": "مفيش حاجة مستنياك",
+  "jobsListNoFollowUpHint": "الفلوس اللي لسه ماتدفعتش والعروض اللي مستنية رد هتلاقيها هنا.",
+  "jobsListNoDone": "لسه مفيش شغلانات خلصت",
+  "jobsListNoDoneHint": "أول ما تخلّص شغلانة هتلاقيها هنا.",
+  "jobsListNoResults": "مفيش نتايج",
+  "jobsListNoResultsHint": "جرّب اسم تاني أو رقم الموبايل.",
+  "calendarTitle": "المواعيد · {month}",
+  "@calendarTitle": {
+    "placeholders": {
+      "month": {
+        "type": "String",
+        "example": "أكتوبر"
+      }
+    }
+  },
+  "calendarSaturday": "سبت",
+  "calendarSunday": "حد",
+  "calendarMonday": "اتنين",
+  "calendarTuesday": "تلات",
+  "calendarWednesday": "أربع",
+  "calendarThursday": "خميس",
+  "calendarFriday": "جمعة",
+  "calendarHourMorning": "{hour} ص",
+  "@calendarHourMorning": {
+    "placeholders": {
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarHourNoon": "{hour} ض",
+  "@calendarHourNoon": {
+    "placeholders": {
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarHourAfternoon": "{hour} ع",
+  "@calendarHourAfternoon": {
+    "placeholders": {
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarHourEvening": "{hour} م",
+  "@calendarHourEvening": {
+    "placeholders": {
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarHours": "{count, plural, =1{ساعة} =2{ساعتين} few{{count} ساعات} other{{count} ساعة}}",
+  "@calendarHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarHoursAndHalf": "{count, plural, =0{نص ساعة} =1{ساعة ونص} =2{ساعتين ونص} few{{count} ساعات ونص} other{{count} ساعة ونص}}",
+  "@calendarHoursAndHalf": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarMinutes": "{count, plural, =1{دقيقة} =2{دقيقتين} few{{count} دقايق} other{{count} دقيقة}}",
+  "@calendarMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarHoursAndMinutes": "{hours} و{minutes}",
+  "@calendarHoursAndMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "String",
+        "example": "ساعة"
+      },
+      "minutes": {
+        "type": "String",
+        "example": "15 دقيقة"
+      }
+    }
+  },
+  "calendarNewJobAt": "سجّل شغلانة الساعة {time}",
+  "@calendarNewJobAt": {
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "3:00 العصر"
+      }
+    }
+  },
+  "newJobClose": "اقفل",
+  "newJobSteps": "3 حاجات بس",
+  "newJobCustomerTitle": "العميل",
+  "newJobProblemTitle": "المشكلة",
+  "newJobScheduleTitle": "المعاد",
+  "newJobChangeCustomer": "غيّر",
+  "newJobPickCustomer": "اختار من عملاءك",
+  "newJobFromContacts": "من جهات الاتصال",
+  "newJobNewCustomer": "عميل جديد",
+  "newJobCustomerRequired": "اختار العميل الأول",
+  "newJobDescriptionHint": "اكتب تفاصيل المشكلة",
+  "newJobDictate": "دوس واتكلم بدل الكتابة",
+  "newJobListening": "بسمعك… دوس لما تخلص",
+  "newJobSpeechUnavailable": "الكتابة بالصوت مش متاحة على الموبايل ده. اكتب التفاصيل بإيدك.",
+  "newJobOtherDay": "يوم تاني",
+  "newJobTimeMorning": "10 ص",
+  "newJobTimeNoon": "1 الضهر",
+  "newJobTimeAfternoon": "4 العصر",
+  "newJobTimeEvening": "7 م",
+  "newJobOtherTime": "ساعة تانية",
+  "newJobTimeRequired": "اختار الساعة كمان",
+  "newJobNoDate": "من غير معاد",
+  "newJobScheduleDone": "تمام",
+  "newJobSendConfirmation": "ابعت للعميل رسالة تأكيد بالمعاد على الواتساب",
+  "newJobSave": "احفظ الشغلانة",
+  "newJobSavedOffline": "بتتحفظ حتى لو مفيش نت",
+  "newJobCustomerSheetTitle": "اختار العميل",
+  "newJobCustomerSearchHint": "دوّر بالاسم أو الرقم",
+  "newJobNoCustomerMatch": "مفيش عميل بالاسم ده"
 }
