@@ -15,6 +15,8 @@ import 'package:salahly/features/jobs/presentation/pages/job_page.dart';
 import 'package:salahly/features/jobs/presentation/pages/jobs_page.dart';
 import 'package:salahly/features/jobs/presentation/pages/new_job_page.dart';
 import 'package:salahly/features/jobs/presentation/pages/quote_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/incoming_request_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/incoming_requests_page.dart';
 import 'package:salahly/features/money/presentation/pages/money_page.dart';
 
 import '../../helpers/customer_fixtures.dart';
@@ -58,6 +60,8 @@ void main() {
   group('screens pushed over the tabs', () {
     for (final (location, page) in [
       (AppRoutes.technicianAccount, TechnicianAccountPage),
+      (AppRoutes.incomingRequests, IncomingRequestsPage),
+      (AppRoutes.incomingRequest('request-1'), IncomingRequestPage),
       (AppRoutes.technicianCalendar, CalendarPage),
       (AppRoutes.newJob, NewJobPage),
       (AppRoutes.job('job-1'), JobPage),

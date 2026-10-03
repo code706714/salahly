@@ -28,6 +28,7 @@ void main() {
         'consumer_profiles': {
           'honorific': 'ms',
           'request_credits': 2,
+          'area_id': 'nasr_city',
           'service_areas': {'name_ar': 'مدينة نصر'},
         },
         'technician_profiles': null,
@@ -42,6 +43,7 @@ void main() {
           activeRole: UserRole.consumer,
           consumer: ConsumerProfile(
             honorific: Honorific.ms,
+            areaId: 'nasr_city',
             areaName: 'مدينة نصر',
             requestCredits: 2,
           ),
@@ -71,6 +73,7 @@ void main() {
         'consumer_profiles': {
           'honorific': 'mr',
           'request_credits': 0,
+          'area_id': 'maadi',
           'service_areas': {'name_ar': 'المعادي'},
         },
       });
@@ -80,6 +83,7 @@ void main() {
         profile.consumer,
         const ConsumerProfile(
           honorific: Honorific.mr,
+          areaId: 'maadi',
           areaName: 'المعادي',
           requestCredits: 0,
         ),

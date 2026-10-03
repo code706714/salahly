@@ -27,6 +27,7 @@ const _cachedProfile = UserProfile(
   activeRole: UserRole.consumer,
   consumer: ConsumerProfile(
     honorific: Honorific.ms,
+    areaId: 'nasr_city',
     areaName: 'مدينة نصر',
     requestCredits: 2,
   ),
@@ -39,6 +40,7 @@ const _freshProfile = UserProfile(
   activeRole: UserRole.consumer,
   consumer: ConsumerProfile(
     honorific: Honorific.ms,
+    areaId: 'nasr_city',
     areaName: 'مدينة نصر',
     requestCredits: 1,
   ),

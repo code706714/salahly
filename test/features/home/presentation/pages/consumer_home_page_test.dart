@@ -23,6 +23,7 @@ SessionReady signedInConsumer({required int requestCredits}) => SessionReady(
     activeRole: UserRole.consumer,
     consumer: ConsumerProfile(
       honorific: Honorific.ms,
+      areaId: 'nasr_city',
       areaName: 'مدينة نصر',
       requestCredits: requestCredits,
     ),

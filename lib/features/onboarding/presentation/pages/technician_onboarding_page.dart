@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/failure_message.dart';
+import 'package:salahly/core/error/upload_failures.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_spacing.dart';
 import 'package:salahly/core/widgets/app_back_button.dart';

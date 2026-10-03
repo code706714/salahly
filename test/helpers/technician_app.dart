@@ -69,6 +69,8 @@ class TechnicianApp {
     ).thenAnswer((_) async => true);
     when(() => apps.dial(any())).thenAnswer((_) async => true);
     when(() => apps.map(any())).thenAnswer((_) async => true);
+    when(requests.fetchNewRequests).thenAnswer((_) async => const Ok([]));
+    when(requests.fetchMyServices).thenAnswer((_) async => const Ok([]));
   }
 
   static const user = AuthUser(id: 'user-1');
@@ -101,6 +103,9 @@ class TechnicianApp {
   final speech = MockSpeechInput();
   final contacts = MockContactPicker();
   final photoPicker = MockPhotoPicker();
+
+  /// The marketplace: no new requests unless a test stubs some.
+  final requests = MockTechnicianRequestsRepository();
   final photos = LocalPhotoStore(Directory.systemTemp.createTempSync());
   final sharedFiles = SharedFiles(Directory.systemTemp.createTempSync());
 
@@ -128,6 +133,8 @@ class TechnicianApp {
     onboardingRepository: MockOnboardingRepository(),
     customersRepository: customers,
     jobsRepository: jobs,
+    consumerRequestsRepository: MockConsumerRequestsRepository(),
+    technicianRequestsRepository: requests,
     locationService: MockLocationService(),
     photoPicker: photoPicker,
     userData: userData,

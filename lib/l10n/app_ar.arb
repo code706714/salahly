@@ -231,6 +231,9 @@
   "navJobs": "الشغلانات",
   "navCustomers": "العملاء",
   "navMoney": "الفلوس",
+  "navHome": "الرئيسية",
+  "navMyRequests": "طلباتي",
+  "navMyAccount": "حسابي",
   "myAccount": "حسابي",
   "today": "النهارده",
   "tomorrow": "بكره",
@@ -1271,5 +1274,94 @@
   "paymentMethodCash": "كاش",
   "paymentMethodInstapay": "إنستاباي",
   "paymentMethodVodafoneCash": "فودافون كاش",
-  "paymentMethodOther": "تاني"
+  "paymentMethodOther": "تاني",
+  "consumerRetry": "{honorific, select, ms{جرّبي تاني} other{جرّب تاني}}",
+  "@consumerRetry": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerErrorNetwork": "{honorific, select, ms{مفيش نت. اتأكدي من النت وجرّبي تاني.} other{مفيش نت. اتأكد من النت وجرّب تاني.}}",
+  "@consumerErrorNetwork": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerErrorRateLimited": "{honorific, select, ms{طلبات كتير ورا بعض. استني شوية وجرّبي تاني.} other{طلبات كتير ورا بعض. استنى شوية وجرّب تاني.}}",
+  "@consumerErrorRateLimited": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerErrorUnexpected": "{honorific, select, ms{حصلت مشكلة عندنا. جرّبي تاني.} other{حصلت مشكلة عندنا. جرّب تاني.}}",
+  "@consumerErrorUnexpected": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerNoCredits": "{honorific, select, ms{خلص رصيد طلباتك، فمينفعش تبعتي طلب جديد دلوقتي.} other{خلص رصيد طلباتك، فمينفعش تبعت طلب جديد دلوقتي.}}",
+  "@consumerNoCredits": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerTechnicianUnavailable": "{honorific, select, ms{الفني ده مبقاش متاح. اختاري عرض تاني.} other{الفني ده مبقاش متاح. اختار عرض تاني.}}",
+  "@consumerTechnicianUnavailable": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerOfferExpired": "{honorific, select, ms{معاد العرض ده فات. اختاري عرض تاني.} other{معاد العرض ده فات. اختار عرض تاني.}}",
+  "@consumerOfferExpired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerTooLateToCancel": "{honorific, select, ms{الشغل بدأ، فمينفعش تلغي الطلب. لو في مشكلة ابعتي شكوى.} other{الشغل بدأ، فمينفعش تلغي الطلب. لو في مشكلة ابعت شكوى.}}",
+  "@consumerTooLateToCancel": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerPriceChangeGone": "{honorific, select, ms{الفني غيّر طلب تغيير السعر. شوفي آخر سعر.} other{الفني غيّر طلب تغيير السعر. شوف آخر سعر.}}",
+  "@consumerPriceChangeGone": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerAddressLimit": "{honorific, select, ms{تقدري تحفظي لحد 10 عناوين بس.} other{تقدر تحفظ لحد 10 عناوين بس.}}",
+  "@consumerAddressLimit": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerRequestClosed": "الطلب ده اتقفل: اتلغى أو خلص وقته أو اتختار فيه فني.",
+  "consumerAlreadySent": "ده اتبعت قبل كده.",
+  "marketplaceNotFound": "الطلب ده مش موجود.",
+  "requestTitle": "طلبك",
+  "requestLoadFailed": "مقدرناش نجيب الطلب دلوقتي.",
+  "technicianNoCredits": "خلصت شغلاناتك من المنصة، فمينفعش تبعت عروض دلوقتي.",
+  "technicianRequestClosed": "الطلب ده اتقفل: العميل اختار فني أو لغاه أو وصله 3 عروض.",
+  "technicianInvalidTime": "اختار معاد جوه اليوم والوقت اللي العميل طلبهم.",
+  "technicianAlreadyOffered": "إنت بعت عرض على الطلب ده قبل كده."
 }
