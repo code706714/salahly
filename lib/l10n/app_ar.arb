@@ -46,7 +46,6 @@
   "otpSubmit": "ادخل",
   "otpInvalid": "الكود غلط أو خلص وقته. اتأكد منه أو اطلب كود جديد.",
   "otpDeleteDigit": "امسح",
-  "otpPasted": "حطّينا الكود اللي نسخته",
   "welcomeTitle": "أهلاً بيك\nهتستخدم الأبلكيشن إزاي؟",
   "welcomeSubtitle": "اختار اللي يناسبك دلوقتي، وتقدر تغيّره بعدين من حسابك.",
   "roleConsumerTitle": "محتاج فني",
@@ -81,7 +80,6 @@
   "areaChosenByHand": "دوس عشان تغيّرها",
   "areaPick": "اختار منطقتك",
   "areaDetecting": "بنحدد مكانك...",
-  "areaRequired": "اختار منطقتك",
   "areaPickerTitle": "اختار المنطقة",
   "areaSearchHint": "دوّر على منطقة",
   "areaSearchEmpty": "مفيش منطقة بالاسم ده",
@@ -189,7 +187,6 @@
   "techDocsRequired": "صوّر البطاقة من الوشّين وصورة ليك ماسكها",
   "techDocsRejected": "في مشكلة في الصور اللي اترفعت. صوّرها تاني وابعت.",
   "techSubmit": "ابعت للتوثيق",
-  "techUploading": "بنرفع الصور...",
   "techDoneTitle": "بياناتك وصلت",
   "techDoneBody": "بنراجع البطاقة وهنبعتلك على الواتساب أول ما حسابك يتوثّق. لحد ما يتوثّق تقدر تضيف عملاءك وشغلاناتك وتبعت عروض أسعار.",
   "freeJobsCount": "{count, plural, =1{شغلانة} =2{شغلانتين} few{{count} شغلانات} other{{count} شغلانة}}",
@@ -206,7 +203,6 @@
   "techStart": "يلا نبدأ",
   "photoTake": "صوّر دلوقتي",
   "photoChoose": "اختار من الصور",
-  "photoReplace": "غيّر الصورة",
   "greeting": "أهلاً يا {name}",
   "@greeting": {
     "placeholders": {
@@ -558,13 +554,6 @@
       }
     }
   },
-  "calendarSaturday": "سبت",
-  "calendarSunday": "حد",
-  "calendarMonday": "اتنين",
-  "calendarTuesday": "تلات",
-  "calendarWednesday": "أربع",
-  "calendarThursday": "خميس",
-  "calendarFriday": "جمعة",
   "calendarHourMorning": "{hour} ص",
   "@calendarHourMorning": {
     "placeholders": {

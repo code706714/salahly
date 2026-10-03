@@ -35,3 +35,15 @@ String dayLabel(
   -1 => l10n.yesterday,
   _ => weekdayDate(day),
 };
+
+/// A [DateTime.weekday] the way it is said in short: "خميس", "حد".
+String weekdayShortName(AppLocalizations l10n, int weekday) =>
+    switch (weekday) {
+      DateTime.saturday => l10n.daySaturday,
+      DateTime.sunday => l10n.daySunday,
+      DateTime.monday => l10n.dayMonday,
+      DateTime.tuesday => l10n.dayTuesday,
+      DateTime.wednesday => l10n.dayWednesday,
+      DateTime.thursday => l10n.dayThursday,
+      _ => l10n.dayFriday,
+    };

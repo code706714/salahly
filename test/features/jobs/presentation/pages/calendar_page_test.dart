@@ -98,8 +98,8 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.text(l10n.calendarTitle('أكتوبر')), findsOneWidget);
-    expect(find.text(l10n.calendarFriday), findsOneWidget);
-    expect(find.text(l10n.calendarThursday), findsOneWidget);
+    expect(find.text(l10n.dayFriday), findsOneWidget);
+    expect(find.text(l10n.dayThursday), findsOneWidget);
     expect(find.text('8'), findsOneWidget);
     expect(
       find.text('${weekdayDate(today)} · ${l10n.today}'),
@@ -264,7 +264,7 @@ void main() {
     expect(find.byType(CalendarPage), findsOneWidget);
     expect(find.text('م. شريف عادل'), findsNothing);
 
-    await tester.tap(find.text(weekdayShortName(l10n, tomorrow)));
+    await tester.tap(find.text(weekdayShortName(l10n, tomorrow.weekday)));
     await app.settle(tester);
     expect(find.text('م. شريف عادل'), findsOneWidget);
 

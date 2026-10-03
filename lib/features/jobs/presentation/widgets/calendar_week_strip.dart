@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:salahly/core/theme/app_colors.dart';
+import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/features/jobs/presentation/cubit/calendar_cubit.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
@@ -144,7 +145,7 @@ class _Day extends StatelessWidget {
         : day.isBefore(state.today)
         ? colors.inkMuted
         : colors.ink;
-    final name = weekdayShortName(AppLocalizations.of(context), day);
+    final name = weekdayShortName(AppLocalizations.of(context), day.weekday);
     return Semantics(
       button: true,
       selected: selected,
@@ -197,15 +198,3 @@ class _Day extends StatelessWidget {
     );
   }
 }
-
-/// The weekday the way it is said in short: "خميس", "حد".
-String weekdayShortName(AppLocalizations l10n, DateTime day) =>
-    switch (day.weekday) {
-      DateTime.saturday => l10n.calendarSaturday,
-      DateTime.sunday => l10n.calendarSunday,
-      DateTime.monday => l10n.calendarMonday,
-      DateTime.tuesday => l10n.calendarTuesday,
-      DateTime.wednesday => l10n.calendarWednesday,
-      DateTime.thursday => l10n.calendarThursday,
-      _ => l10n.calendarFriday,
-    };
