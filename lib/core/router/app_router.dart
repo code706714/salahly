@@ -164,8 +164,12 @@ RouteBase _technicianRoutes() {
       ),
       GoRoute(
         path: AppRoutes.newJob,
-        builder: (context, state) =>
-            NewJobPage(customerId: state.uri.queryParameters['customer']),
+        builder: (context, state) => NewJobPage(
+          customerId: state.uri.queryParameters['customer'],
+          scheduledAt: DateTime.tryParse(
+            state.uri.queryParameters['at'] ?? '',
+          )?.toLocal(),
+        ),
       ),
       GoRoute(
         path: '${AppRoutes.technicianJobs}/:id',

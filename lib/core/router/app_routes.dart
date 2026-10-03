@@ -29,6 +29,12 @@ abstract final class AppRoutes {
   static String newJobFor(String customerId) =>
       Uri(path: newJob, queryParameters: {'customer': customerId}).toString();
 
+  /// A new job with its visit already set to [scheduledAt], local time.
+  static String newJobAt(DateTime scheduledAt) => Uri(
+    path: newJob,
+    queryParameters: {'at': scheduledAt.toIso8601String()},
+  ).toString();
+
   static String customer(String id) => '$technicianCustomers/$id';
   static String editCustomer(String id) => '${customer(id)}/edit';
 
