@@ -411,5 +411,348 @@
         "type": "String"
       }
     }
-  }
+  },
+  "jobPageNoDate": "لسه ملهاش معاد",
+  "jobPageStatusStarted": "شغال دلوقتي",
+  "jobPageStatusAwaitingPayment": "خلصت · مستني الفلوس",
+  "jobPageStepConfirmed": "اتأكد",
+  "jobPageStepStarted": "بدأ",
+  "jobPageStepFinished": "خلص",
+  "jobPageStepPaid": "اتدفع",
+  "jobPageMore": "اختيارات تانية",
+  "jobPageCancel": "إلغي الشغلانة",
+  "jobPageDelete": "امسح الشغلانة",
+  "jobPageDeleteTitle": "تمسح الشغلانة دي؟",
+  "jobPageDeleteBody": "هتتمسح هي وعرض السعر والفاتورة والصور بتوعها، ومش هتقدر ترجّعها.",
+  "jobPageDeleteConfirm": "امسح",
+  "jobPageKeep": "لأ، سيبها",
+  "jobPageUndo": "تراجع",
+  "jobPageConfirmed": "اتأكد المعاد",
+  "jobPageStarted": "بدأت الشغل",
+  "jobPageFinished": "الشغلانة خلصت",
+  "jobPageCancelled": "الشغلانة اتلغت",
+  "jobPageConfirm": "أكّد المعاد",
+  "jobPageStart": "ابدأ الشغل",
+  "jobPageFinish": "خلّصت الشغلانة",
+  "jobPageCollect": "استلمت الفلوس",
+  "jobPageCustomer": "العميل",
+  "jobPageCall": "اتصل",
+  "jobPageWhatsapp": "واتساب",
+  "jobPageMap": "الخريطة",
+  "jobPageGreeting": "أهلاً {name}",
+  "@jobPageGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "jobPageProblem": "المشكلة",
+  "jobPagePhotos": "الصور",
+  "jobPageBefore": "قبل",
+  "jobPageAfter": "بعد",
+  "jobPagePhoto": "صورة",
+  "jobPageAddBefore": "ضيف صورة قبل",
+  "jobPageAddAfter": "ضيف صورة بعد",
+  "jobPageTakeAfter": "صوّر بعد ما تخلص",
+  "jobPagePhotoDelete": "امسح الصورة",
+  "jobPagePhotoDeleteTitle": "تمسح الصورة دي؟",
+  "jobPagePhotoClose": "اقفل",
+  "jobPageQuote": "عرض السعر",
+  "jobPageQuoteAccepted": "العميل وافق",
+  "jobPageQuoteDraft": "لسه ماتبعتش",
+  "jobPageQuoteCreate": "اعمل العرض",
+  "jobPageItemCount": "{count, plural, =0{مفيش بنود لسه} =1{بند واحد} =2{بندين} few{{count} بنود} other{{count} بند}}",
+  "@jobPageItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "jobPagePayment": "الدفع",
+  "jobPagePaid": "اتدفع",
+  "jobPageBalance": "الباقي",
+  "jobPageInvoice": "الفاتورة وتسجيل الدفع",
+  "jobPageMissing": "الشغلانة دي مش موجودة. ممكن تكون اتمسحت.",
+  "quoteTitle": "عرض سعر",
+  "quoteAddItem": "ضيف بند",
+  "quoteIncrease": "زوّد",
+  "quoteDecrease": "قلّل",
+  "quoteRemoveItem": "شيل البند",
+  "quoteUnitPrice": "{quantity} × {price} ج.م",
+  "@quoteUnitPrice": {
+    "placeholders": {
+      "quantity": {
+        "type": "int"
+      },
+      "price": {
+        "type": "String",
+        "example": "900"
+      }
+    }
+  },
+  "quoteEmpty": "ضيف الحاجات اللي هتعملها وسعر كل واحدة.",
+  "quoteTotal": "الإجمالي",
+  "quoteValidFor": "العرض ساري {days, plural, =1{يوم} =2{يومين} few{{days} أيام} other{{days} يوم}}",
+  "@quoteValidFor": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "quoteValidityTitle": "العرض ساري قد إيه؟",
+  "quoteValidityDays": "{days, plural, =1{يوم} =2{يومين} few{{days} أيام} other{{days} يوم}}",
+  "@quoteValidityDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "quotePreviewTitle": "ده اللي هيوصل للعميل",
+  "quoteSend": "ابعت على الواتساب",
+  "quoteSaveDraft": "احفظ من غير ما تبعت",
+  "quoteSavedNote": "العرض اتحفظ عندك.",
+  "quoteAccepted": "العميل وافق على العرض",
+  "quoteMarkAccepted": "العميل وافق",
+  "quoteDiscardTitle": "تخرج من غير ما تحفظ؟",
+  "quoteDiscardBody": "التغييرات اللي عملتها في العرض هتضيع.",
+  "quoteDiscard": "اخرج",
+  "quoteStay": "ارجع للعرض",
+  "quoteItemTitleLabel": "البند",
+  "quoteItemTitleHint": "مثلاً: ماسورة نحاس (المتر)",
+  "quoteItemTitleRequired": "اكتب البند",
+  "quoteItemPriceLabel": "السعر",
+  "quoteItemPriceInvalid": "اكتب السعر بالجنيه",
+  "quoteItemAdd": "ضيف",
+  "quoteSuggestions": "استخدمتهم قبل كده",
+  "quoteMessageGreeting": "أهلاً {name}، ده عرض السعر:",
+  "@quoteMessageGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quoteMessageLine": "• {title}: {amount} ج.م",
+  "@quoteMessageLine": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String",
+        "example": "900"
+      }
+    }
+  },
+  "quoteMessageLineQuantity": "• {title} × {quantity}: {amount} ج.م",
+  "@quoteMessageLineQuantity": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "quantity": {
+        "type": "int"
+      },
+      "amount": {
+        "type": "String",
+        "example": "400"
+      }
+    }
+  },
+  "quoteMessageTotal": "الإجمالي: {amount} ج.م",
+  "@quoteMessageTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1,450"
+      }
+    }
+  },
+  "quoteMessageAsk": "{gender, select, female{لو موافقة} other{لو موافق}} ابعتلي \"تمام\".",
+  "@quoteMessageAsk": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "quoteMessageAskToBook": "{gender, select, female{لو موافقة} other{لو موافق}} ابعتلي \"تمام\" وأنا أثبّتلك المعاد.",
+  "@quoteMessageAskToBook": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceTitle": "فاتورة رقم {number}",
+  "@invoiceTitle": {
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "0127"
+      }
+    }
+  },
+  "invoiceTitleUnnumbered": "الفاتورة",
+  "invoiceFromQuote": "اتعملت من عرض السعر",
+  "invoiceSignature": "{name} · فني تكييف",
+  "@invoiceSignature": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceTotal": "الإجمالي",
+  "invoicePaid": "اتدفع",
+  "invoiceBalance": "الباقي",
+  "invoicePayments": "الدفعات",
+  "invoicePaymentLine": "{method} · {date}",
+  "@invoicePaymentLine": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceRecordTitle": "سجّل الفلوس اللي استلمتها",
+  "invoiceFullAmount": "المبلغ كله",
+  "invoicePartAmount": "جزء بس",
+  "invoiceAmountLabel": "المبلغ",
+  "invoiceAmountTooHigh": "الباقي {amount} ج.م بس",
+  "@invoiceAmountTooHigh": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1,450"
+      }
+    }
+  },
+  "invoiceMethodQuestion": "استلمتها إزاي؟",
+  "invoiceRecord": "سجّل {amount} ج.م",
+  "@invoiceRecord": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1,450"
+      }
+    }
+  },
+  "invoiceRecordEmpty": "سجّل الفلوس",
+  "invoiceRecordedAll": "اتسجّل إن الفاتورة اتدفعت كلها {method}.",
+  "@invoiceRecordedAll": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceRecordedPart": "اتسجّل {amount} {method}. الباقي {balance} ج.م هيظهر في \"مين عليه فلوس\".",
+  "@invoiceRecordedPart": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1,000"
+      },
+      "method": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String",
+        "example": "450"
+      }
+    }
+  },
+  "invoiceSettled": "الفاتورة اتدفعت كلها.",
+  "invoiceSeeMoney": "شوف الفلوس",
+  "invoiceSend": "ابعت الفاتورة على الواتساب",
+  "invoiceNeedsPrice": "لسه مفيش سعر للشغلانة دي. اكتب البنود في عرض السعر الأول، وبعدين سجّل الفلوس هنا.",
+  "invoiceWriteQuote": "اكتب عرض السعر",
+  "invoicePromiseTitle": "وعد يدفع امتى؟",
+  "invoicePromiseHint": "لو العميل قال هيدفع يوم معيّن سجّله، وهيبان جنب اسمه في الفلوس.",
+  "invoicePromisePick": "حدد يوم",
+  "invoicePromiseChange": "غيّر",
+  "invoicePromiseClear": "امسح الوعد",
+  "invoicePdf": "PDF",
+  "invoicePdfFailed": "مقدرناش نبعت ملف الفاتورة. جرّب تاني.",
+  "invoicePdfName": "فاتورة {number}.pdf",
+  "@invoicePdfName": {
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "0127"
+      }
+    }
+  },
+  "invoicePdfCustomer": "العميل",
+  "invoicePdfItem": "البند",
+  "invoicePdfQuantity": "العدد",
+  "invoicePdfUnitPrice": "السعر",
+  "invoicePdfAmount": "المبلغ",
+  "invoiceThanks": "شكراً لتعاملك معانا.",
+  "invoiceMessageGreeting": "أهلاً {name}، دي فاتورة رقم {number}:",
+  "@invoiceMessageGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "number": {
+        "type": "String",
+        "example": "0127"
+      }
+    }
+  },
+  "invoiceMessageGreetingUnnumbered": "أهلاً {name}، دي الفاتورة:",
+  "@invoiceMessageGreetingUnnumbered": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceMessagePaid": "اتدفع: {amount} ج.م",
+  "@invoiceMessagePaid": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1,000"
+      }
+    }
+  },
+  "invoiceMessageBalance": "الباقي: {amount} ج.م",
+  "@invoiceMessageBalance": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "450"
+      }
+    }
+  },
+  "invoiceMessageHowToPay": "{gender, select, female{تقدري تدفعي} other{تقدر تدفع}} كاش أو تحويل إنستاباي أو فودافون كاش.",
+  "@invoiceMessageHowToPay": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceMessageSettled": "اتدفعت كلها، {gender, select, female{شكراً ليكي} other{شكراً ليك}}.",
+  "@invoiceMessageSettled": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentMethodCash": "كاش",
+  "paymentMethodInstapay": "إنستاباي",
+  "paymentMethodVodafoneCash": "فودافون كاش",
+  "paymentMethodOther": "تاني"
 }
