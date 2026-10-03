@@ -33,7 +33,6 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.successBright,
     required this.noticeSoft,
     required this.brassLight,
-    required this.onInkFaint,
     required this.chartCollected,
     required this.chartOutstanding,
     required this.whatsappOutline,
@@ -70,7 +69,6 @@ class AppColors extends ThemeExtension<AppColors> {
     successBright: Color(0xFF3F7A3A),
     noticeSoft: Color(0xFFFBF3E4),
     brassLight: Color(0xFFE8B65A),
-    onInkFaint: Color(0xFF6B7764),
     chartCollected: Color(0xFF8DBF7F),
     chartOutstanding: Color(0xFFE07A88),
     whatsappOutline: Color(0xFF1FA855),
@@ -127,9 +125,6 @@ class AppColors extends ThemeExtension<AppColors> {
   /// Actions on dark surfaces, e.g. snack bars.
   final Color brassLight;
 
-  /// Outlines on dark surfaces.
-  final Color onInkFaint;
-
   /// Money collected, on dark surfaces.
   final Color chartCollected;
 
@@ -173,7 +168,6 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? successBright,
     Color? noticeSoft,
     Color? brassLight,
-    Color? onInkFaint,
     Color? chartCollected,
     Color? chartOutstanding,
     Color? whatsappOutline,
@@ -209,7 +203,6 @@ class AppColors extends ThemeExtension<AppColors> {
       successBright: successBright ?? this.successBright,
       noticeSoft: noticeSoft ?? this.noticeSoft,
       brassLight: brassLight ?? this.brassLight,
-      onInkFaint: onInkFaint ?? this.onInkFaint,
       chartCollected: chartCollected ?? this.chartCollected,
       chartOutstanding: chartOutstanding ?? this.chartOutstanding,
       whatsappOutline: whatsappOutline ?? this.whatsappOutline,
@@ -250,7 +243,6 @@ class AppColors extends ThemeExtension<AppColors> {
       successBright: Color.lerp(successBright, other.successBright, t)!,
       noticeSoft: Color.lerp(noticeSoft, other.noticeSoft, t)!,
       brassLight: Color.lerp(brassLight, other.brassLight, t)!,
-      onInkFaint: Color.lerp(onInkFaint, other.onInkFaint, t)!,
       chartCollected: Color.lerp(chartCollected, other.chartCollected, t)!,
       chartOutstanding: Color.lerp(
         chartOutstanding,
