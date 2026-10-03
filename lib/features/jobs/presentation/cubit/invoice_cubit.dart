@@ -74,6 +74,8 @@ class InvoiceCubit extends Cubit<InvoiceState> {
     final result = await _jobs.issueInvoice(_jobId);
     if (isClosed) return;
     if (result case Err(:final failure)) {
+      // Tried again with the job's next change.
+      _numbering = false;
       emit(state.copyWith(failure: () => failure));
     }
   }

@@ -116,12 +116,17 @@ void main() {
       verifyNever(() => jobs.issueInvoice(any()));
     });
 
-    test('reports a failure', () async {
+    test('reports a failure and tries again with the next change', () async {
       when(
         () => jobs.issueInvoice('job-1'),
       ).thenAnswer((_) async => const Err(failure));
       final cubit = await started(finished(invoiceNumber: null));
       expect(cubit.state.failure, failure);
+
+      details.add(finished(invoiceNumber: null));
+      await pumpEventQueue();
+
+      verify(() => jobs.issueInvoice('job-1')).called(2);
       await cubit.close();
     });
   });

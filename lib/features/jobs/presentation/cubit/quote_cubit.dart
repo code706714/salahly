@@ -39,9 +39,13 @@ class QuoteCubit extends Cubit<QuoteState> {
     _subscription = _jobs
         .watchJob(_jobId)
         .listen(_onDetails, onError: addError);
-    final suggestions = await _jobs.itemSuggestions();
-    if (isClosed) return;
-    emit(state.copyWith(suggestions: suggestions));
+    try {
+      final suggestions = await _jobs.itemSuggestions();
+      if (!isClosed) emit(state.copyWith(suggestions: suggestions));
+    } on Object catch (error, stackTrace) {
+      // The quote is written without suggestions then.
+      addError(error, stackTrace);
+    }
   }
 
   void _onDetails(JobDetails? details) {

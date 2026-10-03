@@ -9,6 +9,7 @@ import 'package:salahly/features/jobs/domain/entities/job_details.dart';
 import 'package:salahly/features/jobs/domain/entities/job_item.dart';
 import 'package:salahly/features/jobs/presentation/cubit/quote_cubit.dart';
 
+import '../../../../helpers/error_observer.dart';
 import '../../../../helpers/job_details_fixtures.dart';
 import '../../../../helpers/job_fixtures.dart';
 import '../../../../helpers/mocks.dart';
@@ -70,6 +71,18 @@ void main() {
           as List<JobItemDraft>;
 
   group('loading', () {
+    test('works without earlier lines when they fail to load', () async {
+      final observer = ErrorObserver.install();
+      when(jobs.itemSuggestions).thenThrow(StateError('disk'));
+
+      final cubit = await started(testDetails(items: sampleItems));
+
+      expect(cubit.state.status, JobDetailsStatus.ready);
+      expect(cubit.state.suggestions, isEmpty);
+      expect(observer.errors.single, isA<StateError>());
+      await cubit.close();
+    });
+
     test('shows the saved lines, validity and earlier lines', () async {
       final cubit = await started(
         testDetails(
