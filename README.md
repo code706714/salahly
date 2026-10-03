@@ -43,7 +43,8 @@ Rules the schema follows:
   roles cannot reach.
 - Money is stored in piastres (`bigint`).
 - Uploaded photos are re-encoded on the device to drop EXIF/GPS, and can
-  only be written to the uploader's own folder.
+  only be written to the uploader's own folder. Job photos can only be
+  uploaded by technicians, at most 60 a day.
 - Never push `supabase/config.toml` auth settings (test OTPs) to a hosted
   project.
 
@@ -62,8 +63,9 @@ without a network, and sync with Supabase in the background
 - A pulled row never overwrites one with a queued local edit. A row the
   server refuses is replaced by the server's copy, or parked until it is
   edited again when the server has none.
-- The local data belongs to one user: it is wiped on sign-out and before
-  another account's session starts.
+- The local data belongs to one user: the database, job photos and shared
+  files (invoice PDFs) are wiped on sign-out and before another account's
+  session starts.
 - Syncs run on start, shortly after edits, when the network returns, on
   resume and every 5 minutes, retrying failures with growing delays.
 
