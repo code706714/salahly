@@ -48,6 +48,12 @@ class _SalahlyAppState extends State<SalahlyApp> {
         RepositoryProvider.value(value: dependencies.photoPicker),
         RepositoryProvider.value(value: dependencies.customersRepository),
         RepositoryProvider.value(value: dependencies.jobsRepository),
+        RepositoryProvider.value(
+          value: dependencies.consumerRequestsRepository,
+        ),
+        RepositoryProvider.value(
+          value: dependencies.technicianRequestsRepository,
+        ),
         RepositoryProvider.value(value: dependencies.database),
         RepositoryProvider.value(value: dependencies.syncEngine),
         RepositoryProvider.value(value: dependencies.networkStatus),

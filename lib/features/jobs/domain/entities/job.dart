@@ -26,7 +26,7 @@ enum JobStatus {
   bool get isDone => this == finished || this == paid;
 }
 
-enum QuoteStatus { none, draft, sent, accepted }
+enum QuoteStatus { none, draft, sent, accepted, declined }
 
 /// The problems a technician picks from when writing down a job.
 enum JobTag {

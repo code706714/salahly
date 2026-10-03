@@ -29,6 +29,10 @@ import 'package:salahly/features/customers/data/repositories/drift_customers_rep
 import 'package:salahly/features/customers/domain/repositories/customers_repository.dart';
 import 'package:salahly/features/jobs/data/repositories/drift_jobs_repository.dart';
 import 'package:salahly/features/jobs/domain/repositories/jobs_repository.dart';
+import 'package:salahly/features/marketplace/data/repositories/supabase_consumer_requests_repository.dart';
+import 'package:salahly/features/marketplace/data/repositories/supabase_technician_requests_repository.dart';
+import 'package:salahly/features/marketplace/domain/repositories/consumer_requests_repository.dart';
+import 'package:salahly/features/marketplace/domain/repositories/technician_requests_repository.dart';
 import 'package:salahly/features/onboarding/data/repositories/supabase_onboarding_repository.dart';
 import 'package:salahly/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -43,6 +47,8 @@ class AppDependencies {
     required this.onboardingRepository,
     required this.customersRepository,
     required this.jobsRepository,
+    required this.consumerRequestsRepository,
+    required this.technicianRequestsRepository,
     required this.locationService,
     required this.photoPicker,
     required this.userData,
@@ -94,6 +100,10 @@ class AppDependencies {
         changes: localChanges,
         currentUserId: () => authRepository.currentUser?.id,
       ),
+      consumerRequestsRepository: SupabaseConsumerRequestsRepository(client),
+      technicianRequestsRepository: SupabaseTechnicianRequestsRepository(
+        client,
+      ),
       locationService: const GeolocatorLocationService(),
       photoPicker: PhotoPicker(),
       userData: LocalUserData(database, photos, sharedFiles),
@@ -118,6 +128,8 @@ class AppDependencies {
   final OnboardingRepository onboardingRepository;
   final CustomersRepository customersRepository;
   final JobsRepository jobsRepository;
+  final ConsumerRequestsRepository consumerRequestsRepository;
+  final TechnicianRequestsRepository technicianRequestsRepository;
   final LocationService locationService;
   final PhotoPicker photoPicker;
   final UserScopedData userData;

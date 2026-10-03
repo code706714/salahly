@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
+import 'package:salahly/core/error/upload_failures.dart';
 import 'package:salahly/core/geo/geo_point.dart';
 import 'package:salahly/core/location/location_service.dart';
 import 'package:salahly/features/catalog/domain/entities/service_area.dart';
