@@ -52,6 +52,8 @@ owed AS (
 SELECT c.*,
   (SELECT COUNT(*) FROM customer_units u
     WHERE u.customer_id = c.id AND u.deleted_at IS NULL) AS unit_count,
+  (SELECT MIN(next_service_on) FROM customer_units u
+    WHERE u.customer_id = c.id AND u.deleted_at IS NULL) AS next_service,
   (SELECT COUNT(*) FROM job_money m WHERE m.customer_id = c.id) AS job_count,
   (SELECT COALESCE(SUM(total - paid), 0) FROM owed o
     WHERE o.customer_id = c.id) AS owed,
@@ -91,6 +93,9 @@ ORDER BY MAX(
                 owedSince: _time(row.read<double?>('owed_since')),
                 lastFinishedAt: _time(row.read<double?>('last_finished')),
                 nextScheduledAt: _time(row.read<double?>('next_scheduled')),
+                nextServiceOn: CalendarDate.tryParse(
+                  row.read<String?>('next_service'),
+                ),
               ),
           ],
         );

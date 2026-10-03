@@ -411,5 +411,272 @@
         "type": "String"
       }
     }
-  }
+  },
+  "customersTitle": "العملاء",
+  "customersAdd": "عميل",
+  "customersSearchHint": "دوّر بالاسم أو الرقم أو المنطقة",
+  "customersSearchClear": "امسح البحث",
+  "customersFilterAll": "الكل",
+  "customersFilterOwing": "عليهم فلوس · {count}",
+  "@customersFilterOwing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customersFilterPlatform": "من المنصة · {count}",
+  "@customersFilterPlatform": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customersFilterCleaning": "تنظيفهم قرّب · {count}",
+  "@customersFilterCleaning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customersOwes": "{gender, select, female{عليها} other{عليه}}",
+  "@customersOwes": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "customersDue": "مستحق",
+  "customersFromPlatform": "من المنصة",
+  "customersNextJob": "{gender, select, female{عندها شغلانة {day}} other{عنده شغلانة {day}}}",
+  "@customersNextJob": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "customersFinishedToday": "خلصت النهارده",
+  "customersLastJobDays": "{days, plural, =1{آخر شغلانة امبارح} =2{آخر شغلانة من يومين} few{آخر شغلانة من {days} أيام} other{آخر شغلانة من {days} يوم}}",
+  "@customersLastJobDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "customersLastJobMonths": "{months, plural, =1{آخر شغلانة من شهر} =2{آخر شغلانة من شهرين} few{آخر شغلانة من {months} شهور} other{آخر شغلانة من {months} شهر}}",
+  "@customersLastJobMonths": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "customersLastJobYears": "{years, plural, =1{آخر شغلانة من سنة} =2{آخر شغلانة من سنتين} few{آخر شغلانة من {years} سنين} other{آخر شغلانة من {years} سنة}}",
+  "@customersLastJobYears": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "customersUnitCount": "{count, plural, =1{تكييف واحد} =2{تكييفين} few{{count} تكييفات} other{{count} تكييف}}",
+  "@customersUnitCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customersNoResults": "مفيش عميل بالبحث ده",
+  "customersEmptyTitle": "لسه مفيش عملاء",
+  "customersEmptyBody": "ضيف عملاءك مرة واحدة، وبعد كده تسجّل شغلاناتهم وتفكّرهم بالفلوس على الواتساب بدوسة.",
+  "customersEmptyContacts": "هات عملاءك من جهات الاتصال",
+  "customersEmptyContactsHint": "اختار اللي عايزهم بس",
+  "customersEmptyAdd": "ضيف عميل بإيدك",
+  "customersEmptyAddHint": "الاسم والرقم والعنوان",
+  "customerEdit": "عدّل",
+  "customerCall": "اتصل",
+  "customerWhatsapp": "واتساب",
+  "customerOwes": "{gender, select, female{عليها فلوس} other{عليه فلوس}}",
+  "@customerOwes": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "customerPaidOf": "{gender, select, female{دفعت {paid} من {total}} other{دفع {paid} من {total}}}",
+  "@customerPaidOf": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      },
+      "paid": {
+        "type": "String",
+        "example": "500"
+      },
+      "total": {
+        "type": "String",
+        "example": "1,700"
+      }
+    }
+  },
+  "customerRecordPayment": "سجّل دفع",
+  "customerDetails": "البيانات",
+  "customerUnits": "{gender, select, female{التكييفات عندها} other{التكييفات عنده}}",
+  "@customerUnits": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "customerNoUnits": "لسه مفيش تكييفات متسجلة.",
+  "customerNextCleaning": "التنظيف الجاي: {day}",
+  "@customerNextCleaning": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "customerCleaningLate": "معاد التنظيف عدّى: {day}",
+  "@customerCleaningLate": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "customerFirstOfMonth": "أول {month}",
+  "@customerFirstOfMonth": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "customerNotes": "ملاحظات",
+  "customerJobs": "الشغلانات ({count})",
+  "@customerJobs": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customerJobBalance": "باقي {amount}",
+  "@customerJobBalance": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1,200"
+      }
+    }
+  },
+  "customerNewJobFor": "شغلانة جديدة ل{name}",
+  "@customerNewJobFor": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "customerNewTitle": "عميل جديد",
+  "customerEditTitle": "عدّل بيانات العميل",
+  "customerName": "الاسم",
+  "customerNameHint": "مثلاً: أ. كريم منصور",
+  "customerNameInvalid": "اكتب اسم العميل (حرفين على الأقل)",
+  "customerPhone": "رقم الموبايل (اختياري)",
+  "customerPhoneHint": "01002345678",
+  "customerArea": "المنطقة (اختياري)",
+  "customerAreaClear": "شيل المنطقة",
+  "customerAddress": "العنوان (اختياري)",
+  "customerAddressHint": "الشارع والعمارة والدور والشقة",
+  "customerNotesLabel": "ملاحظات (اختياري)",
+  "customerNotesHint": "مثلاً: بيحب المعاد بعد الضهر",
+  "customerSave": "احفظ العميل",
+  "customerSavesOffline": "بيتحفظ حتى لو مفيش نت",
+  "customerExists": "الرقم ده متسجل قبل كده باسم {name}.",
+  "@customerExists": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "customerOpen": "افتح العميل",
+  "customerDelete": "امسح العميل",
+  "customerDeleteTitle": "تمسح {name}؟",
+  "@customerDeleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "customerDeleteBody": "{gender, select, female{هتتمسح بياناتها وتكييفاتها وكل شغلاناتها، ومش هتقدر ترجّعهم.} other{هتتمسح بياناته وتكييفاته وكل شغلاناته، ومش هتقدر ترجّعهم.}}",
+  "@customerDeleteBody": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "customerDeleteConfirm": "امسح",
+  "unitAdd": "ضيف تكييف",
+  "unitAddTitle": "تكييف جديد",
+  "unitEditTitle": "عدّل التكييف",
+  "unitBrand": "الماركة",
+  "unitBrandHint": "مثلاً: شارب",
+  "unitCapacity": "القدرة",
+  "unitHp": "{hp} حصان",
+  "@unitHp": {
+    "placeholders": {
+      "hp": {
+        "type": "String",
+        "example": "1.5"
+      }
+    }
+  },
+  "unitRoom": "مكانه",
+  "unitRoomHint": "مثلاً: الصالة",
+  "unitInstalledYear": "سنة التركيب",
+  "unitInstalledYearInvalid": "اكتب سنة من {from} لـ {to}",
+  "@unitInstalledYearInvalid": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "unitSince": "من {year}",
+  "@unitSince": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "unitNextService": "التنظيف الجاي",
+  "unitNoNextService": "مش محدد",
+  "unitInSixMonths": "بعد 6 شهور",
+  "unitInAYear": "بعد سنة",
+  "unitPickDay": "يوم تاني",
+  "unitSave": "احفظ",
+  "unitDelete": "امسح التكييف",
+  "unitDeleted": "اتمسح التكييف.",
+  "unitRestore": "رجّعه",
+  "unitUntitled": "تكييف"
 }

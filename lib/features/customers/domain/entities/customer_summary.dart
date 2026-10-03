@@ -12,6 +12,7 @@ final class CustomerSummary extends Equatable {
     this.owedSince,
     this.lastFinishedAt,
     this.nextScheduledAt,
+    this.nextServiceOn,
   });
 
   final Customer customer;
@@ -30,6 +31,10 @@ final class CustomerSummary extends Equatable {
   /// The next visit still to happen, from today on.
   final DateTime? nextScheduledAt;
 
+  /// The soonest next service of their units, a calendar date at local
+  /// midnight; may be past when overdue.
+  final DateTime? nextServiceOn;
+
   @override
   List<Object?> get props => [
     customer,
@@ -39,6 +44,7 @@ final class CustomerSummary extends Equatable {
     owedSince,
     lastFinishedAt,
     nextScheduledAt,
+    nextServiceOn,
   ];
 }
 
