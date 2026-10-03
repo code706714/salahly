@@ -451,10 +451,20 @@ $$;
 
 -- Platform jobs ---------------------------------------------------------
 
+-- The platform jobs whose price change the consumer is answering right
+-- now. Rows live only inside answer_price_change's transaction, so no
+-- other writer ever sees one, and the API roles can't reach this schema
+-- to forge one (a session setting could be).
+create table private.customer_answers (
+  job_id uuid primary key
+);
+
+alter table private.customer_answers enable row level security;
+
 -- Rules every write to a platform job follows, whoever writes it: it
 -- can't be deleted or moved to another customer, only the consumer
--- accepts or declines a price change, and a job the consumer cancelled
--- stays cancelled. A phone echoing a quote the consumer already answered
+-- accepts or declines a price change, and a job whose request was
+-- cancelled (by either side) stays cancelled. A phone echoing a quote the consumer already answered
 -- keeps the consumer's answer.
 create function private.guard_platform_job()
 returns trigger
@@ -471,9 +481,9 @@ begin
   end if;
   if old.status = 'cancelled' and new.status <> 'cancelled' and exists (
     select 1 from public.service_requests r
-     where r.job_id = old.id and r.cancelled_by = 'consumer'
+     where r.job_id = old.id and r.status = 'cancelled'
   ) then
-    raise exception 'cancelled_by_customer' using errcode = '42501';
+    raise exception 'request_cancelled' using errcode = '42501';
   end if;
   if new.quote_status = 'sent'
      and old.quote_status in ('accepted', 'declined')
@@ -481,7 +491,7 @@ begin
     new.quote_status := old.quote_status;
   elsif new.quote_status in ('accepted', 'declined')
      and (new.quote_status, new.quote_sent_at) is distinct from (old.quote_status, old.quote_sent_at)
-     and current_setting('salahly.answering_customer', true) is distinct from 'on' then
+     and not exists (select 1 from private.customer_answers a where a.job_id = old.id) then
     raise exception 'quote_needs_customer' using errcode = '42501';
   end if;
   return new;
@@ -537,7 +547,9 @@ as $$
       select count(*)
         from public.service_requests r
         join public.jobs j on j.id = r.job_id
-       where j.technician_id = t.id and j.status in ('finished', 'paid')
+       where j.technician_id = t.id
+         and r.status = 'assigned'
+         and j.status in ('finished', 'paid')
     )
   )
   from public.technician_profiles t
@@ -1144,7 +1156,7 @@ begin
   if v_job_id is null then
     raise exception 'not_found' using errcode = 'P0002';
   end if;
-  perform set_config('salahly.answering_customer', 'on', true);
+  insert into private.customer_answers (job_id) values (v_job_id);
   update public.jobs
      set quote_status = case when p_approve then 'accepted' else 'declined' end::public.quote_status
    where id = v_job_id
@@ -1153,7 +1165,7 @@ begin
   if not found then
     raise exception 'no_price_change' using errcode = 'P0001';
   end if;
-  perform set_config('salahly.answering_customer', 'off', true);
+  delete from private.customer_answers where job_id = v_job_id;
 end;
 $$;
 
@@ -1173,6 +1185,9 @@ declare
   v_request public.service_requests;
   v_job public.jobs;
 begin
+  if cardinality(p_tags) > cardinality(enum_range(null::public.review_tag)) then
+    raise exception 'invalid_tags' using errcode = '22023';
+  end if;
   select * into v_request
     from public.service_requests
    where id = p_request_id and consumer_id = auth.uid();
@@ -1332,12 +1347,11 @@ set search_path = ''
 as $$
 declare
   v_user_id uuid := auth.uid();
-  v_technician public.technician_profiles;
+  v_credits integer;
   v_request public.service_requests;
   v_offer_id uuid;
 begin
-  select * into v_technician from public.technician_profiles where id = v_user_id;
-  if not found then
+  if not exists (select 1 from public.technician_profiles where id = v_user_id) then
     raise exception 'not_technician' using errcode = '42501';
   end if;
   select r.* into v_request
@@ -1353,6 +1367,12 @@ begin
      or (select count(*) from public.request_offers where request_id = v_request.id) >= 3 then
     raise exception 'request_closed' using errcode = 'P0001';
   end if;
+  -- Locked after the request, as accept_offer does, so two offers sent at
+  -- once can't both count the same pending offers.
+  select job_credits into v_credits
+    from public.technician_profiles
+   where id = v_user_id
+   for update;
   if (
     select count(*)
       from public.request_offers o
@@ -1360,7 +1380,7 @@ begin
      where o.technician_id = v_user_id
        and o.status = 'sent'
        and private.request_state(r.status, r.expires_at) = 'open'
-  ) >= v_technician.job_credits then
+  ) >= v_credits then
     raise exception 'no_credits' using errcode = 'P0001';
   end if;
   if p_arrive_at <= now()

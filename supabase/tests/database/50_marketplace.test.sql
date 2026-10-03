@@ -1,7 +1,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(62);
+select plan(66);
 
 -- Consumers C and D; technicians: A and B cover Nasr City (B has no uses
 -- left), F covers Maadi only, P covers Nasr City but isn't verified yet.
@@ -417,6 +417,17 @@ select is(
   'only the consumer can accept a price change'
 );
 
+set local salahly.answering_customer = 'on';
+select is(
+  pg_temp.push_job(
+    (select id from pg_temp.ids where name = 'job1'),
+    jsonb_build_object('quote_status', 'declined', 'quote_sent_at', now() + interval '2 minutes')
+  ) #>> '{rejected,0,code}',
+  'quote_needs_customer',
+  'a session setting can''t stand in for the consumer''s answer'
+);
+reset salahly.answering_customer;
+
 select is(
   pg_temp.push_job(
     (select id from pg_temp.ids where name = 'job1'),
@@ -517,6 +528,15 @@ select throws_ok(
   'a job is rated once'
 );
 
+select throws_ok(
+  $$select public.submit_review(
+      (select id from pg_temp.ids where name = 'r1'), 5::smallint,
+      array_fill('on_time'::public.review_tag, array[6]), null, 'cash')$$,
+  '22023',
+  'invalid_tags',
+  'a rating takes at most one of each tag'
+);
+
 select is(
   public.technician_profile('00000000-0000-4000-8000-0000000000a1') #>> '{reviews,0,author}',
   'نورهان م.',
@@ -579,7 +599,7 @@ select results_eq(
 
 select is(
   pg_temp.push_job((select id from pg_temp.ids where name = 'job3'), '{"status": "confirmed"}') #>> '{rejected,0,code}',
-  'cancelled_by_customer',
+  'request_cancelled',
   'a phone can''t bring back a job the consumer cancelled'
 );
 
@@ -626,6 +646,25 @@ select results_eq(
      where r.id = (select id from pg_temp.ids where name = 'r4')$$,
   $$values ('cancelled', 'technician', 1)$$,
   'when the technician cancels, the request ends and the consumer gets the use back'
+);
+
+select pg_temp.sign_in_as('00000000-0000-4000-8000-0000000000a1');
+
+select is(
+  pg_temp.push_job(
+    (select id from pg_temp.ids where name = 'job4'),
+    jsonb_build_object('status', 'finished', 'started_at', now(), 'finished_at', now())
+  ) #>> '{rejected,0,code}',
+  'request_cancelled',
+  'a technician can''t bring back a job they cancelled'
+);
+
+select pg_temp.sign_in_as('00000000-0000-4000-8000-0000000000c1');
+
+select is(
+  (public.technician_profile('00000000-0000-4000-8000-0000000000a1') ->> 'jobs_done')::int,
+  1,
+  'only work done on a booking that stood counts as a finished job'
 );
 
 -- Time running out, and widening.
