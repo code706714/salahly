@@ -2,9 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
+import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/core/text/digits.dart';
 import 'package:salahly/features/auth/domain/entities/otp_channel.dart';
-import 'package:salahly/features/auth/domain/entities/phone_number.dart';
 import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
 
 part 'phone_state.dart';

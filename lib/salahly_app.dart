@@ -22,6 +22,7 @@ class _SalahlyAppState extends State<SalahlyApp> {
   late final SessionCubit _session = SessionCubit(
     authRepository: widget.dependencies.authRepository,
     accountRepository: widget.dependencies.accountRepository,
+    userData: widget.dependencies.userData,
   );
   late final SessionRefresh _refresh = SessionRefresh(_session.stream);
   late final GoRouter _router = createRouter(_session, refresh: _refresh);
@@ -45,6 +46,16 @@ class _SalahlyAppState extends State<SalahlyApp> {
         RepositoryProvider.value(value: dependencies.onboardingRepository),
         RepositoryProvider.value(value: dependencies.locationService),
         RepositoryProvider.value(value: dependencies.photoPicker),
+        RepositoryProvider.value(value: dependencies.customersRepository),
+        RepositoryProvider.value(value: dependencies.jobsRepository),
+        RepositoryProvider.value(value: dependencies.database),
+        RepositoryProvider.value(value: dependencies.syncEngine),
+        RepositoryProvider.value(value: dependencies.networkStatus),
+        RepositoryProvider.value(value: dependencies.localChanges),
+        RepositoryProvider.value(value: dependencies.externalApps),
+        RepositoryProvider.value(value: dependencies.speechInput),
+        RepositoryProvider.value(value: dependencies.contactPicker),
+        RepositoryProvider.value(value: dependencies.sharedFiles),
       ],
       child: BlocProvider.value(
         value: _session,

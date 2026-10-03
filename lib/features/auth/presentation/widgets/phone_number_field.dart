@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
-import 'package:salahly/features/auth/domain/entities/phone_number.dart';
 
 /// The "+20 | 100 234 5678" field. Always left-to-right, like the number.
 class PhoneNumberField extends StatefulWidget {

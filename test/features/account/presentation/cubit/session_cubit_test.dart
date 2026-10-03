@@ -58,6 +58,7 @@ const _otherProfile = UserProfile(
 void main() {
   late MockAuthRepository authRepository;
   late MockAccountRepository accountRepository;
+  late MockUserScopedData userData;
   late StreamController<AuthUser?> userChanges;
   AuthUser? currentUser;
 
@@ -69,11 +70,15 @@ void main() {
   SessionCubit buildCubit() => SessionCubit(
     authRepository: authRepository,
     accountRepository: accountRepository,
+    userData: userData,
   );
 
   setUp(() {
     authRepository = MockAuthRepository();
     accountRepository = MockAccountRepository();
+    userData = MockUserScopedData();
+    when(() => userData.claimFor(any())).thenAnswer((_) async {});
+    when(() => userData.clear()).thenAnswer((_) async {});
     userChanges = StreamController<AuthUser?>.broadcast();
     currentUser = null;
     when(
@@ -114,7 +119,21 @@ void main() {
         build: buildCubit,
         act: (_) => authChanged(null),
         expect: () => [const SessionSignedOut()],
-        verify: (_) => verify(() => accountRepository.clearCache()).called(1),
+        verify: (_) {
+          verify(() => accountRepository.clearCache()).called(1);
+          verify(() => userData.clear()).called(1);
+        },
+      );
+
+      blocTest<SessionCubit, SessionState>(
+        'still reports signed out when local data cannot be deleted',
+        setUp: () => when(
+          () => userData.clear(),
+        ).thenThrow(StateError('disk full')),
+        build: buildCubit,
+        act: (_) => authChanged(null),
+        expect: () => [const SessionSignedOut()],
+        errors: () => [isA<StateError>()],
       );
 
       blocTest<SessionCubit, SessionState>(
@@ -163,6 +182,32 @@ void main() {
           const SessionReady(user: _user, profile: _cachedProfile),
           const SessionReady(user: _user, profile: _freshProfile),
         ],
+      );
+
+      blocTest<SessionCubit, SessionState>(
+        "makes the phone's local data this user's before showing anything",
+        build: buildCubit,
+        act: (_) => authChanged(_user),
+        expect: () => [
+          const SessionReady(user: _user, profile: _freshProfile),
+        ],
+        verify: (_) => verifyInOrder([
+          () => userData.claimFor(_userId),
+          () => accountRepository.cachedProfile(_userId),
+        ]),
+      );
+
+      blocTest<SessionCubit, SessionState>(
+        'still signs in when local data cannot be prepared',
+        setUp: () => when(
+          () => userData.claimFor(any()),
+        ).thenThrow(StateError('disk full')),
+        build: buildCubit,
+        act: (_) => authChanged(_user),
+        expect: () => [
+          const SessionReady(user: _user, profile: _freshProfile),
+        ],
+        errors: () => [isA<StateError>()],
       );
 
       blocTest<SessionCubit, SessionState>(

@@ -46,7 +46,6 @@
   "otpSubmit": "ادخل",
   "otpInvalid": "الكود غلط أو خلص وقته. اتأكد منه أو اطلب كود جديد.",
   "otpDeleteDigit": "امسح",
-  "otpPasted": "حطّينا الكود اللي نسخته",
   "welcomeTitle": "أهلاً بيك\nهتستخدم الأبلكيشن إزاي؟",
   "welcomeSubtitle": "اختار اللي يناسبك دلوقتي، وتقدر تغيّره بعدين من حسابك.",
   "roleConsumerTitle": "محتاج فني",
@@ -81,7 +80,6 @@
   "areaChosenByHand": "دوس عشان تغيّرها",
   "areaPick": "اختار منطقتك",
   "areaDetecting": "بنحدد مكانك...",
-  "areaRequired": "اختار منطقتك",
   "areaPickerTitle": "اختار المنطقة",
   "areaSearchHint": "دوّر على منطقة",
   "areaSearchEmpty": "مفيش منطقة بالاسم ده",
@@ -189,7 +187,6 @@
   "techDocsRequired": "صوّر البطاقة من الوشّين وصورة ليك ماسكها",
   "techDocsRejected": "في مشكلة في الصور اللي اترفعت. صوّرها تاني وابعت.",
   "techSubmit": "ابعت للتوثيق",
-  "techUploading": "بنرفع الصور...",
   "techDoneTitle": "بياناتك وصلت",
   "techDoneBody": "بنراجع البطاقة وهنبعتلك على الواتساب أول ما حسابك يتوثّق. لحد ما يتوثّق تقدر تضيف عملاءك وشغلاناتك وتبعت عروض أسعار.",
   "freeJobsCount": "{count, plural, =1{شغلانة} =2{شغلانتين} few{{count} شغلانات} other{{count} شغلانة}}",
@@ -206,7 +203,6 @@
   "techStart": "يلا نبدأ",
   "photoTake": "صوّر دلوقتي",
   "photoChoose": "اختار من الصور",
-  "photoReplace": "غيّر الصورة",
   "greeting": "أهلاً يا {name}",
   "@greeting": {
     "placeholders": {
@@ -230,5 +226,1050 @@
   "sessionUnavailableTitle": "مقدرناش نفتح حسابك",
   "sessionUnavailableBody": "محتاجين نت أول مرة عشان نجيب بياناتك. اتأكد من النت وجرّب تاني.",
   "signOut": "سجّل خروج",
-  "photoCameraDenied": "اسمح للأبلكيشن يفتح الكاميرا من إعدادات الموبايل، أو اختار صورة من الصور."
+  "photoCameraDenied": "اسمح للأبلكيشن يفتح الكاميرا من إعدادات الموبايل، أو اختار صورة من الصور.",
+  "navToday": "النهارده",
+  "navJobs": "الشغلانات",
+  "navCustomers": "العملاء",
+  "navMoney": "الفلوس",
+  "myAccount": "حسابي",
+  "today": "النهارده",
+  "tomorrow": "بكره",
+  "yesterday": "امبارح",
+  "periodMorning": "الصبح",
+  "periodNoon": "الضهر",
+  "periodAfternoon": "العصر",
+  "periodSunset": "المغرب",
+  "periodNight": "بالليل",
+  "pounds": "{amount} ج.م",
+  "@pounds": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1,450"
+      }
+    }
+  },
+  "offlineTitle": "من غير نت.",
+  "offlinePending": "{count, plural, =0{كل حاجة بتتحفظ على الموبايل وهتتبعت لوحدها أول ما النت يرجع.} =1{حاجة واحدة اتحفظت وهتتبعت لوحدها أول ما النت يرجع.} =2{حاجتين اتحفظوا وهيتبعتوا لوحدهم أول ما النت يرجع.} few{{count} حاجات اتحفظت وهتتبعت لوحدها أول ما النت يرجع.} other{{count} حاجة اتحفظت وهتتبعت لوحدها أول ما النت يرجع.}}",
+  "@offlinePending": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "whatsappFailed": "الواتساب ماتفتحش.",
+  "dialFailed": "مقدرناش نفتح الاتصال.",
+  "mapFailed": "مقدرناش نفتح الخريطة.",
+  "newJob": "شغلانة جديدة",
+  "jobTagCleaning": "تنظيف",
+  "jobTagFreon": "شحن فريون",
+  "jobTagInstallation": "تركيب",
+  "jobTagNotCooling": "مش بيبرّد",
+  "jobTagLeaking": "بينقّط مية",
+  "jobTagMaintenance": "صيانة دورية",
+  "jobTagRemoval": "فك ونقل",
+  "jobUntitled": "شغلانة",
+  "jobStatusUnconfirmed": "لسه ماتأكدش",
+  "jobStatusConfirmed": "اتأكد",
+  "jobStatusStarted": "بدأت",
+  "jobStatusFinished": "خلصت",
+  "jobStatusPaid": "اتدفعت",
+  "jobStatusCancelled": "اتلغت",
+  "jobAwaitingAmount": "مستني {amount} ج.م",
+  "@jobAwaitingAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "650"
+      }
+    }
+  },
+  "jobQuoteSent": "مستني رد على العرض",
+  "jobFromPlatform": "من المنصة",
+  "jobPendingSync": "هتتبعت",
+  "jobNext": "الجاي",
+  "jobNow": "دلوقتي",
+  "jobSendConfirmation": "ابعت تأكيد",
+  "jobConfirmationMessage": "أهلاً {name}، معانا ميعاد {day} الساعة {time} {period} ({work}). لو الميعاد مناسب ابعتلي \"تمام\".\n{technician}",
+  "@jobConfirmationMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String",
+        "example": "بكره"
+      },
+      "time": {
+        "type": "String",
+        "example": "4:30"
+      },
+      "period": {
+        "type": "String",
+        "example": "العصر"
+      },
+      "work": {
+        "type": "String"
+      },
+      "technician": {
+        "type": "String"
+      }
+    }
+  },
+  "dueToday": "مستحق النهارده",
+  "dueLate": "{days, plural, =1{متأخر يوم} =2{متأخر يومين} few{متأخر {days} أيام} other{متأخر {days} يوم}}",
+  "@dueLate": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "duePromised": "وعد يدفع {day}",
+  "@duePromised": {
+    "placeholders": {
+      "day": {
+        "type": "String",
+        "example": "السبت"
+      }
+    }
+  },
+  "goodMorning": "صباح الخير يا {name}",
+  "@goodMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "goodEvening": "مساء الخير يا {name}",
+  "@goodEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "todayOwedTitle": "فلوس ليك بره",
+  "todayOwedSeeWho": "شوف مين",
+  "todayOwedCustomers": "{count, plural, =1{عند عميل واحد} =2{عند عميلين} few{عند {count} عملاء} other{عند {count} عميل}}",
+  "@todayOwedCustomers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayOwedLatest": "{days, plural, =1{، والأقدم متأخر يوم} =2{، والأقدم متأخر يومين} few{، والأقدم متأخر {days} أيام} other{، والأقدم متأخر {days} يوم}}",
+  "@todayOwedLatest": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "todayScheduleTitle": "مواعيد النهارده",
+  "jobCount": "{count, plural, =0{مفيش شغلانات} =1{شغلانة واحدة} =2{شغلانتين} few{{count} شغلانات} other{{count} شغلانة}}",
+  "@jobCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayNoJobs": "مفيش مواعيد النهارده",
+  "todayNoJobsHint": "أي شغلانة تسجّلها بميعاد النهارده هتظهر هنا.",
+  "todayFirstSteps": "ابدأ بالحاجتين دول، كل واحدة بتاخد أقل من دقيقة.",
+  "todayStepFirstJob": "سجّل أول شغلانة",
+  "todayStepFirstJobHint": "حتى لو لعميل قديم",
+  "todayStepContacts": "هات عملاءك من جهات الاتصال",
+  "todayStepContactsHint": "اختار اللي عايزهم بس",
+  "remindCustomer": "فكّره",
+  "remindCustomerFeminine": "فكّرها",
+  "paymentReminderMessage": "أهلاً {name}، بفكّرك إن فاضل {amount} ج.م من حساب {work}. {gender, select, female{تقدري} other{تقدر}} تدفعهم كاش أو تحويل إنستاباي أو فودافون كاش. شكراً.\n{technician}",
+  "@paymentReminderMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String",
+        "example": "1,200"
+      },
+      "work": {
+        "type": "String"
+      },
+      "gender": {
+        "type": "String"
+      },
+      "technician": {
+        "type": "String"
+      }
+    }
+  },
+  "moneyIncomeToDate": "دخل الشهر لحد النهارده",
+  "moneyIncomeOf": "دخل شهر {month}",
+  "@moneyIncomeOf": {
+    "placeholders": {
+      "month": {
+        "type": "String",
+        "example": "سبتمبر"
+      }
+    }
+  },
+  "moneyFromJobs": "{count, plural, =0{مفيش شغلانات خلصت} =1{من شغلانة واحدة} =2{من شغلانتين} few{من {count} شغلانات} other{من {count} شغلانة}}",
+  "@moneyFromJobs": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "moneyCollected": "اتحصّل",
+  "moneyOutstanding": "لسه بره",
+  "moneyMonthsTitle": "اختار الشهر",
+  "moneyOwingTitle": "مين عليه فلوس",
+  "moneyOwingCustomers": "{count, plural, =1{عميل واحد} =2{عميلين} few{{count} عملاء} other{{count} عميل}}",
+  "@moneyOwingCustomers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "moneyOwedAll": "{work} · {amount} ج.م",
+  "@moneyOwedAll": {
+    "placeholders": {
+      "work": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String",
+        "example": "1,400"
+      }
+    }
+  },
+  "moneyOwedRest": "{work} · باقي {rest} من {total}",
+  "@moneyOwedRest": {
+    "placeholders": {
+      "work": {
+        "type": "String"
+      },
+      "rest": {
+        "type": "String",
+        "example": "1,200"
+      },
+      "total": {
+        "type": "String",
+        "example": "1,700"
+      }
+    }
+  },
+  "moneyPartlyPaid": "{due} · دفع جزء",
+  "@moneyPartlyPaid": {
+    "placeholders": {
+      "due": {
+        "type": "String",
+        "example": "متأخر 6 أيام"
+      }
+    }
+  },
+  "moneyRecordPayment": "سجّل دفع",
+  "moneyRemindNote": "\"فكّره\" بتفتح الواتساب برسالة مؤدبة جاهزة فيها المبلغ وطرق الدفع، وإنت اللي بتدوس إرسال.",
+  "moneyNobodyOwes": "محدش عليه فلوس",
+  "moneyNobodyOwesHint": "أي شغلانة تخلص وفاضل فيها فلوس هتظهر هنا.",
+  "accountVerified": "موثّق",
+  "accountHelp": "مساعدة",
+  "accountSignOutTitle": "تسجّل خروج؟",
+  "accountSignOutBody": "عشان تدخل تاني هتحتاج رقم موبايلك وكود جديد.",
+  "accountSignOutUnsent": "{count, plural, =1{فيه حاجة واحدة لسه ماتبعتتش، ولو خرجت دلوقتي هتضيع. استنى لحد ما تتبعت.} =2{فيه حاجتين لسه ماتبعتوش، ولو خرجت دلوقتي هيضيعوا. استنى لحد ما يتبعتوا.} few{فيه {count} حاجات لسه ماتبعتتش، ولو خرجت دلوقتي هتضيع. استنى لحد ما تتبعت.} other{فيه {count} حاجة لسه ماتبعتتش، ولو خرجت دلوقتي هتضيع. استنى لحد ما تتبعت.}}",
+  "@accountSignOutUnsent": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "accountSignOutStay": "مش دلوقتي",
+  "jobsListCalendar": "التقويم",
+  "jobsListSearch": "دوّر",
+  "jobsListSearchHint": "اسم العميل أو رقمه أو الشغلانة",
+  "jobsListSearchClose": "اقفل البحث",
+  "jobsListUpcoming": "الجاية",
+  "jobsListFollowUp": "متابعة",
+  "jobsListDone": "خلصت",
+  "jobsListTabCount": "{tab} ({count})",
+  "@jobsListTabCount": {
+    "placeholders": {
+      "tab": {
+        "type": "String",
+        "example": "الجاية"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "jobsListAwaitingPayment": "مستنيين فلوس",
+  "jobsListQuotesWaiting": "عروض أسعار مستنية رد",
+  "jobsListMissed": "فات معادها ولسه ماخلصتش",
+  "jobsListUnscheduled": "لسه ملهاش معاد",
+  "jobsListThisWeek": "الأسبوع ده",
+  "jobsListLastWeek": "الأسبوع اللي فات",
+  "jobsListPartlyPaid": "دفع جزء",
+  "jobsListAwaitingMoney": "مستني الفلوس",
+  "jobsListQuoteSentAgo": "{days, plural, =0{اتبعت النهارده} =1{اتبعت امبارح} =2{اتبعت من يومين} few{اتبعت من {days} أيام} other{اتبعت من {days} يوم}}",
+  "@jobsListQuoteSentAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "jobsListWasDue": "كان معادها {day}",
+  "@jobsListWasDue": {
+    "placeholders": {
+      "day": {
+        "type": "String",
+        "example": "امبارح"
+      }
+    }
+  },
+  "jobsListNoAmount": "—",
+  "jobsListNoUpcoming": "مفيش مواعيد جاية",
+  "jobsListNoUpcomingHint": "أي شغلانة تسجّلها بميعاد هتظهر هنا.",
+  "jobsListNoFollowUp": "مفيش حاجة مستنياك",
+  "jobsListNoFollowUpHint": "الفلوس اللي لسه ماتدفعتش والعروض اللي مستنية رد هتلاقيها هنا.",
+  "jobsListNoDone": "لسه مفيش شغلانات خلصت",
+  "jobsListNoDoneHint": "أول ما تخلّص شغلانة هتلاقيها هنا.",
+  "jobsListNoResults": "مفيش نتايج",
+  "jobsListNoResultsHint": "جرّب اسم تاني أو رقم الموبايل.",
+  "calendarTitle": "المواعيد · {month}",
+  "@calendarTitle": {
+    "placeholders": {
+      "month": {
+        "type": "String",
+        "example": "أكتوبر"
+      }
+    }
+  },
+  "calendarHourMorning": "{hour} ص",
+  "@calendarHourMorning": {
+    "placeholders": {
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarHourNoon": "{hour} ض",
+  "@calendarHourNoon": {
+    "placeholders": {
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarHourAfternoon": "{hour} ع",
+  "@calendarHourAfternoon": {
+    "placeholders": {
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarHourEvening": "{hour} م",
+  "@calendarHourEvening": {
+    "placeholders": {
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarHours": "{count, plural, =1{ساعة} =2{ساعتين} few{{count} ساعات} other{{count} ساعة}}",
+  "@calendarHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarHoursAndHalf": "{count, plural, =0{نص ساعة} =1{ساعة ونص} =2{ساعتين ونص} few{{count} ساعات ونص} other{{count} ساعة ونص}}",
+  "@calendarHoursAndHalf": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarMinutes": "{count, plural, =1{دقيقة} =2{دقيقتين} few{{count} دقايق} other{{count} دقيقة}}",
+  "@calendarMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarHoursAndMinutes": "{hours} و{minutes}",
+  "@calendarHoursAndMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "String",
+        "example": "ساعة"
+      },
+      "minutes": {
+        "type": "String",
+        "example": "15 دقيقة"
+      }
+    }
+  },
+  "calendarNewJobAt": "سجّل شغلانة الساعة {time}",
+  "@calendarNewJobAt": {
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "3:00 العصر"
+      }
+    }
+  },
+  "newJobClose": "اقفل",
+  "newJobSteps": "3 حاجات بس",
+  "newJobCustomerTitle": "العميل",
+  "newJobProblemTitle": "المشكلة",
+  "newJobScheduleTitle": "المعاد",
+  "newJobChangeCustomer": "غيّر",
+  "newJobPickCustomer": "اختار من عملاءك",
+  "newJobFromContacts": "من جهات الاتصال",
+  "newJobNewCustomer": "عميل جديد",
+  "newJobCustomerRequired": "اختار العميل الأول",
+  "newJobDescriptionHint": "اكتب تفاصيل المشكلة",
+  "newJobDictate": "دوس واتكلم بدل الكتابة",
+  "newJobListening": "بسمعك… دوس لما تخلص",
+  "newJobSpeechUnavailable": "الكتابة بالصوت مش متاحة على الموبايل ده. اكتب التفاصيل بإيدك.",
+  "newJobOtherDay": "يوم تاني",
+  "newJobTimeMorning": "10 ص",
+  "newJobTimeNoon": "1 الضهر",
+  "newJobTimeAfternoon": "4 العصر",
+  "newJobTimeEvening": "7 م",
+  "newJobOtherTime": "ساعة تانية",
+  "newJobTimeRequired": "اختار الساعة كمان",
+  "newJobNoDate": "من غير معاد",
+  "newJobScheduleDone": "تمام",
+  "newJobSendConfirmation": "ابعت للعميل رسالة تأكيد بالمعاد على الواتساب",
+  "newJobSave": "احفظ الشغلانة",
+  "newJobSavedOffline": "بتتحفظ حتى لو مفيش نت",
+  "newJobCustomerSheetTitle": "اختار العميل",
+  "newJobCustomerSearchHint": "دوّر بالاسم أو الرقم",
+  "newJobNoCustomerMatch": "مفيش عميل بالاسم ده",
+  "customersTitle": "العملاء",
+  "customersAdd": "عميل",
+  "customersSearchHint": "دوّر بالاسم أو الرقم أو المنطقة",
+  "customersSearchClear": "امسح البحث",
+  "customersFilterAll": "الكل",
+  "customersFilterOwing": "عليهم فلوس · {count}",
+  "@customersFilterOwing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customersFilterPlatform": "من المنصة · {count}",
+  "@customersFilterPlatform": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customersFilterCleaning": "تنظيفهم قرّب · {count}",
+  "@customersFilterCleaning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customersOwes": "{gender, select, female{عليها} other{عليه}}",
+  "@customersOwes": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "customersDue": "مستحق",
+  "customersFromPlatform": "من المنصة",
+  "customersNextJob": "{gender, select, female{عندها شغلانة {day}} other{عنده شغلانة {day}}}",
+  "@customersNextJob": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "customersFinishedToday": "خلصت النهارده",
+  "customersLastJobDays": "{days, plural, =1{آخر شغلانة امبارح} =2{آخر شغلانة من يومين} few{آخر شغلانة من {days} أيام} other{آخر شغلانة من {days} يوم}}",
+  "@customersLastJobDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "customersLastJobMonths": "{months, plural, =1{آخر شغلانة من شهر} =2{آخر شغلانة من شهرين} few{آخر شغلانة من {months} شهور} other{آخر شغلانة من {months} شهر}}",
+  "@customersLastJobMonths": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "customersLastJobYears": "{years, plural, =1{آخر شغلانة من سنة} =2{آخر شغلانة من سنتين} few{آخر شغلانة من {years} سنين} other{آخر شغلانة من {years} سنة}}",
+  "@customersLastJobYears": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "customersUnitCount": "{count, plural, =1{تكييف واحد} =2{تكييفين} few{{count} تكييفات} other{{count} تكييف}}",
+  "@customersUnitCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customersNoResults": "مفيش عميل بالبحث ده",
+  "customersEmptyTitle": "لسه مفيش عملاء",
+  "customersEmptyBody": "ضيف عملاءك مرة واحدة، وبعد كده تسجّل شغلاناتهم وتفكّرهم بالفلوس على الواتساب بدوسة.",
+  "customersEmptyContacts": "هات عملاءك من جهات الاتصال",
+  "customersEmptyContactsHint": "اختار اللي عايزهم بس",
+  "customersEmptyAdd": "ضيف عميل بإيدك",
+  "customersEmptyAddHint": "الاسم والرقم والعنوان",
+  "customerEdit": "عدّل",
+  "customerCall": "اتصل",
+  "customerWhatsapp": "واتساب",
+  "customerOwes": "{gender, select, female{عليها فلوس} other{عليه فلوس}}",
+  "@customerOwes": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "customerPaidOf": "{gender, select, female{دفعت {paid} من {total}} other{دفع {paid} من {total}}}",
+  "@customerPaidOf": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      },
+      "paid": {
+        "type": "String",
+        "example": "500"
+      },
+      "total": {
+        "type": "String",
+        "example": "1,700"
+      }
+    }
+  },
+  "customerRecordPayment": "سجّل دفع",
+  "customerDetails": "البيانات",
+  "customerUnits": "{gender, select, female{التكييفات عندها} other{التكييفات عنده}}",
+  "@customerUnits": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "customerNoUnits": "لسه مفيش تكييفات متسجلة.",
+  "customerNextCleaning": "التنظيف الجاي: {day}",
+  "@customerNextCleaning": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "customerCleaningLate": "معاد التنظيف عدّى: {day}",
+  "@customerCleaningLate": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "customerFirstOfMonth": "أول {month}",
+  "@customerFirstOfMonth": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "customerNotes": "ملاحظات",
+  "customerJobs": "الشغلانات ({count})",
+  "@customerJobs": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customerJobBalance": "باقي {amount}",
+  "@customerJobBalance": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1,200"
+      }
+    }
+  },
+  "customerNewJobFor": "شغلانة جديدة ل{name}",
+  "@customerNewJobFor": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "customerNewTitle": "عميل جديد",
+  "customerEditTitle": "عدّل بيانات العميل",
+  "customerName": "الاسم",
+  "customerNameHint": "مثلاً: أ. كريم منصور",
+  "customerNameInvalid": "اكتب اسم العميل (حرفين على الأقل)",
+  "customerPhone": "رقم الموبايل (اختياري)",
+  "customerPhoneHint": "01002345678",
+  "customerArea": "المنطقة (اختياري)",
+  "customerAreaClear": "شيل المنطقة",
+  "customerAddress": "العنوان (اختياري)",
+  "customerAddressHint": "الشارع والعمارة والدور والشقة",
+  "customerNotesLabel": "ملاحظات (اختياري)",
+  "customerNotesHint": "مثلاً: بيحب المعاد بعد الضهر",
+  "customerSave": "احفظ العميل",
+  "customerSavesOffline": "بيتحفظ حتى لو مفيش نت",
+  "customerExists": "الرقم ده متسجل قبل كده باسم {name}.",
+  "@customerExists": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "customerOpen": "افتح العميل",
+  "customerDelete": "امسح العميل",
+  "customerDeleteTitle": "تمسح {name}؟",
+  "@customerDeleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "customerDeleteBody": "{gender, select, female{هتتمسح بياناتها وتكييفاتها وكل شغلاناتها، ومش هتقدر ترجّعهم.} other{هتتمسح بياناته وتكييفاته وكل شغلاناته، ومش هتقدر ترجّعهم.}}",
+  "@customerDeleteBody": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "customerDeleteConfirm": "امسح",
+  "unitAdd": "ضيف تكييف",
+  "unitAddTitle": "تكييف جديد",
+  "unitEditTitle": "عدّل التكييف",
+  "unitBrand": "الماركة",
+  "unitBrandHint": "مثلاً: شارب",
+  "unitCapacity": "القدرة",
+  "unitHp": "{hp} حصان",
+  "@unitHp": {
+    "placeholders": {
+      "hp": {
+        "type": "String",
+        "example": "1.5"
+      }
+    }
+  },
+  "unitRoom": "مكانه",
+  "unitRoomHint": "مثلاً: الصالة",
+  "unitInstalledYear": "سنة التركيب",
+  "unitInstalledYearInvalid": "اكتب سنة من {from} لـ {to}",
+  "@unitInstalledYearInvalid": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "unitSince": "من {year}",
+  "@unitSince": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "unitNextService": "التنظيف الجاي",
+  "unitNoNextService": "مش محدد",
+  "unitInSixMonths": "بعد 6 شهور",
+  "unitInAYear": "بعد سنة",
+  "unitPickDay": "يوم تاني",
+  "unitSave": "احفظ",
+  "unitDelete": "امسح التكييف",
+  "unitDeleted": "اتمسح التكييف.",
+  "unitRestore": "رجّعه",
+  "unitUntitled": "تكييف",
+  "jobPageNoDate": "لسه ملهاش معاد",
+  "jobPageStatusStarted": "شغال دلوقتي",
+  "jobPageStatusAwaitingPayment": "خلصت · مستني الفلوس",
+  "jobPageStepConfirmed": "اتأكد",
+  "jobPageStepStarted": "بدأ",
+  "jobPageStepFinished": "خلص",
+  "jobPageStepPaid": "اتدفع",
+  "jobPageMore": "اختيارات تانية",
+  "jobPageCancel": "إلغي الشغلانة",
+  "jobPageReschedule": "غيّر المعاد",
+  "jobPageDelete": "امسح الشغلانة",
+  "jobPageDeleteTitle": "تمسح الشغلانة دي؟",
+  "jobPageDeleteBody": "هتتمسح هي وعرض السعر والفاتورة والصور بتوعها، ومش هتقدر ترجّعها.",
+  "jobPageDeleteConfirm": "امسح",
+  "jobPageKeep": "لأ، سيبها",
+  "jobPageUndo": "تراجع",
+  "jobPageConfirmed": "اتأكد المعاد",
+  "jobPageStarted": "بدأت الشغل",
+  "jobPageFinished": "الشغلانة خلصت",
+  "jobPageCancelled": "الشغلانة اتلغت",
+  "jobPageConfirm": "أكّد المعاد",
+  "jobPageStart": "ابدأ الشغل",
+  "jobPageFinish": "خلّصت الشغلانة",
+  "jobPageCollect": "استلمت الفلوس",
+  "jobPageCustomer": "العميل",
+  "jobPageCall": "اتصل",
+  "jobPageWhatsapp": "واتساب",
+  "jobPageMap": "الخريطة",
+  "jobPageGreeting": "أهلاً {name}",
+  "@jobPageGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "jobPageProblem": "المشكلة",
+  "jobPagePhotos": "الصور",
+  "jobPageBefore": "قبل",
+  "jobPageAfter": "بعد",
+  "jobPagePhoto": "صورة",
+  "jobPageAddBefore": "ضيف صورة قبل",
+  "jobPageAddAfter": "ضيف صورة بعد",
+  "jobPageTakeAfter": "صوّر بعد ما تخلص",
+  "jobPagePhotoDelete": "امسح الصورة",
+  "jobPagePhotoDeleteTitle": "تمسح الصورة دي؟",
+  "jobPagePhotoClose": "اقفل",
+  "jobPageQuote": "عرض السعر",
+  "jobPageQuoteAccepted": "العميل وافق",
+  "jobPageQuoteDraft": "لسه ماتبعتش",
+  "jobPageQuoteCreate": "اعمل العرض",
+  "jobPageItemCount": "{count, plural, =0{مفيش بنود لسه} =1{بند واحد} =2{بندين} few{{count} بنود} other{{count} بند}}",
+  "@jobPageItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "jobPagePayment": "الدفع",
+  "jobPagePaid": "اتدفع",
+  "jobPageBalance": "الباقي",
+  "jobPageInvoice": "الفاتورة وتسجيل الدفع",
+  "jobPageMissing": "الشغلانة دي مش موجودة. ممكن تكون اتمسحت.",
+  "quoteTitle": "عرض سعر",
+  "quoteAddItem": "ضيف بند",
+  "quoteIncrease": "زوّد",
+  "quoteDecrease": "قلّل",
+  "quoteRemoveItem": "شيل البند",
+  "quoteUnitPrice": "{quantity} × {price} ج.م",
+  "@quoteUnitPrice": {
+    "placeholders": {
+      "quantity": {
+        "type": "int"
+      },
+      "price": {
+        "type": "String",
+        "example": "900"
+      }
+    }
+  },
+  "quoteEmpty": "ضيف الحاجات اللي هتعملها وسعر كل واحدة.",
+  "quoteTotal": "الإجمالي",
+  "quoteValidFor": "العرض ساري {days, plural, =1{يوم} =2{يومين} few{{days} أيام} other{{days} يوم}}",
+  "@quoteValidFor": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "quoteValidityTitle": "العرض ساري قد إيه؟",
+  "quoteValidityDays": "{days, plural, =1{يوم} =2{يومين} few{{days} أيام} other{{days} يوم}}",
+  "@quoteValidityDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "quotePreviewTitle": "ده اللي هيوصل للعميل",
+  "quoteSend": "ابعت على الواتساب",
+  "quoteSaveDraft": "احفظ من غير ما تبعت",
+  "quoteSavedNote": "العرض اتحفظ عندك.",
+  "quoteAccepted": "العميل وافق على العرض",
+  "quoteMarkAccepted": "العميل وافق",
+  "quoteDiscardTitle": "تخرج من غير ما تحفظ؟",
+  "quoteDiscardBody": "التغييرات اللي عملتها في العرض هتضيع.",
+  "quoteDiscard": "اخرج",
+  "quoteStay": "ارجع للعرض",
+  "quoteItemTitleLabel": "البند",
+  "quoteItemTitleHint": "مثلاً: ماسورة نحاس (المتر)",
+  "quoteItemTitleRequired": "اكتب البند",
+  "quoteItemPriceLabel": "السعر",
+  "quoteItemPriceInvalid": "اكتب السعر بالجنيه",
+  "quoteItemAdd": "ضيف",
+  "quoteSuggestions": "استخدمتهم قبل كده",
+  "quoteMessageGreeting": "أهلاً {name}، ده عرض السعر:",
+  "@quoteMessageGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quoteMessageLine": "• {title}: {amount} ج.م",
+  "@quoteMessageLine": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String",
+        "example": "900"
+      }
+    }
+  },
+  "quoteMessageLineQuantity": "• {title} × {quantity}: {amount} ج.م",
+  "@quoteMessageLineQuantity": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "quantity": {
+        "type": "int"
+      },
+      "amount": {
+        "type": "String",
+        "example": "400"
+      }
+    }
+  },
+  "quoteMessageTotal": "الإجمالي: {amount} ج.م",
+  "@quoteMessageTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1,450"
+      }
+    }
+  },
+  "quoteMessageAsk": "{gender, select, female{لو موافقة} other{لو موافق}} ابعتلي \"تمام\".",
+  "@quoteMessageAsk": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "quoteMessageAskToBook": "{gender, select, female{لو موافقة} other{لو موافق}} ابعتلي \"تمام\" وأنا أثبّتلك المعاد.",
+  "@quoteMessageAskToBook": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceTitle": "فاتورة رقم {number}",
+  "@invoiceTitle": {
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "0127"
+      }
+    }
+  },
+  "invoiceTitleUnnumbered": "الفاتورة",
+  "invoiceFromQuote": "اتعملت من عرض السعر",
+  "invoiceSignature": "{name} · فني تكييف",
+  "@invoiceSignature": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceTotal": "الإجمالي",
+  "invoicePaid": "اتدفع",
+  "invoiceBalance": "الباقي",
+  "invoicePayments": "الدفعات",
+  "invoicePaymentLine": "{method} · {date}",
+  "@invoicePaymentLine": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceRecordTitle": "سجّل الفلوس اللي استلمتها",
+  "invoiceFullAmount": "المبلغ كله",
+  "invoicePartAmount": "جزء بس",
+  "invoiceAmountLabel": "المبلغ",
+  "invoiceAmountTooHigh": "الباقي {amount} ج.م بس",
+  "@invoiceAmountTooHigh": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1,450"
+      }
+    }
+  },
+  "invoiceMethodQuestion": "استلمتها إزاي؟",
+  "invoiceRecord": "سجّل {amount} ج.م",
+  "@invoiceRecord": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1,450"
+      }
+    }
+  },
+  "invoiceRecordEmpty": "سجّل الفلوس",
+  "invoiceRecordedAll": "اتسجّل إن الفاتورة اتدفعت كلها {method}.",
+  "@invoiceRecordedAll": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceRecordedPart": "اتسجّل {amount} {method}. الباقي {balance} ج.م هيظهر في \"مين عليه فلوس\".",
+  "@invoiceRecordedPart": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1,000"
+      },
+      "method": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String",
+        "example": "450"
+      }
+    }
+  },
+  "invoiceSettled": "الفاتورة اتدفعت كلها.",
+  "invoiceSeeMoney": "شوف الفلوس",
+  "invoiceSend": "ابعت الفاتورة على الواتساب",
+  "invoiceNeedsPrice": "لسه مفيش سعر للشغلانة دي. اكتب البنود في عرض السعر الأول، وبعدين سجّل الفلوس هنا.",
+  "invoiceWriteQuote": "اكتب عرض السعر",
+  "invoicePromiseTitle": "وعد يدفع امتى؟",
+  "invoicePromiseHint": "لو العميل قال هيدفع يوم معيّن سجّله، وهيبان جنب اسمه في الفلوس.",
+  "invoicePromisePick": "حدد يوم",
+  "invoicePromiseChange": "غيّر",
+  "invoicePromiseClear": "امسح الوعد",
+  "invoicePdf": "PDF",
+  "invoicePdfFailed": "مقدرناش نبعت ملف الفاتورة. جرّب تاني.",
+  "invoicePdfName": "فاتورة {number}.pdf",
+  "@invoicePdfName": {
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "0127"
+      }
+    }
+  },
+  "invoicePdfCustomer": "العميل",
+  "invoicePdfItem": "البند",
+  "invoicePdfQuantity": "العدد",
+  "invoicePdfUnitPrice": "السعر",
+  "invoicePdfAmount": "المبلغ",
+  "invoiceThanks": "شكراً لتعاملك معانا.",
+  "invoiceMessageGreeting": "أهلاً {name}، دي فاتورة رقم {number}:",
+  "@invoiceMessageGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "number": {
+        "type": "String",
+        "example": "0127"
+      }
+    }
+  },
+  "invoiceMessageGreetingUnnumbered": "أهلاً {name}، دي الفاتورة:",
+  "@invoiceMessageGreetingUnnumbered": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceMessagePaid": "اتدفع: {amount} ج.م",
+  "@invoiceMessagePaid": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1,000"
+      }
+    }
+  },
+  "invoiceMessageBalance": "الباقي: {amount} ج.م",
+  "@invoiceMessageBalance": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "450"
+      }
+    }
+  },
+  "invoiceMessageHowToPay": "{gender, select, female{تقدري تدفعي} other{تقدر تدفع}} كاش أو تحويل إنستاباي أو فودافون كاش.",
+  "@invoiceMessageHowToPay": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "invoiceMessageSettled": "اتدفعت كلها، {gender, select, female{شكراً ليكي} other{شكراً ليك}}.",
+  "@invoiceMessageSettled": {
+    "placeholders": {
+      "gender": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentMethodCash": "كاش",
+  "paymentMethodInstapay": "إنستاباي",
+  "paymentMethodVodafoneCash": "فودافون كاش",
+  "paymentMethodOther": "تاني"
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/error/result.dart';
+import 'package:salahly/core/storage/user_scoped_data.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
 import 'package:salahly/features/account/domain/repositories/account_repository.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
@@ -13,17 +14,21 @@ part 'session_state.dart';
 /// Who is using the app right now, which decides every redirect.
 ///
 /// A cached profile is shown immediately so the app opens offline, then
-/// refreshed from the server in the background.
+/// refreshed from the server in the background. Data kept on the phone
+/// belongs to the signed-in user only: it is deleted on sign-out and before
+/// another user's session starts.
 class SessionCubit extends Cubit<SessionState> {
   SessionCubit({
     required this._authRepository,
     required this._accountRepository,
+    required this._userData,
   }) : super(const SessionLoading()) {
     _subscription = _authRepository.userChanges.listen(_onUserChanged);
   }
 
   final AuthRepository _authRepository;
   final AccountRepository _accountRepository;
+  final UserScopedData _userData;
   late final StreamSubscription<AuthUser?> _subscription;
 
   /// Fetches the profile again, e.g. after onboarding or to retry.
@@ -37,11 +42,14 @@ class SessionCubit extends Cubit<SessionState> {
   Future<void> _onUserChanged(AuthUser? user) async {
     if (user == null) {
       await _accountRepository.clearCache();
+      await _guard(_userData.clear);
       if (!isClosed && _authRepository.currentUser == null) {
         emit(const SessionSignedOut());
       }
       return;
     }
+    await _guard(() => _userData.claimFor(user.id));
+    if (isClosed) return;
     final cached = await _accountRepository.cachedProfile(user.id);
     if (isClosed) return;
     if (cached != null && _isCurrent(user)) {
@@ -69,6 +77,15 @@ class SessionCubit extends Cubit<SessionState> {
   }
 
   bool _isCurrent(AuthUser user) => _authRepository.currentUser == user;
+
+  /// A storage failure must not lock the user out; it is reported instead.
+  Future<void> _guard(Future<void> Function() action) async {
+    try {
+      await action();
+    } on Object catch (error, stackTrace) {
+      addError(error, stackTrace);
+    }
+  }
 
   @override
   Future<void> close() async {

@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:salahly/app_dependencies.dart';
 import 'package:salahly/core/config/env.dart';
 import 'package:salahly/core/storage/fresh_install.dart';
@@ -24,11 +25,16 @@ Future<void> main() async {
     ),
   );
 
+  final supportDirectory = await getApplicationSupportDirectory();
+  final cacheDirectory = await getTemporaryDirectory();
+
   runApp(
     SalahlyApp(
       dependencies: AppDependencies.live(
         client: Supabase.instance.client,
         storage: storage,
+        supportDirectory: supportDirectory,
+        cacheDirectory: cacheDirectory,
       ),
     ),
   );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/location/location_service.dart';
+import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/core/widgets/choice_chip_button.dart';
 import 'package:salahly/features/catalog/presentation/widgets/area_picker_sheet.dart';
 import 'package:salahly/features/onboarding/presentation/cubit/technician_onboarding_cubit.dart';
@@ -18,13 +19,8 @@ class TechnicianLocationStep extends StatelessWidget {
     final state = context.watch<TechnicianOnboardingCubit>().state;
     final base = state.baseArea;
     final days = [
-      (6, l10n.daySaturday),
-      (7, l10n.daySunday),
-      (1, l10n.dayMonday),
-      (2, l10n.dayTuesday),
-      (3, l10n.dayWednesday),
-      (4, l10n.dayThursday),
-      (5, l10n.dayFriday),
+      for (final weekday in const [6, 7, 1, 2, 3, 4, 5])
+        (weekday, weekdayShortName(l10n, weekday)),
     ];
 
     Future<void> pickBase() async {

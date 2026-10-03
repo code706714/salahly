@@ -1,7 +1,7 @@
 import 'package:salahly/core/error/result.dart';
+import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
 import 'package:salahly/features/auth/domain/entities/otp_channel.dart';
-import 'package:salahly/features/auth/domain/entities/phone_number.dart';
 
 abstract interface class AuthRepository {
   /// The signed-in user now, then on every sign in or sign out.

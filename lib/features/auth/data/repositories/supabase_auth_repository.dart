@@ -1,9 +1,9 @@
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/error/supabase_errors.dart';
+import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
 import 'package:salahly/features/auth/domain/entities/otp_channel.dart';
-import 'package:salahly/features/auth/domain/entities/phone_number.dart';
 import 'package:salahly/features/auth/domain/failures/auth_failures.dart';
 import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
@@ -57,8 +57,16 @@ class SupabaseAuthRepository implements AuthRepository {
     }
   }
 
+  /// Signs out on this phone straight away, even offline. Telling the server
+  /// comes after and may fail; the session it keeps expires on its own.
   @override
-  Future<void> signOut() => _auth.signOut();
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } on supabase.AuthException {
+      // Already signed out here; only telling the server failed.
+    }
+  }
 
   static AuthUser? _toAuthUser(supabase.User? user) =>
       user == null ? null : AuthUser(id: user.id);

@@ -1,19 +1,32 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/router/session_redirect.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/account/presentation/pages/session_unavailable_page.dart';
+import 'package:salahly/features/account/presentation/pages/technician_account_page.dart';
 import 'package:salahly/features/auth/presentation/cubit/otp_cubit.dart';
 import 'package:salahly/features/auth/presentation/cubit/phone_cubit.dart';
 import 'package:salahly/features/auth/presentation/pages/otp_page.dart';
 import 'package:salahly/features/auth/presentation/pages/phone_page.dart';
+import 'package:salahly/features/customers/presentation/pages/customer_form_page.dart';
+import 'package:salahly/features/customers/presentation/pages/customer_page.dart';
+import 'package:salahly/features/customers/presentation/pages/customers_page.dart';
 import 'package:salahly/features/home/presentation/pages/consumer_home_page.dart';
-import 'package:salahly/features/home/presentation/pages/technician_home_page.dart';
+import 'package:salahly/features/home/presentation/pages/today_page.dart';
+import 'package:salahly/features/home/presentation/widgets/technician_scope.dart';
+import 'package:salahly/features/home/presentation/widgets/technician_shell.dart';
+import 'package:salahly/features/jobs/presentation/pages/calendar_page.dart';
+import 'package:salahly/features/jobs/presentation/pages/invoice_page.dart';
+import 'package:salahly/features/jobs/presentation/pages/job_page.dart';
+import 'package:salahly/features/jobs/presentation/pages/jobs_page.dart';
+import 'package:salahly/features/jobs/presentation/pages/new_job_page.dart';
+import 'package:salahly/features/jobs/presentation/pages/quote_page.dart';
 import 'package:salahly/features/legal/presentation/pages/legal_page.dart';
+import 'package:salahly/features/money/presentation/pages/money_page.dart';
 import 'package:salahly/features/onboarding/domain/usecases/submit_technician_onboarding.dart';
 import 'package:salahly/features/onboarding/presentation/cubit/consumer_onboarding_cubit.dart';
 import 'package:salahly/features/onboarding/presentation/cubit/technician_onboarding_cubit.dart';
@@ -98,10 +111,7 @@ GoRouter createRouter(SessionCubit session, {required Listenable refresh}) {
         path: AppRoutes.consumerHome,
         builder: (context, state) => const ConsumerHomePage(),
       ),
-      GoRoute(
-        path: AppRoutes.technicianHome,
-        builder: (context, state) => const TechnicianHomePage(),
-      ),
+      _technicianRoutes(),
       GoRoute(
         path: AppRoutes.sessionUnavailable,
         builder: (context, state) => const SessionUnavailablePage(),
@@ -115,6 +125,82 @@ GoRouter createRouter(SessionCubit session, {required Listenable refresh}) {
         path: AppRoutes.privacy,
         builder: (context, state) =>
             const LegalPage(document: LegalDocument.privacy),
+      ),
+    ],
+  );
+}
+
+/// Everything under [AppRoutes.technicianHome], inside [TechnicianScope]:
+/// four tabs that keep their place, and the screens pushed over them.
+RouteBase _technicianRoutes() {
+  StatefulShellBranch tab(String path, Widget page) => StatefulShellBranch(
+    routes: [GoRoute(path: path, builder: (context, state) => page)],
+  );
+
+  String id(GoRouterState state) => state.pathParameters['id']!;
+
+  return ShellRoute(
+    builder: (context, state, child) => TechnicianScope(child: child),
+    routes: [
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            TechnicianShell(navigationShell: navigationShell),
+        branches: [
+          tab(AppRoutes.technicianHome, const TodayPage()),
+          tab(AppRoutes.technicianJobs, const JobsPage()),
+          tab(AppRoutes.technicianCustomers, const CustomersPage()),
+          tab(AppRoutes.technicianMoney, const MoneyPage()),
+        ],
+      ),
+      // Pushed over the tabs. A tab's own path only matches exactly, so
+      // these deeper paths fall through to here.
+      GoRoute(
+        path: AppRoutes.technicianAccount,
+        builder: (context, state) => const TechnicianAccountPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.technicianCalendar,
+        builder: (context, state) => const CalendarPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.newJob,
+        builder: (context, state) => NewJobPage(
+          customerId: state.uri.queryParameters['customer'],
+          scheduledAt: DateTime.tryParse(
+            state.uri.queryParameters['at'] ?? '',
+          )?.toLocal(),
+        ),
+      ),
+      GoRoute(
+        path: '${AppRoutes.technicianJobs}/:id',
+        builder: (context, state) => JobPage(jobId: id(state)),
+        routes: [
+          GoRoute(
+            path: 'quote',
+            builder: (context, state) => QuotePage(jobId: id(state)),
+          ),
+          GoRoute(
+            path: 'invoice',
+            builder: (context, state) => InvoicePage(jobId: id(state)),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: AppRoutes.newCustomer,
+        builder: (context, state) => CustomerFormPage(
+          fromContacts: state.uri.queryParameters['from'] == 'contacts',
+        ),
+      ),
+      GoRoute(
+        path: '${AppRoutes.technicianCustomers}/:id',
+        builder: (context, state) => CustomerPage(customerId: id(state)),
+        routes: [
+          GoRoute(
+            path: 'edit',
+            builder: (context, state) =>
+                CustomerFormPage(customerId: id(state)),
+          ),
+        ],
       ),
     ],
   );
