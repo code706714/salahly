@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -51,6 +53,16 @@ class PhotoPicker {
       minHeight: purpose.shortSide,
       quality: 80,
     );
+    // The picker's copy still has the metadata and is not needed anymore.
+    await _deleteQuietly(File(picked.path));
     return cleaned?.path;
+  }
+
+  static Future<void> _deleteQuietly(File file) async {
+    try {
+      await file.delete();
+    } on FileSystemException {
+      // Left for the system to clear with the rest of the cache.
+    }
   }
 }
