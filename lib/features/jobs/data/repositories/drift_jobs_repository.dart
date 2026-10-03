@@ -142,8 +142,9 @@ ORDER BY julianday(j.finished_at)''');
   @override
   Stream<List<JobSummary>> watchClosed({int limit = 100}) => _watchSummaries(
     """
-AND j.status IN ('paid', 'cancelled')
-ORDER BY julianday(COALESCE(j.paid_at, j.cancelled_at, j.updated_at)) DESC
+AND (j.status IN ('paid', 'cancelled')
+  OR (j.status = 'finished' AND COALESCE(i.total, 0) <= COALESCE(p.paid, 0)))
+ORDER BY julianday(COALESCE(j.paid_at, j.cancelled_at, j.finished_at, j.updated_at)) DESC
 LIMIT ?""",
     [Variable<int>(limit)],
   );
