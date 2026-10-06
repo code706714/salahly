@@ -1,7 +1,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(44);
+select plan(69);
 
 -- Consumers C1 and C2; technicians T1 and T2. T1 is also a consumer (one
 -- person on both sides of the app).
@@ -57,9 +57,56 @@ language sql
 as $$
   select set_config(
     'request.jwt.claims',
-    json_build_object('sub', p_user_id, 'role', 'authenticated')::text,
+    json_build_object(
+      'sub', p_user_id, 'role', 'authenticated',
+      'iat', extract(epoch from now())::bigint
+    )::text,
     true
   );
+$$;
+
+-- A session whose token was issued (or whose sign-in happened) long ago.
+create function pg_temp.sign_in_stale(p_user_id uuid, p_age_seconds integer)
+returns void
+language sql
+as $$
+  select set_config(
+    'request.jwt.claims',
+    json_build_object(
+      'sub', p_user_id, 'role', 'authenticated',
+      'iat', extract(epoch from now())::bigint - p_age_seconds
+    )::text,
+    true
+  );
+$$;
+
+create function pg_temp.sign_in_old_login(p_user_id uuid)
+returns void
+language sql
+as $$
+  select set_config(
+    'request.jwt.claims',
+    json_build_object(
+      'sub', p_user_id, 'role', 'authenticated',
+      'iat', extract(epoch from now())::bigint,
+      'amr', json_build_array(json_build_object(
+        'method', 'otp', 'timestamp', extract(epoch from now())::bigint - 3600
+      ))
+    )::text,
+    true
+  );
+$$;
+
+create function pg_temp.push_customer(p_id uuid, p_changes jsonb)
+returns jsonb
+language sql
+as $$
+  select public.sync_push(jsonb_build_array(jsonb_build_object(
+    'entity', 'customers',
+    'id', p_id,
+    'row', (select to_jsonb(c) - 'technician_id' - 'sync_txid' - 'version' from public.customers c where c.id = p_id)
+           || p_changes
+  )));
 $$;
 
 create function pg_temp.tomorrow()
@@ -300,6 +347,20 @@ select throws_ok(
 reset role;
 delete from public.credit_topups where id = '00000000-0000-4000-8000-0000000000f9';
 
+-- Deleting needs a recent sign-in.
+select pg_temp.sign_in_stale('00000000-0000-4000-8000-0000000000c1', 1000);
+set local role authenticated;
+select throws_ok(
+  $$select public.delete_my_account('DELETE')$$,
+  'P0001', 'recent_login_required', 'a token issued over 15 minutes ago cannot delete the account'
+);
+select pg_temp.sign_in_old_login('00000000-0000-4000-8000-0000000000c1');
+select throws_ok(
+  $$select public.delete_my_account('DELETE')$$,
+  'P0001', 'recent_login_required', 'nor can a fresh token of a sign-in made an hour ago'
+);
+reset role;
+
 -- C1 deletes their account.
 select pg_temp.sign_in_as('00000000-0000-4000-8000-0000000000c1');
 set local role authenticated;
@@ -312,11 +373,6 @@ select is(
 );
 select is(pg_temp.leftovers('00000000-0000-4000-8000-0000000000c1'), '',
   'no table still points at the person');
-select is(pg_temp.mentions('01009990031'), '', 'their phone number appears nowhere');
-select is(pg_temp.mentions('نورهان'), '', 'their name appears nowhere');
-select is(pg_temp.mentions('عباس العقاد'), '', 'their address appears nowhere');
-select is(pg_temp.mentions('بلاغ c1'), '', 'their request text appears nowhere');
-
 select is(
   (select job_credits from public.technician_profiles where id = '00000000-0000-4000-8000-0000000000a1'),
   (select t1_uses + 1 from before_c1),
@@ -350,15 +406,106 @@ select is(
 );
 select is(
   (select count(*)::int from public.customers where name = 'عميل محذوف' and phone is null and address is null),
-  2,
-  'the technicians keep their jobs but the customer is just "a deleted customer"'
+  1,
+  'the technician keeps the job but the customer of finished work is just "a deleted customer"'
 );
 select is(
   (select count(*)::int from public.jobs j join public.customers c on c.id = j.customer_id
     where c.name = 'عميل محذوف' and j.address is null and j.description is null),
-  3,
+  2,
   'the jobs of that customer lose the address and the request text'
 );
+select is(
+  (select (j.address is not null)::text || ':' || (c.phone is not null)::text
+     from public.jobs j join public.customers c on c.id = j.customer_id
+    where j.id = (select id from pg_temp.ids where name = 'j_c')),
+  'true:true',
+  'a job under way keeps the address and the customer''s phone for the technician on site'
+);
+
+select pg_temp.sign_in_as('00000000-0000-4000-8000-0000000000a2');
+set local role authenticated;
+select pg_temp.push_job((select id from pg_temp.ids where name = 'j_c'),
+  '{"description": "leak", "address": "leak"}');
+reset role;
+select isnt(
+  (select coalesce(description, '') || coalesce(address, '') from public.jobs
+    where id = (select id from pg_temp.ids where name = 'j_c')),
+  'leakleak',
+  'a sync can''t write new details onto the job of a deleted consumer'
+);
+select is(
+  (select count(*)::int from public.jobs where description = 'leak' or address = 'leak'), 0,
+  'not even a part of them'
+);
+
+-- The technician finishes it: now the details go too.
+set local role authenticated;
+select pg_temp.push_job((select id from pg_temp.ids where name = 'j_c'), '{"status": "finished"}');
+reset role;
+select is(
+  (select coalesce(address, 'null') || ':' || coalesce(description, 'null') from public.jobs
+    where id = (select id from pg_temp.ids where name = 'j_c')),
+  'null:null', 'a finished job of a deleted consumer loses address and text'
+);
+select is(
+  (select c.name || ':' || coalesce(c.phone, 'null') from public.jobs j join public.customers c on c.id = j.customer_id
+    where j.id = (select id from pg_temp.ids where name = 'j_c')),
+  'عميل محذوف:null', 'and its customer becomes "a deleted customer"'
+);
+set local role authenticated;
+select pg_temp.push_customer(
+  (select customer_id from public.jobs where id = (select id from pg_temp.ids where name = 'j_c')),
+  '{"name": "نورهان مصطفى", "phone": "+201009990031", "address": "14 شارع عباس العقاد", "notes": "نورهان"}');
+reset role;
+select is(
+  (select name || ':' || coalesce(phone, 'null') || ':' || coalesce(address, 'null') || ':' || coalesce(notes, 'null')
+     from public.customers
+    where id = (select customer_id from public.jobs where id = (select id from pg_temp.ids where name = 'j_c'))),
+  'عميل محذوف:null:null:null', 'a sync can''t write the person back onto the customer'
+);
+
+-- A deleted person's token can't upload any more.
+select pg_temp.sign_in_as('00000000-0000-4000-8000-0000000000c1');
+set local role authenticated;
+select throws_ok(
+  $$insert into storage.objects (bucket_id, name, owner_id) values (
+      'avatars', '00000000-0000-4000-8000-0000000000c1/' || gen_random_uuid() || '.jpg',
+      '00000000-0000-4000-8000-0000000000c1')$$,
+  '42501', null, 'a deleted person can''t upload an avatar'
+);
+select throws_ok(
+  $$insert into storage.objects (bucket_id, name, owner_id) values (
+      'verification-docs', '00000000-0000-4000-8000-0000000000c1/' || gen_random_uuid() || '.jpg',
+      '00000000-0000-4000-8000-0000000000c1')$$,
+  '42501', null, 'nor documents'
+);
+select throws_ok(
+  $$insert into storage.objects (bucket_id, name, owner_id) values (
+      'transfer-proofs', '00000000-0000-4000-8000-0000000000c1/' || gen_random_uuid() || '.jpg',
+      '00000000-0000-4000-8000-0000000000c1')$$,
+  '42501', null, 'nor transfer proofs'
+);
+select throws_ok(
+  $$insert into storage.objects (bucket_id, name, owner_id) values (
+      'request-photos', '00000000-0000-4000-8000-0000000000c1/' || gen_random_uuid() || '.jpg',
+      '00000000-0000-4000-8000-0000000000c1')$$,
+  '42501', null, 'nor request photos'
+);
+select throws_ok(
+  $$insert into storage.objects (bucket_id, name, owner_id) values (
+      'job-photos', '00000000-0000-4000-8000-0000000000c1/' || gen_random_uuid() || '.jpg',
+      '00000000-0000-4000-8000-0000000000c1')$$,
+  '42501', null, 'nor job photos'
+);
+reset role;
+
+select is(pg_temp.mentions('01009990031'), '', 'their phone number appears nowhere');
+select is(pg_temp.mentions('نورهان'), '', 'their name appears nowhere');
+select is(pg_temp.mentions('عباس العقاد'), '', 'their address appears nowhere');
+select is(pg_temp.mentions('بلاغ c1'), '', 'their request text appears nowhere');
+
+
 select is(
   (select count(*)::int from public.reviews where request_id = (select id from pg_temp.ids where name = 'r_d')),
   0, 'their review goes with them'
@@ -451,6 +598,84 @@ select is(
   (select count(*)::int from private.free_credit_grants
     where phone_hash = encode(sha256(convert_to('201009990041', 'UTF8')), 'hex')),
   2, 'both sides of their phone hash are kept'
+);
+
+-- The purge queue --------------------------------------------------------
+delete from vault.secrets where name in ('purge_storage_url', 'purge_storage_secret');
+delete from private.storage_purge;
+insert into private.storage_purge (bucket_id, name, attempts, queued_at)
+values ('avatars', 'x/old.jpg', 9, now() - interval '3 hours');
+
+select is(
+  (select count(*)::int from public.storage_purge_claim(10)), 1,
+  'a file tried 9 times is claimed once more'
+);
+update private.storage_purge set claimed_at = now() - interval '1 hour';
+select is(
+  (select count(*)::int from public.storage_purge_claim(10)), 0,
+  'after 10 tries it is not claimed again'
+);
+select is(
+  (select failed from private.storage_purge where name = 'x/old.jpg'), true,
+  'and stays in the queue flagged as failed'
+);
+select ok(
+  (select private.purge_backlog() between interval '2 hours' and interval '4 hours'),
+  'the backlog is the age of the oldest file waiting'
+);
+select private.run_storage_purge();
+select is(
+  (select problem from private.purge_status), null,
+  'only failed files wait: nothing to report'
+);
+insert into private.storage_purge (bucket_id, name) values ('avatars', 'x/new.jpg');
+select private.run_storage_purge();
+select is(
+  (select problem from private.purge_status), 'vault_secrets_missing',
+  'missing vault secrets are recorded, not silently skipped'
+);
+
+insert into storage.objects (bucket_id, name, owner_id, created_at) values
+  ('avatars', '00000000-0000-4000-8000-0000000000e1/90000000-0000-4000-8000-0000000000e1.jpg', null, now() - interval '2 days'),
+  ('avatars', '00000000-0000-4000-8000-0000000000e2/90000000-0000-4000-8000-0000000000e2.jpg', null, now() - interval '1 hour'),
+  ('avatars', '00000000-0000-4000-8000-0000000000c2/90000000-0000-4000-8000-0000000000e3.jpg', null, now() - interval '2 days');
+select private.run_storage_purge();
+select is(
+  (select string_agg(split_part(name, '/', 1), ',') from private.storage_purge where name like '00000000%'),
+  '00000000-0000-4000-8000-0000000000e1',
+  'files of nobody are queued once a day old, and not the others'
+);
+
+-- The phone hash ----------------------------------------------------------
+select is(
+  private.phone_hash('201009990031'), private.legacy_phone_hash('201009990031'),
+  'without a pepper the hash is the plain one'
+);
+select vault.create_secret('a-long-random-pepper', 'free_credit_pepper');
+select is(
+  private.phone_hash('201009990031'),
+  encode(extensions.hmac('201009990031', 'a-long-random-pepper', 'sha256'), 'hex'),
+  'with a pepper it is an HMAC-SHA256 of the number'
+);
+insert into auth.users (id, phone, aud, role)
+values
+  ('00000000-0000-4000-8000-0000000000d1', '201009990061', 'authenticated', 'authenticated'),
+  ('00000000-0000-4000-8000-0000000000d2', '201009990062', 'authenticated', 'authenticated');
+insert into private.free_credit_grants (phone_hash, role)
+values (private.legacy_phone_hash('201009990061'), 'consumer');
+select is(
+  private.claim_free_credits('00000000-0000-4000-8000-0000000000d1', 'consumer'), 0,
+  'a phone recorded with the old plain hash still gets no free uses'
+);
+select is(
+  private.claim_free_credits('00000000-0000-4000-8000-0000000000d2', 'consumer'),
+  (select consumer_free_requests::int from public.app_settings),
+  'a new phone gets them'
+);
+select is(
+  (select count(*)::int from private.free_credit_grants
+    where phone_hash = private.phone_hash('201009990062')),
+  1, 'recorded with the peppered hash'
 );
 
 select * from finish();

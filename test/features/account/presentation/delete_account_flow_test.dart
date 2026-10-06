@@ -90,4 +90,60 @@ void main() {
     verify(app.auth.signOut).called(1);
     expect(find.text('حسابك اتمسح'), findsOneWidget);
   });
+
+  testConsumerApp('an old sign-in offers to sign in again, then deletes', (
+    tester,
+    app,
+  ) async {
+    when(
+      app.account.deleteAccount,
+    ).thenAnswer((_) async => const Err(RecentLoginRequiredFailure()));
+    when(app.auth.signOut).thenAnswer((_) async {});
+    await app.pump(tester, location: '/consumer/account/delete');
+
+    await _confirmAndDelete(tester);
+    await app.settle(tester);
+
+    expect(find.text('لازم تسجّلي دخول تاني'), findsOneWidget);
+    verifyNever(app.auth.signOut);
+
+    await tester.tap(find.text('سجّلي خروج وادخلي تاني'));
+    await app.settle(tester);
+
+    verify(app.auth.signOut).called(1);
+  });
+
+  testConsumerApp('the sign-in dialog can be dismissed', (tester, app) async {
+    when(
+      app.account.deleteAccount,
+    ).thenAnswer((_) async => const Err(RecentLoginRequiredFailure()));
+    await app.pump(tester, location: '/consumer/account/delete');
+
+    await _confirmAndDelete(tester);
+    await app.settle(tester);
+    await tester.tap(find.text('مش دلوقتي'));
+    await app.settle(tester);
+
+    expect(find.byType(DeleteAccountPage), findsOneWidget);
+    expect(find.text('لازم تسجّلي دخول تاني'), findsNothing);
+    verifyNever(app.auth.signOut);
+  });
+
+  testConsumerApp('a failing sign-out after deleting leaves no crash', (
+    tester,
+    app,
+  ) async {
+    when(app.account.deleteAccount).thenAnswer((_) async => const Ok(null));
+    when(app.auth.signOut).thenThrow(StateError('offline'));
+    when(app.account.clearCache).thenAnswer((_) async {});
+    when(app.userData.clear).thenAnswer((_) async {});
+    await app.pump(tester, location: '/consumer/account/delete');
+
+    await _confirmAndDelete(tester);
+    await app.settle(tester);
+
+    expect(find.byType(AccountDeletedPage), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    verify(app.userData.clear).called(1);
+  });
 }

@@ -5,3 +5,8 @@ import 'package:salahly/core/error/failure.dart';
 final class PendingTransferFailure extends Failure {
   const PendingTransferFailure();
 }
+
+/// Deleting the account needs a sign-in from the last 15 minutes.
+final class RecentLoginRequiredFailure extends Failure {
+  const RecentLoginRequiredFailure();
+}

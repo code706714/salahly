@@ -67,6 +67,31 @@ as $$
   values (p_user_id, p_role, p_kind, p_request_id, p_offer_id, p_topup_id);
 $$;
 
+-- Like notify, but not again when the same person was already told the
+-- same thing about the same request in the last 10 minutes. For events a
+-- technician's phone can repeat at will (status flips, a new quote time).
+create function private.notify_once(
+  p_user_id uuid,
+  p_role public.user_role,
+  p_kind public.notification_kind,
+  p_request_id uuid
+)
+returns void
+language sql
+set search_path = ''
+as $$
+  select private.notify(p_user_id, p_role, p_kind, p_request_id)
+   where not exists (
+     select 1
+       from public.notifications n
+      where n.user_id = p_user_id
+        and n.role = p_role
+        and n.kind = p_kind
+        and n.request_id = p_request_id
+        and n.created_at > now() - interval '10 minutes'
+   );
+$$;
+
 -- Consumer: an offer arrived.
 create function private.notify_offer_received()
 returns trigger
@@ -172,11 +197,11 @@ begin
       when 'finished' then 'job_finished'
     end;
     if v_kind is not null then
-      perform private.notify(v_consumer_id, 'consumer', v_kind, v_request_id);
+      perform private.notify_once(v_consumer_id, 'consumer', v_kind, v_request_id);
     end if;
   end if;
   if new.quote_status = 'sent' and new.quote_sent_at is distinct from old.quote_sent_at then
-    perform private.notify(v_consumer_id, 'consumer', 'price_change', v_request_id);
+    perform private.notify_once(v_consumer_id, 'consumer', 'price_change', v_request_id);
   end if;
   return null;
 end;
@@ -245,6 +270,9 @@ create trigger technician_profiles_notify
 -- The list, newest first, with what the text needs: the request, the
 -- offer, the other person's first name and the transfer. Whatever was
 -- deleted since reads as null, and the app falls back to plain text.
+-- The chosen offer's price, time and technician are joined only for the
+-- consumer: a technician sees the offer he sent himself and nothing of a
+-- competitor's.
 create function public.my_notifications(p_role public.user_role, p_limit integer default 50)
 returns jsonb
 language sql
@@ -279,7 +307,8 @@ as $$
         from public.notifications n
         left join public.service_requests r on r.id = n.request_id
         left join public.request_offers o on o.id = n.offer_id
-        left join public.request_offers tr on tr.id = r.chosen_offer_id and o.id is null
+        left join public.request_offers tr
+          on tr.id = r.chosen_offer_id and o.id is null and p_role = 'consumer'
         left join public.profiles tp on tp.id = coalesce(o.technician_id, tr.technician_id)
         left join public.request_recipients rr
           on rr.request_id = r.id and rr.technician_id = n.user_id

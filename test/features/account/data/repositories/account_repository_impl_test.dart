@@ -124,6 +124,19 @@ void main() {
         );
       });
 
+      test('says when the sign-in is too old', () async {
+        when(() => remote.deleteAccount()).thenAnswer(
+          (_) => Future.error(
+            const PostgrestException(message: 'recent_login_required'),
+          ),
+        );
+
+        expect(
+          await repository.deleteAccount(),
+          isErr(const RecentLoginRequiredFailure()),
+        );
+      });
+
       test('fails with a network failure offline', () async {
         when(
           () => remote.deleteAccount(),

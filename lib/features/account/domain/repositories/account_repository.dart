@@ -12,7 +12,8 @@ abstract interface class AccountRepository {
 
   /// Deletes the signed-in person's account for good, after cancelling
   /// what is open. Fails with `PendingTransferFailure` while a transfer
-  /// waits to be checked.
+  /// waits to be checked, and with `RecentLoginRequiredFailure` when the
+  /// person last signed in more than 15 minutes ago.
   Future<Result<void>> deleteAccount();
 
   /// Forgets everything cached for the signed-out user.

@@ -12,5 +12,7 @@ abstract interface class NotificationsRepository {
   Future<Result<int>> fetchUnreadCount(UserRole role);
 
   /// Marks [ids], or every unread one of [role] when [ids] is null, as read.
+  /// The app always passes the ids it shows, so a notification that arrived
+  /// since the list was fetched stays unread.
   Future<Result<void>> markRead(UserRole role, {List<String>? ids});
 }

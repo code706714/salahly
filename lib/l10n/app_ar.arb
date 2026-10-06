@@ -3731,5 +3731,30 @@
         "type": "String"
       }
     }
-  }
+  },
+  "acctDeleteRelogTitle": "{honorific, select, ms{لازم تسجّلي دخول تاني} other{لازم تسجّل دخول تاني}}",
+  "@acctDeleteRelogTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "acctDeleteRelogBody": "{honorific, select, ms{عشان نتأكد إنك إنتي، سجّلي خروج وادخلي تاني بكود جديد، وبعدها ارجعي امسحي الحساب.} other{عشان نتأكد إنك إنت، سجّل خروج وادخل تاني بكود جديد، وبعدها ارجع امسح الحساب.}}",
+  "@acctDeleteRelogBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "acctDeleteRelogButton": "{honorific, select, ms{سجّلي خروج وادخلي تاني} other{سجّل خروج وادخل تاني}}",
+  "@acctDeleteRelogButton": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "acctDeleteRelogCancel": "مش دلوقتي"
 }

@@ -1,15 +1,21 @@
 // Removes the files of deleted accounts. delete_my_account() queues their
 // paths; this function (service role, woken by pg_cron through pg_net with
 // a shared secret) deletes them through the Storage API and then reports
-// them done, so a failed batch is simply tried again later.
+// them done, so a failed batch is simply tried again later (up to 10 times; the
+// database then keeps the row flagged failed).
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { isAuthorized } from "./auth.ts";
 
 const batchSize = 100;
 const maxBatches = 10;
 
 Deno.serve(async (request) => {
-  const secret = Deno.env.get("PURGE_STORAGE_SECRET");
-  if (!secret || request.headers.get("x-purge-secret") !== secret) {
+  if (
+    !isAuthorized(
+      Deno.env.get("PURGE_STORAGE_SECRET"),
+      request.headers.get("x-purge-secret"),
+    )
+  ) {
     return new Response("forbidden", { status: 403 });
   }
 

@@ -59,8 +59,19 @@ import 'package:salahly/features/splash/presentation/pages/splash_page.dart';
 GoRouter createRouter(SessionCubit session, {required Listenable refresh}) {
   return GoRouter(
     refreshListenable: refresh,
-    redirect: (context, state) =>
-        sessionRedirect(session.state, state.uri.path),
+    redirect: (context, state) {
+      final target = sessionRedirect(session.state, state.uri.path);
+      // Someone who signed out to sign in again before deleting their
+      // account goes back to where they were.
+      final current = session.state;
+      if (target != null && current is SessionReady) {
+        final back = session.takeReturnTo(current.user);
+        if (back != null && sessionRedirect(session.state, back) == null) {
+          return back;
+        }
+      }
+      return target;
+    },
     // A link to a screen that doesn't exist lands where the session belongs.
     onException: (context, state, router) => router.go(AppRoutes.splash),
     routes: [

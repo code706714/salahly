@@ -1,7 +1,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(7);
+select plan(9);
 
 create function pg_temp.sign_in_as(p_user_id uuid)
 returns void
@@ -24,6 +24,9 @@ as $$
 $$;
 
 grant execute on all functions in schema pg_temp to authenticated;
+
+insert into auth.users (id, phone, aud, role)
+values ('00000000-0000-4000-8000-00000000c001', '201009990001', 'authenticated', 'authenticated');
 
 select pg_temp.sign_in_as('00000000-0000-4000-8000-00000000c001');
 set local role authenticated;
@@ -94,6 +97,29 @@ select throws_ok(
 select is_empty(
   $$select name from storage.objects$$,
   'users cannot list uploaded files, their own included'
+);
+
+-- A signed-in token whose account no longer exists uploads nothing.
+select pg_temp.sign_in_as('00000000-0000-4000-8000-00000000c009');
+select throws_ok(
+  $$select pg_temp.upload(
+      'avatars',
+      '00000000-0000-4000-8000-00000000c009/' || gen_random_uuid() || '.jpg',
+      '00000000-0000-4000-8000-00000000c009'
+    )$$,
+  '42501',
+  null,
+  'a token of a deleted account can''t upload an avatar'
+);
+select throws_ok(
+  $$select pg_temp.upload(
+      'verification-docs',
+      '00000000-0000-4000-8000-00000000c009/' || gen_random_uuid() || '.jpg',
+      '00000000-0000-4000-8000-00000000c009'
+    )$$,
+  '42501',
+  null,
+  'nor documents'
 );
 
 select * from finish();

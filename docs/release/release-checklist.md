@@ -4,18 +4,21 @@ Gate from the security-and-testing skill, Part C. A build ships only if every ro
 
 | # | Gate | State | Evidence or next step |
 |---|---|---|---|
-| 1 | CI green on the release commit (format, analyze, unit, widget, golden, pgTAP) | Done locally | `flutter analyze`, `dart format`, `flutter test`, pgTAP files 00-65 pass. Re-check the CI run on the tag. Deno and integration tests do not exist yet (the `purge-storage` function has no Deno test). |
+| 1 | CI green on the release commit (format, analyze, unit, widget, golden, pgTAP) | Done locally | `flutter analyze`, `dart format`, `flutter test`, pgTAP files 00-65 pass. Re-check the CI run on the tag. Integration tests do not exist yet; the `purge-storage` Deno tests exist (`deno test supabase/functions/purge-storage`) but CI does not run them yet, so run them by hand. |
 | 2 | RLS on every table, matrix tests pass | Done | `00_security_baseline` plus 10-65. Test 5 (`plpgsql_` functions) and 6 fail only on the local stack, not on hosted. |
 | 3 | No secrets in repo or AAB | Partly | gitleaks runs in CI; `env/*.json` is ignored; keystore is read from env. Blocked on amr: after the first build run `unzip -p app.aab | strings` for `service_role` and `BEGIN PRIVATE KEY`. |
 | 4 | E2E on 2 low-end devices (Android 8-10, 2-3 GB) | Blocked on amr | No Patrol suite yet; do the manual script on two real devices or Firebase Test Lab. |
 | 5 | Manual QA by someone other than the author | Blocked on amr | Both roles: sign-up, request, offer, pick, job, review, top-up, notifications, delete account. |
 | 6 | Closed testing at least 14 days with 12 testers (new personal account) | Blocked on amr | Play Console steps below. Crash-free at least 99.5%, no open P0/P1. |
-| 7 | Migrations backward compatible, backup, rollback written | Partly | Migrations only add. Before pushing: take a backup (below). Rollback: the previous app keeps working because nothing was dropped or renamed. |
+| 7 | Migrations backward compatible, backup, rollback written | Partly | Migrations are additive, except M5, which relaxes some NOT NULLs and replaces two foreign keys (`credit_topups.user_id`, `credit_ledger.user_id`); that is backward compatible with the old client. Before pushing: take a backup (below). Rollback: the previous app keeps working because no column or table was dropped or renamed. |
 | 8 | Privacy policy, Data safety, permissions, deletion match the build | Done in repo | `assets/legal/*`, `docs/release/data-safety.md`, `docs/legal/delete-account.md`. Blocked on amr: publish the web page and enter its URL in Play. Confirm the support email in that page (placeholder `support@salahly.app`). |
 | 9 | Crash reporting with symbols, alerts, on-call named | Blocked on amr | No Sentry/Crashlytics in the app. The release workflow uploads Dart symbols as an artifact; choose a tool and name the person for the first 72 hours. |
 | 10 | Staged rollout 10% > 50% > 100%, halt criteria | Blocked on amr | Set in Play Console; halt if crash-free below 99.5%, error spike or 1-star spike. |
 
 Verdict today: **no-ship** until rows 3 (AAB spot check), 4, 5, 6, 9, 10 are done.
+
+## Decisions for amr
+- Deleting a consumer removes their reviews and complaints, and deleting a technician removes his finished requests from consumers' history. Anonymizing them instead is an option.
 
 ## Keystore (once, on amr's machine)
 ```
@@ -49,9 +52,9 @@ GitHub: Settings > Environments > `production`, add required reviewers, then add
 3. Extensions: `pg_cron` and `pg_net` enabled (Database > Extensions) before the migrations run.
 4. Purge of deleted accounts' files (account deletion queues them; without this step files stay):
    - `supabase functions deploy purge-storage --no-verify-jwt`
-   - `supabase secrets set PURGE_STORAGE_SECRET=<long random value>`
+   - `supabase secrets set PURGE_STORAGE_SECRET=<random value, at least 32 characters>`
    - SQL editor: `select vault.create_secret('https://<ref>.supabase.co/functions/v1/purge-storage', 'purge_storage_url');` and `select vault.create_secret('<same random value>', 'purge_storage_secret');`
-   - Check: delete a test account, then within 5 minutes `select count(*) from private.storage_purge` returns 0 and the bucket files are gone.
+   - Check: delete a test account, then within 15 minutes `select count(*) from private.storage_purge` returns 0 and the bucket files are gone. Also wire an alert on `select private.purge_backlog()` (age of the oldest file still waiting; alert above 1 hour) and add the secret `free_credit_pepper` (`select vault.create_secret('<long random value>', 'free_credit_pepper');`) before launch. Keep it forever: losing it re-opens the free uses for deleted accounts.
 5. Seed what the app needs on hosted: payment accounts (Vodafone Cash / InstaPay numbers), credit packs, app_settings free-use counts, and at least one staff account allowed to approve technicians and top-ups.
 6. Check the Security Advisor shows no table without RLS, and add a billing alert.
 

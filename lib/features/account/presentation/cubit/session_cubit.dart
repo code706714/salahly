@@ -39,6 +39,43 @@ class SessionCubit extends Cubit<SessionState> {
 
   Future<void> signOut() => _authRepository.signOut();
 
+  ({String userId, String location})? _returnTo;
+
+  /// Signs out so the person can sign in again, and brings them back to
+  /// [location] once they are signed in as the same user.
+  Future<void> signOutAndReturnTo(String location) async {
+    final user = _authRepository.currentUser;
+    if (user != null) _returnTo = (userId: user.id, location: location);
+    try {
+      await signOut();
+    } on Object {
+      _returnTo = null;
+      rethrow;
+    }
+  }
+
+  /// Where to send [user] now that they signed in again, once; null when
+  /// they didn't sign out to come back somewhere.
+  String? takeReturnTo(AuthUser user) {
+    final target = _returnTo;
+    if (target == null) return null;
+    _returnTo = null;
+    return target.userId == user.id ? target.location : null;
+  }
+
+  /// Signs out after the account was deleted. The account is gone whatever
+  /// happens here, so a failure (no network) is reported and the data on
+  /// the phone is erased all the same.
+  Future<void> signOutDeleted() async {
+    try {
+      await signOut();
+    } on Object catch (error, stackTrace) {
+      addError(error, stackTrace);
+      await _accountRepository.clearCache();
+      await _guard(_userData.clear);
+    }
+  }
+
   Future<void> _onUserChanged(AuthUser? user) async {
     if (user == null) {
       await _accountRepository.clearCache();

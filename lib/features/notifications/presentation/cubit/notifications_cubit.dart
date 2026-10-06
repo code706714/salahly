@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/async/single_flight.dart';
@@ -32,19 +34,22 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   /// shown.
   Future<void> load() => _loadList();
 
-  /// Marks every unread notification as read.
+  /// Marks the unread notifications on the list as read. Only those: one
+  /// that arrived after the list was fetched was never seen.
   Future<void> markAllRead() async {
-    if (state.unread == 0 && state.notifications.every((n) => n.isRead)) {
-      return;
-    }
+    final ids = [
+      for (final n in state.notifications)
+        if (!n.isRead) n.id,
+    ];
+    if (ids.isEmpty) return;
     final at = _now();
     emit(
       state.copyWith(
         notifications: [for (final n in state.notifications) n.markedRead(at)],
-        unread: 0,
+        unread: max(0, state.unread - ids.length),
       ),
     );
-    await _mark(null);
+    await _mark(ids);
   }
 
   /// Marks the notification [id] as read, as when it is opened.

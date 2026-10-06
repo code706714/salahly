@@ -462,4 +462,47 @@ void main() {
       }
     }
   });
+
+  group('a wipe while a sync is away at the server', () {
+    test('keeps a pulled page from being written back', () async {
+      remote.pages.add(serverPage());
+      remote.duringPull = db.wipe;
+
+      await engine.run();
+
+      expect(await db.select(db.customers).get(), isEmpty);
+      expect(await db.select(db.jobs).get(), isEmpty);
+      expect(await db.readMeta(SyncEngine.checkpointKey), isNull);
+    });
+
+    test('keeps the server copy of a refused edit from coming back', () async {
+      await saveLocally(db.customers, customer('c1'), 'customers', 'c1');
+      final page = serverPage();
+      remote.pushReplies.add([
+        SyncRejection(
+          entity: 'customers',
+          id: 'c1',
+          code: 'x',
+          serverRow: page.rows
+              .firstWhere((row) => row.entity == 'customers')
+              .row,
+        ),
+      ]);
+      remote.duringPush = db.wipe;
+
+      await engine.run();
+
+      expect(await db.select(db.customers).get(), isEmpty);
+      expect(remote.pulls, isEmpty);
+    });
+
+    test('a sync that starts after the wipe works as usual', () async {
+      await db.wipe();
+      remote.pages.add(serverPage());
+
+      await engine.run();
+
+      expect(await db.select(db.customers).get(), hasLength(1));
+    });
+  });
 }

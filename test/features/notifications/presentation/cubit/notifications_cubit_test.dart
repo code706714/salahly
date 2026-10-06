@@ -176,8 +176,30 @@ void main() {
           notifications: [unread.markedRead(now), read],
         ),
       ],
-      verify: (_) =>
-          verify(() => repository.markRead(UserRole.consumer)).called(1),
+      verify: (_) => verify(
+        () => repository.markRead(UserRole.consumer, ids: [unread.id]),
+      ).called(1),
+    );
+
+    blocTest<NotificationsCubit, NotificationsState>(
+      'marks only the ones shown, not one that arrived since',
+      build: build,
+      seed: () => NotificationsState(
+        status: NotificationsStatus.ready,
+        notifications: [unread, read],
+        unread: 2,
+      ),
+      act: (cubit) => cubit.markAllRead(),
+      expect: () => [
+        NotificationsState(
+          status: NotificationsStatus.ready,
+          notifications: [unread.markedRead(now), read],
+          unread: 1,
+        ),
+      ],
+      verify: (_) => verify(
+        () => repository.markRead(UserRole.consumer, ids: [unread.id]),
+      ).called(1),
     );
 
     blocTest<NotificationsCubit, NotificationsState>(
@@ -189,7 +211,9 @@ void main() {
       ),
       act: (cubit) => cubit.markAllRead(),
       expect: () => <NotificationsState>[],
-      verify: (_) => verifyNever(() => repository.markRead(any())),
+      verify: (_) => verifyNever(
+        () => repository.markRead(any(), ids: any(named: 'ids')),
+      ),
     );
 
     blocTest<NotificationsCubit, NotificationsState>(
@@ -249,8 +273,9 @@ void main() {
         await cubit.markRead('nope');
       },
       expect: () => <NotificationsState>[],
-      verify: (_) =>
-          verifyNever(() => repository.markRead(any(), ids: any(named: 'ids'))),
+      verify: (_) => verifyNever(
+        () => repository.markRead(any(), ids: any(named: 'ids')),
+      ),
     );
   });
 }

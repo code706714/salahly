@@ -74,7 +74,9 @@ void main() {
     await tester.tap(find.text('علّم الكل اتقرا'));
     await app.settle(tester);
 
-    verify(() => app.notifications.markRead(UserRole.consumer)).called(1);
+    verify(
+      () => app.notifications.markRead(UserRole.consumer, ids: ['n1']),
+    ).called(1);
     expect(find.text('علّم الكل اتقرا'), findsNothing);
   });
 
@@ -123,6 +125,23 @@ void main() {
       () => app.notifications.markRead(UserRole.technician, ids: ['n1']),
     ).called(1);
     expect(find.byType(IncomingRequestPage), findsOneWidget);
+  });
+
+  testTechnicianApp('the notification of a request that is gone says so', (
+    tester,
+    app,
+  ) async {
+    _serve(app.notifications, [testNotification(NotificationKind.newRequest)]);
+    when(
+      () => app.requests.fetchRequest(any()),
+    ).thenAnswer((_) async => const Ok(null));
+    await app.pump(tester, location: '/technician/notifications');
+
+    await tester.tap(find.text('طلب جديد في مدينة نصر'));
+    await app.settle(tester);
+
+    expect(find.byType(IncomingRequestPage), findsOneWidget);
+    expect(find.text('الطلب ده مش موجود.'), findsOneWidget);
   });
 
   testTechnicianApp('a transfer notification opens the technician balance', (

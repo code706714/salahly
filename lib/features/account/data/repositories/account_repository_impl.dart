@@ -51,11 +51,11 @@ class AccountRepositoryImpl implements AccountRepository {
       await _remote.deleteAccount();
       return const Ok(null);
     } on PostgrestException catch (error) {
-      return Err(
-        error.message == 'topup_pending'
-            ? const PendingTransferFailure()
-            : commonFailureFrom(error),
-      );
+      return Err(switch (error.message) {
+        'topup_pending' => const PendingTransferFailure(),
+        'recent_login_required' => const RecentLoginRequiredFailure(),
+        _ => commonFailureFrom(error),
+      });
     } on Object catch (error) {
       return Err(commonFailureFrom(error));
     }

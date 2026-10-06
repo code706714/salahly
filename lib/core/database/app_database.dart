@@ -40,12 +40,22 @@ class AppDatabase extends _$AppDatabase {
   @override
   int get schemaVersion => 1;
 
+  int _wipes = 0;
+
+  /// How many times the database was wiped. A sync that started before a
+  /// wipe sees it changed and must not write what it fetched for the
+  /// previous user.
+  int get wipeCount => _wipes;
+
   /// Deletes every row, e.g. on sign-out.
-  Future<void> wipe() => transaction(() async {
-    for (final table in allTables) {
-      await delete(table).go();
-    }
-  });
+  Future<void> wipe() {
+    _wipes++;
+    return transaction(() async {
+      for (final table in allTables) {
+        await delete(table).go();
+      }
+    });
+  }
 
   /// Writes [row] whole, replacing the row with the same key. Unlike an
   /// upsert of a data class, fields that are null in [row] end up null.

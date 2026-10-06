@@ -50,6 +50,18 @@ class _DeleteAccountViewState extends State<DeleteAccountView> {
 
   bool get _isConsumer => widget.role == UserRole.consumer;
 
+  /// Back to where the person came from; the account tab when nothing is
+  /// behind this screen (after signing in again).
+  void _leave(BuildContext context) {
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go(
+        _isConsumer ? AppRoutes.consumerAccount : AppRoutes.technicianAccount,
+      );
+    }
+  }
+
   /// A consumer's copy is gendered; a technician's is masculine.
   String _honorific(BuildContext context, {bool watch = true}) {
     if (!_isConsumer) return 'other';
@@ -63,7 +75,10 @@ class _DeleteAccountViewState extends State<DeleteAccountView> {
         final session = context.read<SessionCubit>();
         final honorific = _honorific(context, watch: false);
         context.go(AppRoutes.accountDeletedFor(honorific));
-        unawaited(session.signOut());
+        unawaited(session.signOutDeleted());
+      case DeleteAccountStatus.failed
+          when state.failure is RecentLoginRequiredFailure:
+        unawaited(_offerSignIn(context));
       case DeleteAccountStatus.failed:
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -78,6 +93,43 @@ class _DeleteAccountViewState extends State<DeleteAccountView> {
         );
       case DeleteAccountStatus.idle || DeleteAccountStatus.deleting:
         break;
+    }
+  }
+
+  /// Deleting needs a recent sign-in: offers to sign out and sign in again
+  /// with a new code, and comes back to this screen after.
+  Future<void> _offerSignIn(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final honorific = _honorific(context, watch: false);
+    final session = context.read<SessionCubit>();
+    final location = AppRoutes.deleteAccountFor(widget.role);
+    final signOut = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.acctDeleteRelogTitle(honorific)),
+        content: Text(l10n.acctDeleteRelogBody(honorific)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.acctDeleteRelogCancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.acctDeleteRelogButton(honorific)),
+          ),
+        ],
+      ),
+    );
+    if (signOut ?? false) {
+      try {
+        await session.signOutAndReturnTo(location);
+      } on Object {
+        if (context.mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(l10n.errorUnexpected)));
+        }
+      }
     }
   }
 
@@ -256,7 +308,7 @@ class _DeleteAccountViewState extends State<DeleteAccountView> {
                   ),
                 ),
                 TextButton(
-                  onPressed: busy ? null : () => context.pop(),
+                  onPressed: busy ? null : () => _leave(context),
                   style: TextButton.styleFrom(
                     minimumSize: const Size.fromHeight(48),
                     foregroundColor: colors.ink,

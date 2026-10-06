@@ -36,7 +36,7 @@ void main() {
     session = MockSessionCubit();
     when(() => cubit.state).thenReturn(const DeleteAccountState());
     when(cubit.delete).thenAnswer((_) async {});
-    when(session.signOut).thenAnswer((_) async {});
+    when(session.signOutDeleted).thenAnswer((_) async {});
   });
 
   Future<void> pumpView(
@@ -221,7 +221,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      verify(session.signOut).called(1);
+      verify(session.signOutDeleted).called(1);
       expect(_goodbyeFor(tester), 'ms');
     });
   });

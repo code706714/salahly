@@ -1,7 +1,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(33);
+select plan(38);
 
 -- Consumers C1 and C2, technicians A1 and A2 (both cover Nasr City, two
 -- uses each) and A3 (waiting for verification).
@@ -357,6 +357,75 @@ update public.technician_profiles set verification_status = 'approved'
  where id = '00000000-0000-4000-8000-0000000000a3';
 select is(pg_temp.kinds('00000000-0000-4000-8000-0000000000a3', 'technician'), 'verification_approved',
   'an approved technician is told');
+
+-- A technician's phone can't make the consumer's list fill up with repeats.
+select pg_temp.sign_in_as('00000000-0000-4000-8000-0000000000a1');
+set local role authenticated;
+select pg_temp.push_job((select id from pg_temp.ids where name = 'job1'), '{"status": "started"}');
+select pg_temp.push_job((select id from pg_temp.ids where name = 'job1'), '{"status": "finished"}');
+select pg_temp.push_job((select id from pg_temp.ids where name = 'job1'), '{"status": "started"}');
+select pg_temp.push_job((select id from pg_temp.ids where name = 'job1'),
+  '{"quote_status": "sent", "quote_sent_at": "2026-10-03T11:00:00Z"}');
+select pg_temp.push_job((select id from pg_temp.ids where name = 'job1'),
+  '{"quote_status": "sent", "quote_sent_at": "2026-10-03T12:00:00Z"}');
+reset role;
+select is(
+  (select count(*)::int from public.notifications
+    where user_id = '00000000-0000-4000-8000-0000000000c1'
+      and kind in ('job_started', 'job_finished', 'price_change')
+      and request_id = (select id from pg_temp.ids where name = 'r1')),
+  3,
+  'flipping the status or the quote time again within 10 minutes tells nobody again'
+);
+
+update public.notifications set created_at = now() - interval '11 minutes'
+ where user_id = '00000000-0000-4000-8000-0000000000c1' and kind in ('job_started', 'price_change');
+select pg_temp.sign_in_as('00000000-0000-4000-8000-0000000000a1');
+set local role authenticated;
+select pg_temp.push_job((select id from pg_temp.ids where name = 'job1'), '{"status": "finished"}');
+select pg_temp.push_job((select id from pg_temp.ids where name = 'job1'), '{"status": "started"}');
+select pg_temp.push_job((select id from pg_temp.ids where name = 'job1'),
+  '{"quote_status": "sent", "quote_sent_at": "2026-10-03T13:00:00Z"}');
+reset role;
+select is(
+  (select count(*)::int from public.notifications
+    where user_id = '00000000-0000-4000-8000-0000000000c1' and kind in ('job_started', 'price_change')
+      and request_id = (select id from pg_temp.ids where name = 'r1')),
+  4,
+  'once the 10 minutes are over a new change is announced again'
+);
+
+select pg_temp.sign_in_as('00000000-0000-4000-8000-0000000000a1');
+set local role authenticated;
+select pg_temp.push_job((select id from pg_temp.ids where name = 'job1'),
+  '{"quote_status": "sent", "quote_sent_at": "2099-01-01T00:00:00Z"}');
+reset role;
+select ok(
+  (select quote_sent_at <= now() + interval '1 minute' from public.jobs
+    where id = (select id from pg_temp.ids where name = 'job1')),
+  'a quote time far in the future (a wrong phone clock) is replaced by now'
+);
+
+-- A technician sees only his own offer, never the winner's price.
+select pg_temp.sign_in_as('00000000-0000-4000-8000-0000000000a2');
+set local role authenticated;
+select is(
+  (select e ->> 'price_piastres' || ':' || coalesce(e ->> 'technician_name', 'null')
+     from jsonb_array_elements(public.my_notifications('technician')) e
+    where e ->> 'kind' = 'new_request'
+      and e ->> 'request_id' = (select id::text from pg_temp.ids where name = 'r4')),
+  null,
+  'a technician''s notification about a request does not carry the picked offer''s price or name'
+);
+select is(
+  (select e ->> 'price_piastres'
+     from jsonb_array_elements(public.my_notifications('technician')) e
+    where e ->> 'kind' = 'offer_not_picked'
+      and e ->> 'request_id' = (select id::text from pg_temp.ids where name = 'r4')),
+  '31000',
+  'but he still sees the price of his own offer'
+);
+reset role;
 
 -- Retention.
 update public.notifications set created_at = now() - interval '91 days'
