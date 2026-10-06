@@ -43,6 +43,7 @@ import 'package:salahly/features/marketplace/presentation/pages/past_technicians
 import 'package:salahly/features/marketplace/presentation/pages/request_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/technician_profile_page.dart';
 import 'package:salahly/features/money/presentation/pages/money_page.dart';
+import 'package:salahly/features/notifications/presentation/pages/notifications_page.dart';
 import 'package:salahly/features/onboarding/domain/usecases/submit_technician_onboarding.dart';
 import 'package:salahly/features/onboarding/presentation/cubit/consumer_onboarding_cubit.dart';
 import 'package:salahly/features/onboarding/presentation/cubit/technician_onboarding_cubit.dart';
@@ -200,6 +201,11 @@ RouteBase _consumerRoutes() {
         builder: (context, state) => const PastTechniciansPage(),
       ),
       GoRoute(
+        path: AppRoutes.consumerNotifications,
+        builder: (context, state) =>
+            const NotificationsPage(role: UserRole.consumer),
+      ),
+      GoRoute(
         path: AppRoutes.consumerBalance,
         builder: (context, state) => const BalancePage(role: UserRole.consumer),
       ),
@@ -248,6 +254,11 @@ RouteBase _technicianRoutes() {
         path: AppRoutes.technicianBuyUses,
         builder: (context, state) =>
             const BuyUsesPage(role: UserRole.technician),
+      ),
+      GoRoute(
+        path: AppRoutes.technicianNotifications,
+        builder: (context, state) =>
+            const NotificationsPage(role: UserRole.technician),
       ),
       GoRoute(
         path: AppRoutes.incomingRequests,

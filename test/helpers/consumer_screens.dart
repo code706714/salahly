@@ -18,9 +18,11 @@ import 'package:salahly/features/marketplace/domain/entities/service_request.dar
 import 'package:salahly/features/marketplace/presentation/cubit/addresses_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/my_requests_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/new_request_cubit.dart';
+import 'package:salahly/features/notifications/presentation/cubit/notifications_cubit.dart';
 
 import 'fixtures.dart';
 import 'mocks.dart';
+import 'notification_fixtures.dart';
 
 // Mocks and builders for the consumer's home, request form, account,
 // addresses and past technicians screens.
@@ -108,11 +110,13 @@ class ConsumerScreenBlocs {
   final categories = MockCategoriesCubit();
   final areas = MockAreasCubit();
   final myRequests = MockMyRequestsCubit();
+  final MockNotificationsCubit notifications = mockNotificationsCubit();
 
   List<BlocProvider<StateStreamableSource<Object?>>> get providers => [
     BlocProvider<SessionCubit>.value(value: session),
     BlocProvider<CategoriesCubit>.value(value: categories),
     BlocProvider<AreasCubit>.value(value: areas),
     BlocProvider<MyRequestsCubit>.value(value: myRequests),
+    BlocProvider<NotificationsCubit>.value(value: notifications),
   ];
 }

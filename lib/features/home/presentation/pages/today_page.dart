@@ -16,6 +16,7 @@ import 'package:salahly/core/widgets/section_header.dart';
 import 'package:salahly/core/widgets/status_pill.dart';
 import 'package:salahly/core/widgets/whatsapp_button.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
+import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/domain/entities/verification_status.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
@@ -30,6 +31,7 @@ import 'package:salahly/features/jobs/presentation/job_messages.dart';
 import 'package:salahly/features/jobs/presentation/widgets/job_status_pill.dart';
 import 'package:salahly/features/jobs/presentation/widgets/job_time.dart';
 import 'package:salahly/features/jobs/presentation/widgets/new_job_button.dart';
+import 'package:salahly/features/notifications/presentation/widgets/notifications_bell.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
 /// The technician's first tab: today's visits and the money still out.
@@ -176,6 +178,8 @@ class _Header extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
+        const NotificationsBell(role: UserRole.technician),
+        const SizedBox(width: 8),
         Tooltip(
           message: l10n.myAccount,
           child: InkWell(

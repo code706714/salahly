@@ -17,6 +17,7 @@ import 'package:salahly/features/home/presentation/cubit/consumer_home_cubit.dar
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/my_requests_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/marketplace_labels.dart';
+import 'package:salahly/features/notifications/presentation/widgets/notifications_bell.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
 /// The consumer's start screen: their newest request in progress, the
@@ -83,7 +84,13 @@ class ConsumerHomeView extends StatelessWidget {
                     selected == null ? 24 : 120,
                   ),
                   children: [
-                    _AreaName(consumer.areaName),
+                    Row(
+                      children: [
+                        Expanded(child: _AreaName(consumer.areaName)),
+                        const SizedBox(width: 12),
+                        const NotificationsBell(role: UserRole.consumer),
+                      ],
+                    ),
                     const SizedBox(height: 18),
                     _Greeting(firstName: profile.firstName),
                     const SizedBox(height: 18),

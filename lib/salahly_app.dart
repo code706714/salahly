@@ -55,6 +55,7 @@ class _SalahlyAppState extends State<SalahlyApp> {
           value: dependencies.technicianRequestsRepository,
         ),
         RepositoryProvider.value(value: dependencies.balanceRepository),
+        RepositoryProvider.value(value: dependencies.notificationsRepository),
         RepositoryProvider.value(value: dependencies.database),
         RepositoryProvider.value(value: dependencies.syncEngine),
         RepositoryProvider.value(value: dependencies.networkStatus),

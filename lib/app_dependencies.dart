@@ -35,6 +35,8 @@ import 'package:salahly/features/marketplace/data/repositories/supabase_consumer
 import 'package:salahly/features/marketplace/data/repositories/supabase_technician_requests_repository.dart';
 import 'package:salahly/features/marketplace/domain/repositories/consumer_requests_repository.dart';
 import 'package:salahly/features/marketplace/domain/repositories/technician_requests_repository.dart';
+import 'package:salahly/features/notifications/data/repositories/supabase_notifications_repository.dart';
+import 'package:salahly/features/notifications/domain/repositories/notifications_repository.dart';
 import 'package:salahly/features/onboarding/data/repositories/supabase_onboarding_repository.dart';
 import 'package:salahly/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -52,6 +54,7 @@ class AppDependencies {
     required this.consumerRequestsRepository,
     required this.technicianRequestsRepository,
     required this.balanceRepository,
+    required this.notificationsRepository,
     required this.locationService,
     required this.photoPicker,
     required this.userData,
@@ -108,6 +111,7 @@ class AppDependencies {
         client,
       ),
       balanceRepository: SupabaseBalanceRepository(client),
+      notificationsRepository: SupabaseNotificationsRepository(client),
       locationService: const GeolocatorLocationService(),
       photoPicker: PhotoPicker(),
       userData: LocalUserData(database, photos, sharedFiles),
@@ -135,6 +139,7 @@ class AppDependencies {
   final ConsumerRequestsRepository consumerRequestsRepository;
   final TechnicianRequestsRepository technicianRequestsRepository;
   final BalanceRepository balanceRepository;
+  final NotificationsRepository notificationsRepository;
   final LocationService locationService;
   final PhotoPicker photoPicker;
   final UserScopedData userData;
