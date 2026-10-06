@@ -18,6 +18,7 @@ android {
         applicationId = "com.salahly.app"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
+        // From `version:` in pubspec.yaml (name+build), via the Flutter plugin.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
@@ -44,10 +45,35 @@ android {
         }
     }
 
+    // The release key comes from the environment (CI secrets or the
+    // developer's shell), never from a file in the repository. Without it
+    // the build is signed with the debug key so it still runs locally.
+    val releaseKeystore = System.getenv("ANDROID_KEYSTORE_PATH")
+    val hasReleaseKey = !releaseKeystore.isNullOrBlank() &&
+        file(releaseKeystore).exists()
+
+    signingConfigs {
+        if (hasReleaseKey) {
+            create("release") {
+                storeFile = file(releaseKeystore!!)
+                storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("ANDROID_KEY_ALIAS")
+                keyPassword = System.getenv("ANDROID_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // Signing with the debug keys until a release keystore exists.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName(
+                if (hasReleaseKey) "release" else "debug",
+            )
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
         }
     }
 }
