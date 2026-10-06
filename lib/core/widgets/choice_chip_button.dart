@@ -9,6 +9,7 @@ class ChoiceChipButton extends StatelessWidget {
     required this.selected,
     required this.onTap,
     this.icon,
+    this.inkWhenSelected = false,
     this.fontSize = 15,
     this.minHeight = 44,
     this.padding = const EdgeInsets.symmetric(horizontal: 14),
@@ -22,6 +23,9 @@ class ChoiceChipButton extends StatelessWidget {
   /// unavailable.
   final VoidCallback? onTap;
   final IconData? icon;
+
+  /// Keeps the label in the ink color when selected, instead of the brand's.
+  final bool inkWhenSelected;
   final double fontSize;
   final double minHeight;
   final EdgeInsetsGeometry padding;
@@ -29,7 +33,9 @@ class ChoiceChipButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final foreground = selected ? colors.primaryPressed : colors.ink;
+    final foreground = selected && !inkWhenSelected
+        ? colors.primaryPressed
+        : colors.ink;
     return Semantics(
       button: true,
       selected: selected,

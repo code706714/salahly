@@ -467,6 +467,7 @@ class _OfferForm extends StatelessWidget {
                       formatPounds(choice.pounds * 100),
                     ),
                     selected: choice.serviceId == serviceId,
+                    inkWhenSelected: true,
                     onTap: () => onService(choice),
                   ),
               ],
@@ -483,6 +484,7 @@ class _OfferForm extends StatelessWidget {
                 ChoiceChipButton(
                   label: arrivalChoiceLabel(l10n, at, today: today),
                   selected: at == arriveAt,
+                  inkWhenSelected: true,
                   onTap: () => onArrival(at),
                 ),
             ],
