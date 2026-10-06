@@ -9,7 +9,8 @@
 create type public.topup_method as enum ('instapay', 'wallet');
 create type public.topup_status as enum ('pending', 'approved', 'rejected');
 create type public.ledger_reason as enum (
-  'request_sent', 'request_refunded', 'topup', 'admin_adjustment'
+  'free_grant', 'opening_balance', 'request_sent', 'request_refunded', 'topup',
+  'admin_adjustment'
 );
 
 -- What can be bought: consumers buy request uses, technicians job uses.
@@ -134,10 +135,57 @@ begin
        set job_credits = job_credits + 1
      where id = p_user_id;
   end if;
-  insert into public.credit_ledger (user_id, role, delta, reason)
-  values (p_user_id, p_role, 1, 'request_refunded');
+  if found then
+    insert into public.credit_ledger (user_id, role, delta, reason)
+    values (p_user_id, p_role, 1, 'request_refunded');
+  end if;
 end;
 $$;
+
+-- The ledger must add up to the balance: the uses people already hold
+-- become an opening balance, and the free uses granted at sign-up are
+-- written as they are granted.
+insert into public.credit_ledger (user_id, role, delta, reason)
+select id, 'consumer'::public.user_role, request_credits, 'opening_balance'::public.ledger_reason
+  from public.consumer_profiles where request_credits > 0
+union all
+select id, 'technician'::public.user_role, job_credits, 'opening_balance'::public.ledger_reason
+  from public.technician_profiles where job_credits > 0;
+
+create function private.log_consumer_free_grant()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if new.request_credits > 0 then
+    insert into public.credit_ledger (user_id, role, delta, reason)
+    values (new.id, 'consumer', new.request_credits, 'free_grant');
+  end if;
+  return null;
+end;
+$$;
+
+create function private.log_technician_free_grant()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if new.job_credits > 0 then
+    insert into public.credit_ledger (user_id, role, delta, reason)
+    values (new.id, 'technician', new.job_credits, 'free_grant');
+  end if;
+  return null;
+end;
+$$;
+
+create trigger consumer_free_grant after insert on public.consumer_profiles
+  for each row execute function private.log_consumer_free_grant();
+create trigger technician_free_grant after insert on public.technician_profiles
+  for each row execute function private.log_technician_free_grant();
 
 -- Transfer proofs: private, insert-only into the sender's own folder.
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
@@ -160,7 +208,8 @@ create function public.submit_topup(
   p_pack_id uuid,
   p_method public.topup_method,
   p_sender_account text,
-  p_screenshot_path text
+  p_screenshot_path text,
+  p_expected_price_piastres bigint
 )
 returns uuid
 language plpgsql
@@ -181,6 +230,10 @@ begin
   select * into v_pack from public.credit_packs where id = p_pack_id and is_active;
   if not found then
     raise exception 'pack_not_found' using errcode = 'P0002';
+  end if;
+  -- What the person saw and transferred is what the pack must still cost.
+  if v_pack.price_piastres is distinct from p_expected_price_piastres then
+    raise exception 'price_changed' using errcode = 'P0001';
   end if;
   if (
     v_pack.role = 'consumer'
@@ -207,10 +260,12 @@ begin
       raise exception 'invalid_sender' using errcode = '22023';
     end if;
     v_sender := v_digits;
-  elsif char_length(v_sender) not between 3 and 64 or v_sender ~ '[[:cntrl:]]' then
-    raise exception 'invalid_sender' using errcode = '22023';
   elsif v_digits ~ '^01[0125][0-9]{8}$' then
     v_sender := v_digits;
+  elsif v_sender !~ '^[A-Za-z0-9@._-]{3,64}$' then
+    -- An InstaPay address: plain characters only, so nothing odd (control
+    -- or direction marks, markup) reaches whoever reviews the transfer.
+    raise exception 'invalid_sender' using errcode = '22023';
   end if;
 
   if p_screenshot_path is null
@@ -250,13 +305,13 @@ begin
 end;
 $$;
 
-revoke execute on function public.submit_topup(uuid, public.topup_method, text, text)
+revoke execute on function public.submit_topup(uuid, public.topup_method, text, text, bigint)
   from public, anon;
-grant execute on function public.submit_topup(uuid, public.topup_method, text, text)
+grant execute on function public.submit_topup(uuid, public.topup_method, text, text, bigint)
   to authenticated;
 
--- Checked and found right: the uses are added exactly once. Service role
--- only; the dashboard calls it from a function that checks who reviews.
+-- Checked and found right: the uses are added exactly once. Not reachable
+-- from the API.
 create function private.approve_topup(p_topup_id uuid)
 returns void
 language plpgsql
@@ -311,5 +366,8 @@ begin
 end;
 $$;
 
--- The review calls are reachable only with the service role: they live in
--- the private schema, which the API roles can't enter.
+-- The review calls live in the private schema, which no API role can enter;
+-- they run from a database session (the SQL editor, or the dashboard's
+-- backend later). Nothing else may execute them either.
+revoke execute on function private.approve_topup(uuid), private.reject_topup(uuid, text)
+  from public;
