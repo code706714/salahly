@@ -75,6 +75,9 @@ void main() {
         when(
           () => app.requests.fetchRequest(any()),
         ).thenAnswer((_) async => Ok(testRequestDetails()));
+        when(
+          () => app.requests.fetchTechnician(any()),
+        ).thenAnswer((_) async => Ok(testTechnicianProfile()));
         await app.pump(tester);
 
         unawaited(app.router(tester).push(location));
@@ -111,6 +114,9 @@ void main() {
     tester,
     app,
   ) async {
+    when(
+      () => app.requests.fetchTechnician('tech-1'),
+    ).thenAnswer((_) async => Ok(testTechnicianProfile()));
     await app.pump(tester);
     final offer = testOffer();
 
