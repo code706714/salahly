@@ -115,29 +115,7 @@ class AddressesView extends StatelessWidget {
                   ),
                 ),
               const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 12,
-                ),
-                decoration: BoxDecoration(
-                  color: colors.inkSoft,
-                  borderRadius: BorderRadius.circular(AppRadii.md),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(Icons.shield_outlined, size: 22, color: colors.ink),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        l10n.addressesPrivacy(honorific),
-                        style: const TextStyle(fontSize: 14, height: 1.6),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              const AddressPrivacyNote(),
             ],
           ),
         },

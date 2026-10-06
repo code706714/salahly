@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/theme/app_colors.dart';
+import 'package:salahly/core/theme/app_radii.dart';
+import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/marketplace/domain/entities/consumer_address.dart';
+import 'package:salahly/l10n/generated/app_localizations.dart';
 
 /// A saved address in two lines: its label, then the details and the area.
 class AddressSummary extends StatelessWidget {
@@ -33,6 +36,38 @@ class AddressSummary extends StatelessWidget {
           style: TextStyle(fontSize: 15, height: 1.5, color: colors.inkMuted),
         ),
       ],
+    );
+  }
+}
+
+/// Technicians see the area only, until the consumer picks one of them.
+class AddressPrivacyNote extends StatelessWidget {
+  const AddressPrivacyNote({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.appColors;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: colors.inkSoft,
+        borderRadius: BorderRadius.circular(AppRadii.md),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.shield_outlined, size: 22, color: colors.ink),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              AppLocalizations.of(
+                context,
+              ).addressesPrivacy(context.watchHonorific()),
+              style: const TextStyle(fontSize: 14, height: 1.6),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -714,7 +714,7 @@ class _AddressStep extends StatelessWidget {
           _Missing(l10n.newRequestAddressRequired(honorific)),
         ],
         const SizedBox(height: 12),
-        const _PrivacyNote(),
+        const AddressPrivacyNote(),
       ],
     );
   }
@@ -773,38 +773,6 @@ class _AddressOption extends StatelessWidget {
             Expanded(child: AddressSummary(address: address)),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// Technicians see the area only, until the consumer picks one of them.
-class _PrivacyNote extends StatelessWidget {
-  const _PrivacyNote();
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.appColors;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: colors.inkSoft,
-        borderRadius: BorderRadius.circular(AppRadii.md),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(Icons.shield_outlined, size: 22, color: colors.ink),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              AppLocalizations.of(
-                context,
-              ).addressesPrivacy(context.watchHonorific()),
-              style: const TextStyle(fontSize: 14, height: 1.6),
-            ),
-          ),
-        ],
       ),
     );
   }

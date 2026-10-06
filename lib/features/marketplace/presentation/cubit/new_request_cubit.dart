@@ -215,8 +215,8 @@ class NewRequestCubit extends Cubit<NewRequestState> {
     );
   }
 
-  /// The state with the clock read again, dropping a day or window that
-  /// can't be asked for anymore.
+  /// The state with the clock read again, dropping a day that can't be
+  /// asked for anymore, and a window that is over on the day kept.
   NewRequestState _withClock() {
     final checked = state.copyWith(now: _clock());
     final day = checked.day;
@@ -225,9 +225,9 @@ class NewRequestCubit extends Cubit<NewRequestState> {
         day != null && checked.days.contains(day) && checked.hasOpenWindow(day);
     return checked.copyWith(
       day: () => dayOpen ? day : null,
-      window: () => dayOpen && window != null && checked.isOpen(day, window)
-          ? window
-          : null,
+      window: () => dayOpen && window != null && !checked.isOpen(day, window)
+          ? null
+          : window,
     );
   }
 
@@ -289,14 +289,16 @@ class NewRequestCubit extends Cubit<NewRequestState> {
       emit(checked.copyWith(showsErrors: true));
       return;
     }
-    await stopListening();
     emit(
       checked.copyWith(
         status: NewRequestStatus.uploading,
         uploaded: 0,
         failure: () => null,
+        isListening: false,
       ),
     );
+    if (checked.isListening) await _speech.stop();
+    if (isClosed) return;
     final photoPaths = <String>[];
     for (final photo in state.photos) {
       final path = _uploaded[photo] ?? await _upload(photo);
