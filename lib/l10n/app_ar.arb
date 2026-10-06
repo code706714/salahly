@@ -2894,5 +2894,237 @@
         "type": "String"
       }
     }
-  }
+  },
+  "todayRequestsInArea": "{count, plural, =1{طلب جديد في {area}} =2{طلبين جداد في {area}} few{{count} طلبات جديدة في {area}} other{{count} طلب جديد في {area}}}",
+  "@todayRequestsInArea": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "todayRequestsNearby": "{count, plural, =1{طلب جديد قريب منك} =2{طلبين جداد قريبين منك} few{{count} طلبات جديدة قريبة منك} other{{count} طلب جديد قريب منك}}",
+  "@todayRequestsNearby": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayRequestsNeedOne": "{honorific, select, ms{عميلة محتاجة فني {category}. ابعت عرضك.} other{عميل محتاج فني {category}. ابعت عرضك.}}",
+  "@todayRequestsNeedOne": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "todayRequestsNeedMany": "عملاء محتاجين فني {category}. ابعت عرضك.",
+  "@todayRequestsNeedMany": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "todayRequestsCreditsLeft": "{count, plural, =0{خلصت شغلاناتك ببلاش} =1{فاضل لك شغلانة واحدة ببلاش} =2{فاضل لك شغلانتين ببلاش} few{فاضل لك {count} شغلانات ببلاش} other{فاضل لك {count} شغلانة ببلاش}}",
+  "@todayRequestsCreditsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayRequestsBalance": "رصيدك من المنصة:",
+  "todayRequestsBalanceCount": "{count, plural, =0{مفيش شغلانات مجانية} =1{1 شغلانة مجانية} =2{2 شغلانة مجانية} few{{count} شغلانات مجانية} other{{count} شغلانة مجانية}}",
+  "@todayRequestsBalanceCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "incomingTitle": "طلبات جديدة",
+  "incomingEmpty": "مفيش طلبات جديدة دلوقتي",
+  "incomingEmptyHint": "أول ما عميل قريب منك يطلب فني، طلبه هيظهر هنا.",
+  "incomingLoadFailed": "مقدرناش نجيب الطلبات دلوقتي.",
+  "incomingAgoNow": "لسه حالاً",
+  "incomingAgoMinutes": "{count, plural, =1{من دقيقة} =2{من دقيقتين} few{من {count} دقايق} other{من {count} دقيقة}}",
+  "@incomingAgoMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "incomingAgoHours": "{count, plural, =1{من ساعة} =2{من ساعتين} few{من {count} ساعات} other{من {count} ساعة}}",
+  "@incomingAgoHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "incomingAgoDays": "{count, plural, =1{من يوم} =2{من يومين} few{من {count} أيام} other{من {count} يوم}}",
+  "@incomingAgoDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "incomingConsumer": "{honorific, select, ms{العميلة: {name}} other{العميل: {name}}}",
+  "@incomingConsumer": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingDistance": "{km} كم منك",
+  "@incomingDistance": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingOfferCount": "{count} من {max} عروض",
+  "@incomingOfferCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "incomingMyOffer": "بعتّ عرضك · {price} ج.م",
+  "@incomingMyOffer": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingOfferChosen": "{honorific, select, ms{اختارت عرضك} other{اختار عرضك}}",
+  "@incomingOfferChosen": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingOfferNotChosen": "{honorific, select, ms{اختارت فني تاني} other{اختار فني تاني}}",
+  "@incomingOfferNotChosen": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingClosedFull": "وصله 3 عروض",
+  "incomingClosedCancelled": "{honorific, select, ms{العميلة لغت الطلب} other{العميل لغى الطلب}}",
+  "@incomingClosedCancelled": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingClosedExpired": "خلص وقت الطلب",
+  "incomingClosed": "الطلب اتقفل",
+  "incomingRequestTitle": "طلب جديد من عميل",
+  "incomingSentTo": "الطلب راح لـ {sent, plural, =1{فني واحد} =2{فنيين اتنين} few{{sent} فنيين} other{{sent} فني}}، {offers, plural, =0{ولسه ماوصلش أي عرض} =1{ووصل عرض واحد لحد دلوقتي} =2{ووصل عرضين لحد دلوقتي} few{ووصل {offers} عروض لحد دلوقتي} other{ووصل {offers} عرض لحد دلوقتي}}",
+  "@incomingSentTo": {
+    "placeholders": {
+      "sent": {
+        "type": "int"
+      },
+      "offers": {
+        "type": "int"
+      }
+    }
+  },
+  "incomingPrivacy": "{honorific, select, ms{العنوان بالظبط ورقم العميلة هيظهروا لك لما تختار عرضك.} other{العنوان بالظبط ورقم العميل هيظهروا لك لما يختار عرضك.}}",
+  "@incomingPrivacy": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingPhoto": "صورة من الطلب",
+  "offerFormTitle": "عرضك",
+  "offerFormPrice": "السعر المبدئي",
+  "offerFormServiceChip": "{name} {price}",
+  "@offerFormServiceChip": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "offerFormArrival": "تقدر تيجي إمتى؟",
+  "offerFormNoTimes": "وقت الطلب خلص، فمينفعش تبعت عرض عليه.",
+  "offerFormNote": "{honorific, select, ms{كلمة للعميلة (اختياري)} other{كلمة للعميل (اختياري)}}",
+  "@offerFormNote": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "offerFormNoteHint": "مثلاً: السعر شامل الكشف والتنظيف.",
+  "offerFormSend": "ابعت العرض · {price} ج.م",
+  "@offerFormSend": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "offerFormSendEmpty": "ابعت العرض",
+  "offerFormDismiss": "مش مناسب ليا",
+  "offerFormDismissTitle": "الطلب ده مش مناسب ليك؟",
+  "offerFormDismissBody": "مش هيظهر لك تاني في الطلبات الجديدة.",
+  "offerFormDismissConfirm": "أيوه، مش مناسب",
+  "offerFormDismissKeep": "لأ، ارجع",
+  "offerFormArriveAt": "هتوصل {when}",
+  "@offerFormArriveAt": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "offerFormWaiting": "{honorific, select, ms{مستني رد العميلة} other{مستني رد العميل}}",
+  "@offerFormWaiting": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "offerFormChosenHint": "الشغلانة نزلت في شغلاناتك بالعنوان ورقم التليفون.",
+  "platformJobQuoteDeclined": "العميل رفض الزيادة",
+  "platformJobQuoteDeclinedHint": "هيدفع السعر اللي اتفقتوا عليه بس، فشيل الزيادة من العرض.",
+  "platformJobQuoteSend": "ابعت العرض للعميل",
+  "platformJobQuoteInApp": "هيوصل للعميل في التطبيق",
+  "platformJobCancelTitle": "تلغي الشغلانة دي؟",
+  "platformJobCancelBody": "الشغلانة جاية من المنصة، فالطلب هيتلغي عند العميل ومش هتقدر ترجّعها.",
+  "platformJobCancelConfirm": "ألغيها"
 }

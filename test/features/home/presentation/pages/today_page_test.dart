@@ -7,18 +7,23 @@ import 'package:salahly/core/launch/external_apps.dart';
 import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/sync/sync_cubit.dart';
+import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/domain/entities/verification_status.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
+import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/home/presentation/cubit/today_cubit.dart';
 import 'package:salahly/features/home/presentation/pages/today_page.dart';
 import 'package:salahly/features/jobs/domain/entities/job.dart';
 import 'package:salahly/features/jobs/domain/entities/job_summary.dart';
+import 'package:salahly/features/marketplace/domain/entities/incoming_request.dart';
+import 'package:salahly/features/marketplace/presentation/cubit/incoming_requests_cubit.dart';
 
 import '../../../../helpers/fixtures.dart';
+import '../../../../helpers/incoming_fixtures.dart';
 import '../../../../helpers/job_fixtures.dart';
 import '../../../../helpers/mocks.dart';
 import '../../../../pump_app.dart';
@@ -44,6 +49,8 @@ void main() {
   late MockSyncCubit sync;
   late MockAreasCubit areas;
   late MockExternalApps apps;
+  late MockIncomingRequestsCubit incoming;
+  late MockCategoriesCubit categories;
   final morning = DateTime(2026, 10, 2, 11);
 
   setUpAll(() async {
@@ -59,6 +66,12 @@ void main() {
     sync = MockSyncCubit();
     areas = MockAreasCubit();
     apps = MockExternalApps();
+    incoming = MockIncomingRequestsCubit();
+    categories = MockCategoriesCubit();
+    when(() => incoming.state).thenReturn(const IncomingRequestsState());
+    when(() => categories.state).thenReturn(
+      const CategoriesState(categories: TestCategories.all),
+    );
     when(() => session.state).thenReturn(signedInTechnician());
     when(() => sync.state).thenReturn(const SyncState());
     when(
@@ -76,6 +89,8 @@ void main() {
       BlocProvider<TodayCubit>.value(value: today),
       BlocProvider<SyncCubit>.value(value: sync),
       BlocProvider<AreasCubit>.value(value: areas),
+      BlocProvider<CategoriesCubit>.value(value: categories),
+      BlocProvider<IncomingRequestsCubit>.value(value: incoming),
     ],
     stubRoutes: [
       AppRoutes.technicianAccount,
@@ -83,6 +98,7 @@ void main() {
       AppRoutes.newJob,
       AppRoutes.newCustomer,
       AppRoutes.job('job-1'),
+      AppRoutes.incomingRequests,
     ],
   );
 
@@ -296,6 +312,29 @@ void main() {
       );
     });
 
+    testWidgets('marks a price change the consumer declined', (tester) async {
+      showDay(
+        TodayState(
+          now: morning,
+          schedule: [
+            testSummary(
+              testJob(
+                scheduledAt: DateTime(2026, 10, 2, 13),
+                quoteStatus: QuoteStatus.declined,
+                source: JobSource.platform,
+              ),
+              customerName: 'نورهان م.',
+            ),
+          ],
+          hasJobs: true,
+        ),
+      );
+      await pumpPage(tester);
+
+      expect(find.text(l10n.platformJobQuoteDeclined), findsOneWidget);
+      expect(find.text(l10n.jobFromPlatform), findsOneWidget);
+    });
+
     testWidgets('opens the account from the avatar', (tester) async {
       showDay(TodayState(now: morning, schedule: const [], hasJobs: true));
       await pumpPage(tester);
@@ -357,5 +396,130 @@ void main() {
     await pumpPage(tester);
 
     expect(find.textContaining('محمود'), findsNothing);
+  });
+  group('new requests', () {
+    final workingDay = TodayState(
+      now: morning,
+      schedule: const [],
+      hasJobs: true,
+    );
+
+    void showRequests(List<IncomingRequest> requests) =>
+        when(
+          () => incoming.state,
+        ).thenReturn(
+          IncomingRequestsState(
+            status: IncomingRequestsStatus.ready,
+            requests: requests,
+          ),
+        );
+
+    testWidgets('names the area they are all in and the free jobs left', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(smallPhone);
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      showDay(workingDay);
+      showRequests([
+        testIncoming(),
+        testIncoming(id: 'request-2', honorific: Honorific.mr),
+      ]);
+      await pumpPage(tester);
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('2'), findsOneWidget);
+      expect(find.text(l10n.todayRequestsInArea(2, 'مدينة نصر')), findsOne);
+      expect(find.text(l10n.todayRequestsNeedMany('تكييف')), findsOneWidget);
+      expect(find.text(l10n.todayRequestsCreditsLeft(3)), findsOneWidget);
+      expect(
+        find.text(
+          '${l10n.todayRequestsBalance} ${l10n.todayRequestsBalanceCount(3)}',
+          findRichText: true,
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('speaks of one consumer by their gender', (tester) async {
+      showDay(workingDay);
+      showRequests([testIncoming(honorific: Honorific.mr)]);
+      await pumpPage(tester);
+
+      expect(find.text(l10n.todayRequestsInArea(1, 'مدينة نصر')), findsOne);
+      expect(
+        find.text(l10n.todayRequestsNeedOne('mr', 'تكييف')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('speaks generally of requests in several areas', (
+      tester,
+    ) async {
+      showDay(workingDay);
+      showRequests([
+        testIncoming(),
+        testIncoming(id: 'request-2', areaId: 'maadi'),
+        testIncoming(id: 'request-3', areaId: 'zamalek'),
+      ]);
+      await pumpPage(tester);
+
+      expect(find.text(l10n.todayRequestsNearby(3)), findsOneWidget);
+    });
+
+    testWidgets('leaves out requests already answered or closed', (
+      tester,
+    ) async {
+      showDay(workingDay);
+      showRequests([
+        testIncoming(myOffer: testMyOffer()),
+        testIncoming(id: 'request-2', dismissed: true),
+        testIncoming(id: 'request-3', offerCount: 3),
+      ]);
+      await pumpPage(tester);
+
+      expect(find.text(l10n.todayRequestsNearby(1)), findsNothing);
+      expect(find.text(l10n.todayRequestsCreditsLeft(3)), findsNothing);
+      expect(
+        find.text(
+          '${l10n.todayRequestsBalance} ${l10n.todayRequestsBalanceCount(3)}',
+          findRichText: true,
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('opens the new requests', (tester) async {
+      showDay(workingDay);
+      showRequests([testIncoming()]);
+      await pumpPage(tester);
+
+      await tester.tap(find.text(l10n.todayRequestsInArea(1, 'مدينة نصر')));
+      await tester.pumpAndSettle();
+
+      expect(find.text(AppRoutes.incomingRequests), findsOneWidget);
+    });
+
+    testWidgets('shows on the first day too', (tester) async {
+      showDay(TodayState(now: morning, schedule: const [], hasJobs: false));
+      showRequests([testIncoming()]);
+      await pumpPage(tester);
+
+      expect(find.text(l10n.todayRequestsInArea(1, 'مدينة نصر')), findsOne);
+      expect(find.text(l10n.todayStepFirstJob), findsOneWidget);
+    });
+
+    testWidgets('a technician not verified yet gets no requests', (
+      tester,
+    ) async {
+      when(
+        () => session.state,
+      ).thenReturn(signedInTechnician(VerificationStatus.pending));
+      showDay(workingDay);
+      showRequests([testIncoming()]);
+      await pumpPage(tester);
+
+      expect(find.text(l10n.todayRequestsInArea(1, 'مدينة نصر')), findsNothing);
+      expect(find.textContaining(l10n.todayRequestsBalance), findsNothing);
+    });
   });
 }

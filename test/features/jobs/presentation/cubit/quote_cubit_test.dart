@@ -292,6 +292,86 @@ void main() {
       await cubit.close();
     });
 
+    test('never records a yes for a platform job', () async {
+      final cubit = await started(
+        testDetails(
+          job: testJob(
+            quoteStatus: QuoteStatus.sent,
+            source: JobSource.platform,
+          ),
+          items: sampleItems,
+        ),
+      );
+      expect(await cubit.markAccepted(), isFalse);
+      verifyNever(
+        () => jobs.saveQuote(
+          any(),
+          items: any(named: 'items'),
+          validDays: any(named: 'validDays'),
+          status: any(named: 'status'),
+        ),
+      );
+      await cubit.close();
+    });
+
+    test("keeps a platform job's accepted price until it changes", () async {
+      final platform = testDetails(
+        job: testJob(
+          quoteStatus: QuoteStatus.accepted,
+          source: JobSource.platform,
+        ),
+        items: sampleItems,
+      );
+      final unchanged = await started(platform);
+      await unchanged.saveDraft();
+      verify(
+        () => jobs.saveQuote(
+          'job-1',
+          items: any(named: 'items'),
+          validDays: 3,
+          status: QuoteStatus.accepted,
+        ),
+      ).called(1);
+      await unchanged.close();
+
+      final changed = await started(platform);
+      changed.addItem(
+        const JobItemDraft(title: 'شحن فريون', unitPricePiastres: 30000),
+      );
+      await changed.saveDraft();
+      verify(
+        () => jobs.saveQuote(
+          'job-1',
+          items: any(named: 'items'),
+          validDays: 3,
+          status: QuoteStatus.draft,
+        ),
+      ).called(1);
+      await changed.close();
+    });
+
+    test('a declined price change is saved as a draft', () async {
+      final cubit = await started(
+        testDetails(
+          job: testJob(
+            quoteStatus: QuoteStatus.declined,
+            source: JobSource.platform,
+          ),
+          items: sampleItems,
+        ),
+      );
+      await cubit.saveDraft();
+      verify(
+        () => jobs.saveQuote(
+          'job-1',
+          items: any(named: 'items'),
+          validDays: 3,
+          status: QuoteStatus.draft,
+        ),
+      ).called(1);
+      await cubit.close();
+    });
+
     test('takes the saved lines from the job once saved', () async {
       final cubit = await started(testDetails());
       cubit.addItem(

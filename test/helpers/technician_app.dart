@@ -71,6 +71,12 @@ class TechnicianApp {
     when(() => apps.map(any())).thenAnswer((_) async => true);
     when(requests.fetchNewRequests).thenAnswer((_) async => const Ok([]));
     when(requests.fetchMyServices).thenAnswer((_) async => const Ok([]));
+    when(
+      catalog.fetchCategories,
+    ).thenAnswer((_) async => const Ok(TestCategories.all));
+    when(
+      () => requests.fetchRequest(any()),
+    ).thenAnswer((_) async => const Ok(null));
   }
 
   static const user = AuthUser(id: 'user-1');

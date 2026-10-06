@@ -214,6 +214,8 @@ class _InvoiceScreenState extends State<_InvoiceScreen> {
         subtitle: [
           customer.name,
           if (fromQuote) l10n.invoiceFromQuote,
+          if (job.quoteStatus == QuoteStatus.declined)
+            l10n.platformJobQuoteDeclined,
         ].join(' · '),
         trailing: needsPrice
             ? null
