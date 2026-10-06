@@ -19,7 +19,9 @@ import 'package:salahly/core/widgets/busy_filled_button.dart';
 import 'package:salahly/core/widgets/choice_chip_button.dart';
 import 'package:salahly/core/widgets/dashed_rrect_border.dart';
 import 'package:salahly/core/widgets/initials_avatar.dart';
+import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
+import 'package:salahly/features/balance/presentation/balance_navigation.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/marketplace/domain/entities/consumer_address.dart';
@@ -103,7 +105,17 @@ class _NewRequestViewState extends State<NewRequestView> {
     };
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
+      ..showSnackBar(
+        SnackBar(
+          content: Text(message),
+          action: failure is NoCreditsFailure
+              ? SnackBarAction(
+                  label: l10n.buyUsesTopUp(honorific),
+                  onPressed: () => context.openBuyUses(UserRole.consumer),
+                )
+              : null,
+        ),
+      );
   }
 
   @override

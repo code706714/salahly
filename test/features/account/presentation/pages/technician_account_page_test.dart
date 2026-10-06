@@ -50,7 +50,11 @@ void main() {
       BlocProvider<SessionCubit>.value(value: session),
       BlocProvider<SyncCubit>.value(value: sync),
     ],
-    stubRoutes: [AppRoutes.terms, AppRoutes.privacy],
+    stubRoutes: [
+      AppRoutes.terms,
+      AppRoutes.privacy,
+      AppRoutes.technicianBalance,
+    ],
   );
 
   Future<void> askToSignOut(WidgetTester tester) async {
@@ -85,6 +89,15 @@ void main() {
     await pumpPage(tester);
     expect(tester.takeException(), isNull);
     expect(find.text(l10n.techRejectedTitle), findsOneWidget);
+  });
+
+  testWidgets('opens the balance', (tester) async {
+    await pumpPage(tester);
+
+    await tester.tap(find.text(l10n.balanceTitle));
+    await tester.pumpAndSettle();
+
+    expect(find.text(AppRoutes.technicianBalance), findsOneWidget);
   });
 
   testWidgets('opens the terms and the privacy policy', (tester) async {

@@ -7,8 +7,10 @@ import 'package:salahly/core/theme/app_radii.dart';
 import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
+import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
+import 'package:salahly/features/balance/presentation/balance_navigation.dart';
 import 'package:salahly/features/catalog/domain/entities/service_category.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/home/presentation/cubit/consumer_home_cubit.dart';
@@ -173,6 +175,9 @@ class _CreditsLeft extends StatelessWidget {
 
   final int credits;
 
+  /// From this many uses left, the card offers to buy more.
+  static const lowCredits = 1;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -185,24 +190,48 @@ class _CreditsLeft extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadii.md),
         border: Border.all(color: colors.border, width: 1.5),
       ),
-      child: Text.rich(
-        TextSpan(
-          style: TextStyle(fontSize: 14, height: 1.6, color: colors.ink),
-          children: credits > 0
-              ? [
-                  TextSpan(
-                    text: l10n.consumerHomeCreditsLead(
-                      context.watchHonorific(),
-                    ),
-                  ),
-                  const TextSpan(text: ' '),
-                  TextSpan(
-                    text: l10n.consumerHomeCreditsCount(credits),
-                    style: bold,
-                  ),
-                ]
-              : [TextSpan(text: l10n.consumerCreditsLeft(0), style: bold)],
-        ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text.rich(
+              TextSpan(
+                style: TextStyle(fontSize: 14, height: 1.6, color: colors.ink),
+                children: credits > 0
+                    ? [
+                        TextSpan(
+                          text: l10n.consumerHomeCreditsLead(
+                            context.watchHonorific(),
+                          ),
+                        ),
+                        const TextSpan(text: ' '),
+                        TextSpan(
+                          text: l10n.consumerHomeCreditsCount(credits),
+                          style: bold,
+                        ),
+                      ]
+                    : [
+                        TextSpan(
+                          text: l10n.consumerCreditsLeft(0),
+                          style: bold,
+                        ),
+                      ],
+              ),
+            ),
+          ),
+          if (credits <= lowCredits)
+            TextButton(
+              onPressed: () => context.openBuyUses(UserRole.consumer),
+              style: TextButton.styleFrom(
+                minimumSize: const Size(48, 48),
+                foregroundColor: colors.primary,
+                textStyle: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              child: Text(l10n.buyUsesTopUp(context.watchHonorific())),
+            ),
+        ],
       ),
     );
   }

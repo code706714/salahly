@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
@@ -107,8 +108,10 @@ void main() {
   Future<void> pumpView(
     WidgetTester tester, {
     Widget view = const IncomingRequestView(),
+    List<String> stubRoutes = const [],
   }) => tester.pumpApp(
     view,
+    stubRoutes: stubRoutes,
     blocs: [
       BlocProvider<OfferCubit>.value(value: cubit),
       BlocProvider<IncomingRequestsCubit>.value(value: incoming),
@@ -349,8 +352,26 @@ void main() {
       expect(tester.takeException(), isNull);
       expect(find.text(l10n.technicianNoCredits), findsOneWidget);
       expect(find.text(l10n.offerFormTitle), findsNothing);
-      expect(sendButton(), findsNothing);
+      expect(sendButton(), findsOneWidget);
       expect(find.text(l10n.offerFormDismiss), findsOneWidget);
+    });
+
+    testWidgets('offers buying more when no free jobs are left', (
+      tester,
+    ) async {
+      when(() => session.state).thenReturn(signedIn(credits: 0));
+      show(ready(testIncoming()));
+      await pumpView(tester, stubRoutes: [AppRoutes.technicianBuyUses]);
+
+      await tester.tap(
+        find.descendant(
+          of: sendButton(),
+          matching: find.text(l10n.buyUsesTitleTechnician),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text(AppRoutes.technicianBuyUses), findsOneWidget);
     });
 
     testWidgets('explains when the credits are all held by waiting offers', (

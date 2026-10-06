@@ -50,6 +50,15 @@ class TechnicianAccountPage extends StatelessWidget {
                 children: [
                   _ProfileHeader(profile: profile),
                   const SizedBox(height: 16),
+                  _Group(
+                    children: [
+                      _Row(
+                        label: l10n.balanceTitle,
+                        onTap: () => context.push(AppRoutes.technicianBalance),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
                   _GroupLabel(l10n.accountHelp),
                   const SizedBox(height: 16),
                   _Group(

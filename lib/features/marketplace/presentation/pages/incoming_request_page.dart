@@ -11,7 +11,9 @@ import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/busy_filled_button.dart';
 import 'package:salahly/core/widgets/choice_chip_button.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
+import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
+import 'package:salahly/features/balance/presentation/balance_navigation.dart';
 import 'package:salahly/features/catalog/domain/entities/service_category.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/jobs/presentation/widgets/pounds_field.dart';
@@ -311,7 +313,15 @@ class _RequestScreenState extends State<_RequestScreen> {
           if (offer != null)
             SentOfferCard(request: request, offer: offer, now: state.now)
           else if (notice != null)
-            _Notice(text: notice)
+            _Notice(
+              text: notice,
+              action: credits == 0 && standing == IncomingStanding.open
+                  ? (
+                      label: l10n.buyUsesTitleTechnician,
+                      onTap: () => context.openBuyUses(UserRole.technician),
+                    )
+                  : null,
+            )
           else
             _OfferForm(
               request: request,
@@ -519,9 +529,12 @@ class _Label extends StatelessWidget {
 /// Why no offer can be sent: the request closed, no free jobs are left, or
 /// its time is over.
 class _Notice extends StatelessWidget {
-  const _Notice({required this.text});
+  const _Notice({required this.text, this.action});
 
   final String text;
+
+  /// A button under the text, e.g. to buy more uses.
+  final ({String label, VoidCallback onTap})? action;
 
   @override
   Widget build(BuildContext context) {
@@ -539,14 +552,35 @@ class _Notice extends StatelessWidget {
             Icon(Icons.info_outline_rounded, size: 20, color: colors.warning),
             const SizedBox(width: 8),
             Expanded(
-              child: Text(
-                text,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  height: 1.6,
-                  color: colors.warning,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    text,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      height: 1.6,
+                      color: colors.warning,
+                    ),
+                  ),
+                  if (action case (:final label, :final onTap))
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: FilledButton(
+                        onPressed: onTap,
+                        style: FilledButton.styleFrom(
+                          minimumSize: const Size(0, 48),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          textStyle: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        child: Text(label),
+                      ),
+                    ),
+                ],
               ),
             ),
           ],

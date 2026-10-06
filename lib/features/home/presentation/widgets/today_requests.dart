@@ -4,6 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
+import 'package:salahly/features/account/domain/entities/user_role.dart';
+import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
+import 'package:salahly/features/balance/presentation/balance_navigation.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/marketplace/domain/entities/incoming_request.dart';
@@ -158,18 +161,36 @@ class _CreditsRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadii.md),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        child: Text.rich(
-          TextSpan(
-            style: const TextStyle(fontSize: 14, height: 1.5),
-            children: [
-              TextSpan(text: '${l10n.todayRequestsBalance} '),
-              TextSpan(
-                text: l10n.todayRequestsBalanceCount(credits),
-                style: const TextStyle(fontWeight: FontWeight.w700),
+        padding: const EdgeInsetsDirectional.only(start: 14, end: 4),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text.rich(
+                TextSpan(
+                  style: const TextStyle(fontSize: 14, height: 1.5),
+                  children: [
+                    TextSpan(text: '${l10n.todayRequestsBalance} '),
+                    TextSpan(
+                      text: l10n.todayRequestsBalanceCount(credits),
+                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+            TextButton(
+              onPressed: () => context.openBuyUses(UserRole.technician),
+              style: TextButton.styleFrom(
+                minimumSize: const Size(48, 48),
+                foregroundColor: colors.primary,
+                textStyle: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              child: Text(l10n.balanceBuy(context.watchHonorific())),
+            ),
+          ],
         ),
       ),
     );

@@ -54,6 +54,7 @@ void main() {
       blocs: scope.providers,
       stubRoutes: [
         AppRoutes.consumerAddresses,
+        AppRoutes.consumerBalance,
         AppRoutes.pastTechnicians,
         AppRoutes.consumerRequests,
         AppRoutes.terms,
@@ -107,6 +108,7 @@ void main() {
   });
 
   for (final (row, path) in [
+    (l10n.consumerAccountCreditsTitle, AppRoutes.consumerBalance),
     (l10n.pastTechniciansTitle, AppRoutes.pastTechnicians),
     (l10n.legalTermsTitle, AppRoutes.terms),
     (l10n.legalPrivacyTitle, AppRoutes.privacy),
