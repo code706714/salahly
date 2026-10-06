@@ -3,14 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/sync/sync_cubit.dart';
+import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/incoming_requests_cubit.dart';
+import 'package:salahly/features/notifications/presentation/cubit/notifications_cubit.dart';
 
 /// Wraps every technician screen: keeps the phone's records syncing while
 /// the app is open, the area and category names at hand, and the new
-/// requests from the platform fresh.
+/// requests and notifications from the platform fresh.
 ///
 /// The free jobs left change when a consumer picks an offer, which this
 /// phone can't see happen, so the profile is fetched again whenever the
@@ -36,6 +38,10 @@ class _TechnicianScopeState extends State<TechnicianScope> {
   late final IncomingRequestsCubit _requests = IncomingRequestsCubit(
     context.read(),
   );
+  late final NotificationsCubit _notifications = NotificationsCubit(
+    notifications: context.read(),
+    role: UserRole.technician,
+  );
   late final AppLifecycleListener _lifecycle;
 
   @override
@@ -57,6 +63,7 @@ class _TechnicianScopeState extends State<TechnicianScope> {
     unawaited(_areas.load());
     unawaited(_categories.load());
     unawaited(_requests.fetchNewRequests());
+    unawaited(_notifications.refreshUnread());
   }
 
   @override
@@ -66,6 +73,7 @@ class _TechnicianScopeState extends State<TechnicianScope> {
     unawaited(_areas.close());
     unawaited(_categories.close());
     unawaited(_requests.close());
+    unawaited(_notifications.close());
     super.dispose();
   }
 
@@ -77,6 +85,7 @@ class _TechnicianScopeState extends State<TechnicianScope> {
         BlocProvider.value(value: _areas),
         BlocProvider.value(value: _categories),
         BlocProvider.value(value: _requests),
+        BlocProvider.value(value: _notifications),
       ],
       child: BlocListener<SyncCubit, SyncState>(
         // What was missed while offline loads once the server answers

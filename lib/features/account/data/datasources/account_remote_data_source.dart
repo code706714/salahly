@@ -6,6 +6,13 @@ class AccountRemoteDataSource {
 
   final SupabaseClient _client;
 
+  /// Deletes the account on the server; the word is what it needs to be
+  /// sure the person confirmed.
+  Future<void> deleteAccount() => _client.rpc<void>(
+    'delete_my_account',
+    params: {'p_confirmation': 'DELETE'},
+  );
+
   /// The profile row with its side profiles, or null before onboarding.
   Future<Map<String, dynamic>?> fetchProfile(String userId) {
     return _client

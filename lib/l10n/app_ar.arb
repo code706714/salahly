@@ -3450,5 +3450,311 @@
         "type": "String"
       }
     }
-  }
+  },
+  "notifTitle": "الإشعارات",
+  "notifMarkAllRead": "علّم الكل اتقرا",
+  "notifToday": "النهارده",
+  "notifYesterday": "امبارح",
+  "notifEarlier": "قبل كده",
+  "notifBellUnread": "الإشعارات ({count} جديدة)",
+  "@notifBellUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifEmptyTitle": "{honorific, select, ms{مفيش إشعارات لسه} other{مفيش إشعارات لسه}}",
+  "@notifEmptyTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "notifEmptyBody": "{honorific, select, ms{هنبلّغك هنا لما يحصل جديد في طلباتك.} other{هنبلّغك هنا لما يحصل جديد في طلباتك.}}",
+  "@notifEmptyBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "notifAgoNow": "دلوقتي",
+  "notifAgoMinutes": "{minutes} د",
+  "@notifAgoMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "notifAgoHours": "{hours, plural, =1{ساعة} other{{hours} س}}",
+  "@notifAgoHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "notifAm": "ص",
+  "notifPm": "م",
+  "notifTechnicianFallback": "الفني",
+  "notifConsumerFallback": "{honorific, select, ms{العميلة} other{العميل}}",
+  "@notifConsumerFallback": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "notifOfferReceived": "وصلك عرض جديد",
+  "notifJobConfirmed": "{name} أكّد معادك",
+  "@notifJobConfirmed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifJobStarted": "{name} بدأ الشغل",
+  "@notifJobStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifJobFinished": "{name} خلّص الشغلانة",
+  "@notifJobFinished": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifJobFinishedBody": "تقييمك بيساعد جيرانك يختاروا صح",
+  "notifPriceChange": "{name} عايز موافقتك على سعر جديد",
+  "@notifPriceChange": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifPriceChangeBody": "{honorific, select, ms{مش هيكمّل غير لما توافقي.} other{مش هيكمّل غير لما توافق.}}",
+  "@notifPriceChangeBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "notifCancelledByTechnician": "{name} ألغى طلبك",
+  "@notifCancelledByTechnician": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifCancelledByTechnicianBody": "{honorific, select, ms{رجّعنالك الطلب المجاني. اطلبي فني تاني.} other{رجّعنالك الطلب المجاني. اطلب فني تاني.}}",
+  "@notifCancelledByTechnicianBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "notifExpired": "طلبك خلص من غير ما يوصلك عرض",
+  "notifExpiredBody": "{honorific, select, ms{رجّعنالك الطلب المجاني. اطلبي تاني بمعاد تاني.} other{رجّعنالك الطلب المجاني. اطلب تاني بمعاد تاني.}}",
+  "@notifExpiredBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "notifTopupApproved": "التحويل اتأكد",
+  "notifTopupApprovedConsumer": "{uses, plural, =1{اتضاف طلب واحد لرصيدك} =2{اتضاف طلبين لرصيدك} few{اتضافوا {uses} طلبات لرصيدك} other{اتضافوا {uses} طلب لرصيدك}}",
+  "@notifTopupApprovedConsumer": {
+    "placeholders": {
+      "uses": {
+        "type": "int"
+      }
+    }
+  },
+  "notifTopupApprovedTechnician": "{uses, plural, =1{اتضافت شغلانة واحدة لرصيدك} =2{اتضافت شغلانتين لرصيدك} few{اتضافوا {uses} شغلانات لرصيدك} other{اتضافوا {uses} شغلانة لرصيدك}}",
+  "@notifTopupApprovedTechnician": {
+    "placeholders": {
+      "uses": {
+        "type": "int"
+      }
+    }
+  },
+  "notifTopupRejected": "التحويل ماتقبلش",
+  "notifTopupRejectedBody": "{honorific, select, ms{راجعي الصورة والرقم وجرّبي تاني.} other{راجع الصورة والرقم وجرّب تاني.}}",
+  "@notifTopupRejectedBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "notifNewRequest": "طلب جديد",
+  "notifNewRequestIn": "طلب جديد في {area}",
+  "@notifNewRequestIn": {
+    "placeholders": {
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "notifOfferPicked": "{honorific, select, ms{{name} اختارت عرضك} other{{name} اختار عرضك}}",
+  "@notifOfferPicked": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifOfferPickedBody": "{honorific, select, ms{العنوان ورقمها ظهروا في الشغلانة. اتخصمت شغلانة من رصيدك.} other{العنوان ورقمه ظهروا في الشغلانة. اتخصمت شغلانة من رصيدك.}}",
+  "@notifOfferPickedBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "notifOfferNotPicked": "{honorific, select, ms{{name} اختارت فني تاني} other{{name} اختار فني تاني}}",
+  "@notifOfferNotPicked": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifOfferNotPickedBody": "ماتخصمش من رصيدك حاجة. فيه طلبات تانية جاية.",
+  "notifCancelledByConsumer": "{honorific, select, ms{{name} لغت الطلب} other{{name} لغى الطلب}}",
+  "@notifCancelledByConsumer": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifCancelledByConsumerBody": "لو كانت شغلانة اتخصمت من رصيدك، رجعتلك.",
+  "notifVerificationApproved": "حسابك اتوثّق",
+  "notifVerificationApprovedBody": "شارة \"موثّق\" ظهرت على صفحتك، وبقيت تستلم طلبات من المنصة.",
+  "notifVerificationRejected": "حسابك ماتوثّقش",
+  "notifVerificationRejectedBody": "الصور اللي بعتّها مش واضحة أو ناقصة. كلمنا عشان نساعدك.",
+  "acctDeleteRow": "امسح حسابي",
+  "acctDeleteTitle": "مسح الحساب",
+  "acctDeleteHeading": "{honorific, select, ms{متأكدة إنك عايزة تمسحي حسابك؟} other{متأكد إنك عايز تمسح حسابك؟}}",
+  "@acctDeleteHeading": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "acctDeleteGoes": "اللي هيتمسح:",
+  "acctDeleteConsumerData": "{honorific, select, ms{بياناتك وعناوينك وصور طلباتك} other{بياناتك وعناوينك وصور طلباتك}}",
+  "@acctDeleteConsumerData": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "acctDeleteConsumerBalance": "رصيدك اللي فاضل ({uses, plural, =0{مفيش طلبات} =1{طلب واحد} =2{طلبين} few{{uses} طلبات} other{{uses} طلب}})",
+  "@acctDeleteConsumerBalance": {
+    "placeholders": {
+      "uses": {
+        "type": "int"
+      }
+    }
+  },
+  "acctDeleteConsumerHistory": "طلباتك وتقييماتك",
+  "acctDeleteTechnicianData": "بياناتك وصورك وعملاءك وشغلاناتك",
+  "acctDeleteTechnicianBalance": "رصيدك اللي فاضل ({uses, plural, =0{مفيش شغلانات} =1{شغلانة واحدة} =2{شغلانتين} few{{uses} شغلانات} other{{uses} شغلانة}})",
+  "@acctDeleteTechnicianBalance": {
+    "placeholders": {
+      "uses": {
+        "type": "int"
+      }
+    }
+  },
+  "acctDeleteTechnicianHistory": "صفحتك وتقييماتك، والعملاء مش هيلاقوك",
+  "acctDeleteConsumerNote": "{honorific, select, ms{طلباتك اللي لسه ماخلصتش هتتلغي والفني هيتبلّغ. والفنيين اللي اتعاملتي معاهم هيفضل عندهم سجل الشغلانة من غير اسمك ولا رقمك. وسجلات الشحن بتفضل عندنا من غير اسمك ولا رقمك.} other{طلباتك اللي لسه ماخلصتش هتتلغي والفني هيتبلّغ. والفنيين اللي اتعاملت معاهم هيفضل عندهم سجل الشغلانة من غير اسمك ولا رقمك. وسجلات الشحن بتفضل عندنا من غير اسمك ولا رقمك.}}",
+  "@acctDeleteConsumerNote": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "acctDeleteTechnicianNote": "الفواتير وعروض الأسعار اللي بعتّها قبل كده هتفضل عند عملاءك على الواتساب. والشغلانات اللي جاية من المنصة ولسه ماخلصتش هتتلغي والعميل هيتبلّغ. وسجلات الشحن بتفضل عندنا من غير اسمك ولا رقمك.",
+  "acctDeleteConfirm": "{honorific, select, ms{فاهمة إن المسح نهائي ومش هينفع أرجّع حسابي} other{فاهم إن المسح نهائي ومش هينفع أرجّع حسابي}}",
+  "@acctDeleteConfirm": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "acctDeleteButton": "امسح الحساب نهائي",
+  "acctDeleteKeep": "لأ، خليه",
+  "acctDeleteDoneTitle": "حسابك اتمسح",
+  "acctDeleteDoneBody": "{honorific, select, ms{شكراً إنك جرّبتي الأبلكيشن. لو حبيتي ترجعي، سجّلي برقمك من الأول.} other{شكراً إنك جرّبت الأبلكيشن. لو حبيت ترجع، سجّل برقمك من الأول.}}",
+  "@acctDeleteDoneBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "acctDeleteDoneButton": "تمام",
+  "acctDeleteTopupPending": "{honorific, select, ms{عندك تحويل لسه بنراجعه. استني لحد ما يتراجع وبعدين امسحي الحساب.} other{عندك تحويل لسه بنراجعه. استنى لحد ما يتراجع وبعدين امسح الحساب.}}",
+  "@acctDeleteTopupPending": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "acctDeleteRelogTitle": "{honorific, select, ms{لازم تسجّلي دخول تاني} other{لازم تسجّل دخول تاني}}",
+  "@acctDeleteRelogTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "acctDeleteRelogBody": "{honorific, select, ms{عشان نتأكد إنك إنتي، سجّلي خروج وادخلي تاني بكود جديد، وبعدها ارجعي امسحي الحساب.} other{عشان نتأكد إنك إنت، سجّل خروج وادخل تاني بكود جديد، وبعدها ارجع امسح الحساب.}}",
+  "@acctDeleteRelogBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "acctDeleteRelogButton": "{honorific, select, ms{سجّلي خروج وادخلي تاني} other{سجّل خروج وادخل تاني}}",
+  "@acctDeleteRelogButton": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "acctDeleteRelogCancel": "مش دلوقتي"
 }

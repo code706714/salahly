@@ -35,10 +35,27 @@ class SyncEngine {
     for (final table in _tables) table.entity: table,
   };
 
+  /// The wipe count when the running sync started; see [AppDatabase.wipeCount].
+  int _startedAtWipe = 0;
+
+  /// Stops quietly when the database was wiped (sign-out, account deleted)
+  /// while this run was away at the server, so nothing fetched for the
+  /// previous user is written back. Call it first thing inside every write
+  /// transaction: a wipe is a transaction too, so it is either before the
+  /// check (seen) or after the write (and deletes it).
+  void _checkNotWiped() {
+    if (_database.wipeCount != _startedAtWipe) throw const _WipedDuringRun();
+  }
+
   Future<void> run() async {
-    await _uploadPhotos();
-    await _push();
-    await _pull();
+    _startedAtWipe = _database.wipeCount;
+    try {
+      await _uploadPhotos();
+      await _push();
+      await _pull();
+    } on _WipedDuringRun {
+      return;
+    }
   }
 
   Future<void> _uploadPhotos() async {
@@ -51,6 +68,7 @@ class SyncEngine {
       if (!file.existsSync()) {
         // The file is gone, so this photo can never reach the server.
         await _database.transaction(() async {
+          _checkNotWiped();
           await _deleteUpload(upload.photoId);
           await (_database.delete(
             _database.jobPhotos,
@@ -68,6 +86,7 @@ class SyncEngine {
         return;
       }
       await _database.transaction(() async {
+        _checkNotWiped();
         await _deleteUpload(upload.photoId);
         await _database.enqueue(
           SyncEntity.jobPhotos,
@@ -111,6 +130,7 @@ class SyncEngine {
           (rejection.entity, rejection.id): rejection,
       };
       await _database.transaction(() async {
+        _checkNotWiped();
         for (final entry in batch) {
           final rejection = rejections[(entry.entity, entry.rowId)];
           if (rejection == null) {
@@ -183,6 +203,7 @@ class SyncEngine {
     while (true) {
       final page = await _remote.pull(checkpoint);
       await _database.transaction(() async {
+        _checkNotWiped();
         final unpushed = {
           for (final entry in await _database.select(_database.outbox).get())
             (entry.entity, entry.rowId),
@@ -202,4 +223,9 @@ class SyncEngine {
       if (!page.hasMore) return;
     }
   }
+}
+
+/// Thrown inside a run to stop it after the database was wiped.
+class _WipedDuringRun implements Exception {
+  const _WipedDuringRun();
 }

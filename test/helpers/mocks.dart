@@ -17,6 +17,7 @@ import 'package:salahly/features/customers/domain/repositories/customers_reposit
 import 'package:salahly/features/jobs/domain/repositories/jobs_repository.dart';
 import 'package:salahly/features/marketplace/domain/repositories/consumer_requests_repository.dart';
 import 'package:salahly/features/marketplace/domain/repositories/technician_requests_repository.dart';
+import 'package:salahly/features/notifications/domain/repositories/notifications_repository.dart';
 import 'package:salahly/features/onboarding/domain/repositories/onboarding_repository.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
@@ -57,3 +58,6 @@ class MockTechnicianRequestsRepository extends Mock
     implements TechnicianRequestsRepository {}
 
 class MockBalanceRepository extends Mock implements BalanceRepository {}
+
+class MockNotificationsRepository extends Mock
+    implements NotificationsRepository {}

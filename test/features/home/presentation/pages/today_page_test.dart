@@ -21,11 +21,13 @@ import 'package:salahly/features/jobs/domain/entities/job.dart';
 import 'package:salahly/features/jobs/domain/entities/job_summary.dart';
 import 'package:salahly/features/marketplace/domain/entities/incoming_request.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/incoming_requests_cubit.dart';
+import 'package:salahly/features/notifications/presentation/cubit/notifications_cubit.dart';
 
 import '../../../../helpers/fixtures.dart';
 import '../../../../helpers/incoming_fixtures.dart';
 import '../../../../helpers/job_fixtures.dart';
 import '../../../../helpers/mocks.dart';
+import '../../../../helpers/notification_fixtures.dart';
 import '../../../../pump_app.dart';
 
 class _MockTodayCubit extends MockCubit<TodayState> implements TodayCubit {}
@@ -91,6 +93,7 @@ void main() {
       BlocProvider<AreasCubit>.value(value: areas),
       BlocProvider<CategoriesCubit>.value(value: categories),
       BlocProvider<IncomingRequestsCubit>.value(value: incoming),
+      BlocProvider<NotificationsCubit>.value(value: mockNotificationsCubit()),
     ],
     stubRoutes: [
       AppRoutes.technicianAccount,

@@ -8,6 +8,8 @@ import 'package:salahly/features/account/data/repositories/account_repository_im
 import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
+import 'package:salahly/features/account/domain/failures/account_failures.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../helpers/result_matchers.dart';
 
@@ -99,6 +101,61 @@ void main() {
 
         expect(await repository.cachedProfile(_userId), isNull);
         verify(() => local.clear()).called(1);
+      });
+    });
+
+    group('deleteAccount', () {
+      test('deletes on the server', () async {
+        when(() => remote.deleteAccount()).thenAnswer((_) async {});
+
+        expect(await repository.deleteAccount(), isOk());
+        verify(() => remote.deleteAccount()).called(1);
+      });
+
+      test('says a transfer is still waiting', () async {
+        when(() => remote.deleteAccount()).thenAnswer(
+          (_) =>
+              Future.error(const PostgrestException(message: 'topup_pending')),
+        );
+
+        expect(
+          await repository.deleteAccount(),
+          isErr(const PendingTransferFailure()),
+        );
+      });
+
+      test('says when the sign-in is too old', () async {
+        when(() => remote.deleteAccount()).thenAnswer(
+          (_) => Future.error(
+            const PostgrestException(message: 'recent_login_required'),
+          ),
+        );
+
+        expect(
+          await repository.deleteAccount(),
+          isErr(const RecentLoginRequiredFailure()),
+        );
+      });
+
+      test('fails with a network failure offline', () async {
+        when(
+          () => remote.deleteAccount(),
+        ).thenAnswer((_) => Future.error(ClientException('offline')));
+
+        expect(await repository.deleteAccount(), isErr(const NetworkFailure()));
+      });
+
+      test('fails with an unexpected failure for anything else', () async {
+        when(
+          () => remote.deleteAccount(),
+        ).thenAnswer(
+          (_) => Future.error(const PostgrestException(message: 'x')),
+        );
+
+        expect(
+          await repository.deleteAccount(),
+          isErr(isA<UnexpectedFailure>()),
+        );
       });
     });
 

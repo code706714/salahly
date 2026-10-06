@@ -384,5 +384,67 @@ void main() {
         },
       );
     });
+
+    group('signOutAndReturnTo', () {
+      test('brings the same user back once they sign in again', () async {
+        currentUser = _user;
+        when(
+          () => authRepository.signOut(),
+        ).thenAnswer((_) async => authChanged(null));
+        final cubit = buildCubit();
+
+        await cubit.signOutAndReturnTo('/consumer/account/delete');
+
+        expect(cubit.takeReturnTo(_user), '/consumer/account/delete');
+        expect(cubit.takeReturnTo(_user), isNull);
+        await cubit.close();
+      });
+
+      test('does not send somebody else there', () async {
+        currentUser = _user;
+        when(
+          () => authRepository.signOut(),
+        ).thenAnswer((_) async => authChanged(null));
+        final cubit = buildCubit();
+
+        await cubit.signOutAndReturnTo('/consumer/account/delete');
+
+        expect(cubit.takeReturnTo(_otherUser), isNull);
+        expect(cubit.takeReturnTo(_user), isNull);
+        await cubit.close();
+      });
+
+      test('forgets the place when signing out failed', () async {
+        currentUser = _user;
+        when(() => authRepository.signOut()).thenThrow(StateError('offline'));
+        final cubit = buildCubit();
+
+        await expectLater(
+          cubit.signOutAndReturnTo('/consumer/account/delete'),
+          throwsStateError,
+        );
+
+        expect(cubit.takeReturnTo(_user), isNull);
+        await cubit.close();
+      });
+    });
+
+    group('signOutDeleted', () {
+      blocTest<SessionCubit, SessionState>(
+        'erases the data on the phone even when signing out fails',
+        setUp: () {
+          currentUser = _user;
+          when(() => authRepository.signOut()).thenThrow(StateError('offline'));
+        },
+        build: buildCubit,
+        seed: () => const SessionReady(user: _user, profile: _cachedProfile),
+        act: (cubit) => cubit.signOutDeleted(),
+        errors: () => [isA<StateError>()],
+        verify: (_) {
+          verify(() => accountRepository.clearCache()).called(1);
+          verify(() => userData.clear()).called(1);
+        },
+      );
+    });
   });
 }

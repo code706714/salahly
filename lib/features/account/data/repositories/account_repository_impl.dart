@@ -4,7 +4,9 @@ import 'package:salahly/features/account/data/datasources/account_local_data_sou
 import 'package:salahly/features/account/data/datasources/account_remote_data_source.dart';
 import 'package:salahly/features/account/data/models/user_profile_model.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
+import 'package:salahly/features/account/domain/failures/account_failures.dart';
 import 'package:salahly/features/account/domain/repositories/account_repository.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AccountRepositoryImpl implements AccountRepository {
   AccountRepositoryImpl({required this._remote, required this._local});
@@ -41,6 +43,22 @@ class AccountRepositoryImpl implements AccountRepository {
       await clearCache();
     }
     return Ok(profile);
+  }
+
+  @override
+  Future<Result<void>> deleteAccount() async {
+    try {
+      await _remote.deleteAccount();
+      return const Ok(null);
+    } on PostgrestException catch (error) {
+      return Err(switch (error.message) {
+        'topup_pending' => const PendingTransferFailure(),
+        'recent_login_required' => const RecentLoginRequiredFailure(),
+        _ => commonFailureFrom(error),
+      });
+    } on Object catch (error) {
+      return Err(commonFailureFrom(error));
+    }
   }
 
   @override

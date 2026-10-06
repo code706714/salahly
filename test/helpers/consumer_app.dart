@@ -22,6 +22,7 @@ import 'balance_fixtures.dart';
 import 'fake_sync_remote.dart';
 import 'fixtures.dart';
 import 'mocks.dart';
+import 'notification_fixtures.dart';
 import 'technician_app.dart';
 
 /// The whole app signed in as a consumer, with the real screens and
@@ -56,6 +57,7 @@ class ConsumerApp {
       catalog.fetchCategories,
     ).thenAnswer((_) async => const Ok(TestCategories.all));
     stubBalance(balance);
+    stubNotifications(notifications);
     when(() => photoPicker.discard(any())).thenAnswer((_) async {});
     when(requests.fetchRequests).thenAnswer((_) async => const Ok([]));
     when(requests.fetchAddresses).thenAnswer((_) async => const Ok([]));
@@ -92,6 +94,9 @@ class ConsumerApp {
 
   /// The balance: no transfers or movements unless a test stubs some.
   final balance = MockBalanceRepository();
+
+  /// The notifications: none, all read, unless a test stubs some.
+  final notifications = MockNotificationsRepository();
   final apps = MockExternalApps();
   final speech = MockSpeechInput();
   final photoPicker = MockPhotoPicker();
@@ -108,6 +113,7 @@ class ConsumerApp {
     consumerRequestsRepository: requests,
     technicianRequestsRepository: MockTechnicianRequestsRepository(),
     balanceRepository: balance,
+    notificationsRepository: notifications,
     locationService: location,
     photoPicker: photoPicker,
     userData: userData,

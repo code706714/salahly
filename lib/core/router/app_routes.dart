@@ -18,6 +18,8 @@ abstract final class AppRoutes {
   static const consumerBalance = '/consumer/account/balance';
   static const consumerBuyUses = '/consumer/account/balance/buy';
   static const consumerTechnicians = '/consumer/technicians';
+  static const consumerNotifications = '/consumer/notifications';
+  static const consumerDeleteAccount = '/consumer/account/delete';
   static const technicianHome = '/technician';
   static const technicianJobs = '/technician/jobs';
   static const technicianCalendar = '/technician/jobs/calendar';
@@ -29,7 +31,10 @@ abstract final class AppRoutes {
   static const technicianBalance = '/technician/account/balance';
   static const technicianBuyUses = '/technician/account/balance/buy';
   static const incomingRequests = '/technician/requests';
+  static const technicianNotifications = '/technician/notifications';
+  static const technicianDeleteAccount = '/technician/account/delete';
   static const sessionUnavailable = '/session-unavailable';
+  static const accountDeleted = '/account-deleted';
   static const legal = '/legal';
   static const terms = '/legal/terms';
   static const privacy = '/legal/privacy';
@@ -52,6 +57,24 @@ abstract final class AppRoutes {
   static String buyUsesFor(UserRole role) => switch (role) {
     UserRole.consumer => consumerBuyUses,
     UserRole.technician => technicianBuyUses,
+  };
+
+  /// The goodbye after deleting, worded for [honorific].
+  static String accountDeletedFor(String honorific) => Uri(
+    path: accountDeleted,
+    queryParameters: {'honorific': honorific},
+  ).toString();
+
+  /// The notifications of [role]'s side of the app.
+  static String notificationsFor(UserRole role) => switch (role) {
+    UserRole.consumer => consumerNotifications,
+    UserRole.technician => technicianNotifications,
+  };
+
+  /// The screen to delete the account, on [role]'s side of the app.
+  static String deleteAccountFor(UserRole role) => switch (role) {
+    UserRole.consumer => consumerDeleteAccount,
+    UserRole.technician => technicianDeleteAccount,
   };
 
   static String request(String id) => '$consumerRequests/$id';

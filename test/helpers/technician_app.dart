@@ -28,6 +28,7 @@ import 'balance_fixtures.dart';
 import 'fake_sync_remote.dart';
 import 'fixtures.dart';
 import 'mocks.dart';
+import 'notification_fixtures.dart';
 
 /// A network that is up until a test says otherwise.
 class FakeNetworkStatus implements NetworkStatus {
@@ -72,6 +73,7 @@ class TechnicianApp {
     when(() => apps.dial(any())).thenAnswer((_) async => true);
     when(() => apps.map(any())).thenAnswer((_) async => true);
     stubBalance(balance, consumer: false);
+    stubNotifications(notifications);
     when(() => photoPicker.discard(any())).thenAnswer((_) async {});
     when(requests.fetchNewRequests).thenAnswer((_) async => const Ok([]));
     when(requests.fetchMyServices).thenAnswer((_) async => const Ok([]));
@@ -121,6 +123,9 @@ class TechnicianApp {
 
   /// The balance: no transfers or movements unless a test stubs some.
   final balance = MockBalanceRepository();
+
+  /// The notifications: none, all read, unless a test stubs some.
+  final notifications = MockNotificationsRepository();
   final photos = LocalPhotoStore(Directory.systemTemp.createTempSync());
   final sharedFiles = SharedFiles(Directory.systemTemp.createTempSync());
 
@@ -151,6 +156,7 @@ class TechnicianApp {
     consumerRequestsRepository: MockConsumerRequestsRepository(),
     technicianRequestsRepository: requests,
     balanceRepository: balance,
+    notificationsRepository: notifications,
     locationService: MockLocationService(),
     photoPicker: photoPicker,
     userData: userData,
