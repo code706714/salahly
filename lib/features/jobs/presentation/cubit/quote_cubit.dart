@@ -125,13 +125,21 @@ class QuoteCubit extends Cubit<QuoteState> {
       emit(state.copyWith(items: items, isDirty: true));
 
   /// Saves without sending. A quote already sent or accepted keeps that
-  /// status; one without lines is no quote at all.
+  /// status; one without lines is no quote at all. A platform job's
+  /// accepted quote changed here is a draft until the consumer gets it.
   Future<bool> saveDraft() {
-    final current = state.details?.job.quoteStatus ?? QuoteStatus.none;
+    final job = state.details?.job;
+    final current = job?.quoteStatus ?? QuoteStatus.none;
+    final keeps = switch (current) {
+      QuoteStatus.sent => true,
+      QuoteStatus.accepted =>
+        job?.source != JobSource.platform || !state.isDirty,
+      _ => false,
+    };
     return _save(
       state.items.isEmpty
           ? QuoteStatus.none
-          : current == QuoteStatus.sent || current == QuoteStatus.accepted
+          : keeps
           ? current
           : QuoteStatus.draft,
     );

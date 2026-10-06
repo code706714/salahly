@@ -173,6 +173,33 @@ void main() {
       expect(find.text(l10n.jobStatusUnconfirmed), findsOneWidget);
     });
 
+    testWidgets('says when the consumer declined a price change', (
+      tester,
+    ) async {
+      show(
+        loaded(
+          upcoming: [
+            DaySection(DateTime(2026, 10, 3), [
+              testSummary(
+                listedJob(
+                  id: 'nourhan',
+                  scheduledAt: DateTime(2026, 10, 3, 12),
+                  source: JobSource.platform,
+                  quoteStatus: QuoteStatus.declined,
+                ),
+                customerName: 'نورهان م.',
+              ),
+            ]),
+          ],
+        ),
+      );
+      await pumpView(tester);
+
+      expect(tester.takeException(), isNull);
+      expect(find.text(l10n.platformJobQuoteDeclined), findsOneWidget);
+      expect(find.text(l10n.jobFromPlatform), findsOneWidget);
+    });
+
     testWidgets('marks unsent work only while offline', (tester) async {
       show(state);
       await pumpView(tester);

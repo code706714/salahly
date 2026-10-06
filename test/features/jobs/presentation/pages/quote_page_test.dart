@@ -76,10 +76,12 @@ void main() {
     List<JobItemDraft>? items,
     bool isDirty = false,
     bool isSaving = false,
+    JobSource source = JobSource.manual,
   }) => QuoteState(
     status: JobDetailsStatus.ready,
     details: testDetails(
       job: testJob(
+        source: source,
         status: status,
         tags: [JobTag.installation],
         quoteStatus: quoteStatus,
@@ -407,6 +409,69 @@ void main() {
 
       verifyNever(() => cubit.send());
       verifyNever(() => cubit.saveDraft());
+    });
+  });
+
+  group('platform job', () {
+    QuoteState platform({QuoteStatus quoteStatus = QuoteStatus.accepted}) =>
+        quote(quoteStatus: quoteStatus, source: JobSource.platform);
+
+    testWidgets('sends the price change in the app, not on WhatsApp', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(smallPhone);
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      show(platform(quoteStatus: QuoteStatus.draft));
+      await pumpPage(tester, view: const PushedView(QuoteView()));
+      await tester.openPushedView();
+
+      expect(tester.takeException(), isNull);
+      expect(find.text(l10n.platformJobQuoteInApp), findsOneWidget);
+      expect(find.text(l10n.quoteSend), findsNothing);
+      expect(find.text(l10n.quotePreviewTitle), findsNothing);
+      await tester.tap(find.text(l10n.platformJobQuoteSend));
+      await tester.pumpAndSettle();
+
+      verify(() => cubit.send()).called(1);
+      verifyNever(
+        () => apps.whatsApp(
+          text: any(named: 'text'),
+          to: any(named: 'to'),
+        ),
+      );
+      expect(find.text(PushedView.launcher), findsOneWidget);
+    });
+
+    testWidgets('stays when the price change was not sent', (tester) async {
+      when(() => cubit.send()).thenAnswer((_) async => false);
+      show(platform(quoteStatus: QuoteStatus.draft));
+      await pumpPage(tester, view: const PushedView(QuoteView()));
+      await tester.openPushedView();
+
+      await tester.tap(find.text(l10n.platformJobQuoteSend));
+      await tester.pumpAndSettle();
+
+      expect(find.text(l10n.platformJobQuoteSend), findsOneWidget);
+    });
+
+    testWidgets('waits for the consumer, who alone says yes', (tester) async {
+      show(platform(quoteStatus: QuoteStatus.sent));
+      await pumpPage(tester);
+
+      expect(find.text(l10n.jobQuoteSent), findsOneWidget);
+      expect(find.text(l10n.quoteMarkAccepted), findsNothing);
+    });
+
+    testWidgets('shows the answer the consumer gave', (tester) async {
+      show(platform());
+      await pumpPage(tester);
+      expect(find.text(l10n.quoteAccepted), findsOneWidget);
+
+      show(platform(quoteStatus: QuoteStatus.declined));
+      await pumpPage(tester);
+      expect(find.text(l10n.platformJobQuoteDeclined), findsOneWidget);
+      expect(find.text(l10n.platformJobQuoteDeclinedHint), findsOneWidget);
+      expect(find.text(l10n.quoteMarkAccepted), findsNothing);
     });
   });
 

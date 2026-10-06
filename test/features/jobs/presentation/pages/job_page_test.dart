@@ -82,8 +82,10 @@ void main() {
     List<JobPhoto> photos = const [],
     bool isSynced = true,
     bool priced = true,
+    JobSource source = JobSource.manual,
   }) => testDetails(
     job: testJob(
+      source: source,
       status: status,
       tags: [JobTag.installation],
       description: 'العميل جايب الوحدة.',
@@ -433,6 +435,94 @@ void main() {
       await tester.tap(find.text(l10n.jobPageDeleteConfirm));
       await tester.pumpAndSettle();
       verify(() => cubit.delete()).called(1);
+    });
+  });
+
+  group('platform job', () {
+    JobDetails platform({
+      JobStatus status = JobStatus.confirmed,
+      QuoteStatus quoteStatus = QuoteStatus.accepted,
+    }) => visit(
+      status: status,
+      quoteStatus: quoteStatus,
+      source: JobSource.platform,
+    );
+
+    testWidgets('says it came from the platform', (tester) async {
+      await tester.binding.setSurfaceSize(smallPhone);
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      show(ready(platform()));
+      await pumpPage(tester);
+
+      expect(tester.takeException(), isNull);
+      expect(find.text(l10n.jobFromPlatform), findsOneWidget);
+      await scrollTo(tester, find.text(l10n.jobPageInvoice));
+      expect(tester.takeException(), isNull);
+      expect(find.text(l10n.jobPageQuoteAccepted), findsOneWidget);
+    });
+
+    testWidgets('shows a declined price change', (tester) async {
+      show(ready(platform(quoteStatus: QuoteStatus.declined)));
+      await pumpPage(tester);
+      await scrollTo(tester, find.text(l10n.jobPageInvoice));
+
+      expect(find.text(l10n.platformJobQuoteDeclined), findsOneWidget);
+    });
+
+    testWidgets('is never deleted, and cancelled only once confirmed', (
+      tester,
+    ) async {
+      show(ready(platform()));
+      await pumpPage(tester);
+
+      Future<void> openCancel() async {
+        await tester.tap(find.byTooltip(l10n.jobPageMore));
+        await tester.pumpAndSettle();
+        expect(find.text(l10n.jobPageDelete), findsNothing);
+        await tester.tap(find.text(l10n.jobPageCancel));
+        await tester.pumpAndSettle();
+        expect(find.text(l10n.platformJobCancelBody), findsOneWidget);
+      }
+
+      await openCancel();
+      await tester.tap(find.text(l10n.jobPageKeep));
+      await tester.pumpAndSettle();
+      verifyNever(() => cubit.cancel());
+
+      await openCancel();
+      await tester.tap(find.text(l10n.platformJobCancelConfirm));
+      await tester.pumpAndSettle();
+      verify(() => cubit.cancel()).called(1);
+    });
+
+    testWidgets('offers nothing more once over', (tester) async {
+      for (final status in [JobStatus.finished, JobStatus.cancelled]) {
+        show(ready(platform(status: status)));
+        await pumpPage(tester);
+        expect(find.byTooltip(l10n.jobPageMore), findsNothing);
+      }
+    });
+
+    testWidgets('a cancelled platform job is not offered back', (
+      tester,
+    ) async {
+      whenListen(
+        cubit,
+        Stream.value(
+          ready(platform(status: JobStatus.cancelled)).copyWith(
+            change: () => JobChange(
+              previous: platform().job,
+              to: JobStatus.cancelled,
+            ),
+          ),
+        ),
+        initialState: ready(platform()),
+      );
+      await pumpPage(tester);
+      await tester.pump();
+
+      expect(find.text(l10n.jobPageCancelled), findsOneWidget);
+      expect(find.text(l10n.jobPageUndo), findsNothing);
     });
   });
 
