@@ -96,6 +96,10 @@ void main() {
           });
         }
 
+        test('stays on the goodbye after deleting an account', () {
+          expect(sessionRedirect(session, AppRoutes.accountDeleted), isNull);
+        });
+
         test('sends an unknown path to $entry', () {
           expect(sessionRedirect(session, '/nowhere'), entry);
         });

@@ -10,6 +10,11 @@ abstract interface class AccountRepository {
   /// finished onboarding yet.
   Future<Result<UserProfile?>> fetchProfile(String userId);
 
+  /// Deletes the signed-in person's account for good, after cancelling
+  /// what is open. Fails with `PendingTransferFailure` while a transfer
+  /// waits to be checked.
+  Future<Result<void>> deleteAccount();
+
   /// Forgets everything cached for the signed-out user.
   Future<void> clearCache();
 }

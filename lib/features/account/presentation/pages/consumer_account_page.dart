@@ -133,6 +133,12 @@ class ConsumerAccountView extends StatelessWidget {
                     opensPage: false,
                     onTap: () => _signOut(context),
                   ),
+                  _Row(
+                    label: l10n.acctDeleteRow,
+                    opensPage: false,
+                    danger: true,
+                    onTap: () => context.push(AppRoutes.consumerDeleteAccount),
+                  ),
                 ],
               ),
             ],
@@ -296,6 +302,7 @@ class _Row extends StatelessWidget {
     this.icon,
     this.count,
     this.opensPage = true,
+    this.danger = false,
   });
 
   final String label;
@@ -307,6 +314,9 @@ class _Row extends StatelessWidget {
 
   /// Shows a chevron: the row opens another screen.
   final bool opensPage;
+
+  /// Reads in the danger color, for deleting.
+  final bool danger;
 
   @override
   Widget build(BuildContext context) {
@@ -328,7 +338,10 @@ class _Row extends StatelessWidget {
               Expanded(
                 child: Text(
                   label,
-                  style: TextStyle(fontSize: 16, color: colors.ink),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: danger ? colors.danger : colors.ink,
+                  ),
                 ),
               ),
               if (count != null) ...[

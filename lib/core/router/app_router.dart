@@ -7,7 +7,9 @@ import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/router/session_redirect.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
+import 'package:salahly/features/account/presentation/pages/account_deleted_page.dart';
 import 'package:salahly/features/account/presentation/pages/consumer_account_page.dart';
+import 'package:salahly/features/account/presentation/pages/delete_account_page.dart';
 import 'package:salahly/features/account/presentation/pages/session_unavailable_page.dart';
 import 'package:salahly/features/account/presentation/pages/technician_account_page.dart';
 import 'package:salahly/features/auth/presentation/cubit/otp_cubit.dart';
@@ -133,6 +135,12 @@ GoRouter createRouter(SessionCubit session, {required Listenable refresh}) {
         builder: (context, state) => const SessionUnavailablePage(),
       ),
       GoRoute(
+        path: AppRoutes.accountDeleted,
+        builder: (context, state) => AccountDeletedPage(
+          honorific: state.uri.queryParameters['honorific'] ?? 'other',
+        ),
+      ),
+      GoRoute(
         path: AppRoutes.terms,
         builder: (context, state) =>
             const LegalPage(document: LegalDocument.terms),
@@ -201,6 +209,11 @@ RouteBase _consumerRoutes() {
         builder: (context, state) => const PastTechniciansPage(),
       ),
       GoRoute(
+        path: AppRoutes.consumerDeleteAccount,
+        builder: (context, state) =>
+            const DeleteAccountPage(role: UserRole.consumer),
+      ),
+      GoRoute(
         path: AppRoutes.consumerNotifications,
         builder: (context, state) =>
             const NotificationsPage(role: UserRole.consumer),
@@ -254,6 +267,11 @@ RouteBase _technicianRoutes() {
         path: AppRoutes.technicianBuyUses,
         builder: (context, state) =>
             const BuyUsesPage(role: UserRole.technician),
+      ),
+      GoRoute(
+        path: AppRoutes.technicianDeleteAccount,
+        builder: (context, state) =>
+            const DeleteAccountPage(role: UserRole.technician),
       ),
       GoRoute(
         path: AppRoutes.technicianNotifications,

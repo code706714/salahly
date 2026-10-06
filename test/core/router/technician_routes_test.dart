@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/contacts/contact_picker.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
+import 'package:salahly/features/account/presentation/pages/delete_account_page.dart';
 import 'package:salahly/features/account/presentation/pages/technician_account_page.dart';
 import 'package:salahly/features/balance/presentation/pages/balance_page.dart';
 import 'package:salahly/features/balance/presentation/pages/buy_uses_page.dart';
@@ -21,6 +22,7 @@ import 'package:salahly/features/jobs/presentation/pages/quote_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/incoming_request_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/incoming_requests_page.dart';
 import 'package:salahly/features/money/presentation/pages/money_page.dart';
+import 'package:salahly/features/notifications/presentation/pages/notifications_page.dart';
 
 import '../../helpers/customer_fixtures.dart';
 import '../../helpers/technician_app.dart';
@@ -117,6 +119,27 @@ void main() {
           .widget<CustomerFormPage>(find.byType(CustomerFormPage))
           .fromContacts,
       isTrue,
+    );
+  });
+
+  testTechnicianApp('opens the notifications and the account deletion', (
+    tester,
+    app,
+  ) async {
+    await app.pump(tester);
+
+    unawaited(app.router(tester).push(AppRoutes.technicianNotifications));
+    await app.settle(tester);
+    expect(
+      tester.widget<NotificationsPage>(find.byType(NotificationsPage)).role,
+      UserRole.technician,
+    );
+
+    unawaited(app.router(tester).push(AppRoutes.technicianDeleteAccount));
+    await app.settle(tester);
+    expect(
+      tester.widget<DeleteAccountPage>(find.byType(DeleteAccountPage)).role,
+      UserRole.technician,
     );
   });
 

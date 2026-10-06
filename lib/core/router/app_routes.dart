@@ -34,6 +34,7 @@ abstract final class AppRoutes {
   static const technicianNotifications = '/technician/notifications';
   static const technicianDeleteAccount = '/technician/account/delete';
   static const sessionUnavailable = '/session-unavailable';
+  static const accountDeleted = '/account-deleted';
   static const legal = '/legal';
   static const terms = '/legal/terms';
   static const privacy = '/legal/privacy';
@@ -57,6 +58,12 @@ abstract final class AppRoutes {
     UserRole.consumer => consumerBuyUses,
     UserRole.technician => technicianBuyUses,
   };
+
+  /// The goodbye after deleting, worded for [honorific].
+  static String accountDeletedFor(String honorific) => Uri(
+    path: accountDeleted,
+    queryParameters: {'honorific': honorific},
+  ).toString();
 
   /// The notifications of [role]'s side of the app.
   static String notificationsFor(UserRole role) => switch (role) {

@@ -5,7 +5,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
+import 'package:salahly/features/account/presentation/pages/account_deleted_page.dart';
 import 'package:salahly/features/account/presentation/pages/consumer_account_page.dart';
+import 'package:salahly/features/account/presentation/pages/delete_account_page.dart';
 import 'package:salahly/features/balance/presentation/pages/balance_page.dart';
 import 'package:salahly/features/balance/presentation/pages/buy_uses_page.dart';
 import 'package:salahly/features/home/presentation/pages/consumer_home_page.dart';
@@ -16,6 +18,7 @@ import 'package:salahly/features/marketplace/presentation/pages/new_request_page
 import 'package:salahly/features/marketplace/presentation/pages/past_technicians_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/request_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/technician_profile_page.dart';
+import 'package:salahly/features/notifications/presentation/pages/notifications_page.dart';
 
 import '../../helpers/consumer_app.dart';
 import '../../helpers/marketplace_fixtures.dart';
@@ -160,6 +163,44 @@ void main() {
     await app.pump(tester, location: AppRoutes.technicianJobs);
 
     expect(find.byType(ConsumerHomePage), findsOneWidget);
+  });
+
+  testConsumerApp('opens the notifications and the account deletion', (
+    tester,
+    app,
+  ) async {
+    await app.pump(tester);
+
+    unawaited(app.router(tester).push(AppRoutes.consumerNotifications));
+    await app.settle(tester);
+    expect(
+      tester.widget<NotificationsPage>(find.byType(NotificationsPage)).role,
+      UserRole.consumer,
+    );
+
+    unawaited(app.router(tester).push(AppRoutes.consumerDeleteAccount));
+    await app.settle(tester);
+    expect(
+      tester.widget<DeleteAccountPage>(find.byType(DeleteAccountPage)).role,
+      UserRole.consumer,
+    );
+  });
+
+  testConsumerApp('opens the goodbye with the honorific it is given', (
+    tester,
+    app,
+  ) async {
+    await app.pump(tester);
+
+    unawaited(app.router(tester).push(AppRoutes.accountDeletedFor('ms')));
+    await app.settle(tester);
+
+    expect(
+      tester
+          .widget<AccountDeletedPage>(find.byType(AccountDeletedPage))
+          .honorific,
+      'ms',
+    );
   });
 
   testConsumerApp('opens the balance and buying for a consumer', (

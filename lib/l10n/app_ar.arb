@@ -3657,7 +3657,7 @@
   "notifVerificationApprovedBody": "شارة \"موثّق\" ظهرت على صفحتك، وبقيت تستلم طلبات من المنصة.",
   "notifVerificationRejected": "حسابك ماتوثّقش",
   "notifVerificationRejectedBody": "الصور اللي بعتّها مش واضحة أو ناقصة. كلمنا عشان نساعدك.",
-  "acctDeleteRow": "مسح الحساب",
+  "acctDeleteRow": "امسح حسابي",
   "acctDeleteTitle": "مسح الحساب",
   "acctDeleteHeading": "{honorific, select, ms{متأكدة إنك عايزة تمسحي حسابك؟} other{متأكد إنك عايز تمسح حسابك؟}}",
   "@acctDeleteHeading": {
