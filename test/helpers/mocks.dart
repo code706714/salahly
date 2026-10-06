@@ -10,6 +10,7 @@ import 'package:salahly/core/sync/sync_cubit.dart';
 import 'package:salahly/features/account/domain/repositories/account_repository.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
+import 'package:salahly/features/balance/domain/repositories/balance_repository.dart';
 import 'package:salahly/features/catalog/domain/repositories/catalog_repository.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/customers/domain/repositories/customers_repository.dart';
@@ -54,3 +55,5 @@ class MockConsumerRequestsRepository extends Mock
 
 class MockTechnicianRequestsRepository extends Mock
     implements TechnicianRequestsRepository {}
+
+class MockBalanceRepository extends Mock implements BalanceRepository {}

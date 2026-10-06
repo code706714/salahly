@@ -19,10 +19,12 @@ import 'package:salahly/features/account/domain/entities/user_profile.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/domain/entities/verification_status.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
+import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/customers/data/repositories/drift_customers_repository.dart';
 import 'package:salahly/features/jobs/data/repositories/drift_jobs_repository.dart';
 import 'package:salahly/salahly_app.dart';
 
+import 'balance_fixtures.dart';
 import 'fake_sync_remote.dart';
 import 'fixtures.dart';
 import 'mocks.dart';
@@ -69,6 +71,7 @@ class TechnicianApp {
     ).thenAnswer((_) async => true);
     when(() => apps.dial(any())).thenAnswer((_) async => true);
     when(() => apps.map(any())).thenAnswer((_) async => true);
+    stubBalance(balance, consumer: false);
     when(requests.fetchNewRequests).thenAnswer((_) async => const Ok([]));
     when(requests.fetchMyServices).thenAnswer((_) async => const Ok([]));
     when(
@@ -95,6 +98,8 @@ class TechnicianApp {
   static void registerFallbacks() {
     final phone = PhoneNumber.tryParse('01000000000')!;
     registerFallbackValue(phone);
+    registerFallbackValue(UserRole.consumer);
+    registerFallbackValue(TopupMethod.instapay);
   }
 
   final database = AppDatabase(NativeDatabase.memory());
@@ -112,6 +117,9 @@ class TechnicianApp {
 
   /// The marketplace: no new requests unless a test stubs some.
   final requests = MockTechnicianRequestsRepository();
+
+  /// The balance: no transfers or movements unless a test stubs some.
+  final balance = MockBalanceRepository();
   final photos = LocalPhotoStore(Directory.systemTemp.createTempSync());
   final sharedFiles = SharedFiles(Directory.systemTemp.createTempSync());
 
@@ -141,6 +149,7 @@ class TechnicianApp {
     jobsRepository: jobs,
     consumerRequestsRepository: MockConsumerRequestsRepository(),
     technicianRequestsRepository: requests,
+    balanceRepository: balance,
     locationService: MockLocationService(),
     photoPicker: photoPicker,
     userData: userData,
