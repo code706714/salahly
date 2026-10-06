@@ -110,11 +110,13 @@ class JobView extends StatelessWidget {
       ..showSnackBar(
         SnackBar(
           content: Text(message),
-          action: SnackBarAction(
-            label: l10n.jobPageUndo,
-            textColor: context.appColors.brassLight,
-            onPressed: () => cubit.undo(change),
-          ),
+          action: change.canUndo
+              ? SnackBarAction(
+                  label: l10n.jobPageUndo,
+                  textColor: context.appColors.brassLight,
+                  onPressed: () => cubit.undo(change),
+                )
+              : null,
         ),
       );
   }
@@ -136,6 +138,7 @@ class _JobScreen extends StatelessWidget {
     final scheduledAt = job.scheduledAt;
     final description = job.description;
     final action = _mainAction(context);
+    final isPlatform = job.source == JobSource.platform;
 
     return Scaffold(
       appBar: DetailHeader(
@@ -155,13 +158,25 @@ class _JobScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          if (isOffline && !details.isSynced) ...[
+          if (isPlatform || (isOffline && !details.isSynced)) ...[
             Align(
               alignment: AlignmentDirectional.centerStart,
-              child: StatusPill(
-                label: l10n.jobPendingSync,
-                tone: PillTone.waiting,
-                icon: Icons.schedule_rounded,
+              child: Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [
+                  if (isPlatform)
+                    StatusPill(
+                      label: l10n.jobFromPlatform,
+                      tone: PillTone.dark,
+                    ),
+                  if (isOffline && !details.isSynced)
+                    StatusPill(
+                      label: l10n.jobPendingSync,
+                      tone: PillTone.waiting,
+                      icon: Icons.schedule_rounded,
+                    ),
+                ],
               ),
             ),
             const SizedBox(height: 14),
@@ -299,11 +314,16 @@ class _MoreMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    // A platform job is the consumer's request too: it is never deleted,
+    // and cancelling it can't be undone.
+    final isPlatform = job.source == JobSource.platform;
+    if (isPlatform && !job.status.isOpen) return const SizedBox.shrink();
     return PopupMenuButton<_MoreAction>(
       tooltip: l10n.jobPageMore,
       icon: const Icon(Icons.more_vert_rounded),
       onSelected: (action) => switch (action) {
         _MoreAction.reschedule => _reschedule(context),
+        _MoreAction.cancel when isPlatform => _confirmCancel(context),
         _MoreAction.cancel => context.read<JobDetailsCubit>().cancel(),
         _MoreAction.delete => _confirmDelete(context),
       },
@@ -319,15 +339,42 @@ class _MoreMenu extends StatelessWidget {
             value: _MoreAction.cancel,
             child: Text(l10n.jobPageCancel),
           ),
-        PopupMenuItem(
-          value: _MoreAction.delete,
-          child: Text(
-            l10n.jobPageDelete,
-            style: TextStyle(color: context.appColors.danger),
+        if (!isPlatform)
+          PopupMenuItem(
+            value: _MoreAction.delete,
+            child: Text(
+              l10n.jobPageDelete,
+              style: TextStyle(color: context.appColors.danger),
+            ),
           ),
-        ),
       ],
     );
+  }
+
+  Future<void> _confirmCancel(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final cubit = context.read<JobDetailsCubit>();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.platformJobCancelTitle),
+        content: Text(l10n.platformJobCancelBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.jobPageKeep),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(
+              foregroundColor: context.appColors.danger,
+            ),
+            child: Text(l10n.platformJobCancelConfirm),
+          ),
+        ],
+      ),
+    );
+    if (confirmed ?? false) await cubit.cancel();
   }
 
   Future<void> _reschedule(BuildContext context) async {
@@ -442,6 +489,11 @@ class _QuoteCard extends StatelessWidget {
         label: l10n.jobQuoteSent,
         tone: PillTone.waiting,
         icon: Icons.schedule_rounded,
+      ),
+      QuoteStatus.declined => StatusPill(
+        label: l10n.platformJobQuoteDeclined,
+        tone: PillTone.danger,
+        icon: Icons.close_rounded,
       ),
       QuoteStatus.draft when hasItems => StatusPill(
         label: l10n.jobPageQuoteDraft,

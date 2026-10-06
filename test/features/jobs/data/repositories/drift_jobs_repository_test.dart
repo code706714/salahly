@@ -247,6 +247,28 @@ void main() {
       expect(job.quoteStatus, QuoteStatus.accepted);
     });
 
+    test("leaves a platform job's price change to the consumer", () async {
+      final id = await newJob();
+      await (db.update(db.jobs)..where((job) => job.id.equals(id))).write(
+        const JobsCompanion(source: Value('platform')),
+      );
+      ok(
+        await repository.saveQuote(
+          id,
+          items: const [JobItemDraft(title: 'تنظيف', unitPricePiastres: 30000)],
+          validDays: 3,
+          status: QuoteStatus.sent,
+        ),
+      );
+
+      ok(await repository.advance(id));
+
+      final job = (await repository.watchJob(id).first)!.job;
+      expect(job.status, JobStatus.confirmed);
+      expect(job.source, JobSource.platform);
+      expect(job.quoteStatus, QuoteStatus.sent);
+    });
+
     test('marks a job paid when it finishes already paid for', () async {
       final id = await newJob();
       await price(id, const [

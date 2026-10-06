@@ -294,7 +294,8 @@ class _JobsList extends StatelessWidget {
   }
 
   /// Where an open job stands; a sent quote with no answer says so instead
-  /// of "not confirmed yet".
+  /// of "not confirmed yet", and a price increase the consumer declined
+  /// says so too.
   static List<Widget> _openPills(AppLocalizations l10n, Job job) {
     final quoteSent = job.quoteStatus == QuoteStatus.sent;
     return [
@@ -302,6 +303,8 @@ class _JobsList extends StatelessWidget {
         JobStatusPill(job.status),
       if (quoteSent)
         StatusPill(label: l10n.jobQuoteSent, tone: PillTone.waiting),
+      if (job.quoteStatus == QuoteStatus.declined)
+        StatusPill(label: l10n.platformJobQuoteDeclined, tone: PillTone.danger),
     ];
   }
 

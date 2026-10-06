@@ -83,8 +83,9 @@ class JobDetailsCubit extends Cubit<JobDetailsState> {
     });
   }
 
-  /// Puts the job back the way it was before [change].
+  /// Puts the job back the way it was before [change], when it can be.
   Future<void> undo(JobChange change) async {
+    if (!change.canUndo) return;
     emit(state.copyWith(failure: () => null));
     final result = await _jobs.restore(change.previous);
     if (isClosed) return;
@@ -107,8 +108,13 @@ class JobDetailsCubit extends Cubit<JobDetailsState> {
     );
   }
 
-  /// Deletes the job; the page closes once it is gone.
-  Future<void> delete() => _run(_jobs.deleteJob(_jobId));
+  /// Deletes the job; the page closes once it is gone. A platform job
+  /// can't be deleted: it is the consumer's request too.
+  Future<void> delete() async {
+    final job = state.details?.job;
+    if (job == null || job.source == JobSource.platform) return;
+    await _run(_jobs.deleteJob(_jobId));
+  }
 
   /// Keeps the photo picked at [path] with the job.
   Future<void> addPhoto(PhotoKind kind, String path) =>
