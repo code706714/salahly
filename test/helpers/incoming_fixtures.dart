@@ -8,13 +8,13 @@ import 'package:salahly/features/marketplace/domain/entities/service_request.dar
 import 'package:salahly/features/marketplace/presentation/cubit/incoming_requests_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/offer_cubit.dart';
 
-class MockIncomingRequestsCubit extends MockCubit<IncomingRequestsState>
-    implements IncomingRequestsCubit {}
-
 class MockCategoriesCubit extends MockCubit<CategoriesState>
     implements CategoriesCubit {}
 
 class MockOfferCubit extends MockCubit<OfferState> implements OfferCubit {}
+
+class MockIncomingRequestsCubit extends MockCubit<IncomingRequestsState>
+    implements IncomingRequestsCubit {}
 
 /// The technician's offer on a request: 350 ج.م, tomorrow at 12:30.
 MyOffer testMyOffer({

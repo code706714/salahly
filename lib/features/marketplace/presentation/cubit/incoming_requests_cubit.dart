@@ -4,6 +4,7 @@ import 'package:salahly/core/async/single_flight.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/features/marketplace/domain/entities/incoming_request.dart';
+import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
 import 'package:salahly/features/marketplace/domain/repositories/technician_requests_repository.dart';
 
 part 'incoming_requests_state.dart';

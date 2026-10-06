@@ -222,6 +222,25 @@ void main() {
       verify(() => harness.request.acceptOffer('offer-1')).called(1);
     });
 
+    testWidgets('cannot pick an offer whose time has passed', (tester) async {
+      harness.show(
+        liveRequest(
+          offers: [
+            testOffer(
+              arriveAt: DateTime.now().subtract(const Duration(hours: 1)),
+            ),
+          ],
+        ),
+      );
+      await pumpView(tester);
+
+      expect(find.text(l10n.offersExpired), findsOneWidget);
+      await tester.tap(find.text('اختاري محمود'), warnIfMissed: false);
+      await tester.pumpAndSettle();
+      expect(find.text('تختاري محمود؟'), findsNothing);
+      verifyNever(() => harness.request.acceptOffer(any()));
+    });
+
     testWidgets('waits when she changes her mind', (tester) async {
       harness.show(liveRequest(offers: liveOffers()));
       await pumpView(tester);

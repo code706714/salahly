@@ -2698,7 +2698,7 @@
     }
   },
   "newRequestSentTitle": "طلبك اتبعت",
-  "newRequestSentTo": "{count, plural, =1{راح لفني {category} موثّق قريب منك.} =2{راح لفنيين {category} اتنين موثّقين قريبين منك.} few{راح لـ {count} فنيين {category} موثّقين قريبين منك.} other{راح لـ {count} فني {category} موثّق قريبين منك.}}",
+  "newRequestSentTo": "{count, plural, =1{راح لفني {category} موثّق قريب منك.} =2{راح لفنيين {category} اتنين موثّقين قريبين منك.} few{راح لـ {count} فنيين {category} موثّقين قريبين منك.} other{راح لـ {count} فني {category} موثّق قريب منك.}}",
   "@newRequestSentTo": {
     "placeholders": {
       "count": {
@@ -3126,5 +3126,9 @@
   "platformJobQuoteInApp": "هيوصل للعميل في التطبيق",
   "platformJobCancelTitle": "تلغي الشغلانة دي؟",
   "platformJobCancelBody": "الشغلانة جاية من المنصة، فالطلب هيتلغي عند العميل ومش هتقدر ترجّعها.",
-  "platformJobCancelConfirm": "ألغيها"
+  "platformJobCancelConfirm": "ألغيها",
+  "offersExpired": "الميعاد ده فات",
+  "@offersExpired": {},
+  "technicianOffersWaiting": "عروضك المستنية وصلت لرصيدك. استنى لما العميل يرد على واحد منها وبعدها ابعت عرض تاني.",
+  "@technicianOffersWaiting": {}
 }

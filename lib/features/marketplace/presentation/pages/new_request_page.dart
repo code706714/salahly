@@ -622,7 +622,7 @@ class _AddPhotoTile extends StatelessWidget {
         );
       return;
     }
-    if (path != null) cubit.addPhoto(path);
+    if (path != null && !cubit.isClosed) cubit.addPhoto(path);
   }
 
   @override

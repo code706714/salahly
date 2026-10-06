@@ -111,6 +111,7 @@ class _OffersScreenState extends State<_OffersScreen> {
             _OfferCard(
               offer: offer,
               today: today,
+              expired: !offer.arriveAt.isAfter(today),
               picking:
                   busy == RequestAction.acceptOffer && _picking == offer.id,
               onProfile: busy == null ? () => _openProfile(offer) : null,
@@ -215,6 +216,7 @@ class _OfferCard extends StatelessWidget {
   const _OfferCard({
     required this.offer,
     required this.today,
+    required this.expired,
     required this.picking,
     required this.onProfile,
     required this.onPick,
@@ -222,6 +224,9 @@ class _OfferCard extends StatelessWidget {
 
   final RequestOffer offer;
   final DateTime today;
+
+  /// The arrival time has passed, so the server would refuse this offer.
+  final bool expired;
   final bool picking;
 
   /// Null while another action runs.
@@ -238,197 +243,215 @@ class _OfferCard extends StatelessWidget {
     final arrival =
         '${requestDayName(l10n, offer.arriveAt, today: today)} '
         '${clockTime(offer.arriveAt)}';
-    return AppCard(
-      radius: AppRadii.xxl,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              TechnicianAvatar(name: technician.name, size: 56),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            technician.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w700,
-                              height: 1.5,
-                              color: colors.ink,
-                            ),
-                          ),
-                        ),
-                        if (technician.verified) ...[
-                          const SizedBox(width: 6),
-                          Icon(
-                            Icons.verified_user_outlined,
-                            size: 18,
-                            color: colors.warning,
-                            semanticLabel: l10n.offersVerified,
-                          ),
-                        ],
-                      ],
-                    ),
-                    const SizedBox(height: 2),
-                    _TechnicianRecord(technician: technician),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: colors.background,
-              borderRadius: BorderRadius.circular(AppRadii.md),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(AppSpacing.sm),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.offersStartingPrice,
-                          style: TextStyle(
-                            fontSize: 13,
-                            height: 1.5,
-                            color: colors.inkMuted,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        MoneyText(
-                          offer.pricePiastres,
-                          currencyScale: 15 / 26,
-                          style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.w700,
-                            height: 1.2,
-                            color: colors.ink,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.xs),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+    return Opacity(
+      opacity: expired ? 0.5 : 1,
+      child: AppCard(
+        radius: AppRadii.xxl,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                TechnicianAvatar(name: technician.name, size: 56),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            Icons.schedule_rounded,
-                            size: 18,
-                            color: colors.ink,
+                          Flexible(
+                            child: Text(
+                              technician.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700,
+                                height: 1.5,
+                                color: colors.ink,
+                              ),
+                            ),
                           ),
-                          const SizedBox(width: 4),
+                          if (technician.verified) ...[
+                            const SizedBox(width: 6),
+                            Icon(
+                              Icons.verified_user_outlined,
+                              size: 18,
+                              color: colors.warning,
+                              semanticLabel: l10n.offersVerified,
+                            ),
+                          ],
+                        ],
+                      ),
+                      const SizedBox(height: 2),
+                      _TechnicianRecord(technician: technician),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: colors.background,
+                borderRadius: BorderRadius.circular(AppRadii.md),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.sm),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text(
-                            arrival,
+                            l10n.offersStartingPrice,
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 13,
                               height: 1.5,
+                              color: colors.inkMuted,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          MoneyText(
+                            offer.pricePiastres,
+                            currencyScale: 15 / 26,
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.w700,
+                              height: 1.2,
                               color: colors.ink,
                             ),
                           ),
                         ],
                       ),
-                      if (distance != null) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          l10n.offersDistance(distance.toStringAsFixed(1)),
-                          style: TextStyle(
-                            fontSize: 14,
-                            height: 1.5,
-                            color: colors.inkMuted,
-                          ),
+                    ),
+                    const SizedBox(width: AppSpacing.xs),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.schedule_rounded,
+                              size: 18,
+                              color: colors.ink,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              arrival,
+                              style: TextStyle(
+                                fontSize: 14,
+                                height: 1.5,
+                                color: colors.ink,
+                              ),
+                            ),
+                          ],
                         ),
+                        if (expired) ...[
+                          const SizedBox(height: 2),
+                          Text(
+                            l10n.offersExpired,
+                            style: TextStyle(
+                              fontSize: 14,
+                              height: 1.5,
+                              color: colors.danger,
+                            ),
+                          ),
+                        ],
+                        if (distance != null) ...[
+                          const SizedBox(height: 2),
+                          Text(
+                            l10n.offersDistance(distance.toStringAsFixed(1)),
+                            style: TextStyle(
+                              fontSize: 14,
+                              height: 1.5,
+                              color: colors.inkMuted,
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          if (note != null) ...[
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              l10n.offersNote(note),
-              style: TextStyle(fontSize: 14, height: 1.6, color: colors.ink),
-            ),
-          ],
-          const SizedBox(height: AppSpacing.sm),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: onProfile,
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: colors.ink,
-                    minimumSize: const Size.fromHeight(48),
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    side: BorderSide(color: colors.fieldBorder, width: 1.5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppRadii.md),
                     ),
-                    textStyle: const TextStyle(
-                      fontFamily: AppTheme.fontFamily,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  child: Text(l10n.offersProfile),
+                  ],
                 ),
               ),
-              const SizedBox(width: AppSpacing.xs),
-              Expanded(
-                flex: 2,
-                child: FilledButton(
-                  onPressed: picking ? () {} : onPick,
-                  style: FilledButton.styleFrom(
-                    minimumSize: const Size.fromHeight(48),
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppRadii.md),
-                    ),
-                    textStyle: const TextStyle(
-                      fontFamily: AppTheme.fontFamily,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  child: picking
-                      ? SizedBox.square(
-                          dimension: 22,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.5,
-                            color: colors.onPrimary,
-                          ),
-                        )
-                      : Text(
-                          l10n.offersPick(
-                            context.watchHonorific(),
-                            firstNameOf(technician.name),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                ),
+            ),
+            if (note != null) ...[
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                l10n.offersNote(note),
+                style: TextStyle(fontSize: 14, height: 1.6, color: colors.ink),
               ),
             ],
-          ),
-        ],
+            const SizedBox(height: AppSpacing.sm),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: expired ? null : onProfile,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: colors.ink,
+                      minimumSize: const Size.fromHeight(48),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      side: BorderSide(color: colors.fieldBorder, width: 1.5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppRadii.md),
+                      ),
+                      textStyle: const TextStyle(
+                        fontFamily: AppTheme.fontFamily,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    child: Text(l10n.offersProfile),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.xs),
+                Expanded(
+                  flex: 2,
+                  child: FilledButton(
+                    onPressed: picking
+                        ? () {}
+                        : expired
+                        ? null
+                        : onPick,
+                    style: FilledButton.styleFrom(
+                      minimumSize: const Size.fromHeight(48),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppRadii.md),
+                      ),
+                      textStyle: const TextStyle(
+                        fontFamily: AppTheme.fontFamily,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    child: picking
+                        ? SizedBox.square(
+                            dimension: 22,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              color: colors.onPrimary,
+                            ),
+                          )
+                        : Text(
+                            l10n.offersPick(
+                              context.watchHonorific(),
+                              firstNameOf(technician.name),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

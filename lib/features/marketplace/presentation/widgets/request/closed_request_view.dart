@@ -10,7 +10,6 @@ import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
-import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
@@ -37,12 +36,11 @@ class ClosedRequestView extends StatelessWidget {
       (cubit) => cubit.state.nameOf(details.areaId),
     );
     final (icon, title, body) = switch (details.stage) {
-      RequestStage.cancelled when details.cancelledBy == UserRole.technician =>
-        (
-          Icons.event_busy_outlined,
-          l10n.closedRequestCancelledByTechnician,
-          l10n.closedRequestAskOthers(honorific),
-        ),
+      RequestStage.cancelled when details.cancelledByTechnician => (
+        Icons.event_busy_outlined,
+        l10n.closedRequestCancelledByTechnician,
+        l10n.closedRequestAskOthers(honorific),
+      ),
       RequestStage.cancelled => (
         Icons.event_busy_outlined,
         l10n.closedRequestCancelledByYou(honorific),

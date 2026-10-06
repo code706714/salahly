@@ -66,6 +66,7 @@ void main() {
 
   setUp(() {
     cubit = MockNewRequestCubit();
+    when(() => cubit.isClosed).thenReturn(false);
     picker = MockPhotoPicker();
     when(() => cubit.next()).thenAnswer((_) async {});
     when(() => cubit.back()).thenReturn(true);

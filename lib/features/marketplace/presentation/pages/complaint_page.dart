@@ -294,9 +294,9 @@ class _AddPhotoButton extends StatelessWidget {
     try {
       final path = await picker.pick(
         source: source,
-        purpose: PhotoPurpose.job,
+        purpose: PhotoPurpose.request,
       );
-      if (path != null) cubit.attachPhoto(path);
+      if (path != null && !cubit.isClosed) cubit.attachPhoto(path);
     } on PlatformException {
       messenger
         ..hideCurrentSnackBar()

@@ -11,9 +11,7 @@ import 'package:salahly/core/time/calendar_date.dart';
 import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/status_pill.dart';
-import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
-import 'package:salahly/features/jobs/domain/entities/job.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/my_requests_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/request_follow_up.dart';
@@ -268,7 +266,7 @@ class _RequestCard extends StatelessWidget {
         PillTone.success,
       ),
       RequestStage.done => (l10n.myRequestsRate(honorific), PillTone.success),
-      RequestStage.cancelled when _cancelledByTechnician => (
+      RequestStage.cancelled when request.cancelledByTechnician => (
         l10n.myRequestsCancelledByTechnician,
         PillTone.neutral,
       ),
@@ -288,11 +286,6 @@ class _RequestCard extends StatelessWidget {
         > 1 && < 7 => weekdayName(day),
         _ => DateFormat('d MMMM', 'ar').format(day),
       };
-
-  /// A job the technician called off has no request-level canceller.
-  bool get _cancelledByTechnician =>
-      request.cancelledBy == UserRole.technician ||
-      (request.cancelledBy == null && request.jobStatus == JobStatus.cancelled);
 
   /// "السبت 12:00 الضهر · محمود السيد · 350 ج.م" while in progress, the
   /// date in the history, and how long ago it was sent before a pick.

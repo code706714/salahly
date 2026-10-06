@@ -193,7 +193,7 @@ void main() {
       verify(
         () => harness.photoPicker.pick(
           source: PhotoSource.gallery,
-          purpose: PhotoPurpose.job,
+          purpose: PhotoPurpose.request,
         ),
       ).called(1);
       verify(

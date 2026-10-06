@@ -91,6 +91,7 @@ class FollowUpHarness {
     List<String> stubRoutes = const [],
     Size surfaceSize = smallPhone,
   }) async {
+    when(() => complaint.isClosed).thenReturn(false);
     await tester.pumpApp(
       view,
       repositories: [

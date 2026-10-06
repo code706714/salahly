@@ -18,6 +18,7 @@ import 'package:salahly/features/marketplace/domain/entities/request_window.dart
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
 import 'package:salahly/features/marketplace/domain/entities/technician_card.dart';
 import 'package:salahly/features/marketplace/domain/failures/marketplace_failures.dart';
+import 'package:salahly/features/marketplace/presentation/cubit/incoming_requests_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/offer_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/pages/incoming_request_page.dart';
 
@@ -30,6 +31,7 @@ import '../../../../pump_app.dart';
 
 void main() {
   late MockOfferCubit cubit;
+  late MockIncomingRequestsCubit incoming;
   late MockSessionCubit session;
   late MockAreasCubit areas;
   late MockCategoriesCubit categories;
@@ -68,6 +70,8 @@ void main() {
 
   setUp(() {
     cubit = MockOfferCubit();
+    incoming = MockIncomingRequestsCubit();
+    when(() => incoming.state).thenReturn(const IncomingRequestsState());
     session = MockSessionCubit();
     areas = MockAreasCubit();
     categories = MockCategoriesCubit();
@@ -107,6 +111,7 @@ void main() {
     view,
     blocs: [
       BlocProvider<OfferCubit>.value(value: cubit),
+      BlocProvider<IncomingRequestsCubit>.value(value: incoming),
       BlocProvider<SessionCubit>.value(value: session),
       BlocProvider<AreasCubit>.value(value: areas),
       BlocProvider<CategoriesCubit>.value(value: categories),
@@ -346,6 +351,32 @@ void main() {
       expect(find.text(l10n.offerFormTitle), findsNothing);
       expect(sendButton(), findsNothing);
       expect(find.text(l10n.offerFormDismiss), findsOneWidget);
+    });
+
+    testWidgets('explains when the credits are all held by waiting offers', (
+      tester,
+    ) async {
+      when(() => session.state).thenReturn(signedIn(credits: 1));
+      when(() => incoming.state).thenReturn(
+        IncomingRequestsState(
+          requests: [
+            testIncoming(
+              id: 'request-2',
+              myOffer: MyOffer(
+                id: 'offer-2',
+                pricePiastres: 35000,
+                arriveAt: DateTime(2026, 10, 4, 12),
+                status: OfferStatus.sent,
+              ),
+            ),
+          ],
+        ),
+      );
+      show(ready(testIncoming()));
+      await pumpView(tester);
+
+      expect(find.text(l10n.technicianOffersWaiting), findsOneWidget);
+      expect(sendButton(), findsNothing);
     });
 
     testWidgets("says when the request's time is over", (tester) async {

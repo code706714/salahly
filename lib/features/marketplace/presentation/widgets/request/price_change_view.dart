@@ -31,9 +31,12 @@ class PriceChangeView extends StatelessWidget {
       details.chosenOffer?.technician.name ?? '',
     );
     // What the consumer pays if they decline: the lines agreed before.
-    final agreed = lines
+    // When the technician raised an agreed line instead of adding one,
+    // every line counts as new: the agreed price is the offer's.
+    final kept = lines
         .where((line) => !line.addedLater)
         .fold(0, (sum, line) => sum + line.totalPiastres);
+    final agreed = kept > 0 ? kept : details.chosenOffer?.pricePiastres ?? 0;
     return Scaffold(
       appBar: DetailHeader(title: l10n.priceChangeTitle(technician)),
       body: ListView(

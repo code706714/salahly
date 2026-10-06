@@ -32,6 +32,17 @@ final class IncomingRequestsState extends Equatable {
       if (!request.dismissed && acceptsOffers(request)) request,
   ];
 
+  /// Offers sent that the consumer hasn't answered yet. The server holds one
+  /// credit for each, so they count against what can still be sent.
+  int get pendingOffers => requests
+      .where(
+        (request) =>
+            request.myOffer?.status == OfferStatus.sent &&
+            request.status == RequestStatus.open &&
+            !closedIds.contains(request.id),
+      )
+      .length;
+
   IncomingRequestsState copyWith({
     IncomingRequestsStatus? status,
     List<IncomingRequest>? requests,

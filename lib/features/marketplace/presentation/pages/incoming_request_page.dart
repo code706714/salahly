@@ -256,9 +256,14 @@ class _RequestScreenState extends State<_RequestScreen> {
         _ => 0,
       },
     );
+    final waiting = context.select<IncomingRequestsCubit, int>(
+      (cubit) => cubit.state.pendingOffers,
+    );
     final choices = state.arrivalChoices;
     final notice = switch (standing) {
       IncomingStanding.open when credits == 0 => l10n.technicianNoCredits,
+      IncomingStanding.open when waiting >= credits =>
+        l10n.technicianOffersWaiting,
       IncomingStanding.open when choices.isEmpty => l10n.offerFormNoTimes,
       IncomingStanding.open => null,
       _ when offer != null => null,

@@ -107,6 +107,11 @@ final class RequestSummary extends Equatable {
 
   RequestStage get stage => _stageOf(status, offerCount, jobStatus);
 
+  /// A job the technician called off has no request-level canceller.
+  bool get cancelledByTechnician =>
+      cancelledBy == UserRole.technician ||
+      (cancelledBy == null && jobStatus == JobStatus.cancelled);
+
   @override
   List<Object?> get props => [
     id,
@@ -204,8 +209,14 @@ final class RequestDetails extends Equatable {
 
   RequestStage get stage => _stageOf(status, offers.length, job?.status);
 
+  /// A job the technician called off has no request-level canceller.
+  bool get cancelledByTechnician =>
+      cancelledBy == UserRole.technician ||
+      (cancelledBy == null && job?.status == JobStatus.cancelled);
+
   /// A price change the technician sent and the consumer hasn't answered.
-  bool get hasPendingPriceChange => job?.quoteStatus == QuoteStatus.sent;
+  bool get hasPendingPriceChange =>
+      stage != RequestStage.cancelled && job?.quoteStatus == QuoteStatus.sent;
 
   @override
   List<Object?> get props => [
