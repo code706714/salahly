@@ -1427,5 +1427,385 @@
   "requestRangeNoon": "من 12 لـ 3 الضهر",
   "requestRangeAfternoon": "من 3 لـ 6 العصر",
   "requestRangeEvening": "من 6 لـ 9 بالليل",
-  "requestRangeAnyTime": "من 9 الصبح لـ 9 بالليل"
+  "requestRangeAnyTime": "من 9 الصبح لـ 9 بالليل",
+  "waitingTitle": "مستنيين العروض",
+  "waitingSentTo": "{count, plural, =0{لسه ملقيناش فني فاضي قريب منك في المعاد ده، وهنفضل ندوّر.} =1{طلبك راح لفني موثّق قريب منك.} =2{طلبك راح لفنيين اتنين موثّقين قريبين منك.} few{طلبك راح لـ {count} فنيين موثّقين قريبين منك.} other{طلبك راح لـ {count} فني موثّق قريب منك.}}",
+  "@waitingSentTo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "waitingCheckBack": "{honorific, select, ms{مش لازم تفضلي فاتحة الأبلكيشن: أول ما يوصل عرض هتلاقيه هنا وفي طلباتك.} other{مش لازم تفضل فاتح الأبلكيشن: أول ما يوصل عرض هتلاقيه هنا وفي طلباتك.}}",
+  "@waitingCheckBack": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingSentMinutes": "{count, plural, =0{الطلب اتبعت دلوقتي} =1{الطلب اتبعت من دقيقة} =2{الطلب اتبعت من دقيقتين} few{الطلب اتبعت من {count} دقايق} other{الطلب اتبعت من {count} دقيقة}}",
+  "@waitingSentMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "waitingSentHours": "{count, plural, =1{الطلب اتبعت من ساعة} =2{الطلب اتبعت من ساعتين} few{الطلب اتبعت من {count} ساعات} other{الطلب اتبعت من {count} ساعة}}",
+  "@waitingSentHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "waitingSentDays": "{count, plural, =1{الطلب اتبعت من يوم} =2{الطلب اتبعت من يومين} few{الطلب اتبعت من {count} أيام} other{الطلب اتبعت من {count} يوم}}",
+  "@waitingSentDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "waitingSeenBy": "{count, plural, =0{لسه محدش من الفنيين شافه} =1{فني واحد شافه} =2{فنيين اتنين شافوه} few{{count} فنيين شافوه} other{{count} فني شافوه}}",
+  "@waitingSeenBy": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "waitingNoOffers": "لسه مفيش عروض",
+  "waitingWidenTitle": "لو مجاش عروض خلال ساعتين",
+  "waitingWidenBody": "هنبعته لفنيين أبعد شوية ونبلغك. ولو مجاش أي عرض خالص، الطلب مش هيتخصم من رصيدك.",
+  "waitingWidenedTitle": "بعتنا طلبك لفنيين أبعد شوية",
+  "waitingWidenedBody": "عدّت ساعتين من غير عروض فوسّعنا المسافة. ولو مجاش أي عرض خالص، الطلب مش هيتخصم من رصيدك.",
+  "waitingWidenWindow": "{honorific, select, ms{وسّعي المعاد عشان العروض تيجي أسرع} other{وسّع المعاد عشان العروض تيجي أسرع}}",
+  "@waitingWidenWindow": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingWidenConfirmTitle": "{honorific, select, ms{توسّعي المعاد؟} other{توسّع المعاد؟}}",
+  "@waitingWidenConfirmTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingWidenConfirmBody": "الفنيين هيقدروا ييجوا {day} في أي وقت من 9 الصبح لـ 9 بالليل.",
+  "@waitingWidenConfirmBody": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingWidenConfirm": "{honorific, select, ms{وسّعي المعاد} other{وسّع المعاد}}",
+  "@waitingWidenConfirm": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingKeepWindow": "{honorific, select, ms{سيبيه زي ما هو} other{سيبه زي ما هو}}",
+  "@waitingKeepWindow": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingWindowWidened": "{honorific, select, ms{وسّعتي المعاد: الفنيين يقدروا ييجوا في أي وقت من 9 الصبح لـ 9 بالليل.} other{وسّعت المعاد: الفنيين يقدروا ييجوا في أي وقت من 9 الصبح لـ 9 بالليل.}}",
+  "@waitingWindowWidened": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCancel": "الغي الطلب",
+  "waitingCancelFree": "الإلغاء ببلاش ورصيدك بيرجعلك",
+  "waitingCancelConfirmTitle": "تلغي الطلب؟",
+  "waitingCancelConfirmBody": "الفنيين مش هيقدروا يبعتوا عروض عليه، ورصيدك هيرجعلك.",
+  "waitingCancelKeep": "{honorific, select, ms{لأ، سيبيه} other{لأ، سيبه}}",
+  "@waitingCancelKeep": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "offersTitle": "العروض على طلبك",
+  "offersReceived": "{count, plural, =1{وصلك عرض واحد} =2{وصلك عرضين} few{وصلك {count} عروض} other{وصلك {count} عرض}} {sentTo, plural, =1{من فني واحد اتبعتله الطلب} =2{من فنيين اتنين اتبعتلهم الطلب} few{من {sentTo} فنيين اتبعتلهم الطلب} other{من {sentTo} فني اتبعتلهم الطلب}}",
+  "@offersReceived": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "sentTo": {
+        "type": "int"
+      }
+    }
+  },
+  "offersSortNearest": "الأقرب",
+  "offersSortCheapest": "الأرخص",
+  "offersSortTopRated": "الأعلى تقييم",
+  "offersReviewCount": "{count, plural, =1{(تقييم واحد)} =2{(تقييمين)} few{({count} تقييمات)} other{({count} تقييم)}}",
+  "@offersReviewCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offersNoReviews": "لسه مفيش تقييمات",
+  "offersJobsDone": "{count, plural, =0{لسه مخلّصش شغلانات} =1{شغلانة واحدة} =2{شغلانتين} few{{count} شغلانات} other{{count} شغلانة}}",
+  "@offersJobsDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offersVerified": "موثّق",
+  "offersStartingPrice": "السعر المبدئي",
+  "offersDistance": "{km} كم منك",
+  "@offersDistance": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offersNote": "\"{note}\"",
+  "@offersNote": {
+    "placeholders": {
+      "note": {
+        "type": "String"
+      }
+    }
+  },
+  "offersProfile": "صفحته",
+  "offersPick": "{honorific, select, ms{اختاري {name}} other{اختار {name}}}",
+  "@offersPick": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "offersPickTitle": "{honorific, select, ms{تختاري {name}؟} other{تختار {name}؟}}",
+  "@offersPickTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "offersPickBody": "هييجي {when}، والسعر المبدئي {price}. العروض التانية هتتقفل.",
+  "@offersPickBody": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "offersPickKeep": "{honorific, select, ms{لأ، استني} other{لأ، استنى}}",
+  "@offersPickKeep": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "offersPricesNote": "{honorific, select, ms{الأسعار دي مبدئية. لو الفني لقى إن فيه حاجة محتاجة قطع غيار، لازم يقولك السعر وتوافقي قبل ما يبدأ.} other{الأسعار دي مبدئية. لو الفني لقى إن فيه حاجة محتاجة قطع غيار، لازم يقولك السعر وتوافق قبل ما يبدأ.}}",
+  "@offersPricesNote": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "techProfilePageTitle": "صفحة الفني",
+  "techProfileTrade": "فني {category}",
+  "@techProfileTrade": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "techProfileYears": "{count, plural, =0{أقل من سنة خبرة} =1{سنة خبرة} =2{سنتين خبرة} few{{count} سنين خبرة} other{{count} سنة خبرة}}",
+  "@techProfileYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileVerified": "موثّق بالبطاقة",
+  "techProfileReviewCount": "{count, plural, =1{تقييم واحد} =2{تقييمين} few{{count} تقييمات} other{{count} تقييم}}",
+  "@techProfileReviewCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileJobsDone": "{count, plural, few{شغلانات خلصت} other{شغلانة خلصت}}",
+  "@techProfileJobsDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileOnTime": "جه في معاده",
+  "techProfileOnTimeValue": "{percent}%",
+  "@techProfileOnTimeValue": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileAreas": "بيشتغل في",
+  "techProfilePrices": "أسعاره المبدئية",
+  "techProfileFromPrice": "من {price}",
+  "@techProfileFromPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "techProfileReviews": "رأي العملاء",
+  "techProfileAllReviews": "كل التقييمات",
+  "techProfileNoReviews": "لسه محدش قيّمه.",
+  "techProfileStars": "{count} من 5 نجوم",
+  "@techProfileStars": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileAgoDays": "{count, plural, =0{النهارده} =1{امبارح} =2{من يومين} few{من {count} أيام} other{من {count} يوم}}",
+  "@techProfileAgoDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileAgoWeeks": "{count, plural, =1{من أسبوع} =2{من أسبوعين} few{من {count} أسابيع} other{من {count} أسبوع}}",
+  "@techProfileAgoWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileAgoMonths": "{count, plural, =1{من شهر} =2{من شهرين} few{من {count} شهور} other{من {count} شهر}}",
+  "@techProfileAgoMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileAgoYears": "{count, plural, =1{من سنة} =2{من سنتين} few{من {count} سنين} other{من {count} سنة}}",
+  "@techProfileAgoYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfilePickOffer": "{honorific, select, ms{اختاري {name} · {price}} other{اختار {name} · {price}}}",
+  "@techProfilePickOffer": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "techProfileAsk": "{honorific, select, ms{اطلبي {name}} other{اطلب {name}}}",
+  "@techProfileAsk": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "techProfileNotFound": "صفحة الفني ده مش متاحة.",
+  "closedRequestCancelledByYou": "{honorific, select, ms{لغيتي الطلب ده} other{لغيت الطلب ده}}",
+  "@closedRequestCancelledByYou": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "closedRequestFreeCancel": "الإلغاء كان ببلاش ورصيدك رجعلك.",
+  "closedRequestTechnicianTold": "الفني اتبلّغ إن الطلب اتلغى.",
+  "closedRequestCancelledByTechnician": "الفني لغى، ورصيدك رجعلك",
+  "closedRequestAskOthers": "{honorific, select, ms{اطلبي تاني وهنبعته لفنيين تانيين قريبين منك.} other{اطلب تاني وهنبعته لفنيين تانيين قريبين منك.}}",
+  "@closedRequestAskOthers": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "closedRequestExpiredNoOffers": "محدش بعت عرض في الوقت ده، ورصيدك رجعلك",
+  "closedRequestExpiredNoPick": "{honorific, select, ms{معاد الطلب فات من غير ما تختاري فني، ورصيدك رجعلك} other{معاد الطلب فات من غير ما تختار فني، ورصيدك رجعلك}}",
+  "@closedRequestExpiredNoPick": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "closedRequestTryAnotherTime": "{honorific, select, ms{ممكن تطلبي تاني في يوم أو معاد تاني.} other{ممكن تطلب تاني في يوم أو معاد تاني.}}",
+  "@closedRequestTryAnotherTime": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "closedRequestAgain": "{honorific, select, ms{اطلبي تاني} other{اطلب تاني}}",
+  "@closedRequestAgain": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  }
 }
