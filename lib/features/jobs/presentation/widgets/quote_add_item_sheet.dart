@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:salahly/core/text/arabic_search.dart';
 import 'package:salahly/core/text/money.dart';
 import 'package:salahly/core/text/normalize.dart';
+import 'package:salahly/core/text/text_limit.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/features/jobs/domain/entities/job_item.dart';
 import 'package:salahly/features/jobs/presentation/widgets/pounds_field.dart';
@@ -105,6 +106,7 @@ class _QuoteAddItemSheetState extends State<QuoteAddItemSheet> {
               controller: _title,
               autofocus: true,
               maxLength: JobItem.maxTitleLength,
+              inputFormatters: const [CodePointLimit(JobItem.maxTitleLength)],
               textInputAction: TextInputAction.next,
               decoration: InputDecoration(
                 labelText: l10n.quoteItemTitleLabel,

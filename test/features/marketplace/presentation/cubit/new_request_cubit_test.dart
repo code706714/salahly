@@ -51,7 +51,7 @@ void main() {
     String? technicianId,
   }) async {
     final cubit = build(technicianId: technicianId);
-    await cubit.loadAddresses();
+    await cubit.start();
     cubit
       ..selectIssue(RequestIssue.notCooling)
       ..editDescription('  الهوا مش ساقع  ');
@@ -500,6 +500,9 @@ void main() {
       when(() => requests.sendRequest(any())).thenAnswer(
         (_) async => const Ok(SentRequest(id: 'request-9', sentTo: 1)),
       );
+      when(
+        () => requests.fetchTechnician('tech-1'),
+      ).thenAnswer((_) async => Ok(testTechnicianProfile()));
       final cubit = await filled(technicianId: 'tech-1');
       cubit.editDescription('');
 
@@ -511,6 +514,24 @@ void main() {
       expect(draft.description, isNull);
       expect(draft.technicianId, 'tech-1');
       expect(draft.photoPaths, isEmpty);
+      await cubit.close();
+    });
+
+    test('asks no one first when the form could not name them', () async {
+      when(
+        () => requests.fetchTechnician('tech-1'),
+      ).thenAnswer((_) async => const Err(NetworkFailure()));
+      when(() => requests.sendRequest(any())).thenAnswer(
+        (_) async => const Ok(SentRequest(id: 'request-9', sentTo: 3)),
+      );
+      final cubit = await filled(technicianId: 'tech-1');
+
+      await cubit.send();
+
+      final draft =
+          verify(() => requests.sendRequest(captureAny())).captured.single
+              as RequestDraft;
+      expect(draft.technicianId, isNull);
       await cubit.close();
     });
 

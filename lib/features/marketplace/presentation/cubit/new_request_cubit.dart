@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/speech/speech_input.dart';
+import 'package:salahly/core/text/text_limit.dart';
 import 'package:salahly/features/catalog/domain/entities/service_category.dart';
 import 'package:salahly/features/marketplace/domain/entities/consumer_address.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_draft.dart';
@@ -72,8 +73,8 @@ class NewRequestCubit extends Cubit<NewRequestState> {
   Future<void> _loadTechnician(String id) async {
     final result = await _requests.fetchTechnician(id);
     if (isClosed) return;
-    // Without the profile the request still goes to them first; the form
-    // just can't name them.
+    // Without the profile the request goes out like any other: it only
+    // goes to a technician first once the form names them.
     if (result case Ok(value: final profile?)) {
       emit(state.copyWith(technician: profile.card));
     }
@@ -107,9 +108,7 @@ class NewRequestCubit extends Cubit<NewRequestState> {
         ].join(' ');
         emit(
           state.copyWith(
-            description: text.length > maxDescriptionLength
-                ? text.substring(0, maxDescriptionLength)
-                : text,
+            description: clipToCodePoints(text, maxDescriptionLength),
           ),
         );
       },
@@ -317,7 +316,7 @@ class NewRequestCubit extends Cubit<NewRequestState> {
         addressId: address.id,
         day: day,
         window: window,
-        technicianId: _technicianId,
+        technicianId: state.technician?.id,
       ),
     );
     if (isClosed) return;

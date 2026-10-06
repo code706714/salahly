@@ -55,6 +55,8 @@ GoRouter createRouter(SessionCubit session, {required Listenable refresh}) {
     refreshListenable: refresh,
     redirect: (context, state) =>
         sessionRedirect(session.state, state.uri.path),
+    // A link to a screen that doesn't exist lands where the session belongs.
+    onException: (context, state, router) => router.go(AppRoutes.splash),
     routes: [
       GoRoute(
         path: AppRoutes.splash,

@@ -31,6 +31,17 @@ void main() {
     expect(find.text(l10n.navMyRequests), findsOneWidget);
   });
 
+  testConsumerApp('a link to no screen lands on home', (tester, app) async {
+    await app.pump(tester);
+    await tester.tap(find.text(l10n.navMyRequests).last);
+    await app.settle(tester);
+
+    app.router(tester).go('/consumer/nowhere');
+    await app.settle(tester);
+
+    expect(find.byType(ConsumerHomePage), findsOneWidget);
+  });
+
   testConsumerApp('the tabs switch between the three main screens', (
     tester,
     app,

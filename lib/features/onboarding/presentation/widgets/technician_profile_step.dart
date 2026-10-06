@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/media/photo_picker.dart';
 import 'package:salahly/core/text/digit_input_formatters.dart';
 import 'package:salahly/core/text/person_name.dart';
+import 'package:salahly/core/text/text_limit.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
 import 'package:salahly/features/onboarding/presentation/cubit/technician_onboarding_cubit.dart';
@@ -61,8 +61,8 @@ class TechnicianProfileStep extends StatelessWidget {
         TextFormField(
           initialValue: state.fullName,
           onChanged: cubit.nameChanged,
-          inputFormatters: [
-            LengthLimitingTextInputFormatter(maxNameLength),
+          inputFormatters: const [
+            CodePointLimit(maxNameLength),
           ],
           autofillHints: const [AutofillHints.name],
           textInputAction: TextInputAction.next,
@@ -77,8 +77,8 @@ class TechnicianProfileStep extends StatelessWidget {
         TextFormField(
           initialValue: state.shopName,
           onChanged: cubit.shopNameChanged,
-          inputFormatters: [
-            LengthLimitingTextInputFormatter(maxNameLength),
+          inputFormatters: const [
+            CodePointLimit(maxNameLength),
           ],
           textInputAction: TextInputAction.next,
           style: const TextStyle(fontSize: 17),

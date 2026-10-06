@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/speech/speech_input.dart';
+import 'package:salahly/core/text/text_limit.dart';
 import 'package:salahly/core/time/calendar_date.dart';
 import 'package:salahly/features/customers/domain/entities/customer.dart';
 import 'package:salahly/features/customers/domain/repositories/customers_repository.dart';
@@ -105,9 +106,7 @@ class NewJobCubit extends Cubit<NewJobState> {
         ].join(' ');
         emit(
           state.copyWith(
-            description: text.length > Job.maxDescriptionLength
-                ? text.substring(0, Job.maxDescriptionLength)
-                : text,
+            description: clipToCodePoints(text, Job.maxDescriptionLength),
           ),
         );
       },
