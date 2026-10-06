@@ -13,12 +13,15 @@ import 'package:salahly/features/account/domain/entities/verification_status.dar
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
+import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/home/presentation/cubit/today_cubit.dart';
 import 'package:salahly/features/home/presentation/pages/today_page.dart';
 import 'package:salahly/features/jobs/domain/entities/job.dart';
 import 'package:salahly/features/jobs/domain/entities/job_summary.dart';
+import 'package:salahly/features/marketplace/presentation/cubit/incoming_requests_cubit.dart';
 
 import '../../../../helpers/fixtures.dart';
+import '../../../../helpers/incoming_fixtures.dart';
 import '../../../../helpers/job_fixtures.dart';
 import '../../../../helpers/mocks.dart';
 import '../../../../pump_app.dart';
@@ -44,6 +47,8 @@ void main() {
   late MockSyncCubit sync;
   late MockAreasCubit areas;
   late MockExternalApps apps;
+  late MockIncomingRequestsCubit incoming;
+  late MockCategoriesCubit categories;
   final morning = DateTime(2026, 10, 2, 11);
 
   setUpAll(() async {
@@ -59,6 +64,12 @@ void main() {
     sync = MockSyncCubit();
     areas = MockAreasCubit();
     apps = MockExternalApps();
+    incoming = MockIncomingRequestsCubit();
+    categories = MockCategoriesCubit();
+    when(() => incoming.state).thenReturn(const IncomingRequestsState());
+    when(() => categories.state).thenReturn(
+      const CategoriesState(categories: TestCategories.all),
+    );
     when(() => session.state).thenReturn(signedInTechnician());
     when(() => sync.state).thenReturn(const SyncState());
     when(
@@ -76,6 +87,8 @@ void main() {
       BlocProvider<TodayCubit>.value(value: today),
       BlocProvider<SyncCubit>.value(value: sync),
       BlocProvider<AreasCubit>.value(value: areas),
+      BlocProvider<CategoriesCubit>.value(value: categories),
+      BlocProvider<IncomingRequestsCubit>.value(value: incoming),
     ],
     stubRoutes: [
       AppRoutes.technicianAccount,
