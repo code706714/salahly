@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/theme/app_colors.dart';
+import 'package:salahly/core/theme/app_theme.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/request_cubit.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
@@ -35,7 +36,11 @@ class ComplaintButton extends StatelessWidget {
       style: TextButton.styleFrom(
         foregroundColor: colors.ink,
         padding: const EdgeInsets.all(10),
-        textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+        textStyle: const TextStyle(
+          fontFamily: AppTheme.fontFamily,
+          fontSize: 15,
+          fontWeight: FontWeight.w700,
+        ),
       ),
       child: Text(AppLocalizations.of(context).complaintTitle),
     );

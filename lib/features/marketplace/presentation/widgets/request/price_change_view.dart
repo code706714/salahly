@@ -6,6 +6,7 @@ import 'package:salahly/core/text/money.dart';
 import 'package:salahly/core/text/person_name.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
+import 'package:salahly/core/theme/app_theme.dart';
 import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/busy_filled_button.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
@@ -278,7 +279,11 @@ class _Answer extends StatelessWidget {
     final rounded = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(AppRadii.md),
     );
-    const label = TextStyle(fontSize: 15, fontWeight: FontWeight.w700);
+    const label = TextStyle(
+      fontFamily: AppTheme.fontFamily,
+      fontSize: 15,
+      fontWeight: FontWeight.w700,
+    );
     return BottomActionBar(
       child: Column(
         mainAxisSize: MainAxisSize.min,

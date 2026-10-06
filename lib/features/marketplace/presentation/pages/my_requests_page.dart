@@ -6,6 +6,8 @@ import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/text/money.dart';
 import 'package:salahly/core/text/person_name.dart';
 import 'package:salahly/core/theme/app_colors.dart';
+import 'package:salahly/core/theme/app_theme.dart';
+import 'package:salahly/core/time/calendar_date.dart';
 import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/status_pill.dart';
@@ -190,7 +192,9 @@ class _RequestCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Flexible(
+                // The pill keeps its full width unless the name needs room.
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 190),
                   child: StatusPill(label: pill, tone: tone),
                 ),
               ],
@@ -220,6 +224,7 @@ class _RequestCard extends StatelessWidget {
                   minimumSize: const Size(0, 48),
                   alignment: AlignmentDirectional.centerStart,
                   textStyle: const TextStyle(
+                    fontFamily: AppTheme.fontFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                   ),
@@ -250,7 +255,7 @@ class _RequestCard extends StatelessWidget {
       RequestStage.confirmed => (
         l10n.myRequestsComing(
           name,
-          dayLabel(l10n, request.scheduledAt ?? request.day, today: now),
+          _comingDay(l10n, request.scheduledAt ?? request.day),
         ),
         PillTone.attention,
       ),
@@ -274,6 +279,15 @@ class _RequestCard extends StatelessWidget {
       RequestStage.expired => (l10n.myRequestsExpired, PillTone.neutral),
     };
   }
+
+  /// "النهارده", "بكره", else the weekday within the week, else the date.
+  String _comingDay(AppLocalizations l10n, DateTime day) =>
+      switch (CalendarDate.daysBetween(now, day)) {
+        0 => l10n.today,
+        1 => l10n.tomorrow,
+        > 1 && < 7 => weekdayName(day),
+        _ => DateFormat('d MMMM', 'ar').format(day),
+      };
 
   /// A job the technician called off has no request-level canceller.
   bool get _cancelledByTechnician =>

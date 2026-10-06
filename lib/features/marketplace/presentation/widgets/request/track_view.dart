@@ -7,6 +7,7 @@ import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/text/money.dart';
 import 'package:salahly/core/text/person_name.dart';
 import 'package:salahly/core/theme/app_colors.dart';
+import 'package:salahly/core/theme/app_theme.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
 import 'package:salahly/core/widgets/initials_avatar.dart';
@@ -121,11 +122,12 @@ class _TechnicianCard extends StatelessWidget {
       child: Row(
         children: [
           DecoratedBox(
+            position: DecorationPosition.foreground,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(color: colors.brass, width: 2),
             ),
-            child: InitialsAvatar(name: technician.name),
+            child: InitialsAvatar(name: technician.name, size: 52),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -545,6 +547,7 @@ class _Footer extends StatelessWidget {
                     foregroundColor: colors.danger,
                     padding: const EdgeInsets.all(10),
                     textStyle: const TextStyle(
+                      fontFamily: AppTheme.fontFamily,
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                     ),
