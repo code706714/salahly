@@ -26,6 +26,8 @@ class ChoiceChipButton extends StatelessWidget {
   final double minHeight;
   final EdgeInsetsGeometry padding;
 
+  static const _borderWidth = 1.5;
+
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
@@ -42,7 +44,7 @@ class ChoiceChipButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppRadii.sm),
             side: BorderSide(
               color: selected ? colors.primary : colors.fieldBorder,
-              width: 1.5,
+              width: _borderWidth,
             ),
           ),
           child: InkWell(
@@ -51,7 +53,8 @@ class ChoiceChipButton extends StatelessWidget {
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: minHeight),
               child: Padding(
-                padding: padding,
+                // The border takes room from the chip.
+                padding: padding.add(const EdgeInsets.all(_borderWidth)),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,

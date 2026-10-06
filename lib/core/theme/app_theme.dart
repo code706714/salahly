@@ -98,14 +98,14 @@ abstract final class AppTheme {
       titleLarge: TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.w700,
-        height: 1.4,
+        height: 1.5,
         color: colors.ink,
       ),
       // Card titles and app bar titles.
       titleMedium: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w700,
-        height: 1.4,
+        height: 1.5,
         color: colors.ink,
       ),
       // Field labels.
@@ -114,10 +114,10 @@ abstract final class AppTheme {
         fontWeight: FontWeight.w600,
         color: colors.ink,
       ),
-      bodyLarge: TextStyle(fontSize: 16, height: 1.6, color: colors.ink),
-      bodyMedium: TextStyle(fontSize: 15, height: 1.6, color: colors.ink),
+      bodyLarge: TextStyle(fontSize: 16, height: 1.5, color: colors.ink),
+      bodyMedium: TextStyle(fontSize: 15, height: 1.5, color: colors.ink),
       // Hints and secondary lines.
-      bodySmall: TextStyle(fontSize: 13, height: 1.6, color: colors.inkMuted),
+      bodySmall: TextStyle(fontSize: 13, height: 1.5, color: colors.inkMuted),
     );
   }
 

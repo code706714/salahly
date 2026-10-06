@@ -44,7 +44,11 @@ class AppCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        child: Padding(padding: padding, child: child),
+        // The border takes room from the card, as a CSS border does.
+        child: Padding(
+          padding: padding.add(EdgeInsets.all(borderWidth)),
+          child: child,
+        ),
       ),
     );
   }

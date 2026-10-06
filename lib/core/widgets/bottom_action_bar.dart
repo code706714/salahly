@@ -10,7 +10,8 @@ class BottomActionBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    return DecoratedBox(
+    // A container, so the border adds to the height as in the design.
+    return Container(
       decoration: BoxDecoration(
         color: colors.background,
         border: Border(top: BorderSide(color: colors.border)),
