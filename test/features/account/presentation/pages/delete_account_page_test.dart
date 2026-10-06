@@ -236,7 +236,7 @@ void main() {
 
       expect(find.text('متأكد إنك عايز تمسح حسابك؟'), findsOneWidget);
       expect(find.text('بياناتك وصورك وعملاءك وشغلاناتك'), findsOneWidget);
-      expect(find.text('رصيدك اللي فاضل (شغلانة واحدة)'), findsOneWidget);
+      expect(find.text('رصيدك اللي فاضل (1 شغلانة مجانية)'), findsOneWidget);
       expect(find.text('صفحتك وتقييماتك، والعملاء مش هيلاقوك'), findsOneWidget);
       expect(find.textContaining('الفواتير وعروض الأسعار'), findsOneWidget);
       expect(tester.takeException(), isNull);
