@@ -392,6 +392,18 @@ void main() {
       verifyNever(() => cubit.delete());
     });
 
+    testWidgets('offers no delete for a customer booked through the app', (
+      tester,
+    ) async {
+      show(editing.copyWith(canDelete: false));
+      await pumpPage(tester);
+
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, -2000));
+      await tester.pumpAndSettle();
+
+      expect(find.text(l10n.customerDelete), findsNothing);
+    });
+
     testWidgets('goes to the customers tab once deleted', (tester) async {
       whenListen(
         cubit,

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:salahly/core/database/app_database.dart';
@@ -280,5 +281,53 @@ void main() {
       (await db.select(db.outbox).get()).map((entry) => entry.entity).toSet(),
       {SyncEntity.customers, SyncEntity.customerUnits, SyncEntity.jobs},
     );
+  });
+
+  group('a customer booked through the app', () {
+    Future<Customer> bookKarim() async {
+      final karim = await addKarim();
+      ok(await jobs.createJob(JobDraft(customerId: karim.id)));
+      await db
+          .update(db.jobs)
+          .write(const JobsCompanion(source: Value('platform')));
+      return karim;
+    }
+
+    test('says so', () async {
+      final karim = await bookKarim();
+
+      final record = await repository.watchCustomer(karim.id).first;
+
+      expect(record?.bookedInApp, isTrue);
+    });
+
+    test('cannot be deleted', () async {
+      final karim = await bookKarim();
+      await db.delete(db.outbox).go();
+
+      final result = await repository.deleteCustomer(karim.id);
+
+      expect(result, isA<Err<void>>());
+      expect(await repository.watchCustomer(karim.id).first, isNotNull);
+      expect(await db.select(db.outbox).get(), isEmpty);
+    });
+
+    test('can be deleted once that job is gone', () async {
+      final karim = await bookKarim();
+      await db.update(db.jobs).write(JobsCompanion(deletedAt: Value(now)));
+
+      ok(await repository.deleteCustomer(karim.id));
+
+      expect(await repository.watchCustomer(karim.id).first, isNull);
+    });
+  });
+
+  test('a customer added by hand is not booked through the app', () async {
+    final karim = await addKarim();
+    ok(await jobs.createJob(JobDraft(customerId: karim.id)));
+
+    final record = await repository.watchCustomer(karim.id).first;
+
+    expect(record?.bookedInApp, isFalse);
   });
 }

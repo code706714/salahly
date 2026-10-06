@@ -196,7 +196,7 @@ class _Form extends StatelessWidget {
                 style: const TextStyle(fontSize: 17),
                 decoration: InputDecoration(hintText: l10n.customerNotesHint),
               ),
-              if (state.isEditing) ...[
+              if (state.isEditing && state.canDelete) ...[
                 const SizedBox(height: 24),
                 Center(
                   child: TextButton.icon(

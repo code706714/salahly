@@ -28,6 +28,7 @@ final class CustomerFormState extends Equatable {
     this.address = '',
     this.notes = '',
     this.source = CustomerSource.manual,
+    this.canDelete = true,
     this.showErrors = false,
     this.duplicate,
     this.failure,
@@ -45,6 +46,9 @@ final class CustomerFormState extends Equatable {
   final String address;
   final String notes;
   final CustomerSource source;
+
+  /// False for a customer booked through the app, who stays.
+  final bool canDelete;
 
   /// Whether to point out what is missing, after a save was tried.
   final bool showErrors;
@@ -87,6 +91,7 @@ final class CustomerFormState extends Equatable {
     String? address,
     String? notes,
     CustomerSource? source,
+    bool? canDelete,
     bool? showErrors,
     Customer? Function()? duplicate,
     Failure? Function()? failure,
@@ -101,6 +106,7 @@ final class CustomerFormState extends Equatable {
       address: address ?? this.address,
       notes: notes ?? this.notes,
       source: source ?? this.source,
+      canDelete: canDelete ?? this.canDelete,
       showErrors: showErrors ?? this.showErrors,
       duplicate: duplicate == null ? this.duplicate : duplicate(),
       failure: failure == null ? this.failure : failure(),
@@ -118,6 +124,7 @@ final class CustomerFormState extends Equatable {
     address,
     notes,
     source,
+    canDelete,
     showErrors,
     duplicate,
     failure,

@@ -47,9 +47,10 @@ class CustomerFormCubit extends Cubit<CustomerFormState> {
   }
 
   Future<void> _loadCustomer(String id) async {
-    final customer = (await _customers.watchCustomer(id).first)?.customer;
+    final record = await _customers.watchCustomer(id).first;
     if (isClosed) return;
-    if (customer == null) {
+    final customer = record?.customer;
+    if (record == null || customer == null) {
       emit(state.copyWith(status: CustomerFormStatus.cancelled));
       return;
     }
@@ -62,6 +63,7 @@ class CustomerFormCubit extends Cubit<CustomerFormState> {
         address: customer.address ?? '',
         notes: customer.notes ?? '',
         source: customer.source,
+        canDelete: !record.bookedInApp,
       ),
     );
   }
@@ -177,7 +179,11 @@ class CustomerFormCubit extends Cubit<CustomerFormState> {
   /// Deletes the customer being edited, with their units and jobs.
   Future<void> delete() async {
     final id = _customerId;
-    if (id == null || state.status != CustomerFormStatus.editing) return;
+    if (id == null ||
+        !state.canDelete ||
+        state.status != CustomerFormStatus.editing) {
+      return;
+    }
     emit(
       state.copyWith(status: CustomerFormStatus.deleting, failure: () => null),
     );
