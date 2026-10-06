@@ -18,6 +18,9 @@ enum PillTone {
 
   /// A label rather than a state, e.g. from the platform.
   dark,
+
+  /// Over without a result: cancelled or expired.
+  neutral,
 }
 
 /// A small rounded label for a status, e.g. "اتأكد" or "متأخر 12 يوم".
@@ -42,6 +45,7 @@ class StatusPill extends StatelessWidget {
       PillTone.attention => (colors.primarySoft, colors.primaryPressed),
       PillTone.danger => (colors.dangerSoft, colors.dangerDeep),
       PillTone.dark => (colors.ink, colors.surface),
+      PillTone.neutral => (colors.divider, colors.inkMuted),
     };
     return DecoratedBox(
       decoration: BoxDecoration(
