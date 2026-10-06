@@ -1427,5 +1427,542 @@
   "requestRangeNoon": "من 12 لـ 3 الضهر",
   "requestRangeAfternoon": "من 3 لـ 6 العصر",
   "requestRangeEvening": "من 6 لـ 9 بالليل",
-  "requestRangeAnyTime": "من 9 الصبح لـ 9 بالليل"
+  "requestRangeAnyTime": "من 9 الصبح لـ 9 بالليل",
+  "consumerHomeQuestion": "{honorific, select, ms{محتاجة تصلّحي إيه؟} other{محتاج تصلّح إيه؟}}",
+  "@consumerHomeQuestion": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeCreditsLead": "{honorific, select, ms{فاضل ليكي} other{فاضل ليك}}",
+  "@consumerHomeCreditsLead": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeCreditsCount": "{count, plural, =1{طلب واحد ببلاش} =2{طلبين ببلاش} few{{count} طلبات ببلاش} other{{count} طلب ببلاش}}",
+  "@consumerHomeCreditsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "consumerHomeRequestLabel": "طلبك: {title}",
+  "@consumerHomeRequestLabel": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeWaiting": "مستنيين أول عرض",
+  "consumerHomeOffers": "{count, plural, =1{وصلك عرض، {honorific, select, ms{شوفيه} other{شوفه}}} =2{وصلك عرضين، {honorific, select, ms{اختاري واحد} other{اختار واحد}}} few{وصلك {count} عروض، {honorific, select, ms{اختاري واحد} other{اختار واحد}}} other{وصلك {count} عرض، {honorific, select, ms{اختاري واحد} other{اختار واحد}}}}",
+  "@consumerHomeOffers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeChosen": "{honorific, select, ms{اخترتي {name}، مستنيين يأكّد المعاد} other{اخترت {name}، مستنيين يأكّد المعاد}}",
+  "@consumerHomeChosen": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeComing": "{name} جاي {day} الساعة {time}",
+  "@consumerHomeComing": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeConfirmed": "{name} أكّد المعاد",
+  "@consumerHomeConfirmed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeStarted": "{name} شغال دلوقتي",
+  "@consumerHomeStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeTechnicianFallback": "الفني",
+  "consumerHomeSeeOffers": "{honorific, select, ms{شوفي العروض} other{شوف العروض}}",
+  "@consumerHomeSeeOffers": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeFollow": "{honorific, select, ms{تابعي طلبك} other{تابع طلبك}}",
+  "@consumerHomeFollow": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeTechnicians": "{count, plural, =0{لسه مفيش فنيين في منطقتك} =1{فني واحد في منطقتك} =2{فنيين اتنين في منطقتك} few{{count} فنيين في منطقتك} other{{count} فني في منطقتك}}",
+  "@consumerHomeTechnicians": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "consumerHomeSoon": "قريب",
+  "consumerHomeWhyTitle": "{honorific, select, ms{ليه تطلبي من هنا؟} other{ليه تطلب من هنا؟}}",
+  "@consumerHomeWhyTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeWhyVerified": "كل فني متوثّق بالبطاقة ورقم الموبايل",
+  "consumerHomeWhyReviews": "التقييمات من ناس خلصت شغلانة فعلاً",
+  "consumerHomeWhyPrice": "{honorific, select, ms{بتشوفي السعر قبل ما تختاري} other{بتشوف السعر قبل ما تختار}}",
+  "@consumerHomeWhyPrice": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestTitle": "{honorific, select, ms{اطلبي فني {category}} other{اطلب فني {category}}}",
+  "@newRequestTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestTitleAny": "{honorific, select, ms{اطلبي فني} other{اطلب فني}}",
+  "@newRequestTitleAny": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestStep": "خطوة {step} من 3",
+  "@newRequestStep": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      }
+    }
+  },
+  "newRequestDone": "خلصنا",
+  "newRequestFirstTechnician": "طلبك هيروح لـ{name} الأول",
+  "@newRequestFirstTechnician": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestFirstTechnicianNote": "لو مابعتش عرض في ساعتين، هيروح لفنيين تانيين قريبين منك.",
+  "newRequestIssueTitle": "إيه المشكلة؟",
+  "newRequestIssueRequired": "{honorific, select, ms{اختاري المشكلة} other{اختار المشكلة}}",
+  "@newRequestIssueRequired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestDescription": "احكي باختصار",
+  "newRequestDescriptionHint": "مثلاً: التكييف شغال بس الهوا مش ساقع، شارب 1.5 حصان",
+  "newRequestDescriptionRequired": "{honorific, select, ms{اكتبي المشكلة باختصار عشان الفنيين يفهموها} other{اكتب المشكلة باختصار عشان الفنيين يفهموها}}",
+  "@newRequestDescriptionRequired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestDictate": "{honorific, select, ms{دوسي واتكلمي بدل الكتابة} other{دوس واتكلم بدل الكتابة}}",
+  "@newRequestDictate": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestListening": "{honorific, select, ms{بنسمعك… دوسي لما تخلصي} other{بنسمعك… دوس لما تخلص}}",
+  "@newRequestListening": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestSpeechUnavailable": "{honorific, select, ms{الكتابة بالصوت مش متاحة على الموبايل ده. اكتبي المشكلة بإيدك.} other{الكتابة بالصوت مش متاحة على الموبايل ده. اكتب المشكلة بإيدك.}}",
+  "@newRequestSpeechUnavailable": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestPhotos": "صور (اختياري)",
+  "newRequestPhoto": "صورة",
+  "newRequestAddPhoto": "{honorific, select, ms{ضيفي صورة} other{ضيف صورة}}",
+  "@newRequestAddPhoto": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestRemovePhoto": "{honorific, select, ms{شيلي الصورة} other{شيل الصورة}}",
+  "@newRequestRemovePhoto": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestPhotoTake": "{honorific, select, ms{صوّري دلوقتي} other{صوّر دلوقتي}}",
+  "@newRequestPhotoTake": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestPhotoChoose": "{honorific, select, ms{اختاري من الصور} other{اختار من الصور}}",
+  "@newRequestPhotoChoose": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestCameraDenied": "{honorific, select, ms{اسمحي للأبلكيشن يفتح الكاميرا من إعدادات الموبايل، أو اختاري صورة من الصور.} other{اسمح للأبلكيشن يفتح الكاميرا من إعدادات الموبايل، أو اختار صورة من الصور.}}",
+  "@newRequestCameraDenied": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestAddressTitle": "الفني ييجي فين؟",
+  "newRequestAddressRequired": "{honorific, select, ms{اختاري العنوان اللي الفني ييجي فيه} other{اختار العنوان اللي الفني ييجي فيه}}",
+  "@newRequestAddressRequired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestTimeTitle": "إمتى يناسبك؟",
+  "newRequestTomorrow": "بكره {weekday}",
+  "@newRequestTomorrow": {
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestTimeRequired": "{honorific, select, ms{اختاري اليوم والوقت} other{اختار اليوم والوقت}}",
+  "@newRequestTimeRequired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestSummary": "ملخص الطلب",
+  "newRequestSummaryPhotos": "{count, plural, =1{صورة واحدة} =2{صورتين} few{{count} صور} other{{count} صورة}}",
+  "@newRequestSummaryPhotos": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "newRequestSummaryFirst": "هيروح لـ{name} الأول",
+  "@newRequestSummaryFirst": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestNext": "التالي",
+  "newRequestSend": "{honorific, select, ms{ابعتي الطلب} other{ابعت الطلب}}",
+  "@newRequestSend": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestUploading": "بنرفع صورة {current} من {total}…",
+  "@newRequestUploading": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "newRequestSending": "بنبعت طلبك…",
+  "newRequestInvalidTime": "{honorific, select, ms{المعاد ده قرّب يخلص. اختاري معاد تاني.} other{المعاد ده قرّب يخلص. اختار معاد تاني.}}",
+  "@newRequestInvalidTime": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestUploadLimit": "{honorific, select, ms{رفعتي صور كتير النهارده. شيلي الصور وابعتي الطلب من غيرها، أو جرّبي بكره.} other{رفعت صور كتير النهارده. شيل الصور وابعت الطلب من غيرها، أو جرّب بكره.}}",
+  "@newRequestUploadLimit": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestPhotoRejected": "{honorific, select, ms{في صورة مش مقبولة. شيليها وجرّبي تاني.} other{في صورة مش مقبولة. شيلها وجرّب تاني.}}",
+  "@newRequestPhotoRejected": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestSentTitle": "طلبك اتبعت",
+  "newRequestSentTo": "{count, plural, =1{راح لفني {category} موثّق قريب منك.} =2{راح لفنيين {category} اتنين موثّقين قريبين منك.} few{راح لـ {count} فنيين {category} موثّقين قريبين منك.} other{راح لـ {count} فني {category} موثّق قريبين منك.}}",
+  "@newRequestSentTo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestSentOffers": "{honorific, select, ms{هتشوفي العروض أول ما توصل، ولحد 3 عروض.} other{هتشوف العروض أول ما توصل، ولحد 3 عروض.}}",
+  "@newRequestSentOffers": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestSentToNobody": "{honorific, select, ms{مفيش فني {category} متاح قريب منك دلوقتي، بس طلبك لسه مستني. لو مجالكيش عرض في ساعتين هنبعته لفنيين أبعد شوية.} other{مفيش فني {category} متاح قريب منك دلوقتي، بس طلبك لسه مستني. لو مجالكش عرض في ساعتين هنبعته لفنيين أبعد شوية.}}",
+  "@newRequestSentToNobody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestBackHome": "رجوع للرئيسية",
+  "consumerAccountCreditsTitle": "رصيد الطلبات",
+  "consumerAccountCredits": "{count, plural, =0{مفيش طلبات} =1{طلب واحد} =2{طلبين} few{{count} طلبات} other{{count} طلب}}",
+  "@consumerAccountCredits": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "consumerAccountMyData": "بياناتي",
+  "consumerAccountRequestProblem": "عندي مشكلة في طلب",
+  "consumerAccountSignOut": "{honorific, select, ms{سجّلي خروج} other{سجّل خروج}}",
+  "@consumerAccountSignOut": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerAccountSignOutTitle": "{honorific, select, ms{تسجّلي خروج؟} other{تسجّل خروج؟}}",
+  "@consumerAccountSignOutTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerAccountSignOutBody": "{honorific, select, ms{عشان تدخلي تاني هتحتاجي رقم موبايلك وكود جديد.} other{عشان تدخل تاني هتحتاج رقم موبايلك وكود جديد.}}",
+  "@consumerAccountSignOutBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesTitle": "عناويني",
+  "addressesNew": "عنوان جديد",
+  "addressesEdit": "{honorific, select, ms{عدّلي العنوان} other{عدّل العنوان}}",
+  "@addressesEdit": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesEmpty": "مفيش عناوين متسجلة لسه",
+  "addressesEmptyNote": "{honorific, select, ms{ضيفي البيت أو الشغل، وتختاريه لما تطلبي فني.} other{ضيف البيت أو الشغل، وتختاره لما تطلب فني.}}",
+  "@addressesEmptyNote": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesLoadFailed": "مقدرناش نجيب عناوينك.",
+  "addressesPrivacy": "{honorific, select, ms{الفنيين هيشوفوا المنطقة بس. العنوان بالظبط ورقمك بيظهروا للفني اللي تختاريه.} other{الفنيين هيشوفوا المنطقة بس. العنوان بالظبط ورقمك بيظهروا للفني اللي تختاره.}}",
+  "@addressesPrivacy": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesLabel": "اسم العنوان",
+  "addressesLabelHint": "مثلاً: البيت، بيت ماما، الشغل",
+  "addressesLabelRequired": "{honorific, select, ms{اكتبي اسم للعنوان} other{اكتب اسم للعنوان}}",
+  "@addressesLabelRequired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesArea": "المنطقة",
+  "addressesAreaPick": "{honorific, select, ms{اختاري المنطقة} other{اختار المنطقة}}",
+  "@addressesAreaPick": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesAreaRequired": "{honorific, select, ms{لازم تختاري المنطقة} other{لازم تختار المنطقة}}",
+  "@addressesAreaRequired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesDetails": "العنوان بالتفصيل",
+  "addressesDetailsHint": "الشارع، رقم العمارة، الدور والشقة",
+  "addressesDetailsRequired": "{honorific, select, ms{اكتبي الشارع ورقم العمارة} other{اكتب الشارع ورقم العمارة}}",
+  "@addressesDetailsRequired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesSave": "{honorific, select, ms{احفظي العنوان} other{احفظ العنوان}}",
+  "@addressesSave": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesDelete": "{honorific, select, ms{امسحي العنوان} other{امسح العنوان}}",
+  "@addressesDelete": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesDeleteTitle": "{honorific, select, ms{تمسحي «{label}»؟} other{تمسح «{label}»؟}}",
+  "@addressesDeleteTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesDeleteBody": "الطلبات اللي اتبعتت عليه مش هتتأثر.",
+  "addressesDeleteConfirm": "{honorific, select, ms{امسحي} other{امسح}}",
+  "@addressesDeleteConfirm": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesKeep": "خلّيه",
+  "pastTechniciansTitle": "الفنيين اللي اتعاملت معاهم",
+  "pastTechniciansEmpty": "{honorific, select, ms{لسه مااخترتيش فني} other{لسه مااخترتش فني}}",
+  "@pastTechniciansEmpty": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "pastTechniciansEmptyNote": "{honorific, select, ms{أول ما تختاري عرض فني، هيظهر هنا عشان تطلبيه تاني.} other{أول ما تختار عرض فني، هيظهر هنا عشان تطلبه تاني.}}",
+  "@pastTechniciansEmptyNote": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "pastTechniciansLoadFailed": "مقدرناش نجيب طلباتك.",
+  "pastTechniciansLastRequest": "{title} · {date}",
+  "@pastTechniciansLastRequest": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

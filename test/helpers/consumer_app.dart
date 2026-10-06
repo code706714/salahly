@@ -25,7 +25,8 @@ import 'technician_app.dart';
 
 /// The whole app signed in as a consumer, with the real screens and
 /// cubits and fakes at the edges. The marketplace ([requests]) has no
-/// requests or addresses unless a test stubs some.
+/// requests or addresses unless a test stubs some, and 24 technicians in
+/// every area.
 class ConsumerApp {
   ConsumerApp({Honorific honorific = Honorific.ms, int requestCredits = 2})
     : profile = UserProfile(
@@ -55,6 +56,12 @@ class ConsumerApp {
     ).thenAnswer((_) async => const Ok(TestCategories.all));
     when(requests.fetchRequests).thenAnswer((_) async => const Ok([]));
     when(requests.fetchAddresses).thenAnswer((_) async => const Ok([]));
+    when(
+      () => requests.availableTechnicianCount(
+        categoryId: any(named: 'categoryId'),
+        areaId: any(named: 'areaId'),
+      ),
+    ).thenAnswer((_) async => const Ok(24));
     when(
       () => apps.whatsApp(
         text: any(named: 'text'),
