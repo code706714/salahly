@@ -76,9 +76,15 @@ class NewRequestView extends StatefulWidget {
 }
 
 class _NewRequestViewState extends State<NewRequestView> {
-  late final _description = TextEditingController(
-    text: context.read<NewRequestCubit>().state.description,
-  );
+  late final TextEditingController _description;
+
+  @override
+  void initState() {
+    super.initState();
+    _description = TextEditingController(
+      text: context.read<NewRequestCubit>().state.description,
+    );
+  }
 
   @override
   void dispose() {

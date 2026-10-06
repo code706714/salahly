@@ -57,6 +57,9 @@ void registerConsumerScreenFallbacks() {
   );
   registerFallbackValue(PhotoSource.camera);
   registerFallbackValue(PhotoPurpose.request);
+  registerFallbackValue(RequestWindow.morning);
+  registerFallbackValue(RequestIssue.other);
+  registerFallbackValue(DateTime(2026));
 }
 
 /// A signed-in consumer, a woman unless [honorific] says otherwise.
@@ -81,7 +84,7 @@ SessionReady testConsumerSession({
 );
 
 /// The cubits ConsumerScope provides above every consumer screen, as
-/// mocks: a signed-in woman, the test catalog and areas, and [requests].
+/// mocks: a signed-in woman, the test catalog and areas, and `requests`.
 class ConsumerScreenBlocs {
   ConsumerScreenBlocs({
     SessionState? session,
