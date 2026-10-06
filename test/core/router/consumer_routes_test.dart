@@ -4,7 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/router/app_routes.dart';
+import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/pages/consumer_account_page.dart';
+import 'package:salahly/features/balance/presentation/pages/balance_page.dart';
+import 'package:salahly/features/balance/presentation/pages/buy_uses_page.dart';
 import 'package:salahly/features/home/presentation/pages/consumer_home_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/addresses_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/complaint_page.dart';
@@ -78,6 +81,8 @@ void main() {
       (AppRoutes.technicianProfile('tech-1'), TechnicianProfilePage),
       (AppRoutes.consumerAddresses, AddressesPage),
       (AppRoutes.pastTechnicians, PastTechniciansPage),
+      (AppRoutes.consumerBalance, BalancePage),
+      (AppRoutes.consumerBuyUses, BuyUsesPage),
     ]) {
       testConsumerApp('$location opens $page without the tabs', (
         tester,
@@ -156,4 +161,38 @@ void main() {
 
     expect(find.byType(ConsumerHomePage), findsOneWidget);
   });
+
+  testConsumerApp('opens the balance and buying for a consumer', (
+    tester,
+    app,
+  ) async {
+    await app.pump(tester);
+
+    unawaited(app.router(tester).push(AppRoutes.balanceFor(UserRole.consumer)));
+    await app.settle(tester);
+    expect(
+      tester.widget<BalancePage>(find.byType(BalancePage)).role,
+      UserRole.consumer,
+    );
+
+    unawaited(app.router(tester).push(AppRoutes.buyUsesFor(UserRole.consumer)));
+    await app.settle(tester);
+    expect(
+      tester.widget<BuyUsesPage>(find.byType(BuyUsesPage)).role,
+      UserRole.consumer,
+    );
+  });
+
+  for (final location in [
+    AppRoutes.technicianBalance,
+    AppRoutes.technicianBuyUses,
+  ]) {
+    testConsumerApp('a consumer cannot open $location', (tester, app) async {
+      await app.pump(tester, location: location);
+
+      expect(find.byType(ConsumerHomePage), findsOneWidget);
+      expect(find.byType(BalancePage), findsNothing);
+      expect(find.byType(BuyUsesPage), findsNothing);
+    });
+  }
 }

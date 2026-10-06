@@ -3130,5 +3130,315 @@
   "offersExpired": "الميعاد ده فات",
   "@offersExpired": {},
   "technicianOffersWaiting": "عروضك المستنية وصلت لرصيدك. استنى لما العميل يرد على واحد منها وبعدها ابعت عرض تاني.",
-  "@technicianOffersWaiting": {}
+  "@technicianOffersWaiting": {},
+  "balanceTitle": "رصيدي",
+  "balanceUsesTechnician": "رصيد الشغلانات",
+  "balanceTechnicianCredits": "{count, plural, =0{مفيش شغلانات} =1{شغلانة واحدة} =2{شغلانتين} few{{count} شغلانات} other{{count} شغلانة}}",
+  "@balanceTechnicianCredits": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceBuy": "{honorific, select, ms{اشحني} other{اشحن}}",
+  "@balanceBuy": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceTransfers": "التحويلات",
+  "balanceTransfersEmpty": "{honorific, select, ms{لسه مبعتيش أي تحويل.} other{لسه مبعتش أي تحويل.}}",
+  "@balanceTransfersEmpty": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceLedger": "حركة الرصيد",
+  "balanceLedgerEmpty": "لسه مفيش حركة على رصيدك.",
+  "balanceStatusPending": "مستني المراجعة",
+  "balanceStatusApproved": "اتضاف",
+  "balanceStatusRejected": "اترفض",
+  "balanceRejectReason": "السبب: {reason}",
+  "@balanceRejectReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceLedgerRequestSent": "طلب اتبعت",
+  "balanceLedgerOfferPicked": "عميل اختار عرضك",
+  "balanceLedgerRefunded": "اترجّع استخدام",
+  "balanceLedgerTopup": "شحن رصيد",
+  "balanceLedgerAdjustment": "تعديل من صلحلي",
+  "balanceLoadFailed": "{honorific, select, ms{مقدرناش نفتح الرصيد. اتأكدي من النت وجرّبي تاني.} other{مقدرناش نفتح الرصيد. اتأكد من النت وجرّب تاني.}}",
+  "@balanceLoadFailed": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesTitleConsumer": "{honorific, select, ms{اشحني رصيد طلبات} other{اشحن رصيد طلبات}}",
+  "@buyUsesTitleConsumer": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesTitleTechnician": "اشحن رصيدك",
+  "buyUsesTopUp": "{honorific, select, ms{اشحني رصيد} other{اشحن رصيد}}",
+  "@buyUsesTopUp": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesConsumerIntroNone": "{honorific, select, ms{استخدمتي طلباتك المجانية} other{استخدمت طلباتك المجانية}}",
+  "@buyUsesConsumerIntroNone": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesConsumerIntroBody": "{honorific, select, ms{عشان تطلبي فني تاني اشحني رصيد طلبات. ده للمنصة بس، وحساب الفني بتدفعيهوله هو بعد الشغل زي ما هو.} other{عشان تطلب فني تاني اشحن رصيد طلبات. ده للمنصة بس، وحساب الفني بتدفعهوله هو بعد الشغل زي ما هو.}}",
+  "@buyUsesConsumerIntroBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesTechnicianIntroNone": "خلصت أول شغلانتين ببلاش",
+  "buyUsesTechnicianIntroBody": "جالك من المنصة شغلانتين بـ 1,000 ج.م. من دلوقتي كل شغلانة من المنصة بتتخصم من رصيدك لما العميل يختار عرضك. رصيدك دلوقتي: {count, plural, =0{0 شغلانة} =1{شغلانة واحدة} =2{شغلانتين} few{{count} شغلانات} other{{count} شغلانة}}.",
+  "@buyUsesTechnicianIntroBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "buyUsesStepPack": "{honorific, select, ms{اختاري الباقة} other{اختار الباقة}}",
+  "@buyUsesStepPack": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesStepTransfer": "{honorific, select, ms{حوّلي {amount} ج.م على} other{حوّل {amount} ج.م على}}",
+  "@buyUsesStepTransfer": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesStepSender": "{honorific, select, ms{رقم الموبايل أو الحساب اللي حوّلتي منه} other{رقم الموبايل أو الحساب اللي حوّلت منه}}",
+  "@buyUsesStepSender": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesStepScreenshot": "{honorific, select, ms{ارفعي صورة التحويل} other{ارفع صورة التحويل}}",
+  "@buyUsesStepScreenshot": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesPackConsumer": "{count, plural, =1{طلب واحد} =2{طلبين} few{{count} طلبات} other{{count} طلب}}",
+  "@buyUsesPackConsumer": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "buyUsesPackTechnician": "{count, plural, =1{شغلانة واحدة} =2{شغلانتين} few{{count} شغلانات} other{{count} شغلانة}}",
+  "@buyUsesPackTechnician": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "buyUsesNoteSingleConsumer": "للطلب ده بس",
+  "buyUsesNoteSingleTechnician": "تجرّب من غير ما تدفع كتير",
+  "buyUsesNotePerUseConsumer": "{price} ج.م للطلب",
+  "@buyUsesNotePerUseConsumer": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesNotePerUseTechnician": "{price} ج.م للشغلانة",
+  "@buyUsesNotePerUseTechnician": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesNoteSavingConsumer": "{price} ج.م للطلب · {honorific, select, ms{توفّري} other{توفّر}} {saved} ج.م",
+  "@buyUsesNoteSavingConsumer": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      },
+      "saved": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesNoteSavingTechnician": "{price} ج.م للشغلانة · توفّر {saved} ج.م",
+  "@buyUsesNoteSavingTechnician": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      },
+      "saved": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesMethodInstapay": "إنستاباي",
+  "buyUsesMethodWallet": "فودافون كاش",
+  "buyUsesAccountInstapay": "عنوان إنستاباي",
+  "buyUsesAccountWallet": "رقم فودافون كاش",
+  "buyUsesHolder": "باسم: {name}",
+  "@buyUsesHolder": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesCopy": "{honorific, select, ms{انسخي} other{انسخ}}",
+  "@buyUsesCopy": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesCopied": "اتنسخ",
+  "buyUsesSenderInvalidWallet": "{honorific, select, ms{اكتبي رقم موبايل مصري مظبوط.} other{اكتب رقم موبايل مصري مظبوط.}}",
+  "@buyUsesSenderInvalidWallet": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesSenderInvalidInstapay": "{honorific, select, ms{اكتبي رقم الموبايل أو عنوان إنستاباي مظبوط.} other{اكتب رقم الموبايل أو عنوان إنستاباي مظبوط.}}",
+  "@buyUsesSenderInvalidInstapay": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesScreenshotAdd": "{honorific, select, ms{اختاري سكرين شوت التحويل} other{اختار سكرين شوت التحويل}}",
+  "@buyUsesScreenshotAdd": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesScreenshotChosen": "الصورة اتختارت",
+  "buyUsesScreenshotChange": "غيّرها",
+  "buyUsesScreenshotPreview": "صورة التحويل",
+  "buyUsesSubmit": "{honorific, select, ms{ابعتي للمراجعة} other{ابعت للمراجعة}}",
+  "@buyUsesSubmit": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesSent": "وصلنا التحويل، هنراجعه ونضيف رصيدك",
+  "buyUsesUnavailable": "{honorific, select, ms{الشحن مش متاح دلوقتي. جرّبي كمان شوية.} other{الشحن مش متاح دلوقتي. جرّب كمان شوية.}}",
+  "@buyUsesUnavailable": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesTooManyPending": "{honorific, select, ms{عندك تحويلين لسه بيتراجعوا. استني لما نراجعهم وبعدها ابعتي تحويل تاني.} other{عندك تحويلين لسه بيتراجعوا. استنى لما نراجعهم وبعدها ابعت تحويل تاني.}}",
+  "@buyUsesTooManyPending": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesPackGone": "{honorific, select, ms{الباقة دي مبقتش متاحة. اختاري باقة تانية.} other{الباقة دي مبقتش متاحة. اختار باقة تانية.}}",
+  "@buyUsesPackGone": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesMethodGone": "{honorific, select, ms{الطريقة دي مش متاحة دلوقتي. جرّبي الطريقة التانية.} other{الطريقة دي مش متاحة دلوقتي. جرّب الطريقة التانية.}}",
+  "@buyUsesMethodGone": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesInvalidSender": "{honorific, select, ms{الرقم أو الحساب اللي كتبتيه مش مظبوط. راجعيه وجرّبي تاني.} other{الرقم أو الحساب اللي كتبته مش مظبوط. راجعه وجرّب تاني.}}",
+  "@buyUsesInvalidSender": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesInvalidScreenshot": "{honorific, select, ms{الصورة ماوصلتش صح. اختاري الصورة تاني وابعتي.} other{الصورة ماوصلتش صح. اختار الصورة تاني وابعت.}}",
+  "@buyUsesInvalidScreenshot": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesUploadLimit": "{honorific, select, ms{رفعتي صور كتير النهارده. جرّبي بكره.} other{رفعت صور كتير النهارده. جرّب بكره.}}",
+  "@buyUsesUploadLimit": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesPhotoRejected": "{honorific, select, ms{الصورة دي مش مقبولة. اختاري صورة JPG أو PNG.} other{الصورة دي مش مقبولة. اختار صورة JPG أو PNG.}}",
+  "@buyUsesPhotoRejected": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  }
 }
