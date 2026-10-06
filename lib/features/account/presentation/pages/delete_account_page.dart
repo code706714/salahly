@@ -8,6 +8,7 @@ import 'package:salahly/core/error/failure_message.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
+import 'package:salahly/core/theme/app_theme.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
@@ -313,6 +314,7 @@ class _DeleteAccountViewState extends State<DeleteAccountView> {
                     minimumSize: const Size.fromHeight(48),
                     foregroundColor: colors.ink,
                     textStyle: const TextStyle(
+                      fontFamily: AppTheme.fontFamily,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),
