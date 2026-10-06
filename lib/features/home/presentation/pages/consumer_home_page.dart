@@ -190,19 +190,17 @@ class _CreditsLeft extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final colors = context.appColors;
     const bold = TextStyle(fontWeight: FontWeight.w700);
-    return Container(
+    final low = credits <= lowCredits;
+    return AppCard(
+      radius: AppRadii.md,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(AppRadii.md),
-        border: Border.all(color: colors.border, width: 1.5),
-      ),
+      onTap: low ? () => context.openBuyUses(UserRole.consumer) : null,
       child: Row(
         children: [
           Expanded(
             child: Text.rich(
               TextSpan(
-                style: TextStyle(fontSize: 14, height: 1.6, color: colors.ink),
+                style: TextStyle(fontSize: 14, color: colors.ink),
                 children: credits > 0
                     ? [
                         TextSpan(
@@ -225,19 +223,17 @@ class _CreditsLeft extends StatelessWidget {
               ),
             ),
           ),
-          if (credits <= lowCredits)
-            TextButton(
-              onPressed: () => context.openBuyUses(UserRole.consumer),
-              style: TextButton.styleFrom(
-                minimumSize: const Size(48, 48),
-                foregroundColor: colors.primary,
-                textStyle: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
+          if (low) ...[
+            const SizedBox(width: 10),
+            Text(
+              l10n.buyUsesTopUp(context.watchHonorific()),
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: colors.primary,
               ),
-              child: Text(l10n.buyUsesTopUp(context.watchHonorific())),
             ),
+          ],
         ],
       ),
     );
@@ -432,61 +428,45 @@ class _CategoryTile extends StatelessWidget {
       selected: selected,
       child: Opacity(
         opacity: open ? 1 : 0.62,
-        child: Material(
-          color: colors.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadii.xl),
-            side: BorderSide(
-              color: selected ? colors.primary : colors.border,
-              width: selected ? 2 : 1.5,
-            ),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 112),
+          child: AppCard(
+            padding: const EdgeInsets.all(14),
+            borderColor: selected ? colors.primary : null,
+            borderWidth: selected ? 2 : 1.5,
             onTap: open
                 ? () => context.read<ConsumerHomeCubit>().select(category.id)
                 : null,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(minHeight: 112),
-              child: Padding(
-                padding: const EdgeInsets.all(14),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: open ? colors.primarySoft : colors.divider,
-                        borderRadius: BorderRadius.circular(AppRadii.md),
-                      ),
-                      child: Icon(
-                        _icon(category.id),
-                        size: 28,
-                        color: open ? colors.primary : colors.inkMuted,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      category.name,
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                        height: 1.5,
-                        color: colors.ink,
-                      ),
-                    ),
-                    Text(
-                      note,
-                      style: TextStyle(
-                        fontSize: 13,
-                        height: 1.5,
-                        color: colors.inkMuted,
-                      ),
-                    ),
-                  ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: open ? colors.primarySoft : colors.divider,
+                    borderRadius: BorderRadius.circular(AppRadii.md),
+                  ),
+                  child: Icon(
+                    _icon(category.id),
+                    size: 28,
+                    color: open ? colors.primary : colors.inkMuted,
+                  ),
                 ),
-              ),
+                const SizedBox(height: 10),
+                Text(
+                  category.name,
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                    color: colors.ink,
+                  ),
+                ),
+                Text(
+                  note,
+                  style: TextStyle(fontSize: 13, color: colors.inkMuted),
+                ),
+              ],
             ),
           ),
         ),

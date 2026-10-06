@@ -1437,7 +1437,7 @@
       }
     }
   },
-  "waitingCheckBack": "{honorific, select, ms{مش لازم تفضلي فاتحة الأبلكيشن: أول ما يوصل عرض هتلاقيه هنا وفي طلباتك.} other{مش لازم تفضل فاتح الأبلكيشن: أول ما يوصل عرض هتلاقيه هنا وفي طلباتك.}}",
+  "waitingCheckBack": "{honorific, select, ms{هيجيلك إشعار أول ما يوصل عرض. مش لازم تفضلي فاتحة الأبلكيشن.} other{هيجيلك إشعار أول ما يوصل عرض. مش لازم تفضل فاتح الأبلكيشن.}}",
   "@waitingCheckBack": {
     "placeholders": {
       "honorific": {
@@ -2709,14 +2709,8 @@
       }
     }
   },
-  "newRequestSentOffers": "{honorific, select, ms{هتشوفي العروض أول ما توصل، ولحد 3 عروض.} other{هتشوف العروض أول ما توصل، ولحد 3 عروض.}}",
-  "@newRequestSentOffers": {
-    "placeholders": {
-      "honorific": {
-        "type": "String"
-      }
-    }
-  },
+  "newRequestSentOffers": "هيجيلك إشعار أول ما يوصل عرض، ولحد 3 عروض.",
+  "@newRequestSentOffers": {},
   "newRequestSentToNobody": "{honorific, select, ms{مفيش فني {category} متاح قريب منك دلوقتي، بس طلبك لسه مستني. لو مجالكيش عرض في ساعتين هنبعته لفنيين أبعد شوية.} other{مفيش فني {category} متاح قريب منك دلوقتي، بس طلبك لسه مستني. لو مجالكش عرض في ساعتين هنبعته لفنيين أبعد شوية.}}",
   "@newRequestSentToNobody": {
     "placeholders": {

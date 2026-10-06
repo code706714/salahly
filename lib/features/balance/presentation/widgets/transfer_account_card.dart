@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
+import 'package:salahly/core/theme/app_theme.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
@@ -76,6 +77,7 @@ class TransferAccountCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(AppRadii.sm),
               ),
               textStyle: const TextStyle(
+                fontFamily: AppTheme.fontFamily,
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
               ),

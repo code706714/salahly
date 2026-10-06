@@ -54,7 +54,7 @@ class TrackView extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
-                height: 1.4,
+                height: 1.5,
               ),
             ),
           ),

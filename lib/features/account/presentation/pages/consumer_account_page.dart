@@ -103,6 +103,11 @@ class ConsumerAccountView extends StatelessWidget {
                     label: l10n.pastTechniciansTitle,
                     onTap: () => context.push(AppRoutes.pastTechnicians),
                   ),
+                  _Row(
+                    icon: Icons.notifications_none_rounded,
+                    label: l10n.notifTitle,
+                    onTap: () => context.push(AppRoutes.consumerNotifications),
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -175,7 +180,6 @@ class _ProfileHeader extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  height: 1.4,
                 ),
               ),
               Text(
@@ -236,10 +240,22 @@ class _CreditsCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(
-                Icons.chevron_right_rounded,
-                size: 24,
-                color: colors.onInkMuted,
+              Container(
+                constraints: const BoxConstraints(minHeight: 44),
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: colors.brass,
+                  borderRadius: BorderRadius.circular(AppRadii.sm),
+                ),
+                child: Text(
+                  l10n.balanceBuy(context.watchHonorific()),
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: colors.ink,
+                  ),
+                ),
               ),
             ],
           ),

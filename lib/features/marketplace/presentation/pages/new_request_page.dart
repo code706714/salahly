@@ -11,6 +11,7 @@ import 'package:salahly/core/media/photo_picker.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
+import 'package:salahly/core/theme/app_spacing.dart';
 import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/core/widgets/app_back_button.dart';
 import 'package:salahly/core/widgets/app_card.dart';
@@ -208,7 +209,8 @@ class _Header extends StatelessWidget implements PreferredSizeWidget {
       color: colors.background,
       child: SafeArea(
         bottom: false,
-        child: DecoratedBox(
+        // A container, so the border adds to the height as in the design.
+        child: Container(
           decoration: BoxDecoration(
             border: Border(bottom: BorderSide(color: colors.border)),
           ),
@@ -235,7 +237,7 @@ class _Header extends StatelessWidget implements PreferredSizeWidget {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
-                            height: 1.4,
+                            height: 1.5,
                             color: colors.ink,
                           ),
                         ),
@@ -380,7 +382,7 @@ class _ProblemStep extends StatelessWidget {
           decoration: InputDecoration(
             hintText: l10n.newRequestDescriptionHint,
             hintStyle: TextStyle(fontSize: 16, color: colors.inkMuted),
-            contentPadding: const EdgeInsets.all(12),
+            contentPadding: AppSpacing.textArea,
             errorText: descriptionMissing
                 ? l10n.newRequestDescriptionRequired(honorific)
                 : null,
@@ -1003,7 +1005,7 @@ class _SentStep extends StatelessWidget {
               color: colors.successSoft,
               shape: BoxShape.circle,
             ),
-            child: Icon(Icons.check_rounded, size: 44, color: colors.success),
+            child: Icon(Icons.check_rounded, size: 40, color: colors.success),
           ),
         ),
         const SizedBox(height: 14),
@@ -1019,7 +1021,7 @@ class _SentStep extends StatelessWidget {
         Text(
           sentTo > 0
               ? '${l10n.newRequestSentTo(sentTo, category)} '
-                    '${l10n.newRequestSentOffers(honorific)}'
+                    '${l10n.newRequestSentOffers}'
               : l10n.newRequestSentToNobody(honorific, category),
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 16, height: 1.7, color: colors.inkMuted),

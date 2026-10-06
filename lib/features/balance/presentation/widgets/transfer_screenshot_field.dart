@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:salahly/core/media/photo_picker.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
+import 'package:salahly/core/theme/app_theme.dart';
 import 'package:salahly/core/widgets/dashed_rrect_border.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
@@ -113,6 +114,7 @@ class TransferScreenshotField extends StatelessWidget {
                   minimumSize: const Size(48, 48),
                   foregroundColor: colors.primaryPressed,
                   textStyle: const TextStyle(
+                    fontFamily: AppTheme.fontFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                   ),

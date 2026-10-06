@@ -27,10 +27,10 @@ class NotificationTile extends StatelessWidget {
     final body = this.body;
     final (icon, background, foreground) = _look(notification.kind, colors);
     return Material(
-      color: notification.isRead ? colors.surface : colors.dangerFaint,
+      color: notification.isRead ? colors.surface : colors.attentionRow,
       child: InkWell(
         onTap: onTap,
-        child: DecoratedBox(
+        child: Container(
           decoration: BoxDecoration(
             border: Border(bottom: BorderSide(color: colors.divider)),
           ),

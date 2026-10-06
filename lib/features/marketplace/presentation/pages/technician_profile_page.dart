@@ -230,7 +230,7 @@ class _Header extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w700,
-                              height: 1.4,
+                              height: 1.5,
                               color: colors.background,
                             ),
                           ),
@@ -374,7 +374,7 @@ class _Stat extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  height: 1.4,
+                  height: 1.5,
                   color: colors.ink,
                 ),
               ),
