@@ -18,6 +18,7 @@ import 'package:salahly/features/marketplace/presentation/cubit/request_cubit.da
 import '../pump_app.dart';
 import 'fixtures.dart';
 import 'mocks.dart';
+import 'technician_app.dart';
 
 // Pumps the consumer's follow-up screens (tracking, a new price, the
 // invoice and rating, complaints and "طلباتي") with mock cubits.
@@ -70,6 +71,9 @@ class FollowUpHarness {
     when(request.refresh).thenAnswer((_) async {});
     when(requests.load).thenAnswer((_) async {});
   }
+
+  /// Call once from `setUpAll` before using [FollowUpHarness].
+  static void registerFallbacks() => TechnicianApp.registerFallbacks();
 
   final session = MockSessionCubit();
   final categories = MockCategoriesCubit();

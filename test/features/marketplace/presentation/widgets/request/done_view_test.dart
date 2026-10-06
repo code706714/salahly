@@ -11,7 +11,6 @@ import 'package:salahly/features/marketplace/presentation/widgets/request/done_v
 
 import '../../../../../helpers/follow_up_harness.dart';
 import '../../../../../helpers/marketplace_fixtures.dart';
-import '../../../../../helpers/technician_app.dart';
 import '../../../../../pump_app.dart';
 
 void main() {
@@ -19,7 +18,7 @@ void main() {
 
   setUpAll(() async {
     await loadAppFonts();
-    TechnicianApp.registerFallbacks();
+    FollowUpHarness.registerFallbacks();
     registerFallbackValue(
       const ReviewDraft(stars: 5, paidWith: ConsumerPayment.cash),
     );
