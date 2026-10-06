@@ -243,6 +243,9 @@ void main() {
           ),
         ]),
       );
+      when(
+        () => app.requests.fetchTechnician('tech-1'),
+      ).thenAnswer((_) async => Ok(testTechnicianProfile()));
       await app.pump(tester, location: AppRoutes.consumerRequests);
 
       await tester.tap(find.text(l10n.myRequestsAgain('ms', 'ياسر')));
