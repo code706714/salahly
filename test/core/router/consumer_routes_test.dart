@@ -90,6 +90,9 @@ void main() {
     tester,
     app,
   ) async {
+    when(
+      () => app.requests.fetchTechnician('tech-1'),
+    ).thenAnswer((_) async => Ok(testTechnicianProfile()));
     await app.pump(tester);
 
     unawaited(
