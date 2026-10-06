@@ -29,7 +29,7 @@ class SupabaseConsumerRequestsRepository implements ConsumerRequestsRepository {
     final rows = await _client
         .from('consumer_addresses')
         .select(MarketplaceModels.addressSelect)
-        .order('created_at');
+        .order('created_at', ascending: true);
     return rows.map(MarketplaceModels.address).toList();
   });
 

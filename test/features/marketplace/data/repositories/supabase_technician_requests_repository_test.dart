@@ -151,6 +151,10 @@ void main() {
 
     expect(requests.single.url.path, '/rest/v1/technician_services');
     expect(
+      requests.single.url.queryParameters['order'],
+      'service_id.asc.nullslast',
+    );
+    expect(
       result,
       isA<Ok<List<ServicePrice>>>().having((ok) => ok.value, 'value', [
         const ServicePrice(

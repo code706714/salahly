@@ -15,6 +15,7 @@ void main() {
   late Directory directory;
   late JsonFileCache cache;
   late bool online;
+  late List<http.Request> requests;
 
   const rows = [
     {
@@ -30,6 +31,7 @@ void main() {
     directory = Directory.systemTemp.createTempSync();
     cache = JsonFileCache(File('${directory.path}/areas.json'));
     online = true;
+    requests = [];
   });
 
   tearDown(() => directory.deleteSync(recursive: true));
@@ -37,9 +39,9 @@ void main() {
   SupabaseCatalogRepository repository() {
     final client = MockClient((request) async {
       if (!online) throw const SocketException('offline');
-      expect(request.url.path, '/rest/v1/service_areas');
+      requests.add(request);
       return http.Response(
-        jsonEncode(rows),
+        jsonEncode(request.url.path == '/rest/v1/service_areas' ? rows : []),
         200,
         headers: {'content-type': 'application/json; charset=utf-8'},
         request: request,
@@ -50,6 +52,27 @@ void main() {
       areasCache: cache,
     );
   }
+
+  test('reads the open areas in their sort order', () async {
+    await repository().fetchAreas();
+
+    expect(requests.single.url.path, '/rest/v1/service_areas');
+    expect(requests.single.url.queryParameters['is_open'], 'eq.true');
+    expect(
+      requests.single.url.queryParameters['order'],
+      'sort_order.asc.nullslast',
+    );
+  });
+
+  test('reads the categories in their sort order', () async {
+    await repository().fetchCategories();
+
+    expect(requests.single.url.path, '/rest/v1/service_categories');
+    expect(
+      requests.single.url.queryParameters['order'],
+      'sort_order.asc.nullslast',
+    );
+  });
 
   test('keeps the fetched areas for when there is no network', () async {
     final fetched = await repository().fetchAreas();

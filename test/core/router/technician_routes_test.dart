@@ -4,7 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/contacts/contact_picker.dart';
 import 'package:salahly/core/router/app_routes.dart';
+import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/pages/technician_account_page.dart';
+import 'package:salahly/features/balance/presentation/pages/balance_page.dart';
+import 'package:salahly/features/balance/presentation/pages/buy_uses_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customer_form_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customer_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customers_page.dart';
@@ -70,6 +73,8 @@ void main() {
       (AppRoutes.newCustomer, CustomerFormPage),
       (AppRoutes.customer('customer-1'), CustomerPage),
       (AppRoutes.editCustomer('customer-1'), CustomerFormPage),
+      (AppRoutes.technicianBalance, BalancePage),
+      (AppRoutes.technicianBuyUses, BuyUsesPage),
     ]) {
       testTechnicianApp('$location opens $page without the tabs', (
         tester,
@@ -114,4 +119,45 @@ void main() {
       isTrue,
     );
   });
+
+  testTechnicianApp('opens the balance and buying for a technician', (
+    tester,
+    app,
+  ) async {
+    await app.pump(tester);
+
+    unawaited(
+      app.router(tester).push(AppRoutes.balanceFor(UserRole.technician)),
+    );
+    await app.settle(tester);
+    expect(
+      tester.widget<BalancePage>(find.byType(BalancePage)).role,
+      UserRole.technician,
+    );
+
+    unawaited(
+      app.router(tester).push(AppRoutes.buyUsesFor(UserRole.technician)),
+    );
+    await app.settle(tester);
+    expect(
+      tester.widget<BuyUsesPage>(find.byType(BuyUsesPage)).role,
+      UserRole.technician,
+    );
+  });
+
+  for (final location in [
+    AppRoutes.consumerBalance,
+    AppRoutes.consumerBuyUses,
+  ]) {
+    testTechnicianApp('a technician cannot open $location', (
+      tester,
+      app,
+    ) async {
+      await app.pump(tester, location: location);
+
+      expect(find.byType(TodayPage), findsOneWidget);
+      expect(find.byType(BalancePage), findsNothing);
+      expect(find.byType(BuyUsesPage), findsNothing);
+    });
+  }
 }

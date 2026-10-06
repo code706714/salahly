@@ -18,6 +18,7 @@ import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
 import 'package:salahly/salahly_app.dart';
 
+import 'balance_fixtures.dart';
 import 'fake_sync_remote.dart';
 import 'fixtures.dart';
 import 'mocks.dart';
@@ -54,6 +55,8 @@ class ConsumerApp {
     when(
       catalog.fetchCategories,
     ).thenAnswer((_) async => const Ok(TestCategories.all));
+    stubBalance(balance);
+    when(() => photoPicker.discard(any())).thenAnswer((_) async {});
     when(requests.fetchRequests).thenAnswer((_) async => const Ok([]));
     when(requests.fetchAddresses).thenAnswer((_) async => const Ok([]));
     when(
@@ -86,6 +89,9 @@ class ConsumerApp {
   final userData = MockUserScopedData();
   final catalog = MockCatalogRepository();
   final requests = MockConsumerRequestsRepository();
+
+  /// The balance: no transfers or movements unless a test stubs some.
+  final balance = MockBalanceRepository();
   final apps = MockExternalApps();
   final speech = MockSpeechInput();
   final photoPicker = MockPhotoPicker();
@@ -101,6 +107,7 @@ class ConsumerApp {
     jobsRepository: MockJobsRepository(),
     consumerRequestsRepository: requests,
     technicianRequestsRepository: MockTechnicianRequestsRepository(),
+    balanceRepository: balance,
     locationService: location,
     photoPicker: photoPicker,
     userData: userData,

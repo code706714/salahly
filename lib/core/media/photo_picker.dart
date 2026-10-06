@@ -12,7 +12,8 @@ enum PhotoPurpose {
   avatar(shortSide: 800),
   document(shortSide: 1600),
   job(shortSide: 1280),
-  request(shortSide: 1280);
+  request(shortSide: 1280),
+  transfer(shortSide: 1600);
 
   const PhotoPurpose({required this.shortSide});
 
@@ -58,6 +59,9 @@ class PhotoPicker {
     await _deleteQuietly(File(picked.path));
     return cleaned?.path;
   }
+
+  /// Deletes a photo this picker returned once it is not needed anymore.
+  Future<void> discard(String path) => _deleteQuietly(File(path));
 
   static Future<void> _deleteQuietly(File file) async {
     try {

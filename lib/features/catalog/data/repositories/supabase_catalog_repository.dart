@@ -21,7 +21,7 @@ class SupabaseCatalogRepository implements CatalogRepository {
       final rows = await _client
           .from('service_categories')
           .select(ServiceCategoryModel.select)
-          .order('sort_order');
+          .order('sort_order', ascending: true);
       return Ok(rows.map(ServiceCategoryModel.fromJson).toList());
     } on Object catch (error) {
       return Err(commonFailureFrom(error));
@@ -36,7 +36,7 @@ class SupabaseCatalogRepository implements CatalogRepository {
           .from('service_areas')
           .select(ServiceAreaModel.select)
           .eq('is_open', true)
-          .order('sort_order');
+          .order('sort_order', ascending: true);
     } on Object catch (error) {
       final cached = await _areasCache.read();
       if (cached == null) return Err(commonFailureFrom(error));

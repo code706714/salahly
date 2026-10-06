@@ -1,3 +1,5 @@
+import 'package:salahly/features/account/domain/entities/user_role.dart';
+
 /// Paths of every screen, so navigation never relies on string literals.
 abstract final class AppRoutes {
   static const splash = '/';
@@ -13,6 +15,8 @@ abstract final class AppRoutes {
   static const newRequest = '/consumer/requests/new';
   static const consumerAddresses = '/consumer/account/addresses';
   static const pastTechnicians = '/consumer/account/technicians';
+  static const consumerBalance = '/consumer/account/balance';
+  static const consumerBuyUses = '/consumer/account/balance/buy';
   static const consumerTechnicians = '/consumer/technicians';
   static const technicianHome = '/technician';
   static const technicianJobs = '/technician/jobs';
@@ -22,6 +26,8 @@ abstract final class AppRoutes {
   static const newCustomer = '/technician/customers/new';
   static const technicianMoney = '/technician/money';
   static const technicianAccount = '/technician/account';
+  static const technicianBalance = '/technician/account/balance';
+  static const technicianBuyUses = '/technician/account/balance/buy';
   static const incomingRequests = '/technician/requests';
   static const sessionUnavailable = '/session-unavailable';
   static const legal = '/legal';
@@ -35,6 +41,18 @@ abstract final class AppRoutes {
         ? newRequest
         : Uri(path: newRequest, queryParameters: query).toString();
   }
+
+  /// The balance screen of [role]'s side of the app.
+  static String balanceFor(UserRole role) => switch (role) {
+    UserRole.consumer => consumerBalance,
+    UserRole.technician => technicianBalance,
+  };
+
+  /// The screen to buy uses on [role]'s side of the app.
+  static String buyUsesFor(UserRole role) => switch (role) {
+    UserRole.consumer => consumerBuyUses,
+    UserRole.technician => technicianBuyUses,
+  };
 
   static String request(String id) => '$consumerRequests/$id';
   static String requestComplaint(String id) => '${request(id)}/complaint';

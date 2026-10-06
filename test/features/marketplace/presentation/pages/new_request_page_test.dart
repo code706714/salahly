@@ -14,6 +14,8 @@ import 'package:salahly/core/media/photo_picker.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
+import 'package:salahly/features/account/domain/entities/user_role.dart';
+import 'package:salahly/features/balance/presentation/pages/buy_uses_page.dart';
 import 'package:salahly/features/marketplace/domain/entities/consumer_address.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_draft.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
@@ -546,6 +548,10 @@ void main() {
           ),
           findsOneWidget,
         );
+        expect(
+          find.text(l10n.buyUsesTopUp('ms')),
+          failure is NoCreditsFailure ? findsOneWidget : findsNothing,
+        );
         await states.close();
       });
     }
@@ -789,6 +795,12 @@ void main() {
         findsOneWidget,
       );
       expect(find.text(l10n.newRequestSend('ms')), findsOneWidget);
+
+      await tester.tap(find.text(l10n.buyUsesTopUp('ms')));
+      await app.settle(tester);
+
+      expect(find.byType(BuyUsesPage), findsOneWidget);
+      verify(() => app.balance.fetchPacks(UserRole.consumer)).called(1);
     });
   });
 }

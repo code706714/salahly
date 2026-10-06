@@ -83,7 +83,10 @@ class ConsumerAccountView extends StatelessWidget {
             children: [
               _ProfileHeader(profile: profile),
               const SizedBox(height: 16),
-              _CreditsCard(credits: consumer.requestCredits),
+              _CreditsCard(
+                credits: consumer.requestCredits,
+                onTap: () => context.push(AppRoutes.consumerBalance),
+              ),
               const SizedBox(height: 16),
               _GroupLabel(l10n.consumerAccountMyData),
               const SizedBox(height: 16),
@@ -184,41 +187,57 @@ class _ProfileHeader extends StatelessWidget {
 
 /// "رصيد الطلبات · 4 طلبات" on the dark card.
 class _CreditsCard extends StatelessWidget {
-  const _CreditsCard({required this.credits});
+  const _CreditsCard({required this.credits, required this.onTap});
 
   final int credits;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = context.appColors;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: colors.ink,
-        borderRadius: BorderRadius.circular(AppRadii.xl),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n.consumerAccountCreditsTitle,
-            style: TextStyle(
-              fontSize: 14,
-              height: 1.5,
-              color: colors.onInkMuted,
-            ),
+    return Material(
+      color: colors.ink,
+      borderRadius: BorderRadius.circular(AppRadii.xl),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.consumerAccountCreditsTitle,
+                      style: TextStyle(
+                        fontSize: 14,
+                        height: 1.5,
+                        color: colors.onInkMuted,
+                      ),
+                    ),
+                    Text(
+                      l10n.consumerAccountCredits(credits),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        height: 1.5,
+                        color: colors.background,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.chevron_right_rounded,
+                size: 24,
+                color: colors.onInkMuted,
+              ),
+            ],
           ),
-          Text(
-            l10n.consumerAccountCredits(credits),
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              height: 1.5,
-              color: colors.background,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/router/session_redirect.dart';
+import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/account/presentation/pages/consumer_account_page.dart';
 import 'package:salahly/features/account/presentation/pages/session_unavailable_page.dart';
@@ -13,6 +14,8 @@ import 'package:salahly/features/auth/presentation/cubit/otp_cubit.dart';
 import 'package:salahly/features/auth/presentation/cubit/phone_cubit.dart';
 import 'package:salahly/features/auth/presentation/pages/otp_page.dart';
 import 'package:salahly/features/auth/presentation/pages/phone_page.dart';
+import 'package:salahly/features/balance/presentation/pages/balance_page.dart';
+import 'package:salahly/features/balance/presentation/pages/buy_uses_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customer_form_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customer_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customers_page.dart';
@@ -196,6 +199,14 @@ RouteBase _consumerRoutes() {
         path: AppRoutes.pastTechnicians,
         builder: (context, state) => const PastTechniciansPage(),
       ),
+      GoRoute(
+        path: AppRoutes.consumerBalance,
+        builder: (context, state) => const BalancePage(role: UserRole.consumer),
+      ),
+      GoRoute(
+        path: AppRoutes.consumerBuyUses,
+        builder: (context, state) => const BuyUsesPage(role: UserRole.consumer),
+      ),
     ],
   );
 }
@@ -227,6 +238,16 @@ RouteBase _technicianRoutes() {
       GoRoute(
         path: AppRoutes.technicianAccount,
         builder: (context, state) => const TechnicianAccountPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.technicianBalance,
+        builder: (context, state) =>
+            const BalancePage(role: UserRole.technician),
+      ),
+      GoRoute(
+        path: AppRoutes.technicianBuyUses,
+        builder: (context, state) =>
+            const BuyUsesPage(role: UserRole.technician),
       ),
       GoRoute(
         path: AppRoutes.incomingRequests,

@@ -381,6 +381,10 @@ void main() {
       ),
     );
     expect(server.requests.last.url.path, '/rest/v1/consumer_addresses');
+    expect(
+      server.requests.last.url.queryParameters['order'],
+      'created_at.asc.nullslast',
+    );
 
     server.body = 'address-2';
     expect(

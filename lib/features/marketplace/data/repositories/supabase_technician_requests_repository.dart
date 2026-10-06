@@ -57,7 +57,7 @@ class SupabaseTechnicianRequestsRepository
     final rows = await _client
         .from('technician_services')
         .select('service_id, starting_price_piastres')
-        .order('service_id');
+        .order('service_id', ascending: true);
     return [
       for (final row in rows)
         ServicePrice(
