@@ -68,7 +68,7 @@ class TransferAccountCard extends StatelessWidget {
           OutlinedButton(
             onPressed: () => _copy(context),
             style: OutlinedButton.styleFrom(
-              minimumSize: const Size(0, 48),
+              minimumSize: const Size(0, 44),
               padding: const EdgeInsets.symmetric(horizontal: 14),
               backgroundColor: Colors.white,
               foregroundColor: colors.ink,

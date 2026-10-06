@@ -5,14 +5,19 @@ import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/sync/sync_cubit.dart';
 import 'package:salahly/core/theme/app_colors.dart';
+import 'package:salahly/core/theme/app_radii.dart';
+import 'package:salahly/core/theme/app_theme.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
 import 'package:salahly/core/widgets/initials_avatar.dart';
 import 'package:salahly/core/widgets/status_pill.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
+import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/domain/entities/verification_status.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/account/presentation/widgets/sign_out_dialog.dart';
+import 'package:salahly/features/balance/presentation/balance_navigation.dart';
+import 'package:salahly/features/balance/presentation/uses_left.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
 /// The technician's account: who they are, the legal texts and signing
@@ -49,6 +54,8 @@ class TechnicianAccountPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 children: [
                   _ProfileHeader(profile: profile),
+                  const SizedBox(height: 16),
+                  const _CreditsCard(),
                   const SizedBox(height: 16),
                   _Group(
                     children: [
@@ -120,7 +127,7 @@ class _ProfileHeader extends StatelessWidget {
         const SizedBox(width: 14),
         Expanded(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
                 profile.fullName,
@@ -139,12 +146,82 @@ class _ProfileHeader extends StatelessWidget {
               if (profile.technician?.verificationStatus case final status?)
                 Padding(
                   padding: const EdgeInsets.only(top: 2),
-                  child: _VerificationPill(status),
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: _VerificationPill(status),
+                  ),
                 ),
             ],
           ),
         ),
       ],
+    );
+  }
+}
+
+/// The free jobs left, with the way to buy more.
+class _CreditsCard extends StatelessWidget {
+  const _CreditsCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final colors = context.appColors;
+    final credits = context.watchUsesLeft(UserRole.technician);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.ink,
+        borderRadius: BorderRadius.circular(AppRadii.lg),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.accountCredits,
+                    style: TextStyle(
+                      fontSize: 13,
+                      height: 1.5,
+                      color: colors.onInkMuted,
+                    ),
+                  ),
+                  Text(
+                    l10n.todayRequestsBalanceCount(credits),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      height: 1.5,
+                      color: colors.background,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            FilledButton(
+              onPressed: () => context.openBuyUses(UserRole.technician),
+              style: FilledButton.styleFrom(
+                backgroundColor: colors.brass,
+                foregroundColor: colors.ink,
+                minimumSize: const Size(0, 44),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppRadii.sm),
+                ),
+                textStyle: const TextStyle(
+                  fontFamily: AppTheme.fontFamily,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              child: Text(l10n.balanceBuy('other')),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

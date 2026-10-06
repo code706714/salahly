@@ -7,6 +7,7 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.primary,
     required this.primaryPressed,
     required this.primarySoft,
+    required this.primaryFaint,
     required this.onPrimary,
     required this.ink,
     required this.inkMuted,
@@ -47,6 +48,7 @@ class AppColors extends ThemeExtension<AppColors> {
     primary: Color(0xFFB8492C),
     primaryPressed: Color(0xFF8F3520),
     primarySoft: Color(0xFFF3E1D9),
+    primaryFaint: Color(0xFFFBEFEA),
     onPrimary: Color(0xFFFFFCF7),
     ink: Color(0xFF2F3B2A),
     inkMuted: Color(0xFF5E6656),
@@ -86,6 +88,9 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color primary;
   final Color primaryPressed;
   final Color primarySoft;
+
+  /// Background of a selected option card.
+  final Color primaryFaint;
   final Color onPrimary;
   final Color ink;
   final Color inkMuted;
@@ -163,6 +168,7 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? primary,
     Color? primaryPressed,
     Color? primarySoft,
+    Color? primaryFaint,
     Color? onPrimary,
     Color? ink,
     Color? inkMuted,
@@ -202,6 +208,7 @@ class AppColors extends ThemeExtension<AppColors> {
       primary: primary ?? this.primary,
       primaryPressed: primaryPressed ?? this.primaryPressed,
       primarySoft: primarySoft ?? this.primarySoft,
+      primaryFaint: primaryFaint ?? this.primaryFaint,
       onPrimary: onPrimary ?? this.onPrimary,
       ink: ink ?? this.ink,
       inkMuted: inkMuted ?? this.inkMuted,
@@ -246,6 +253,7 @@ class AppColors extends ThemeExtension<AppColors> {
       primary: Color.lerp(primary, other.primary, t)!,
       primaryPressed: Color.lerp(primaryPressed, other.primaryPressed, t)!,
       primarySoft: Color.lerp(primarySoft, other.primarySoft, t)!,
+      primaryFaint: Color.lerp(primaryFaint, other.primaryFaint, t)!,
       onPrimary: Color.lerp(onPrimary, other.onPrimary, t)!,
       ink: Color.lerp(ink, other.ink, t)!,
       inkMuted: Color.lerp(inkMuted, other.inkMuted, t)!,
