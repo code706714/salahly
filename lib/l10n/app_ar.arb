@@ -3686,7 +3686,7 @@
   },
   "acctDeleteConsumerHistory": "طلباتك وتقييماتك",
   "acctDeleteTechnicianData": "بياناتك وصورك وعملاءك وشغلاناتك",
-  "acctDeleteTechnicianBalance": "رصيدك اللي فاضل ({uses, plural, =0{مفيش شغلانات} =1{شغلانة واحدة} =2{شغلانتين} few{{uses} شغلانات} other{{uses} شغلانة}})",
+  "acctDeleteTechnicianBalance": "رصيدك اللي فاضل ({uses, plural, =0{مفيش شغلانات مجانية} =1{1 شغلانة مجانية} =2{2 شغلانة مجانية} few{{uses} شغلانات مجانية} other{{uses} شغلانة مجانية}})",
   "@acctDeleteTechnicianBalance": {
     "placeholders": {
       "uses": {
