@@ -72,6 +72,7 @@ class TechnicianApp {
     when(() => apps.dial(any())).thenAnswer((_) async => true);
     when(() => apps.map(any())).thenAnswer((_) async => true);
     stubBalance(balance, consumer: false);
+    when(() => photoPicker.discard(any())).thenAnswer((_) async {});
     when(requests.fetchNewRequests).thenAnswer((_) async => const Ok([]));
     when(requests.fetchMyServices).thenAnswer((_) async => const Ok([]));
     when(

@@ -1,7 +1,14 @@
 import 'package:equatable/equatable.dart';
 
 /// What moved a balance.
-enum LedgerReason { requestSent, requestRefunded, topup, adminAdjustment }
+enum LedgerReason {
+  requestSent,
+  requestRefunded,
+  topup,
+  adminAdjustment,
+  freeGrant,
+  openingBalance,
+}
 
 /// One movement of the balance: [delta] uses taken (negative) or added.
 final class LedgerEntry extends Equatable {

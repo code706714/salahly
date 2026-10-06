@@ -14,7 +14,6 @@ import 'package:salahly/core/widgets/section_header.dart';
 import 'package:salahly/core/widgets/status_pill.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
-import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/balance/domain/entities/ledger_entry.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
 import 'package:salahly/features/balance/presentation/balance_labels.dart';
@@ -32,10 +31,12 @@ class BalancePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        final cubit = BalanceCubit(balance: context.read(), role: role);
+        final cubit = BalanceCubit(
+          balance: context.read(),
+          session: context.read(),
+          role: role,
+        );
         unawaited(cubit.load());
-        // The uses shown here and elsewhere come from the profile.
-        unawaited(context.read<SessionCubit>().refreshProfile());
         return cubit;
       },
       child: BalanceView(role: role),

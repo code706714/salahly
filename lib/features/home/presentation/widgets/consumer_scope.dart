@@ -10,8 +10,10 @@ import 'package:salahly/features/marketplace/presentation/cubit/my_requests_cubi
 /// Wraps every consumer screen: the area and category names, and the
 /// consumer's requests, fetched again whenever the app comes back.
 ///
-/// The free requests left change only with a request (sent, cancelled,
-/// expired), so the profile is fetched again whenever the list changes.
+/// The free requests left change with a request (sent, cancelled, expired),
+/// so the profile is fetched again whenever the list changes; and with an
+/// approved transfer, which this phone can't see happen, so it is fetched
+/// again whenever the app comes back.
 class ConsumerScope extends StatefulWidget {
   const ConsumerScope({required this.child, super.key});
 
@@ -30,7 +32,12 @@ class _ConsumerScopeState extends State<ConsumerScope> {
   @override
   void initState() {
     super.initState();
-    _lifecycle = AppLifecycleListener(onResume: _load);
+    _lifecycle = AppLifecycleListener(onResume: _resume);
+    _load();
+  }
+
+  void _resume() {
+    unawaited(context.read<SessionCubit>().refreshProfile());
     _load();
   }
 

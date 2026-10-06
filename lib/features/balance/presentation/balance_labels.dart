@@ -37,4 +37,6 @@ String ledgerReasonLabel(
   LedgerReason.requestRefunded => l10n.balanceLedgerRefunded,
   LedgerReason.topup => l10n.balanceLedgerTopup,
   LedgerReason.adminAdjustment => l10n.balanceLedgerAdjustment,
+  LedgerReason.freeGrant => l10n.balanceLedgerFreeGrant,
+  LedgerReason.openingBalance => l10n.balanceLedgerOpeningBalance,
 };

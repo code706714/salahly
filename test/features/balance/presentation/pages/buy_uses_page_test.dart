@@ -503,7 +503,74 @@ void main() {
       verifyNever(harness.buyUses.submit);
     });
 
-    testWidgets('thanks, refreshes the balance and closes once sent', (
+    testWidgets('cannot be left while the transfer is being sent', (
+      tester,
+    ) async {
+      final harness = consumer();
+      final sending = filled.copyWith(status: BuyUsesStatus.submitting);
+      when(() => harness.buyUses.state).thenReturn(sending);
+      whenListen(
+        harness.buyUses,
+        const Stream<BuyUsesState>.empty(),
+        initialState: sending,
+      );
+      await harness.pump(
+        tester,
+        Scaffold(
+          body: Builder(
+            builder: (context) => TextButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<bool>(
+                  builder: (_) => const BuyUsesView(role: UserRole.consumer),
+                ),
+              ),
+              child: const Text('open'),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('open'));
+      await tester.pump(const Duration(seconds: 1));
+
+      await tester.binding.handlePopRoute();
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.byType(BuyUsesView), findsOneWidget);
+    });
+
+    testWidgets('can be left while it is being filled in', (tester) async {
+      final harness = consumer();
+      when(() => harness.buyUses.state).thenReturn(filled);
+      whenListen(
+        harness.buyUses,
+        const Stream<BuyUsesState>.empty(),
+        initialState: filled,
+      );
+      await harness.pump(
+        tester,
+        Scaffold(
+          body: Builder(
+            builder: (context) => TextButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<bool>(
+                  builder: (_) => const BuyUsesView(role: UserRole.consumer),
+                ),
+              ),
+              child: const Text('open'),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(BuyUsesView), findsNothing);
+    });
+
+    testWidgets('thanks and closes once sent', (
       tester,
     ) async {
       final harness = consumer();
@@ -535,7 +602,6 @@ void main() {
 
       expect(result, isTrue);
       expect(find.text(l10n.buyUsesSent), findsOneWidget);
-      verify(harness.session.refreshProfile).called(1);
     });
 
     for (final (name, failure, message) in <(String, Failure, String)>[
@@ -563,6 +629,11 @@ void main() {
         'a refused screenshot',
         const InvalidScreenshotFailure(),
         l10n.buyUsesInvalidScreenshot('ms'),
+      ),
+      (
+        'a changed price',
+        const PriceChangedFailure(),
+        l10n.buyUsesPriceChanged('ms'),
       ),
       (
         'the upload limit',

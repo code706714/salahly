@@ -60,6 +60,18 @@ void main() {
       reason: LedgerReason.adminAdjustment,
       createdAt: DateTime(2026, 10, 1, 12),
     ),
+    testLedgerEntry(
+      id: 10,
+      delta: 3,
+      reason: LedgerReason.freeGrant,
+      createdAt: DateTime(2026, 9, 30, 12),
+    ),
+    testLedgerEntry(
+      id: 11,
+      delta: 4,
+      reason: LedgerReason.openingBalance,
+      createdAt: DateTime(2026, 9, 29, 12),
+    ),
   ];
   final loaded = BalanceState(
     status: BalanceStatus.ready,
@@ -135,7 +147,7 @@ void main() {
     testWidgets('shows what moved the balance', (tester) async {
       await pump(tester, consumer(), loaded);
       await tester.scrollUntilVisible(
-        find.text(l10n.balanceLedgerAdjustment),
+        find.text(l10n.balanceLedgerOpeningBalance),
         200,
         scrollable: find.byType(Scrollable).first,
       );
@@ -145,6 +157,8 @@ void main() {
       expect(find.text(l10n.balanceLedgerRequestSent), findsOneWidget);
       expect(find.text(l10n.balanceLedgerRefunded), findsOneWidget);
       expect(find.text(l10n.balanceLedgerAdjustment), findsOneWidget);
+      expect(find.text(l10n.balanceLedgerFreeGrant), findsOneWidget);
+      expect(find.text(l10n.balanceLedgerOpeningBalance), findsOneWidget);
       expect(find.text('+5'), findsOneWidget);
       expect(find.text('-1'), findsOneWidget);
       expect(find.text(l10n.balanceLedgerOfferPicked), findsNothing);

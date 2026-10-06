@@ -3349,7 +3349,7 @@
       }
     }
   },
-  "buyUsesSenderInvalidInstapay": "{honorific, select, ms{اكتبي رقم الموبايل أو عنوان إنستاباي مظبوط.} other{اكتب رقم الموبايل أو عنوان إنستاباي مظبوط.}}",
+  "buyUsesSenderInvalidInstapay": "{honorific, select, ms{اكتبي رقم موبايل مصري أو عنوان إنستاباي بحروف إنجليزي وأرقام من غير مسافات.} other{اكتب رقم موبايل مصري أو عنوان إنستاباي بحروف إنجليزي وأرقام من غير مسافات.}}",
   "@buyUsesSenderInvalidInstapay": {
     "placeholders": {
       "honorific": {
@@ -3435,6 +3435,16 @@
   },
   "buyUsesPhotoRejected": "{honorific, select, ms{الصورة دي مش مقبولة. اختاري صورة JPG أو PNG.} other{الصورة دي مش مقبولة. اختار صورة JPG أو PNG.}}",
   "@buyUsesPhotoRejected": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceLedgerFreeGrant": "الرصيد المجاني",
+  "balanceLedgerOpeningBalance": "الرصيد اللي كان معاك",
+  "buyUsesPriceChanged": "{honorific, select, ms{السعر اتغير. ارجعي افتحي الصفحة تاني وشوفي السعر الجديد.} other{السعر اتغير. ارجع افتح الصفحة تاني وشوف السعر الجديد.}}",
+  "@buyUsesPriceChanged": {
     "placeholders": {
       "honorific": {
         "type": "String"

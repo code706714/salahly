@@ -211,6 +211,18 @@ void main() {
           'reason': 'admin_adjustment',
           'created_at': '2026-10-01T09:00:00+00:00',
         },
+        {
+          'id': 3,
+          'delta': 3,
+          'reason': 'free_grant',
+          'created_at': '2026-09-30T09:00:00+00:00',
+        },
+        {
+          'id': 2,
+          'delta': 4,
+          'reason': 'opening_balance',
+          'created_at': '2026-09-29T09:00:00+00:00',
+        },
       ];
 
       final result = await server.repository().fetchLedger(
@@ -223,8 +235,10 @@ void main() {
         LedgerReason.requestSent,
         LedgerReason.requestRefunded,
         LedgerReason.adminAdjustment,
+        LedgerReason.freeGrant,
+        LedgerReason.openingBalance,
       ]);
-      expect(entries.map((entry) => entry.delta), [5, -1, 1, 2]);
+      expect(entries.map((entry) => entry.delta), [5, -1, 1, 2, 3, 4]);
       expect(server.last.url.path, '/rest/v1/credit_ledger');
       expect(server.last.url.queryParameters['role'], 'eq.technician');
       expect(server.last.url.queryParameters['limit'], '50');
@@ -232,31 +246,37 @@ void main() {
   });
 
   group('submitTopup', () {
-    test('sends only the pack, method, sender and screenshot', () async {
-      server.body = 'topup-9';
+    test(
+      'sends only the pack, price, method, sender and screenshot',
+      () async {
+        server.body = 'topup-9';
 
-      final result = await server.repository().submitTopup(
-        packId: 'pack-5',
-        method: TopupMethod.wallet,
-        senderAccount: '01114567720',
-        screenshotPath: 'consumer-1/proof.jpg',
-      );
+        final result = await server.repository().submitTopup(
+          packId: 'pack-5',
+          method: TopupMethod.wallet,
+          senderAccount: '01114567720',
+          screenshotPath: 'consumer-1/proof.jpg',
+          expectedPricePiastres: 8000,
+        );
 
-      expect((result as Ok<String>).value, 'topup-9');
-      expect(server.last.url.path, '/rest/v1/rpc/submit_topup');
-      expect(server.lastParams, {
-        'p_pack_id': 'pack-5',
-        'p_method': 'wallet',
-        'p_sender_account': '01114567720',
-        'p_screenshot_path': 'consumer-1/proof.jpg',
-      });
-    });
+        expect((result as Ok<String>).value, 'topup-9');
+        expect(server.last.url.path, '/rest/v1/rpc/submit_topup');
+        expect(server.lastParams, {
+          'p_pack_id': 'pack-5',
+          'p_method': 'wallet',
+          'p_sender_account': '01114567720',
+          'p_screenshot_path': 'consumer-1/proof.jpg',
+          'p_expected_price_piastres': 8000,
+        });
+      },
+    );
 
     for (final (message, failure) in <(String, Failure)>[
       ('pack_not_found', const PackNotFoundFailure()),
       ('method_unavailable', const MethodUnavailableFailure()),
       ('invalid_sender', const InvalidSenderFailure()),
       ('invalid_screenshot', const InvalidScreenshotFailure()),
+      ('price_changed', const PriceChangedFailure()),
       ('too_many_pending', const TooManyPendingFailure()),
     ]) {
       test('maps $message', () async {
@@ -268,6 +288,7 @@ void main() {
             method: TopupMethod.instapay,
             senderAccount: 'a@instapay',
             screenshotPath: 'consumer-1/proof.jpg',
+            expectedPricePiastres: 8000,
           ),
           _failure(failure),
         );
@@ -282,6 +303,7 @@ void main() {
         method: TopupMethod.wallet,
         senderAccount: '01114567720',
         screenshotPath: 'consumer-1/proof.jpg',
+        expectedPricePiastres: 8000,
       );
 
       final failure = (result as Err<String>).failure;
@@ -298,6 +320,7 @@ void main() {
           method: TopupMethod.wallet,
           senderAccount: '01114567720',
           screenshotPath: 'consumer-1/proof.jpg',
+          expectedPricePiastres: 8000,
         ),
         _failure(const NetworkFailure()),
       );

@@ -75,6 +75,7 @@ class SupabaseBalanceRepository implements BalanceRepository {
   @override
   Future<Result<String>> submitTopup({
     required String packId,
+    required int expectedPricePiastres,
     required TopupMethod method,
     required String senderAccount,
     required String screenshotPath,
@@ -86,6 +87,7 @@ class SupabaseBalanceRepository implements BalanceRepository {
         'p_method': toWire(method),
         'p_sender_account': senderAccount,
         'p_screenshot_path': screenshotPath,
+        'p_expected_price_piastres': expectedPricePiastres,
       },
     ),
   );

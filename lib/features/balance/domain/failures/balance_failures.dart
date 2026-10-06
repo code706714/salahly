@@ -21,6 +21,11 @@ final class InvalidScreenshotFailure extends Failure {
   const InvalidScreenshotFailure();
 }
 
+/// The pack costs something else than what the person saw and transferred.
+final class PriceChangedFailure extends Failure {
+  const PriceChangedFailure();
+}
+
 /// Two transfers are already waiting for review.
 final class TooManyPendingFailure extends Failure {
   const TooManyPendingFailure();

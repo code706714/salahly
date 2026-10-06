@@ -15,6 +15,7 @@ import '../../../../helpers/mocks.dart';
 
 void main() {
   late MockBalanceRepository balance;
+  late MockPhotoPicker photos;
 
   setUpAll(() {
     registerFallbackValue(UserRole.consumer);
@@ -23,6 +24,8 @@ void main() {
 
   setUp(() {
     balance = MockBalanceRepository();
+    photos = MockPhotoPicker();
+    when(() => photos.discard(any())).thenAnswer((_) async {});
     stubBalance(balance);
     when(
       () => balance.uploadScreenshot(any()),
@@ -33,12 +36,13 @@ void main() {
         method: any(named: 'method'),
         senderAccount: any(named: 'senderAccount'),
         screenshotPath: any(named: 'screenshotPath'),
+        expectedPricePiastres: any(named: 'expectedPricePiastres'),
       ),
     ).thenAnswer((_) async => const Ok('topup-1'));
   });
 
   BuyUsesCubit build({UserRole role = UserRole.consumer}) =>
-      BuyUsesCubit(balance: balance, role: role);
+      BuyUsesCubit(balance: balance, photos: photos, role: role);
 
   const loaded = BuyUsesState(
     status: BuyUsesStatus.editing,
@@ -245,6 +249,7 @@ void main() {
             method: TopupMethod.instapay,
             senderAccount: '01114567720',
             screenshotPath: 'consumer-1/proof.jpg',
+            expectedPricePiastres: 8000,
           ),
         ]);
       },
@@ -279,6 +284,7 @@ void main() {
             method: any(named: 'method'),
             senderAccount: any(named: 'senderAccount'),
             screenshotPath: any(named: 'screenshotPath'),
+            expectedPricePiastres: any(named: 'expectedPricePiastres'),
           ),
         );
       },
@@ -290,6 +296,7 @@ void main() {
       const MethodUnavailableFailure(),
       const InvalidSenderFailure(),
       const NetworkFailure(),
+      const PriceChangedFailure(),
     ]) {
       blocTest<BuyUsesCubit, BuyUsesState>(
         'goes back to editing after $failure',
@@ -299,6 +306,7 @@ void main() {
             method: any(named: 'method'),
             senderAccount: any(named: 'senderAccount'),
             screenshotPath: any(named: 'screenshotPath'),
+            expectedPricePiastres: any(named: 'expectedPricePiastres'),
           ),
         ).thenAnswer((_) async => Err(failure)),
         build: build,
@@ -308,6 +316,61 @@ void main() {
       );
     }
 
+    test(
+      'shows the new prices and keeps the form after a price change',
+      () async {
+        const changed = [
+          CreditPack(id: 'pack-1', uses: 1, pricePiastres: 2500),
+          CreditPack(id: 'pack-5', uses: 5, pricePiastres: 9000),
+        ];
+        when(
+          () => balance.submitTopup(
+            packId: any(named: 'packId'),
+            method: any(named: 'method'),
+            senderAccount: any(named: 'senderAccount'),
+            screenshotPath: any(named: 'screenshotPath'),
+            expectedPricePiastres: any(named: 'expectedPricePiastres'),
+          ),
+        ).thenAnswer((_) async => const Err(PriceChangedFailure()));
+        final cubit = build();
+        await fillAndSubmit()(cubit);
+        when(
+          () => balance.fetchPacks(any()),
+        ).thenAnswer((_) async => const Ok(changed));
+        await cubit.submit();
+
+        verify(() => balance.fetchPacks(UserRole.consumer)).called(3);
+        expect(cubit.state.packs, changed);
+        expect(cubit.state.pack?.pricePiastres, 9000);
+        expect(cubit.state.status, BuyUsesStatus.editing);
+        expect(cubit.state.failure, const PriceChangedFailure());
+        expect(cubit.state.screenshot, '/tmp/proof.jpg');
+        expect(cubit.state.sender, '0111 456 7720');
+        await cubit.close();
+      },
+    );
+
+    test('does not send once closed during the upload', () async {
+      final cubit = build();
+      await cubit.load();
+      cubit
+        ..setSender('0111 456 7720')
+        ..attachScreenshot('/tmp/proof.jpg');
+      final sending = cubit.submit();
+      await cubit.close();
+      await sending;
+
+      verifyNever(
+        () => balance.submitTopup(
+          packId: any(named: 'packId'),
+          method: any(named: 'method'),
+          senderAccount: any(named: 'senderAccount'),
+          screenshotPath: any(named: 'screenshotPath'),
+          expectedPricePiastres: any(named: 'expectedPricePiastres'),
+        ),
+      );
+    });
+
     test('does not upload the same screenshot twice on a retry', () async {
       var attempts = 0;
       when(
@@ -316,6 +379,7 @@ void main() {
           method: any(named: 'method'),
           senderAccount: any(named: 'senderAccount'),
           screenshotPath: any(named: 'screenshotPath'),
+          expectedPricePiastres: any(named: 'expectedPricePiastres'),
         ),
       ).thenAnswer(
         (_) async =>
@@ -338,6 +402,7 @@ void main() {
           method: any(named: 'method'),
           senderAccount: any(named: 'senderAccount'),
           screenshotPath: any(named: 'screenshotPath'),
+          expectedPricePiastres: any(named: 'expectedPricePiastres'),
         ),
       ).thenAnswer(
         (_) async => ++attempts == 1
@@ -359,6 +424,7 @@ void main() {
           method: any(named: 'method'),
           senderAccount: any(named: 'senderAccount'),
           screenshotPath: any(named: 'screenshotPath'),
+          expectedPricePiastres: any(named: 'expectedPricePiastres'),
         ),
       ).thenAnswer((_) async => const Err(NetworkFailure()));
       final cubit = build();
@@ -368,6 +434,56 @@ void main() {
 
       verify(() => balance.uploadScreenshot('/tmp/other.jpg')).called(1);
       await cubit.close();
+    });
+  });
+
+  group('the screenshot file', () {
+    test('is deleted once the transfer is sent', () async {
+      final cubit = build();
+      await fillAndSubmit()(cubit);
+      await cubit.close();
+
+      verify(() => photos.discard('/tmp/proof.jpg')).called(1);
+    });
+
+    test('is deleted when another one replaces it', () async {
+      final cubit = build();
+      await cubit.load();
+      cubit
+        ..attachScreenshot('/tmp/a.jpg')
+        ..attachScreenshot('/tmp/a.jpg')
+        ..attachScreenshot('/tmp/b.jpg');
+
+      verify(() => photos.discard('/tmp/a.jpg')).called(1);
+      verifyNever(() => photos.discard('/tmp/b.jpg'));
+      await cubit.close();
+    });
+
+    test('is deleted when the cubit closes without sending', () async {
+      final cubit = build();
+      await cubit.load();
+      cubit.attachScreenshot('/tmp/proof.jpg');
+      await cubit.close();
+
+      verify(() => photos.discard('/tmp/proof.jpg')).called(1);
+    });
+
+    test('stays while a failed transfer can be sent again', () async {
+      when(
+        () => balance.submitTopup(
+          packId: any(named: 'packId'),
+          method: any(named: 'method'),
+          senderAccount: any(named: 'senderAccount'),
+          screenshotPath: any(named: 'screenshotPath'),
+          expectedPricePiastres: any(named: 'expectedPricePiastres'),
+        ),
+      ).thenAnswer((_) async => const Err(NetworkFailure()));
+      final cubit = build();
+      await fillAndSubmit()(cubit);
+
+      verifyNever(() => photos.discard(any()));
+      await cubit.close();
+      verify(() => photos.discard('/tmp/proof.jpg')).called(1);
     });
   });
 }

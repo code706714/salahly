@@ -56,6 +56,7 @@ class ConsumerApp {
       catalog.fetchCategories,
     ).thenAnswer((_) async => const Ok(TestCategories.all));
     stubBalance(balance);
+    when(() => photoPicker.discard(any())).thenAnswer((_) async {});
     when(requests.fetchRequests).thenAnswer((_) async => const Ok([]));
     when(requests.fetchAddresses).thenAnswer((_) async => const Ok([]));
     when(

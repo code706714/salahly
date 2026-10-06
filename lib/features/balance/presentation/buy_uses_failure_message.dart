@@ -15,6 +15,7 @@ String buyUsesFailureMessage(
   required String honorific,
 }) {
   return switch (failure) {
+    PriceChangedFailure() => l10n.buyUsesPriceChanged(honorific),
     TooManyPendingFailure() => l10n.buyUsesTooManyPending(honorific),
     PackNotFoundFailure() => l10n.buyUsesPackGone(honorific),
     MethodUnavailableFailure() => l10n.buyUsesMethodGone(honorific),

@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
+import 'package:salahly/core/media/photo_picker.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/balance/domain/entities/credit_pack.dart';
 import 'package:salahly/features/balance/domain/entities/payment_account.dart';
@@ -14,10 +17,14 @@ part 'buy_uses_state.dart';
 /// Buying a pack: the pack, where the money goes, where it came from and
 /// the screenshot, then sending it for review.
 class BuyUsesCubit extends Cubit<BuyUsesState> {
-  BuyUsesCubit({required this._balance, required this._role})
-    : super(const BuyUsesState());
+  BuyUsesCubit({
+    required this._balance,
+    required this._photos,
+    required this._role,
+  }) : super(const BuyUsesState());
 
   final BalanceRepository _balance;
+  final PhotoPicker _photos;
   final UserRole _role;
 
   /// The screenshot already uploaded, by its local path, so a retry after
@@ -69,9 +76,13 @@ class BuyUsesCubit extends Cubit<BuyUsesState> {
     emit(state.copyWith(sender: sender, failure: () => null));
   }
 
-  /// [path] is a screenshot the `PhotoPicker` already cleaned.
-  void attachScreenshot(String path) =>
-      emit(state.copyWith(screenshot: () => path, failure: () => null));
+  /// [path] is a screenshot the `PhotoPicker` already cleaned. The one it
+  /// replaces is deleted: it is a bank screenshot.
+  void attachScreenshot(String path) {
+    final replaced = state.screenshot;
+    if (replaced != null && replaced != path) _discard(replaced);
+    emit(state.copyWith(screenshot: () => path, failure: () => null));
+  }
 
   /// Uploads the screenshot, then says the transfer was made.
   Future<void> submit() async {
@@ -100,8 +111,10 @@ class BuyUsesCubit extends Cubit<BuyUsesState> {
           return;
       }
     }
+    if (isClosed) return;
     final result = await _balance.submitTopup(
       packId: pack.id,
+      expectedPricePiastres: pack.pricePiastres,
       method: method,
       senderAccount: sender,
       screenshotPath: stored,
@@ -109,14 +122,43 @@ class BuyUsesCubit extends Cubit<BuyUsesState> {
     if (isClosed) return;
     switch (result) {
       case Ok():
+        _discard(screenshot);
         emit(state.copyWith(status: BuyUsesStatus.submitted));
       case Err(:final failure):
         // The server doesn't know this upload, or it was spent: send the
         // screenshot again next time.
         if (failure is InvalidScreenshotFailure) _uploaded = null;
         _fail(failure);
+        if (failure is PriceChangedFailure) await _reloadPacks();
     }
   }
+
+  /// Shows the packs at their current prices, keeping the rest of the form.
+  Future<void> _reloadPacks() async {
+    final result = await _balance.fetchPacks(_role);
+    if (isClosed) return;
+    if (result case Ok(value: final packs) when packs.isNotEmpty) {
+      emit(
+        state.copyWith(
+          packs: packs,
+          packId: packs.any((pack) => pack.id == state.packId)
+              ? state.packId
+              : _bestValue(packs).id,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<void> close() {
+    final screenshot = state.screenshot;
+    if (screenshot != null && state.status != BuyUsesStatus.submitted) {
+      _discard(screenshot);
+    }
+    return super.close();
+  }
+
+  void _discard(String path) => unawaited(_photos.discard(path));
 
   void _fail(Failure failure) {
     if (isClosed) return;

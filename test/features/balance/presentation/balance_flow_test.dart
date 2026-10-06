@@ -41,6 +41,7 @@ Future<void> _fillAndSend(
       method: any(named: 'method'),
       senderAccount: any(named: 'senderAccount'),
       screenshotPath: any(named: 'screenshotPath'),
+      expectedPricePiastres: any(named: 'expectedPricePiastres'),
     ),
   ).thenAnswer((_) async {
     onSubmit?.call();
@@ -119,6 +120,7 @@ void main() {
           method: TopupMethod.instapay,
           senderAccount: '01114567720',
           screenshotPath: 'user-1/proof.jpg',
+          expectedPricePiastres: 8000,
         ),
       ]);
       expect(tester.takeException(), isNull);
@@ -245,6 +247,7 @@ void main() {
           method: TopupMethod.instapay,
           senderAccount: '01114567720',
           screenshotPath: 'user-1/proof.jpg',
+          expectedPricePiastres: 25000,
         ),
       ).called(1);
       expect(find.byType(BalancePage), findsOneWidget);

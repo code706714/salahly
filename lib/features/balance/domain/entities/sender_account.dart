@@ -1,21 +1,20 @@
 import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 
+final _whitespace = RegExp(r'\s');
 final _mobile = RegExp(r'^01[0125][0-9]{8}$');
-final _control = RegExp(r'[\u0000-\u001F\u007F-\u009F]');
+final _address = RegExp(r'^[A-Za-z0-9@._-]{3,64}$');
 
 /// What the server accepts as the account the money came from, or null
 /// when it would refuse it. The same rules as `submit_topup`: a wallet
 /// takes an Egyptian mobile number; InstaPay also takes an address of 3 to
-/// 64 characters without control characters. Arabic-Indic digits and
-/// spaces are accepted in numbers.
+/// 64 plain characters (letters, digits and `@ . _ -`). Whitespace is
+/// dropped and Arabic-Indic digits are accepted in numbers.
 String? normalizedSender(TopupMethod method, String input) {
-  final text = input.trim();
-  final digits = _asciiDigits(text).replaceAll(' ', '');
+  final text = input.replaceAll(_whitespace, '');
+  final digits = _asciiDigits(text);
   if (_mobile.hasMatch(digits)) return digits;
   if (method == TopupMethod.wallet) return null;
-  final length = text.runes.length;
-  if (length < 3 || length > 64 || _control.hasMatch(text)) return null;
-  return text;
+  return _address.hasMatch(text) ? text : null;
 }
 
 String _asciiDigits(String input) {

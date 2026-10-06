@@ -25,9 +25,12 @@ abstract interface class BalanceRepository {
   Future<Result<String>> uploadScreenshot(String localPath);
 
   /// Says a transfer of [packId] was made from [senderAccount]; returns
-  /// the transfer's id. The server decides the price and the uses.
+  /// the transfer's id. The server decides the uses, and refuses with a
+  /// `PriceChangedFailure` when the pack no longer costs
+  /// [expectedPricePiastres], what the person saw and transferred.
   Future<Result<String>> submitTopup({
     required String packId,
+    required int expectedPricePiastres,
     required TopupMethod method,
     required String senderAccount,
     required String screenshotPath,

@@ -14,7 +14,6 @@ import 'package:salahly/core/widgets/detail_header.dart';
 import 'package:salahly/core/widgets/segmented_tabs.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
-import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/balance/presentation/buy_uses_failure_message.dart';
 import 'package:salahly/features/balance/presentation/cubit/buy_uses_cubit.dart';
@@ -36,7 +35,11 @@ class BuyUsesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        final cubit = BuyUsesCubit(balance: context.read(), role: role);
+        final cubit = BuyUsesCubit(
+          balance: context.read(),
+          photos: context.read(),
+          role: role,
+        );
         unawaited(cubit.load());
         return cubit;
       },
@@ -85,7 +88,6 @@ class _BuyUsesViewState extends State<BuyUsesView> {
     final l10n = AppLocalizations.of(context);
     final messenger = ScaffoldMessenger.of(context);
     if (state.status == BuyUsesStatus.submitted) {
-      unawaited(context.read<SessionCubit>().refreshProfile());
       messenger
         ..hideCurrentSnackBar()
         ..showSnackBar(SnackBar(content: Text(l10n.buyUsesSent)));
@@ -128,34 +130,37 @@ class _BuyUsesViewState extends State<BuyUsesView> {
           BuyUsesStatus.loading || BuyUsesStatus.failed => false,
           _ => true,
         };
-        return Scaffold(
-          appBar: DetailHeader(title: title),
-          body: switch (state.status) {
-            BuyUsesStatus.loading => const Center(
-              child: CircularProgressIndicator(),
-            ),
-            BuyUsesStatus.failed => _Unavailable(
-              honorific: honorific,
-              onRetry: cubit.load,
-            ),
-            _ => _Steps(
-              role: role,
-              state: state,
-              honorific: honorific,
-              sender: _sender,
-              senderFocus: _senderFocus,
-              senderTouched: _senderTouched,
-            ),
-          },
-          bottomNavigationBar: loaded
-              ? BottomActionBar(
-                  child: BusyFilledButton(
-                    label: l10n.buyUsesSubmit(honorific),
-                    isBusy: state.status == BuyUsesStatus.submitting,
-                    onPressed: state.canSubmit ? cubit.submit : null,
-                  ),
-                )
-              : null,
+        return PopScope(
+          canPop: state.status != BuyUsesStatus.submitting,
+          child: Scaffold(
+            appBar: DetailHeader(title: title),
+            body: switch (state.status) {
+              BuyUsesStatus.loading => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              BuyUsesStatus.failed => _Unavailable(
+                honorific: honorific,
+                onRetry: cubit.load,
+              ),
+              _ => _Steps(
+                role: role,
+                state: state,
+                honorific: honorific,
+                sender: _sender,
+                senderFocus: _senderFocus,
+                senderTouched: _senderTouched,
+              ),
+            },
+            bottomNavigationBar: loaded
+                ? BottomActionBar(
+                    child: BusyFilledButton(
+                      label: l10n.buyUsesSubmit(honorific),
+                      isBusy: state.status == BuyUsesStatus.submitting,
+                      onPressed: state.canSubmit ? cubit.submit : null,
+                    ),
+                  )
+                : null,
+          ),
         );
       },
     );

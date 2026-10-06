@@ -11,6 +11,7 @@ Failure? balanceFailureFrom(Object error) {
     'method_unavailable' => const MethodUnavailableFailure(),
     'invalid_sender' => const InvalidSenderFailure(),
     'invalid_screenshot' => const InvalidScreenshotFailure(),
+    'price_changed' => const PriceChangedFailure(),
     'too_many_pending' => const TooManyPendingFailure(),
     _ => null,
   };

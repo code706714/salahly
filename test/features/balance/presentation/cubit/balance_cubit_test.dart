@@ -12,6 +12,7 @@ import '../../../../helpers/mocks.dart';
 
 void main() {
   late MockBalanceRepository balance;
+  late MockSessionCubit session;
   final topups = [testTopup(), testTopup(id: 'topup-2')];
   final ledger = [
     testLedgerEntry(id: 2, delta: 5, reason: LedgerReason.topup),
@@ -22,6 +23,8 @@ void main() {
 
   setUp(() {
     balance = MockBalanceRepository();
+    session = MockSessionCubit();
+    when(session.refreshProfile).thenAnswer((_) async {});
     when(
       () => balance.fetchTopups(any()),
     ).thenAnswer((_) async => Ok(topups));
@@ -31,7 +34,7 @@ void main() {
   });
 
   BalanceCubit build({UserRole role = UserRole.consumer}) =>
-      BalanceCubit(balance: balance, role: role);
+      BalanceCubit(balance: balance, session: session, role: role);
 
   blocTest<BalanceCubit, BalanceState>(
     'loads the transfers and the movements of the role',
@@ -48,6 +51,36 @@ void main() {
       verify(() => balance.fetchTopups(UserRole.technician)).called(1);
       verify(() => balance.fetchLedger(UserRole.technician)).called(1);
     },
+  );
+
+  blocTest<BalanceCubit, BalanceState>(
+    'fetches the profile too, so the uses left are right',
+    build: build,
+    act: (cubit) async {
+      await cubit.load();
+      await cubit.load();
+    },
+    verify: (_) => verify(session.refreshProfile).called(2),
+  );
+
+  blocTest<BalanceCubit, BalanceState>(
+    'shows the loading state again when retrying after a failure',
+    setUp: () => when(
+      () => balance.fetchTopups(any()),
+    ).thenAnswer((_) async => const Err(NetworkFailure())),
+    build: build,
+    seed: () => const BalanceState(
+      status: BalanceStatus.failed,
+      failure: NetworkFailure(),
+    ),
+    act: (cubit) => cubit.load(),
+    expect: () => [
+      const BalanceState(),
+      const BalanceState(
+        status: BalanceStatus.failed,
+        failure: NetworkFailure(),
+      ),
+    ],
   );
 
   blocTest<BalanceCubit, BalanceState>(

@@ -60,6 +60,9 @@ class PhotoPicker {
     return cleaned?.path;
   }
 
+  /// Deletes a photo this picker returned once it is not needed anymore.
+  Future<void> discard(String path) => _deleteQuietly(File(path));
+
   static Future<void> _deleteQuietly(File file) async {
     try {
       await file.delete();
