@@ -2,7 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:salahly/core/sync/sync_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
+import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/home/presentation/pages/today_page.dart';
 import 'package:salahly/features/jobs/presentation/pages/jobs_page.dart';
 
@@ -74,4 +76,44 @@ void main() {
 
     expect(find.byType(TodayPage), findsOneWidget);
   });
+  testTechnicianApp('loads the category names for every screen', (
+    tester,
+    app,
+  ) async {
+    await app.pump(tester);
+
+    final categories = tester
+        .element(find.byType(TodayPage))
+        .read<CategoriesCubit>()
+        .state;
+    expect(categories.category('ac')?.name, 'تكييف');
+  });
+
+  testTechnicianApp(
+    'fetches new requests on opening, after each sync and on coming back',
+    (tester, app) async {
+      await app.pump(tester);
+      final onOpen = verify(app.requests.fetchNewRequests).callCount;
+      expect(onOpen, greaterThan(0));
+
+      await tester.element(find.byType(TodayPage)).read<SyncCubit>().syncNow();
+      await app.settle(tester);
+      verify(app.requests.fetchNewRequests).called(greaterThan(0));
+      clearInteractions(app.account);
+
+      const [
+        AppLifecycleState.inactive,
+        AppLifecycleState.hidden,
+        AppLifecycleState.paused,
+        AppLifecycleState.hidden,
+        AppLifecycleState.inactive,
+        AppLifecycleState.resumed,
+      ].forEach(tester.binding.handleAppLifecycleStateChanged);
+      await app.settle(tester);
+
+      verify(app.requests.fetchNewRequests).called(greaterThan(0));
+      // The free jobs left may have changed meanwhile.
+      verify(() => app.account.fetchProfile(any())).called(greaterThan(0));
+    },
+  );
 }
