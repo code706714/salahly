@@ -281,9 +281,36 @@ void main() {
       expect(cubit.state.change, change);
       await cubit.close();
     });
+
+    test('never brings back a cancelled platform job', () async {
+      final platform = testJob(source: JobSource.platform);
+      when(() => jobs.cancel('job-1')).thenAnswer((_) async => Ok(platform));
+      final cubit = await started(testDetails(job: platform));
+      await cubit.cancel();
+      final cancelled = cubit.state.change!;
+      expect(cancelled.canUndo, isFalse);
+
+      await cubit.undo(cancelled);
+
+      verifyNever(() => jobs.restore(any()));
+      expect(
+        JobChange(previous: platform, to: JobStatus.started).canUndo,
+        isTrue,
+      );
+      await cubit.close();
+    });
   });
 
   group('delete and photos', () {
+    test('never deletes a platform job', () async {
+      final cubit = await started(
+        testDetails(job: testJob(source: JobSource.platform)),
+      );
+      await cubit.delete();
+      verifyNever(() => jobs.deleteJob(any()));
+      await cubit.close();
+    });
+
     test('deletes the job', () async {
       when(
         () => jobs.deleteJob('job-1'),

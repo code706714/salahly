@@ -8,6 +8,12 @@ abstract final class AppRoutes {
   static const consumerOnboarding = '/onboarding/consumer';
   static const technicianOnboarding = '/onboarding/technician';
   static const consumerHome = '/consumer';
+  static const consumerRequests = '/consumer/requests';
+  static const consumerAccount = '/consumer/account';
+  static const newRequest = '/consumer/requests/new';
+  static const consumerAddresses = '/consumer/account/addresses';
+  static const pastTechnicians = '/consumer/account/technicians';
+  static const consumerTechnicians = '/consumer/technicians';
   static const technicianHome = '/technician';
   static const technicianJobs = '/technician/jobs';
   static const technicianCalendar = '/technician/jobs/calendar';
@@ -16,10 +22,25 @@ abstract final class AppRoutes {
   static const newCustomer = '/technician/customers/new';
   static const technicianMoney = '/technician/money';
   static const technicianAccount = '/technician/account';
+  static const incomingRequests = '/technician/requests';
   static const sessionUnavailable = '/session-unavailable';
   static const legal = '/legal';
   static const terms = '/legal/terms';
   static const privacy = '/legal/privacy';
+
+  /// A new request, optionally for [categoryId] or to [technicianId] first.
+  static String newRequestFor({String? categoryId, String? technicianId}) {
+    final query = {'category': ?categoryId, 'technician': ?technicianId};
+    return query.isEmpty
+        ? newRequest
+        : Uri(path: newRequest, queryParameters: query).toString();
+  }
+
+  static String request(String id) => '$consumerRequests/$id';
+  static String requestComplaint(String id) => '${request(id)}/complaint';
+  static String technicianProfile(String id) => '$consumerTechnicians/$id';
+
+  static String incomingRequest(String id) => '$incomingRequests/$id';
 
   static String job(String id) => '$technicianJobs/$id';
   static String jobQuote(String id) => '${job(id)}/quote';

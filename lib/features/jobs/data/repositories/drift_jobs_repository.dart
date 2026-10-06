@@ -331,8 +331,12 @@ SELECT title, unit_price_piastres FROM (
     updated = switch (next) {
       JobStatus.confirmed => updated.copyWith(
         confirmedAt: Value(now),
-        // Confirming the visit means the customer agreed to the price.
-        quoteStatus: row.quoteStatus == QuoteStatus.sent.name
+        // Confirming the visit means the customer agreed to the price,
+        // except on a platform job: there the consumer answers a price
+        // change in the app.
+        quoteStatus:
+            previous.quoteStatus == QuoteStatus.sent &&
+                previous.source == JobSource.manual
             ? QuoteStatus.accepted.name
             : null,
       ),

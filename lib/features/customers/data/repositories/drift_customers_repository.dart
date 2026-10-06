@@ -107,7 +107,7 @@ ORDER BY MAX(
   @override
   Stream<CustomerRecord?> watchCustomer(String id) {
     final db = _database;
-    return watchTables(db, {db.customers, db.customerUnits}, () async {
+    return watchTables(db, {db.customers, db.customerUnits, db.jobs}, () async {
       final row =
           await (db.select(db.customers)..where(
                 (customer) =>
@@ -126,6 +126,7 @@ ORDER BY MAX(
       return CustomerRecord(
         customer: customerFromRow(row),
         units: units.map(unitFromRow).toList(),
+        bookedInApp: await _hasAppBookings(id),
       );
     });
   }
@@ -184,6 +185,9 @@ ORDER BY MAX(
 
   @override
   Future<Result<void>> deleteCustomer(String id) => _write(() async {
+    if (await _hasAppBookings(id)) {
+      throw StateError('A customer booked through the app stays');
+    }
     final db = _database;
     final now = _now();
     final row = await _customerRow(id);
@@ -287,6 +291,22 @@ ORDER BY MAX(
   Future<CustomerUnitRow> _unitRow(String id) => (_database.select(
     _database.customerUnits,
   )..where((unit) => unit.id.equals(id))).getSingle();
+
+  /// Whether a live job came to this customer through the app; the server
+  /// keeps such customers, so they can't be deleted here either.
+  Future<bool> _hasAppBookings(String customerId) async {
+    final job =
+        await (_database.select(_database.jobs)
+              ..where(
+                (job) =>
+                    job.customerId.equals(customerId) &
+                    job.source.equals('platform') &
+                    job.deletedAt.isNull(),
+              )
+              ..limit(1))
+            .getSingleOrNull();
+    return job != null;
+  }
 
   /// Runs [action] in a transaction, then tells the sync about it.
   Future<Result<T>> _write<T>(Future<T> Function() action) async {

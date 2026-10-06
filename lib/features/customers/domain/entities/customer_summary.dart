@@ -50,11 +50,19 @@ final class CustomerSummary extends Equatable {
 
 /// A customer and their air conditioners.
 final class CustomerRecord extends Equatable {
-  const CustomerRecord({required this.customer, required this.units});
+  const CustomerRecord({
+    required this.customer,
+    required this.units,
+    this.bookedInApp = false,
+  });
 
   final Customer customer;
   final List<CustomerUnit> units;
 
+  /// Has a job booked through the app. Such jobs stay on the server, so
+  /// the customer can't be deleted.
+  final bool bookedInApp;
+
   @override
-  List<Object?> get props => [customer, units];
+  List<Object?> get props => [customer, units, bookedInApp];
 }

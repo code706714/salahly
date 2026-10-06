@@ -14,6 +14,8 @@ import 'package:salahly/features/catalog/domain/repositories/catalog_repository.
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/customers/domain/repositories/customers_repository.dart';
 import 'package:salahly/features/jobs/domain/repositories/jobs_repository.dart';
+import 'package:salahly/features/marketplace/domain/repositories/consumer_requests_repository.dart';
+import 'package:salahly/features/marketplace/domain/repositories/technician_requests_repository.dart';
 import 'package:salahly/features/onboarding/domain/repositories/onboarding_repository.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
@@ -46,3 +48,9 @@ class MockSessionCubit extends MockCubit<SessionState>
 class MockSyncCubit extends MockCubit<SyncState> implements SyncCubit {}
 
 class MockAreasCubit extends MockCubit<AreasState> implements AreasCubit {}
+
+class MockConsumerRequestsRepository extends Mock
+    implements ConsumerRequestsRepository {}
+
+class MockTechnicianRequestsRepository extends Mock
+    implements TechnicianRequestsRepository {}

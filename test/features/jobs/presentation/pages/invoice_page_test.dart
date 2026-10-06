@@ -143,6 +143,17 @@ void main() {
       expect(find.text(l10n.invoiceTitle('0127')), findsNothing);
     });
 
+    testWidgets('says when the consumer declined the price change', (
+      tester,
+    ) async {
+      show(ready(finished(quoteStatus: QuoteStatus.declined)));
+      await pumpPage(tester);
+      expect(
+        find.text('م. شريف عادل · ${l10n.platformJobQuoteDeclined}'),
+        findsOneWidget,
+      );
+    });
+
     testWidgets('says when the job is not on this phone', (tester) async {
       show(InvoiceState(today: today, status: JobDetailsStatus.missing));
       await pumpPage(tester);

@@ -11,7 +11,8 @@ enum PhotoSource { camera, gallery }
 enum PhotoPurpose {
   avatar(shortSide: 800),
   document(shortSide: 1600),
-  job(shortSide: 1280);
+  job(shortSide: 1280),
+  request(shortSide: 1280);
 
   const PhotoPurpose({required this.shortSide});
 

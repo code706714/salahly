@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:salahly/core/error/failure_message.dart';
 import 'package:salahly/core/location/location_service.dart';
 import 'package:salahly/core/text/person_name.dart';
+import 'package:salahly/core/text/text_limit.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
 import 'package:salahly/core/theme/app_spacing.dart';
@@ -102,8 +102,8 @@ class _Form extends StatelessWidget {
               TextFormField(
                 initialValue: state.fullName,
                 onChanged: cubit.nameChanged,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(maxNameLength),
+                inputFormatters: const [
+                  CodePointLimit(maxNameLength),
                 ],
                 autofillHints: const [AutofillHints.name],
                 textInputAction: TextInputAction.done,

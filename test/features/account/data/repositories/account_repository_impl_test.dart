@@ -27,6 +27,7 @@ Map<String, dynamic> _row() => {
   'consumer_profiles': {
     'honorific': 'ms',
     'request_credits': 2,
+    'area_id': 'nasr_city',
     'service_areas': {'name_ar': 'مدينة نصر'},
   },
   'technician_profiles': null,
@@ -39,6 +40,7 @@ const _profile = UserProfile(
   activeRole: UserRole.consumer,
   consumer: ConsumerProfile(
     honorific: Honorific.ms,
+    areaId: 'nasr_city',
     areaName: 'مدينة نصر',
     requestCredits: 2,
   ),

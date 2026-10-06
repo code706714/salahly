@@ -1,10 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:salahly/core/text/digit_input_formatters.dart';
 import 'package:salahly/core/text/digits.dart';
 import 'package:salahly/core/text/normalize.dart';
+import 'package:salahly/core/text/text_limit.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/widgets/choice_chip_button.dart';
 import 'package:salahly/features/customers/domain/entities/customer_unit.dart';
@@ -151,7 +151,7 @@ class _UnitSheetState extends State<UnitSheet> {
             Text(l10n.unitBrand, style: textTheme.labelLarge),
             TextField(
               controller: _brand,
-              inputFormatters: [LengthLimitingTextInputFormatter(40)],
+              inputFormatters: const [CodePointLimit(40)],
               textInputAction: TextInputAction.next,
               style: const TextStyle(fontSize: 17),
               decoration: InputDecoration(hintText: l10n.unitBrandHint),
@@ -174,7 +174,7 @@ class _UnitSheetState extends State<UnitSheet> {
             Text(l10n.unitRoom, style: textTheme.labelLarge),
             TextField(
               controller: _room,
-              inputFormatters: [LengthLimitingTextInputFormatter(40)],
+              inputFormatters: const [CodePointLimit(40)],
               textInputAction: TextInputAction.next,
               style: const TextStyle(fontSize: 17),
               decoration: InputDecoration(hintText: l10n.unitRoomHint),

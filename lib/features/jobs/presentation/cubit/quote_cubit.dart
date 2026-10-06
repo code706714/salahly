@@ -15,7 +15,8 @@ export 'package:salahly/features/jobs/presentation/cubit/job_details_status.dart
 part 'quote_state.dart';
 
 /// Writing a job's quote: its lines and how long it holds, saved as a
-/// draft, sent, or marked accepted.
+/// draft, sent, or marked accepted. A platform job's quote is sent to the
+/// consumer in the app, who accepts or declines it there.
 ///
 /// Edits stay on the screen until saved; the saved lines are picked up
 /// again after each save so they keep their ids.
@@ -124,13 +125,21 @@ class QuoteCubit extends Cubit<QuoteState> {
       emit(state.copyWith(items: items, isDirty: true));
 
   /// Saves without sending. A quote already sent or accepted keeps that
-  /// status; one without lines is no quote at all.
+  /// status; one without lines is no quote at all. A platform job's
+  /// accepted quote changed here is a draft until the consumer gets it.
   Future<bool> saveDraft() {
-    final current = state.details?.job.quoteStatus ?? QuoteStatus.none;
+    final job = state.details?.job;
+    final current = job?.quoteStatus ?? QuoteStatus.none;
+    final keeps = switch (current) {
+      QuoteStatus.sent => true,
+      QuoteStatus.accepted =>
+        job?.source != JobSource.platform || !state.isDirty,
+      _ => false,
+    };
     return _save(
       state.items.isEmpty
           ? QuoteStatus.none
-          : current == QuoteStatus.sent || current == QuoteStatus.accepted
+          : keeps
           ? current
           : QuoteStatus.draft,
     );
@@ -142,9 +151,13 @@ class QuoteCubit extends Cubit<QuoteState> {
     return _save(QuoteStatus.sent);
   }
 
-  /// The customer agreed to the quote.
+  /// The customer agreed to the quote. On a platform job only the consumer
+  /// answers, in the app.
   Future<bool> markAccepted() async {
-    if (state.items.isEmpty) return false;
+    final job = state.details?.job;
+    if (state.items.isEmpty || job?.source == JobSource.platform) {
+      return false;
+    }
     return _save(QuoteStatus.accepted);
   }
 

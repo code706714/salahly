@@ -10,6 +10,11 @@ final class JobChange extends Equatable {
   /// The status the job was moved to.
   final JobStatus to;
 
+  /// A platform job stays cancelled: the consumer's request was cancelled
+  /// with it.
+  bool get canUndo =>
+      !(previous.source == JobSource.platform && to == JobStatus.cancelled);
+
   @override
   List<Object?> get props => [previous, to];
 }

@@ -9,7 +9,7 @@ import 'package:salahly/features/account/domain/entities/verification_status.dar
 abstract final class UserProfileModel {
   static const select =
       'id, phone, full_name, active_role, '
-      'consumer_profiles(honorific, request_credits, '
+      'consumer_profiles(honorific, request_credits, area_id, '
       'service_areas(name_ar)), '
       'technician_profiles(verification_status, job_credits)';
 
@@ -30,6 +30,7 @@ abstract final class UserProfileModel {
     final area = json['service_areas'] as Map<String, dynamic>;
     return ConsumerProfile(
       honorific: Honorific.values.byName(json['honorific'] as String),
+      areaId: json['area_id'] as String,
       areaName: area['name_ar'] as String,
       requestCredits: json['request_credits'] as int,
     );

@@ -38,18 +38,22 @@ final class UserProfile extends Equatable {
 final class ConsumerProfile extends Equatable {
   const ConsumerProfile({
     required this.honorific,
+    required this.areaId,
     required this.areaName,
     required this.requestCredits,
   });
 
   final Honorific honorific;
+
+  /// The area picked at sign-up.
+  final String areaId;
   final String areaName;
 
   /// Requests the consumer can still send without paying.
   final int requestCredits;
 
   @override
-  List<Object?> get props => [honorific, areaName, requestCredits];
+  List<Object?> get props => [honorific, areaId, areaName, requestCredits];
 }
 
 final class TechnicianProfile extends Equatable {

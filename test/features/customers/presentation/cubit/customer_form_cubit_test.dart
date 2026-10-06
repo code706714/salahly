@@ -553,5 +553,27 @@ void main() {
       expect: () => <CustomerFormState>[],
       verify: (_) => verifyNever(() => customers.deleteCustomer(any())),
     );
+
+    blocTest<CustomerFormCubit, CustomerFormState>(
+      'keeps a customer booked through the app',
+      setUp: () => when(() => customers.watchCustomer(any())).thenAnswer(
+        (_) => Stream.value(
+          CustomerRecord(customer: karim, units: const [], bookedInApp: true),
+        ),
+      ),
+      build: () => build(customerId: 'customer-1'),
+      act: (cubit) async {
+        await cubit.load();
+        await cubit.delete();
+      },
+      expect: () => [
+        isA<CustomerFormState>().having(
+          (state) => state.canDelete,
+          'canDelete',
+          isFalse,
+        ),
+      ],
+      verify: (_) => verifyNever(() => customers.deleteCustomer(any())),
+    );
   });
 }

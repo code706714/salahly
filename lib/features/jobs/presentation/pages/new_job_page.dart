@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:salahly/core/error/failure_message.dart';
 import 'package:salahly/core/launch/launch_feedback.dart';
 import 'package:salahly/core/router/app_routes.dart';
+import 'package:salahly/core/text/text_limit.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
 import 'package:salahly/core/widgets/app_card.dart';
@@ -523,6 +524,7 @@ class _DescriptionField extends StatelessWidget {
       minLines: 2,
       maxLines: 6,
       maxLength: Job.maxDescriptionLength,
+      inputFormatters: const [CodePointLimit(Job.maxDescriptionLength)],
       keyboardType: TextInputType.multiline,
       textCapitalization: TextCapitalization.sentences,
       style: const TextStyle(fontSize: 16, height: 1.6),

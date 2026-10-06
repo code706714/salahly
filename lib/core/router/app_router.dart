@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/router/session_redirect.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
+import 'package:salahly/features/account/presentation/pages/consumer_account_page.dart';
 import 'package:salahly/features/account/presentation/pages/session_unavailable_page.dart';
 import 'package:salahly/features/account/presentation/pages/technician_account_page.dart';
 import 'package:salahly/features/auth/presentation/cubit/otp_cubit.dart';
@@ -17,6 +18,8 @@ import 'package:salahly/features/customers/presentation/pages/customer_page.dart
 import 'package:salahly/features/customers/presentation/pages/customers_page.dart';
 import 'package:salahly/features/home/presentation/pages/consumer_home_page.dart';
 import 'package:salahly/features/home/presentation/pages/today_page.dart';
+import 'package:salahly/features/home/presentation/widgets/consumer_scope.dart';
+import 'package:salahly/features/home/presentation/widgets/consumer_shell.dart';
 import 'package:salahly/features/home/presentation/widgets/technician_scope.dart';
 import 'package:salahly/features/home/presentation/widgets/technician_shell.dart';
 import 'package:salahly/features/jobs/presentation/pages/calendar_page.dart';
@@ -26,6 +29,16 @@ import 'package:salahly/features/jobs/presentation/pages/jobs_page.dart';
 import 'package:salahly/features/jobs/presentation/pages/new_job_page.dart';
 import 'package:salahly/features/jobs/presentation/pages/quote_page.dart';
 import 'package:salahly/features/legal/presentation/pages/legal_page.dart';
+import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
+import 'package:salahly/features/marketplace/presentation/pages/addresses_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/complaint_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/incoming_request_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/incoming_requests_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/my_requests_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/new_request_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/past_technicians_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/request_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/technician_profile_page.dart';
 import 'package:salahly/features/money/presentation/pages/money_page.dart';
 import 'package:salahly/features/onboarding/domain/usecases/submit_technician_onboarding.dart';
 import 'package:salahly/features/onboarding/presentation/cubit/consumer_onboarding_cubit.dart';
@@ -42,6 +55,8 @@ GoRouter createRouter(SessionCubit session, {required Listenable refresh}) {
     refreshListenable: refresh,
     redirect: (context, state) =>
         sessionRedirect(session.state, state.uri.path),
+    // A link to a screen that doesn't exist lands where the session belongs.
+    onException: (context, state, router) => router.go(AppRoutes.splash),
     routes: [
       GoRoute(
         path: AppRoutes.splash,
@@ -107,10 +122,7 @@ GoRouter createRouter(SessionCubit session, {required Listenable refresh}) {
           child: const TechnicianOnboardingPage(),
         ),
       ),
-      GoRoute(
-        path: AppRoutes.consumerHome,
-        builder: (context, state) => const ConsumerHomePage(),
-      ),
+      _consumerRoutes(),
       _technicianRoutes(),
       GoRoute(
         path: AppRoutes.sessionUnavailable,
@@ -130,13 +142,71 @@ GoRouter createRouter(SessionCubit session, {required Listenable refresh}) {
   );
 }
 
+/// Everything under [AppRoutes.consumerHome], inside [ConsumerScope]:
+/// three tabs that keep their place, and the screens pushed over them.
+RouteBase _consumerRoutes() {
+  String id(GoRouterState state) => state.pathParameters['id']!;
+
+  return ShellRoute(
+    builder: (context, state, child) => ConsumerScope(child: child),
+    routes: [
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            ConsumerShell(navigationShell: navigationShell),
+        branches: [
+          _tab(AppRoutes.consumerHome, const ConsumerHomePage()),
+          _tab(AppRoutes.consumerRequests, const MyRequestsPage()),
+          _tab(AppRoutes.consumerAccount, const ConsumerAccountPage()),
+        ],
+      ),
+      // Pushed over the tabs; listed before the request so "new" isn't
+      // taken for a request id.
+      GoRoute(
+        path: AppRoutes.newRequest,
+        builder: (context, state) => NewRequestPage(
+          categoryId: state.uri.queryParameters['category'],
+          technicianId: state.uri.queryParameters['technician'],
+        ),
+      ),
+      GoRoute(
+        path: '${AppRoutes.consumerRequests}/:id',
+        builder: (context, state) => RequestPage(requestId: id(state)),
+        routes: [
+          GoRoute(
+            path: 'complaint',
+            builder: (context, state) => ComplaintPage(requestId: id(state)),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '${AppRoutes.consumerTechnicians}/:id',
+        builder: (context, state) => TechnicianProfilePage(
+          technicianId: id(state),
+          offer: switch (state.extra) {
+            final RequestOffer offer => offer,
+            _ => null,
+          },
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.consumerAddresses,
+        builder: (context, state) => const AddressesPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.pastTechnicians,
+        builder: (context, state) => const PastTechniciansPage(),
+      ),
+    ],
+  );
+}
+
+StatefulShellBranch _tab(String path, Widget page) => StatefulShellBranch(
+  routes: [GoRoute(path: path, builder: (context, state) => page)],
+);
+
 /// Everything under [AppRoutes.technicianHome], inside [TechnicianScope]:
 /// four tabs that keep their place, and the screens pushed over them.
 RouteBase _technicianRoutes() {
-  StatefulShellBranch tab(String path, Widget page) => StatefulShellBranch(
-    routes: [GoRoute(path: path, builder: (context, state) => page)],
-  );
-
   String id(GoRouterState state) => state.pathParameters['id']!;
 
   return ShellRoute(
@@ -146,10 +216,10 @@ RouteBase _technicianRoutes() {
         builder: (context, state, navigationShell) =>
             TechnicianShell(navigationShell: navigationShell),
         branches: [
-          tab(AppRoutes.technicianHome, const TodayPage()),
-          tab(AppRoutes.technicianJobs, const JobsPage()),
-          tab(AppRoutes.technicianCustomers, const CustomersPage()),
-          tab(AppRoutes.technicianMoney, const MoneyPage()),
+          _tab(AppRoutes.technicianHome, const TodayPage()),
+          _tab(AppRoutes.technicianJobs, const JobsPage()),
+          _tab(AppRoutes.technicianCustomers, const CustomersPage()),
+          _tab(AppRoutes.technicianMoney, const MoneyPage()),
         ],
       ),
       // Pushed over the tabs. A tab's own path only matches exactly, so
@@ -157,6 +227,14 @@ RouteBase _technicianRoutes() {
       GoRoute(
         path: AppRoutes.technicianAccount,
         builder: (context, state) => const TechnicianAccountPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.incomingRequests,
+        builder: (context, state) => const IncomingRequestsPage(),
+      ),
+      GoRoute(
+        path: '${AppRoutes.incomingRequests}/:id',
+        builder: (context, state) => IncomingRequestPage(requestId: id(state)),
       ),
       GoRoute(
         path: AppRoutes.technicianCalendar,

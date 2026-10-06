@@ -231,6 +231,9 @@
   "navJobs": "الشغلانات",
   "navCustomers": "العملاء",
   "navMoney": "الفلوس",
+  "navHome": "الرئيسية",
+  "navMyRequests": "طلباتي",
+  "navMyAccount": "حسابي",
   "myAccount": "حسابي",
   "today": "النهارده",
   "tomorrow": "بكره",
@@ -1271,5 +1274,1861 @@
   "paymentMethodCash": "كاش",
   "paymentMethodInstapay": "إنستاباي",
   "paymentMethodVodafoneCash": "فودافون كاش",
-  "paymentMethodOther": "تاني"
+  "paymentMethodOther": "تاني",
+  "consumerRetry": "{honorific, select, ms{جرّبي تاني} other{جرّب تاني}}",
+  "@consumerRetry": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerErrorNetwork": "{honorific, select, ms{مفيش نت. اتأكدي من النت وجرّبي تاني.} other{مفيش نت. اتأكد من النت وجرّب تاني.}}",
+  "@consumerErrorNetwork": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerErrorRateLimited": "{honorific, select, ms{طلبات كتير ورا بعض. استني شوية وجرّبي تاني.} other{طلبات كتير ورا بعض. استنى شوية وجرّب تاني.}}",
+  "@consumerErrorRateLimited": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerErrorUnexpected": "{honorific, select, ms{حصلت مشكلة عندنا. جرّبي تاني.} other{حصلت مشكلة عندنا. جرّب تاني.}}",
+  "@consumerErrorUnexpected": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerNoCredits": "{honorific, select, ms{خلص رصيد طلباتك، فمينفعش تبعتي طلب جديد دلوقتي.} other{خلص رصيد طلباتك، فمينفعش تبعت طلب جديد دلوقتي.}}",
+  "@consumerNoCredits": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerTechnicianUnavailable": "{honorific, select, ms{الفني ده مبقاش متاح. اختاري عرض تاني.} other{الفني ده مبقاش متاح. اختار عرض تاني.}}",
+  "@consumerTechnicianUnavailable": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerOfferExpired": "{honorific, select, ms{معاد العرض ده فات. اختاري عرض تاني.} other{معاد العرض ده فات. اختار عرض تاني.}}",
+  "@consumerOfferExpired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerTooLateToCancel": "{honorific, select, ms{الشغل بدأ، فمينفعش تلغي الطلب. لو في مشكلة ابعتي شكوى.} other{الشغل بدأ، فمينفعش تلغي الطلب. لو في مشكلة ابعت شكوى.}}",
+  "@consumerTooLateToCancel": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerPriceChangeGone": "{honorific, select, ms{الفني غيّر طلب تغيير السعر. شوفي آخر سعر.} other{الفني غيّر طلب تغيير السعر. شوف آخر سعر.}}",
+  "@consumerPriceChangeGone": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerAddressLimit": "{honorific, select, ms{تقدري تحفظي لحد 10 عناوين بس.} other{تقدر تحفظ لحد 10 عناوين بس.}}",
+  "@consumerAddressLimit": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerRequestClosed": "الطلب ده اتقفل: اتلغى أو خلص وقته أو اتختار فيه فني.",
+  "consumerAlreadySent": "ده اتبعت قبل كده.",
+  "marketplaceNotFound": "الطلب ده مش موجود.",
+  "requestTitle": "طلبك",
+  "requestLoadFailed": "مقدرناش نجيب الطلب دلوقتي.",
+  "technicianNoCredits": "خلصت شغلاناتك من المنصة، فمينفعش تبعت عروض دلوقتي.",
+  "technicianRequestClosed": "الطلب ده اتقفل: العميل اختار فني أو لغاه أو وصله 3 عروض.",
+  "technicianInvalidTime": "اختار معاد جوه اليوم والوقت اللي العميل طلبهم.",
+  "technicianAlreadyOffered": "إنت بعت عرض على الطلب ده قبل كده.",
+  "requestIssueNotCooling": "مش بيبرّد",
+  "requestIssueLeaking": "بينقّط مية",
+  "requestIssueNoisy": "صوته عالي",
+  "requestIssueNeedsCleaning": "محتاج تنظيف",
+  "requestIssueInstallation": "تركيب جديد",
+  "requestIssueOther": "حاجة تانية",
+  "requestTitleNotCooling": "{category} مش بيبرّد",
+  "@requestTitleNotCooling": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "requestTitleLeaking": "{category} بينقّط مية",
+  "@requestTitleLeaking": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "requestTitleNoisy": "{category} صوته عالي",
+  "@requestTitleNoisy": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "requestTitleNeedsCleaning": "تنظيف {category}",
+  "@requestTitleNeedsCleaning": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "requestTitleInstallation": "تركيب {category} جديد",
+  "@requestTitleInstallation": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "requestTitleOther": "مشكلة في ال{category}",
+  "@requestTitleOther": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "requestWindowMorning": "الصبح 9 لـ 12",
+  "requestWindowNoon": "الضهر 12 لـ 3",
+  "requestWindowAfternoon": "العصر 3 لـ 6",
+  "requestWindowEvening": "بالليل 6 لـ 9",
+  "requestWindowAnyTime": "أي وقت 9 لـ 9",
+  "requestRangeMorning": "من 9 لـ 12 الصبح",
+  "requestRangeNoon": "من 12 لـ 3 الضهر",
+  "requestRangeAfternoon": "من 3 لـ 6 العصر",
+  "requestRangeEvening": "من 6 لـ 9 بالليل",
+  "requestRangeAnyTime": "من 9 الصبح لـ 9 بالليل",
+  "waitingTitle": "مستنيين العروض",
+  "waitingSentTo": "{count, plural, =0{لسه ملقيناش فني فاضي قريب منك في المعاد ده، وهنفضل ندوّر.} =1{طلبك راح لفني موثّق قريب منك.} =2{طلبك راح لفنيين اتنين موثّقين قريبين منك.} few{طلبك راح لـ {count} فنيين موثّقين قريبين منك.} other{طلبك راح لـ {count} فني موثّق قريب منك.}}",
+  "@waitingSentTo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "waitingCheckBack": "{honorific, select, ms{مش لازم تفضلي فاتحة الأبلكيشن: أول ما يوصل عرض هتلاقيه هنا وفي طلباتك.} other{مش لازم تفضل فاتح الأبلكيشن: أول ما يوصل عرض هتلاقيه هنا وفي طلباتك.}}",
+  "@waitingCheckBack": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingSentMinutes": "{count, plural, =0{الطلب اتبعت دلوقتي} =1{الطلب اتبعت من دقيقة} =2{الطلب اتبعت من دقيقتين} few{الطلب اتبعت من {count} دقايق} other{الطلب اتبعت من {count} دقيقة}}",
+  "@waitingSentMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "waitingSentHours": "{count, plural, =1{الطلب اتبعت من ساعة} =2{الطلب اتبعت من ساعتين} few{الطلب اتبعت من {count} ساعات} other{الطلب اتبعت من {count} ساعة}}",
+  "@waitingSentHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "waitingSentDays": "{count, plural, =1{الطلب اتبعت من يوم} =2{الطلب اتبعت من يومين} few{الطلب اتبعت من {count} أيام} other{الطلب اتبعت من {count} يوم}}",
+  "@waitingSentDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "waitingSeenBy": "{count, plural, =0{لسه محدش من الفنيين شافه} =1{فني واحد شافه} =2{فنيين اتنين شافوه} few{{count} فنيين شافوه} other{{count} فني شافوه}}",
+  "@waitingSeenBy": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "waitingNoOffers": "لسه مفيش عروض",
+  "waitingWidenTitle": "لو مجاش عروض خلال ساعتين",
+  "waitingWidenBody": "هنبعته لفنيين أبعد شوية ونبلغك. ولو مجاش أي عرض خالص، الطلب مش هيتخصم من رصيدك.",
+  "waitingWidenedTitle": "بعتنا طلبك لفنيين أبعد شوية",
+  "waitingWidenedBody": "عدّت ساعتين من غير عروض فوسّعنا المسافة. ولو مجاش أي عرض خالص، الطلب مش هيتخصم من رصيدك.",
+  "waitingWidenWindow": "{honorific, select, ms{وسّعي المعاد عشان العروض تيجي أسرع} other{وسّع المعاد عشان العروض تيجي أسرع}}",
+  "@waitingWidenWindow": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingWidenConfirmTitle": "{honorific, select, ms{توسّعي المعاد؟} other{توسّع المعاد؟}}",
+  "@waitingWidenConfirmTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingWidenConfirmBody": "الفنيين هيقدروا ييجوا {day} في أي وقت من 9 الصبح لـ 9 بالليل.",
+  "@waitingWidenConfirmBody": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingWidenConfirm": "{honorific, select, ms{وسّعي المعاد} other{وسّع المعاد}}",
+  "@waitingWidenConfirm": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingKeepWindow": "{honorific, select, ms{سيبيه زي ما هو} other{سيبه زي ما هو}}",
+  "@waitingKeepWindow": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingWindowWidened": "{honorific, select, ms{وسّعتي المعاد: الفنيين يقدروا ييجوا في أي وقت من 9 الصبح لـ 9 بالليل.} other{وسّعت المعاد: الفنيين يقدروا ييجوا في أي وقت من 9 الصبح لـ 9 بالليل.}}",
+  "@waitingWindowWidened": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCancel": "الغي الطلب",
+  "waitingCancelFree": "الإلغاء ببلاش ورصيدك بيرجعلك",
+  "waitingCancelConfirmTitle": "تلغي الطلب؟",
+  "waitingCancelConfirmBody": "الفنيين مش هيقدروا يبعتوا عروض عليه، ورصيدك هيرجعلك.",
+  "waitingCancelKeep": "{honorific, select, ms{لأ، سيبيه} other{لأ، سيبه}}",
+  "@waitingCancelKeep": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "offersTitle": "العروض على طلبك",
+  "offersReceived": "{count, plural, =1{وصلك عرض واحد} =2{وصلك عرضين} few{وصلك {count} عروض} other{وصلك {count} عرض}} {sentTo, plural, =1{من فني واحد اتبعتله الطلب} =2{من فنيين اتنين اتبعتلهم الطلب} few{من {sentTo} فنيين اتبعتلهم الطلب} other{من {sentTo} فني اتبعتلهم الطلب}}",
+  "@offersReceived": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "sentTo": {
+        "type": "int"
+      }
+    }
+  },
+  "offersSortNearest": "الأقرب",
+  "offersSortCheapest": "الأرخص",
+  "offersSortTopRated": "الأعلى تقييم",
+  "offersReviewCount": "{count, plural, =1{(تقييم واحد)} =2{(تقييمين)} few{({count} تقييمات)} other{({count} تقييم)}}",
+  "@offersReviewCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offersNoReviews": "لسه مفيش تقييمات",
+  "offersJobsDone": "{count, plural, =0{لسه مخلّصش شغلانات} =1{شغلانة واحدة} =2{شغلانتين} few{{count} شغلانات} other{{count} شغلانة}}",
+  "@offersJobsDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offersVerified": "موثّق",
+  "offersStartingPrice": "السعر المبدئي",
+  "offersDistance": "{km} كم منك",
+  "@offersDistance": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "offersNote": "\"{note}\"",
+  "@offersNote": {
+    "placeholders": {
+      "note": {
+        "type": "String"
+      }
+    }
+  },
+  "offersProfile": "صفحته",
+  "offersPick": "{honorific, select, ms{اختاري {name}} other{اختار {name}}}",
+  "@offersPick": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "offersPickTitle": "{honorific, select, ms{تختاري {name}؟} other{تختار {name}؟}}",
+  "@offersPickTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "offersPickBody": "هييجي {when}، والسعر المبدئي {price}. العروض التانية هتتقفل.",
+  "@offersPickBody": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "offersPickKeep": "{honorific, select, ms{لأ، استني} other{لأ، استنى}}",
+  "@offersPickKeep": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "offersPricesNote": "{honorific, select, ms{الأسعار دي مبدئية. لو الفني لقى إن فيه حاجة محتاجة قطع غيار، لازم يقولك السعر وتوافقي قبل ما يبدأ.} other{الأسعار دي مبدئية. لو الفني لقى إن فيه حاجة محتاجة قطع غيار، لازم يقولك السعر وتوافق قبل ما يبدأ.}}",
+  "@offersPricesNote": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "techProfilePageTitle": "صفحة الفني",
+  "techProfileTrade": "فني {category}",
+  "@techProfileTrade": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "techProfileYears": "{count, plural, =0{أقل من سنة خبرة} =1{سنة خبرة} =2{سنتين خبرة} few{{count} سنين خبرة} other{{count} سنة خبرة}}",
+  "@techProfileYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileVerified": "موثّق بالبطاقة",
+  "techProfileReviewCount": "{count, plural, =1{تقييم واحد} =2{تقييمين} few{{count} تقييمات} other{{count} تقييم}}",
+  "@techProfileReviewCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileJobsDone": "{count, plural, few{شغلانات خلصت} other{شغلانة خلصت}}",
+  "@techProfileJobsDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileOnTime": "جه في معاده",
+  "techProfileOnTimeValue": "{percent}%",
+  "@techProfileOnTimeValue": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileAreas": "بيشتغل في",
+  "techProfilePrices": "أسعاره المبدئية",
+  "techProfileFromPrice": "من {price}",
+  "@techProfileFromPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "techProfileReviews": "رأي العملاء",
+  "techProfileAllReviews": "كل التقييمات",
+  "techProfileNoReviews": "لسه محدش قيّمه.",
+  "techProfileStars": "{count} من 5 نجوم",
+  "@techProfileStars": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileAgoDays": "{count, plural, =0{النهارده} =1{امبارح} =2{من يومين} few{من {count} أيام} other{من {count} يوم}}",
+  "@techProfileAgoDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileAgoWeeks": "{count, plural, =1{من أسبوع} =2{من أسبوعين} few{من {count} أسابيع} other{من {count} أسبوع}}",
+  "@techProfileAgoWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileAgoMonths": "{count, plural, =1{من شهر} =2{من شهرين} few{من {count} شهور} other{من {count} شهر}}",
+  "@techProfileAgoMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfileAgoYears": "{count, plural, =1{من سنة} =2{من سنتين} few{من {count} سنين} other{من {count} سنة}}",
+  "@techProfileAgoYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "techProfilePickOffer": "{honorific, select, ms{اختاري {name} · {price}} other{اختار {name} · {price}}}",
+  "@techProfilePickOffer": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "techProfileAsk": "{honorific, select, ms{اطلبي {name}} other{اطلب {name}}}",
+  "@techProfileAsk": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "techProfileNotFound": "صفحة الفني ده مش متاحة.",
+  "closedRequestCancelledByYou": "{honorific, select, ms{لغيتي الطلب ده} other{لغيت الطلب ده}}",
+  "@closedRequestCancelledByYou": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "closedRequestFreeCancel": "الإلغاء كان ببلاش ورصيدك رجعلك.",
+  "closedRequestTechnicianTold": "الفني اتبلّغ إن الطلب اتلغى.",
+  "closedRequestCancelledByTechnician": "الفني لغى، ورصيدك رجعلك",
+  "closedRequestAskOthers": "{honorific, select, ms{اطلبي تاني وهنبعته لفنيين تانيين قريبين منك.} other{اطلب تاني وهنبعته لفنيين تانيين قريبين منك.}}",
+  "@closedRequestAskOthers": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "closedRequestExpiredNoOffers": "محدش بعت عرض في الوقت ده، ورصيدك رجعلك",
+  "closedRequestExpiredNoPick": "{honorific, select, ms{معاد الطلب فات من غير ما تختاري فني، ورصيدك رجعلك} other{معاد الطلب فات من غير ما تختار فني، ورصيدك رجعلك}}",
+  "@closedRequestExpiredNoPick": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "closedRequestTryAnotherTime": "{honorific, select, ms{ممكن تطلبي تاني في يوم أو معاد تاني.} other{ممكن تطلب تاني في يوم أو معاد تاني.}}",
+  "@closedRequestTryAnotherTime": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "closedRequestAgain": "{honorific, select, ms{اطلبي تاني} other{اطلب تاني}}",
+  "@closedRequestAgain": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "trackTitleChosen": "مستنيين {name} يأكّد المعاد",
+  "@trackTitleChosen": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "trackConfirmed": "{name} أكّد المعاد",
+  "@trackConfirmed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "trackTitleStarted": "{name} بيشتغل دلوقتي",
+  "@trackTitleStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "trackConfirming": "{name} يأكّد المعاد",
+  "@trackConfirming": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "trackVerified": "فني {category} موثّق",
+  "@trackVerified": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "trackTechnician": "فني {category}",
+  "@trackTechnician": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "trackCall": "{honorific, select, ms{اتصلي ب{name}} other{اتصل ب{name}}}",
+  "@trackCall": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "trackWhatsApp": "واتساب {name}",
+  "@trackWhatsApp": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "trackWhatsAppMessage": "{honorific, select, ms{أهلاً يا {technician}، أنا {name} صاحبة طلب {request} على صلحلي.} other{أهلاً يا {technician}، أنا {name} صاحب طلب {request} على صلحلي.}}",
+  "@trackWhatsAppMessage": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "technician": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "request": {
+        "type": "String"
+      }
+    }
+  },
+  "trackStepSent": "اتبعت الطلب",
+  "trackStepChosen": "{honorific, select, ms{اخترتي {name} · {price} ج.م} other{اخترت {name} · {price} ج.م}}",
+  "@trackStepChosen": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "trackStepStarted": "بدأ الشغل",
+  "trackStepFinished": "{honorific, select, ms{خلص وتستلمي الفاتورة} other{خلص وتستلم الفاتورة}}",
+  "@trackStepFinished": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "trackPrice": "السعر المبدئي",
+  "trackPriceAgreed": "السعر المتفق عليه",
+  "trackPayment": "الدفع",
+  "trackPaymentValue": "كاش أو InstaPay للفني",
+  "trackAddress": "العنوان",
+  "trackCancel": "إلغاء الطلب",
+  "trackCancelNote": "{honorific, select, ms{لو ألغيتي دلوقتي هنبلّغ {name} فوراً.} other{لو ألغيت دلوقتي هنبلّغ {name} فوراً.}}",
+  "@trackCancelNote": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "trackCancelQuestion": "تلغي الطلب؟",
+  "trackKeep": "لا، خلّيه",
+  "priceChangeTitle": "{name} عايز يغيّر السعر",
+  "@priceChangeTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "priceChangeAgreedLine": "{item} (المتفق عليه)",
+  "@priceChangeAgreedLine": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "priceChangeNewLine": "+ {item} (جديد)",
+  "@priceChangeNewLine": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "priceChangeNewTotal": "الإجمالي الجديد",
+  "priceChangeShield": "{honorific, select, ms{الفني مايقدرش يزوّد أي حاجة من غير موافقتك. لو رفضتي بتدفعي {amount} بس، وتقدري تكلّميه الأول.} other{الفني مايقدرش يزوّد أي حاجة من غير موافقتك. لو رفضت بتدفع {amount} بس، وتقدر تكلّمه الأول.}}",
+  "@priceChangeShield": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "priceChangeApprove": "موافقة على {amount} ج.م",
+  "@priceChangeApprove": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "priceChangeDecline": "{honorific, select, ms{ارفضي الزيادة} other{ارفض الزيادة}}",
+  "@priceChangeDecline": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "priceChangeCall": "{honorific, select, ms{كلّميه الأول} other{كلّمه الأول}}",
+  "@priceChangeCall": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "priceChangeDeclineQuestion": "{honorific, select, ms{ترفضي الزيادة؟} other{ترفض الزيادة؟}}",
+  "@priceChangeDeclineQuestion": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "priceChangeDeclineBody": "{honorific, select, ms{لو رفضتي، هتدفعي {amount} ج.م بس.} other{لو رفضت، هتدفع {amount} ج.م بس.}}",
+  "@priceChangeDeclineBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "priceChangeApproved": "{honorific, select, ms{وافقتي على {amount} ج.م. {name} وصله إنه يكمّل، والسعر الجديد هيظهر في الفاتورة.} other{وافقت على {amount} ج.م. {name} وصله إنه يكمّل، والسعر الجديد هيظهر في الفاتورة.}}",
+  "@priceChangeApproved": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "priceChangeDeclined": "{honorific, select, ms{رفضتي الزيادة. {name} هيكمّل بـ {amount} ج.م بس.} other{رفضت الزيادة. {name} هيكمّل بـ {amount} ج.م بس.}}",
+  "@priceChangeDeclined": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "doneTitle": "الشغلانة خلصت",
+  "doneInvoiceFrom": "فاتورة من {name}",
+  "@doneInvoiceFrom": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "doneAddedApproved": "{honorific, select, ms{{count, plural, =1{{items} اتضاف بعد الكشف ووافقتي عليه.} other{{items} اتضافوا بعد الكشف ووافقتي عليهم.}}} other{{count, plural, =1{{items} اتضاف بعد الكشف ووافقت عليه.} other{{items} اتضافوا بعد الكشف ووافقت عليهم.}}}}",
+  "@doneAddedApproved": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      },
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "doneAddedDeclined": "{honorific, select, ms{{count, plural, =1{{items} اتضاف بعد الكشف ورفضتيه.} other{{items} اتضافوا بعد الكشف ورفضتيهم.}}} other{{count, plural, =1{{items} اتضاف بعد الكشف ورفضته.} other{{items} اتضافوا بعد الكشف ورفضتهم.}}}}",
+  "@doneAddedDeclined": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      },
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "donePaidQuestion": "{honorific, select, ms{دفعتي إزاي؟} other{دفعت إزاي؟}}",
+  "@donePaidQuestion": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "donePaidCash": "كاش",
+  "donePaidInstapay": "InstaPay",
+  "donePaidNotYet": "لسه",
+  "doneRateQuestion": "إيه رأيك في {name}؟",
+  "@doneRateQuestion": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "doneStars": "{count, plural, =1{نجمة واحدة} =2{نجمتين} few{{count} نجوم} other{{count} نجمة}}",
+  "@doneStars": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "doneRatingAwful": "وحش",
+  "doneRatingMeh": "مش أحسن حاجة",
+  "doneRatingGood": "كويس",
+  "doneRatingVeryGood": "كويس جداً",
+  "doneRatingExcellent": "ممتاز",
+  "doneTagOnTime": "جه في معاده",
+  "doneTagCleanWork": "شغله نضيف",
+  "doneTagFairPrice": "سعره زي ما قال",
+  "doneTagExplained": "شرحلي المشكلة",
+  "doneTagRespectful": "محترم",
+  "doneComment": "{honorific, select, ms{عايزة تقولي حاجة تانية؟ (اختياري)} other{عايز تقول حاجة تانية؟ (اختياري)}}",
+  "@doneComment": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "doneSubmit": "{honorific, select, ms{ابعتي التقييم} other{ابعت التقييم}}",
+  "@doneSubmit": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "doneThanks": "شكراً، تقييمك وصل",
+  "doneThanksBody": "{honorific, select, ms{تقييمك بيساعد جيرانك يختاروا صح. {name} موجود في طلباتك لو احتجتيه تاني.} other{تقييمك بيساعد جيرانك يختاروا صح. {name} موجود في طلباتك لو احتجته تاني.}}",
+  "@doneThanksBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "doneYourRating": "تقييمك",
+  "doneBackHome": "رجوع للرئيسية",
+  "complaintTitle": "عندي مشكلة",
+  "complaintSubtitle": "طلب {request} · {technician}",
+  "@complaintSubtitle": {
+    "placeholders": {
+      "request": {
+        "type": "String"
+      },
+      "technician": {
+        "type": "String"
+      }
+    }
+  },
+  "complaintQuestion": "إيه اللي حصل؟",
+  "complaintReasonNoShow": "الفني ماجاش أو اتأخر كتير",
+  "complaintReasonPriceRaised": "السعر زاد من غير ما يسألني",
+  "complaintReasonPoorWork": "الشغل مش مظبوط",
+  "complaintReasonBadConduct": "تعامله مش كويس",
+  "complaintReasonOther": "حاجة تانية",
+  "complaintDetails": "احكيلنا أكتر (اختياري)",
+  "complaintDetailsHint": "مثلاً: قالي جاي الساعة 12 وماجاش ومش بيرد",
+  "complaintAddPhoto": "{honorific, select, ms{ضيفي صورة أو سكرين شوت} other{ضيف صورة أو سكرين شوت}}",
+  "@complaintAddPhoto": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "complaintPhotoTake": "{honorific, select, ms{صوّري دلوقتي} other{صوّر دلوقتي}}",
+  "@complaintPhotoTake": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "complaintPhotoChoose": "{honorific, select, ms{اختاري من الصور} other{اختار من الصور}}",
+  "@complaintPhotoChoose": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "complaintPhotoRemove": "{honorific, select, ms{شيلي الصورة} other{شيل الصورة}}",
+  "@complaintPhotoRemove": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "complaintPhotoDenied": "{honorific, select, ms{اسمحي للأبلكيشن يفتح الكاميرا من إعدادات الموبايل، أو اختاري صورة من الصور.} other{اسمح للأبلكيشن يفتح الكاميرا من إعدادات الموبايل، أو اختار صورة من الصور.}}",
+  "@complaintPhotoDenied": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "complaintPhotoLimit": "{honorific, select, ms{رفعتي صور كتير النهارده. ابعتي الشكوى من غير صورة أو جرّبي بكره.} other{رفعت صور كتير النهارده. ابعت الشكوى من غير صورة أو جرّب بكره.}}",
+  "@complaintPhotoLimit": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "complaintSubmit": "{honorific, select, ms{ابعتي الشكوى} other{ابعت الشكوى}}",
+  "@complaintSubmit": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "complaintSent": "شكوتك وصلت. حد من فريقنا هيكلمك على الواتساب على نفس رقمك.",
+  "complaintOpen": "في شكوى مفتوحة على الطلب ده، وحد من فريقنا هيكلمك على الواتساب.",
+  "myRequestsActive": "شغالة دلوقتي",
+  "myRequestsPast": "اللي فات",
+  "myRequestsWaiting": "مستني عروض",
+  "myRequestsOffers": "{count, plural, =1{وصلك عرض} =2{وصلك عرضين} few{وصلك {count} عروض} other{وصلك {count} عرض}}",
+  "@myRequestsOffers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "myRequestsChosen": "مستني {name} يأكّد",
+  "@myRequestsChosen": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "myRequestsComing": "{name} جاي {time}",
+  "@myRequestsComing": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "myRequestsWorking": "{name} بيشتغل",
+  "@myRequestsWorking": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "myRequestsRated": "خلص · قيّمته {stars}",
+  "@myRequestsRated": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "myRequestsRate": "{honorific, select, ms{خلص · قيّميه} other{خلص · قيّمه}}",
+  "@myRequestsRate": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "myRequestsCancelledByYou": "{honorific, select, ms{إنتي لغيتيه} other{إنت لغيته}}",
+  "@myRequestsCancelledByYou": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "myRequestsCancelledByTechnician": "الفني لغاه",
+  "myRequestsExpired": "خلص وقته",
+  "myRequestsSentMinutes": "{minutes, plural, =0{اتبعت دلوقتي} =1{اتبعت من دقيقة} =2{اتبعت من دقيقتين} few{اتبعت من {minutes} دقايق} other{اتبعت من {minutes} دقيقة}}",
+  "@myRequestsSentMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "myRequestsSentHours": "{hours, plural, =1{اتبعت من ساعة} =2{اتبعت من ساعتين} few{اتبعت من {hours} ساعات} other{اتبعت من {hours} ساعة}}",
+  "@myRequestsSentHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "myRequestsSentDays": "{days, plural, =1{اتبعت من يوم} =2{اتبعت من يومين} few{اتبعت من {days} أيام} other{اتبعت من {days} يوم}}",
+  "@myRequestsSentDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "myRequestsNoOffers": "لسه مفيش عروض",
+  "myRequestsBeforePick": "{honorific, select, ms{قبل ما تختاري فني} other{قبل ما تختار فني}}",
+  "@myRequestsBeforePick": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "myRequestsNoOffersCame": "ماجاش عروض",
+  "myRequestsAgain": "{honorific, select, ms{اطلبي {name} تاني} other{اطلب {name} تاني}}",
+  "@myRequestsAgain": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "myRequestsEmpty": "{honorific, select, ms{لسه مابعتيش طلبات} other{لسه مابعتش طلبات}}",
+  "@myRequestsEmpty": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "myRequestsEmptyBody": "{honorific, select, ms{أول ما تطلبي فني، هتلاقي طلبك هنا وتتابعيه خطوة بخطوة.} other{أول ما تطلب فني، هتلاقي طلبك هنا وتتابعه خطوة بخطوة.}}",
+  "@myRequestsEmptyBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "myRequestsEmptyAction": "{honorific, select, ms{اطلبي فني} other{اطلب فني}}",
+  "@myRequestsEmptyAction": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "myRequestsLoadFailed": "مقدرناش نجيب طلباتك دلوقتي.",
+  "consumerHomeQuestion": "{honorific, select, ms{محتاجة تصلّحي إيه؟} other{محتاج تصلّح إيه؟}}",
+  "@consumerHomeQuestion": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeCreditsLead": "{honorific, select, ms{فاضل ليكي} other{فاضل ليك}}",
+  "@consumerHomeCreditsLead": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeCreditsCount": "{count, plural, =1{طلب واحد ببلاش} =2{طلبين ببلاش} few{{count} طلبات ببلاش} other{{count} طلب ببلاش}}",
+  "@consumerHomeCreditsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "consumerHomeRequestLabel": "طلبك: {title}",
+  "@consumerHomeRequestLabel": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeWaiting": "مستنيين أول عرض",
+  "consumerHomeOffers": "{count, plural, =1{وصلك عرض، {honorific, select, ms{شوفيه} other{شوفه}}} =2{وصلك عرضين، {honorific, select, ms{اختاري واحد} other{اختار واحد}}} few{وصلك {count} عروض، {honorific, select, ms{اختاري واحد} other{اختار واحد}}} other{وصلك {count} عرض، {honorific, select, ms{اختاري واحد} other{اختار واحد}}}}",
+  "@consumerHomeOffers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeChosen": "{honorific, select, ms{اخترتي {name}، مستنيين يأكّد المعاد} other{اخترت {name}، مستنيين يأكّد المعاد}}",
+  "@consumerHomeChosen": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeComing": "{name} جاي {day} الساعة {time}",
+  "@consumerHomeComing": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeConfirmed": "{name} أكّد المعاد",
+  "@consumerHomeConfirmed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeStarted": "{name} شغال دلوقتي",
+  "@consumerHomeStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeTechnicianFallback": "الفني",
+  "consumerHomeSeeOffers": "{honorific, select, ms{شوفي العروض} other{شوف العروض}}",
+  "@consumerHomeSeeOffers": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeFollow": "{honorific, select, ms{تابعي طلبك} other{تابع طلبك}}",
+  "@consumerHomeFollow": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeTechnicians": "{count, plural, =0{لسه مفيش فنيين في منطقتك} =1{فني واحد في منطقتك} =2{فنيين اتنين في منطقتك} few{{count} فنيين في منطقتك} other{{count} فني في منطقتك}}",
+  "@consumerHomeTechnicians": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "consumerHomeSoon": "قريب",
+  "consumerHomeWhyTitle": "{honorific, select, ms{ليه تطلبي من هنا؟} other{ليه تطلب من هنا؟}}",
+  "@consumerHomeWhyTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerHomeWhyVerified": "كل فني متوثّق بالبطاقة ورقم الموبايل",
+  "consumerHomeWhyReviews": "التقييمات من ناس خلصت شغلانة فعلاً",
+  "consumerHomeWhyPrice": "{honorific, select, ms{بتشوفي السعر قبل ما تختاري} other{بتشوف السعر قبل ما تختار}}",
+  "@consumerHomeWhyPrice": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestTitle": "{honorific, select, ms{اطلبي فني {category}} other{اطلب فني {category}}}",
+  "@newRequestTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestTitleAny": "{honorific, select, ms{اطلبي فني} other{اطلب فني}}",
+  "@newRequestTitleAny": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestStep": "خطوة {step} من 3",
+  "@newRequestStep": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      }
+    }
+  },
+  "newRequestDone": "خلصنا",
+  "newRequestFirstTechnician": "طلبك هيروح لـ{name} الأول",
+  "@newRequestFirstTechnician": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestFirstTechnicianNote": "لو مابعتش عرض في ساعتين، هيروح لفنيين تانيين قريبين منك.",
+  "newRequestIssueTitle": "إيه المشكلة؟",
+  "newRequestIssueRequired": "{honorific, select, ms{اختاري المشكلة} other{اختار المشكلة}}",
+  "@newRequestIssueRequired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestDescription": "احكي باختصار",
+  "newRequestDescriptionHint": "مثلاً: التكييف شغال بس الهوا مش ساقع، شارب 1.5 حصان",
+  "newRequestDescriptionRequired": "{honorific, select, ms{اكتبي المشكلة باختصار عشان الفنيين يفهموها} other{اكتب المشكلة باختصار عشان الفنيين يفهموها}}",
+  "@newRequestDescriptionRequired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestDictate": "{honorific, select, ms{دوسي واتكلمي بدل الكتابة} other{دوس واتكلم بدل الكتابة}}",
+  "@newRequestDictate": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestListening": "{honorific, select, ms{بنسمعك… دوسي لما تخلصي} other{بنسمعك… دوس لما تخلص}}",
+  "@newRequestListening": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestSpeechUnavailable": "{honorific, select, ms{الكتابة بالصوت مش متاحة على الموبايل ده. اكتبي المشكلة بإيدك.} other{الكتابة بالصوت مش متاحة على الموبايل ده. اكتب المشكلة بإيدك.}}",
+  "@newRequestSpeechUnavailable": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestPhotos": "صور (اختياري)",
+  "newRequestPhoto": "صورة",
+  "newRequestAddPhoto": "{honorific, select, ms{ضيفي صورة} other{ضيف صورة}}",
+  "@newRequestAddPhoto": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestRemovePhoto": "{honorific, select, ms{شيلي الصورة} other{شيل الصورة}}",
+  "@newRequestRemovePhoto": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestPhotoTake": "{honorific, select, ms{صوّري دلوقتي} other{صوّر دلوقتي}}",
+  "@newRequestPhotoTake": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestPhotoChoose": "{honorific, select, ms{اختاري من الصور} other{اختار من الصور}}",
+  "@newRequestPhotoChoose": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestCameraDenied": "{honorific, select, ms{اسمحي للأبلكيشن يفتح الكاميرا من إعدادات الموبايل، أو اختاري صورة من الصور.} other{اسمح للأبلكيشن يفتح الكاميرا من إعدادات الموبايل، أو اختار صورة من الصور.}}",
+  "@newRequestCameraDenied": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestAddressTitle": "الفني ييجي فين؟",
+  "newRequestAddressRequired": "{honorific, select, ms{اختاري العنوان اللي الفني ييجي فيه} other{اختار العنوان اللي الفني ييجي فيه}}",
+  "@newRequestAddressRequired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestTimeTitle": "إمتى يناسبك؟",
+  "newRequestTomorrow": "بكره {weekday}",
+  "@newRequestTomorrow": {
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestTimeRequired": "{honorific, select, ms{اختاري اليوم والوقت} other{اختار اليوم والوقت}}",
+  "@newRequestTimeRequired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestSummary": "ملخص الطلب",
+  "newRequestSummaryPhotos": "{count, plural, =1{صورة واحدة} =2{صورتين} few{{count} صور} other{{count} صورة}}",
+  "@newRequestSummaryPhotos": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "newRequestSummaryFirst": "هيروح لـ{name} الأول",
+  "@newRequestSummaryFirst": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestNext": "التالي",
+  "newRequestSend": "{honorific, select, ms{ابعتي الطلب} other{ابعت الطلب}}",
+  "@newRequestSend": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestUploading": "بنرفع صورة {current} من {total}…",
+  "@newRequestUploading": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "newRequestSending": "بنبعت طلبك…",
+  "newRequestInvalidTime": "{honorific, select, ms{المعاد ده قرّب يخلص. اختاري معاد تاني.} other{المعاد ده قرّب يخلص. اختار معاد تاني.}}",
+  "@newRequestInvalidTime": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestUploadLimit": "{honorific, select, ms{رفعتي صور كتير النهارده. شيلي الصور وابعتي الطلب من غيرها، أو جرّبي بكره.} other{رفعت صور كتير النهارده. شيل الصور وابعت الطلب من غيرها، أو جرّب بكره.}}",
+  "@newRequestUploadLimit": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestPhotoRejected": "{honorific, select, ms{في صورة مش مقبولة. شيليها وجرّبي تاني.} other{في صورة مش مقبولة. شيلها وجرّب تاني.}}",
+  "@newRequestPhotoRejected": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestSentTitle": "طلبك اتبعت",
+  "newRequestSentTo": "{count, plural, =1{راح لفني {category} موثّق قريب منك.} =2{راح لفنيين {category} اتنين موثّقين قريبين منك.} few{راح لـ {count} فنيين {category} موثّقين قريبين منك.} other{راح لـ {count} فني {category} موثّق قريب منك.}}",
+  "@newRequestSentTo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestSentOffers": "{honorific, select, ms{هتشوفي العروض أول ما توصل، ولحد 3 عروض.} other{هتشوف العروض أول ما توصل، ولحد 3 عروض.}}",
+  "@newRequestSentOffers": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestSentToNobody": "{honorific, select, ms{مفيش فني {category} متاح قريب منك دلوقتي، بس طلبك لسه مستني. لو مجالكيش عرض في ساعتين هنبعته لفنيين أبعد شوية.} other{مفيش فني {category} متاح قريب منك دلوقتي، بس طلبك لسه مستني. لو مجالكش عرض في ساعتين هنبعته لفنيين أبعد شوية.}}",
+  "@newRequestSentToNobody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestBackHome": "رجوع للرئيسية",
+  "consumerAccountCreditsTitle": "رصيد الطلبات",
+  "consumerAccountCredits": "{count, plural, =0{مفيش طلبات} =1{طلب واحد} =2{طلبين} few{{count} طلبات} other{{count} طلب}}",
+  "@consumerAccountCredits": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "consumerAccountMyData": "بياناتي",
+  "consumerAccountRequestProblem": "عندي مشكلة في طلب",
+  "consumerAccountSignOut": "{honorific, select, ms{سجّلي خروج} other{سجّل خروج}}",
+  "@consumerAccountSignOut": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerAccountSignOutTitle": "{honorific, select, ms{تسجّلي خروج؟} other{تسجّل خروج؟}}",
+  "@consumerAccountSignOutTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerAccountSignOutBody": "{honorific, select, ms{عشان تدخلي تاني هتحتاجي رقم موبايلك وكود جديد.} other{عشان تدخل تاني هتحتاج رقم موبايلك وكود جديد.}}",
+  "@consumerAccountSignOutBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesTitle": "عناويني",
+  "addressesNew": "عنوان جديد",
+  "addressesEdit": "{honorific, select, ms{عدّلي العنوان} other{عدّل العنوان}}",
+  "@addressesEdit": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesEmpty": "مفيش عناوين متسجلة لسه",
+  "addressesEmptyNote": "{honorific, select, ms{ضيفي البيت أو الشغل، وتختاريه لما تطلبي فني.} other{ضيف البيت أو الشغل، وتختاره لما تطلب فني.}}",
+  "@addressesEmptyNote": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesLoadFailed": "مقدرناش نجيب عناوينك.",
+  "addressesPrivacy": "{honorific, select, ms{الفنيين هيشوفوا المنطقة بس. العنوان بالظبط ورقمك بيظهروا للفني اللي تختاريه.} other{الفنيين هيشوفوا المنطقة بس. العنوان بالظبط ورقمك بيظهروا للفني اللي تختاره.}}",
+  "@addressesPrivacy": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesLabel": "اسم العنوان",
+  "addressesLabelHint": "مثلاً: البيت، بيت ماما، الشغل",
+  "addressesLabelRequired": "{honorific, select, ms{اكتبي اسم للعنوان} other{اكتب اسم للعنوان}}",
+  "@addressesLabelRequired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesArea": "المنطقة",
+  "addressesAreaPick": "{honorific, select, ms{اختاري المنطقة} other{اختار المنطقة}}",
+  "@addressesAreaPick": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesAreaRequired": "{honorific, select, ms{لازم تختاري المنطقة} other{لازم تختار المنطقة}}",
+  "@addressesAreaRequired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesDetails": "العنوان بالتفصيل",
+  "addressesDetailsHint": "الشارع، رقم العمارة، الدور والشقة",
+  "addressesDetailsRequired": "{honorific, select, ms{اكتبي الشارع ورقم العمارة} other{اكتب الشارع ورقم العمارة}}",
+  "@addressesDetailsRequired": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesSave": "{honorific, select, ms{احفظي العنوان} other{احفظ العنوان}}",
+  "@addressesSave": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesDelete": "{honorific, select, ms{امسحي العنوان} other{امسح العنوان}}",
+  "@addressesDelete": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesDeleteTitle": "{honorific, select, ms{تمسحي «{label}»؟} other{تمسح «{label}»؟}}",
+  "@addressesDeleteTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesDeleteBody": "الطلبات اللي اتبعتت عليه مش هتتأثر.",
+  "addressesDeleteConfirm": "{honorific, select, ms{امسحي} other{امسح}}",
+  "@addressesDeleteConfirm": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "addressesKeep": "خلّيه",
+  "pastTechniciansTitle": "الفنيين اللي اتعاملت معاهم",
+  "pastTechniciansEmpty": "{honorific, select, ms{لسه مااخترتيش فني} other{لسه مااخترتش فني}}",
+  "@pastTechniciansEmpty": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "pastTechniciansEmptyNote": "{honorific, select, ms{أول ما تختاري عرض فني، هيظهر هنا عشان تطلبيه تاني.} other{أول ما تختار عرض فني، هيظهر هنا عشان تطلبه تاني.}}",
+  "@pastTechniciansEmptyNote": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "pastTechniciansLoadFailed": "مقدرناش نجيب طلباتك.",
+  "pastTechniciansLastRequest": "{title} · {date}",
+  "@pastTechniciansLastRequest": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "todayRequestsInArea": "{count, plural, =1{طلب جديد في {area}} =2{طلبين جداد في {area}} few{{count} طلبات جديدة في {area}} other{{count} طلب جديد في {area}}}",
+  "@todayRequestsInArea": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "todayRequestsNearby": "{count, plural, =1{طلب جديد قريب منك} =2{طلبين جداد قريبين منك} few{{count} طلبات جديدة قريبة منك} other{{count} طلب جديد قريب منك}}",
+  "@todayRequestsNearby": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayRequestsNeedOne": "{honorific, select, ms{عميلة محتاجة فني {category}. ابعت عرضك.} other{عميل محتاج فني {category}. ابعت عرضك.}}",
+  "@todayRequestsNeedOne": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "todayRequestsNeedMany": "عملاء محتاجين فني {category}. ابعت عرضك.",
+  "@todayRequestsNeedMany": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "todayRequestsCreditsLeft": "{count, plural, =0{خلصت شغلاناتك ببلاش} =1{فاضل لك شغلانة واحدة ببلاش} =2{فاضل لك شغلانتين ببلاش} few{فاضل لك {count} شغلانات ببلاش} other{فاضل لك {count} شغلانة ببلاش}}",
+  "@todayRequestsCreditsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayRequestsBalance": "رصيدك من المنصة:",
+  "todayRequestsBalanceCount": "{count, plural, =0{مفيش شغلانات مجانية} =1{1 شغلانة مجانية} =2{2 شغلانة مجانية} few{{count} شغلانات مجانية} other{{count} شغلانة مجانية}}",
+  "@todayRequestsBalanceCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "incomingTitle": "طلبات جديدة",
+  "incomingEmpty": "مفيش طلبات جديدة دلوقتي",
+  "incomingEmptyHint": "أول ما عميل قريب منك يطلب فني، طلبه هيظهر هنا.",
+  "incomingLoadFailed": "مقدرناش نجيب الطلبات دلوقتي.",
+  "incomingAgoNow": "لسه حالاً",
+  "incomingAgoMinutes": "{count, plural, =1{من دقيقة} =2{من دقيقتين} few{من {count} دقايق} other{من {count} دقيقة}}",
+  "@incomingAgoMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "incomingAgoHours": "{count, plural, =1{من ساعة} =2{من ساعتين} few{من {count} ساعات} other{من {count} ساعة}}",
+  "@incomingAgoHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "incomingAgoDays": "{count, plural, =1{من يوم} =2{من يومين} few{من {count} أيام} other{من {count} يوم}}",
+  "@incomingAgoDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "incomingConsumer": "{honorific, select, ms{العميلة: {name}} other{العميل: {name}}}",
+  "@incomingConsumer": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingDistance": "{km} كم منك",
+  "@incomingDistance": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingOfferCount": "{count} من {max} عروض",
+  "@incomingOfferCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "incomingMyOffer": "بعتّ عرضك · {price} ج.م",
+  "@incomingMyOffer": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingOfferChosen": "{honorific, select, ms{اختارت عرضك} other{اختار عرضك}}",
+  "@incomingOfferChosen": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingOfferNotChosen": "{honorific, select, ms{اختارت فني تاني} other{اختار فني تاني}}",
+  "@incomingOfferNotChosen": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingClosedFull": "وصله 3 عروض",
+  "incomingClosedCancelled": "{honorific, select, ms{العميلة لغت الطلب} other{العميل لغى الطلب}}",
+  "@incomingClosedCancelled": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingClosedExpired": "خلص وقت الطلب",
+  "incomingClosed": "الطلب اتقفل",
+  "incomingRequestTitle": "طلب جديد من عميل",
+  "incomingSentTo": "الطلب راح لـ {sent, plural, =1{فني واحد} =2{فنيين اتنين} few{{sent} فنيين} other{{sent} فني}}، {offers, plural, =0{ولسه ماوصلش أي عرض} =1{ووصل عرض واحد لحد دلوقتي} =2{ووصل عرضين لحد دلوقتي} few{ووصل {offers} عروض لحد دلوقتي} other{ووصل {offers} عرض لحد دلوقتي}}",
+  "@incomingSentTo": {
+    "placeholders": {
+      "sent": {
+        "type": "int"
+      },
+      "offers": {
+        "type": "int"
+      }
+    }
+  },
+  "incomingPrivacy": "{honorific, select, ms{العنوان بالظبط ورقم العميلة هيظهروا لك لما تختار عرضك.} other{العنوان بالظبط ورقم العميل هيظهروا لك لما يختار عرضك.}}",
+  "@incomingPrivacy": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingPhoto": "صورة من الطلب",
+  "offerFormTitle": "عرضك",
+  "offerFormPrice": "السعر المبدئي",
+  "offerFormServiceChip": "{name} {price}",
+  "@offerFormServiceChip": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "offerFormArrival": "تقدر تيجي إمتى؟",
+  "offerFormNoTimes": "وقت الطلب خلص، فمينفعش تبعت عرض عليه.",
+  "offerFormNote": "{honorific, select, ms{كلمة للعميلة (اختياري)} other{كلمة للعميل (اختياري)}}",
+  "@offerFormNote": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "offerFormNoteHint": "مثلاً: السعر شامل الكشف والتنظيف.",
+  "offerFormSend": "ابعت العرض · {price} ج.م",
+  "@offerFormSend": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "offerFormSendEmpty": "ابعت العرض",
+  "offerFormDismiss": "مش مناسب ليا",
+  "offerFormDismissTitle": "الطلب ده مش مناسب ليك؟",
+  "offerFormDismissBody": "مش هيظهر لك تاني في الطلبات الجديدة.",
+  "offerFormDismissConfirm": "أيوه، مش مناسب",
+  "offerFormDismissKeep": "لأ، ارجع",
+  "offerFormArriveAt": "هتوصل {when}",
+  "@offerFormArriveAt": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "offerFormWaiting": "{honorific, select, ms{مستني رد العميلة} other{مستني رد العميل}}",
+  "@offerFormWaiting": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "offerFormChosenHint": "الشغلانة نزلت في شغلاناتك بالعنوان ورقم التليفون.",
+  "platformJobQuoteDeclined": "العميل رفض الزيادة",
+  "platformJobQuoteDeclinedHint": "هيدفع السعر اللي اتفقتوا عليه بس، فشيل الزيادة من العرض.",
+  "platformJobQuoteSend": "ابعت العرض للعميل",
+  "platformJobQuoteInApp": "هيوصل للعميل في التطبيق",
+  "platformJobCancelTitle": "تلغي الشغلانة دي؟",
+  "platformJobCancelBody": "الشغلانة جاية من المنصة، فالطلب هيتلغي عند العميل ومش هتقدر ترجّعها.",
+  "platformJobCancelConfirm": "ألغيها",
+  "offersExpired": "الميعاد ده فات",
+  "@offersExpired": {},
+  "technicianOffersWaiting": "عروضك المستنية وصلت لرصيدك. استنى لما العميل يرد على واحد منها وبعدها ابعت عرض تاني.",
+  "@technicianOffersWaiting": {}
 }

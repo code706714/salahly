@@ -101,6 +101,7 @@ class _QuoteScreen extends StatelessWidget {
     final job = details.job;
     final customer = details.customer;
     final hasItems = state.items.isNotEmpty;
+    final isPlatform = job.source == JobSource.platform;
     final message = quoteMessage(
       l10n,
       customerName: customer.name,
@@ -126,10 +127,14 @@ class _QuoteScreen extends StatelessWidget {
         body: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            if (job.quoteStatus == QuoteStatus.sent ||
-                job.quoteStatus == QuoteStatus.accepted) ...[
+            if (job.quoteStatus
+                case QuoteStatus.sent ||
+                    QuoteStatus.accepted ||
+                    QuoteStatus.declined) ...[
               _ReplyNotice(
-                accepted: job.quoteStatus == QuoteStatus.accepted,
+                status: job.quoteStatus,
+                // Only the consumer answers a platform job's quote.
+                canMarkAccepted: !isPlatform,
                 onAccepted: state.isSaving ? null : cubit.markAccepted,
               ),
               const SizedBox(height: 14),
@@ -151,7 +156,8 @@ class _QuoteScreen extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        _ValidityButton(days: state.validDays),
+                        // A price change in the app waits for its answer.
+                        if (!isPlatform) _ValidityButton(days: state.validDays),
                       ],
                     ),
                   ),
@@ -165,7 +171,25 @@ class _QuoteScreen extends StatelessWidget {
                 ],
               ),
             ),
-            if (hasItems) ...[
+            if (isPlatform) ...[
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  Icon(
+                    Icons.smartphone_outlined,
+                    size: 20,
+                    color: colors.inkMuted,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      l10n.platformJobQuoteInApp,
+                      style: TextStyle(fontSize: 14, color: colors.inkMuted),
+                    ),
+                  ),
+                ],
+              ),
+            ] else if (hasItems) ...[
               const SizedBox(height: 14),
               Text(
                 l10n.quotePreviewTitle,
@@ -184,16 +208,24 @@ class _QuoteScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Opacity(
-                opacity: hasItems ? 1 : 0.5,
-                child: WhatsAppButton(
-                  label: l10n.quoteSend,
-                  size: WhatsAppButtonSize.large,
+              if (isPlatform)
+                FilledButton(
                   onPressed: hasItems && !state.isSaving
-                      ? () => _send(context, message, customer.phone)
+                      ? () => _sendInApp(context)
                       : null,
+                  child: Text(l10n.platformJobQuoteSend),
+                )
+              else
+                Opacity(
+                  opacity: hasItems ? 1 : 0.5,
+                  child: WhatsAppButton(
+                    label: l10n.quoteSend,
+                    size: WhatsAppButtonSize.large,
+                    onPressed: hasItems && !state.isSaving
+                        ? () => _send(context, message, customer.phone)
+                        : null,
+                  ),
                 ),
-              ),
               const SizedBox(height: 6),
               TextButton(
                 onPressed: state.isSaving ? null : () => _saveDraft(context),
@@ -216,6 +248,13 @@ class _QuoteScreen extends StatelessWidget {
     final sent = await context.read<QuoteCubit>().send();
     if (!sent || !context.mounted) return;
     await context.sendOnWhatsApp(message, to: phone, failureNote: note);
+  }
+
+  /// Sends a platform job's quote to the consumer, who answers it in the
+  /// app, and goes back to the job.
+  Future<void> _sendInApp(BuildContext context) async {
+    final navigator = Navigator.of(context);
+    if (await context.read<QuoteCubit>().send()) navigator.pop();
   }
 
   Future<void> _saveDraft(BuildContext context) async {
@@ -250,20 +289,43 @@ class _QuoteScreen extends StatelessWidget {
 }
 
 /// Where the sent quote stands: waiting for the customer, with a way to
-/// record their yes, or accepted.
+/// record their yes when [canMarkAccepted], accepted, or declined.
 class _ReplyNotice extends StatelessWidget {
-  const _ReplyNotice({required this.accepted, required this.onAccepted});
+  const _ReplyNotice({
+    required this.status,
+    required this.canMarkAccepted,
+    required this.onAccepted,
+  });
 
-  final bool accepted;
+  /// Sent, accepted or declined.
+  final QuoteStatus status;
+  final bool canMarkAccepted;
   final VoidCallback? onAccepted;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = context.appColors;
-    final (background, foreground) = accepted
-        ? (colors.successSoft, colors.success)
-        : (colors.warningSoft, colors.warning);
+    final (background, foreground, icon, text) = switch (status) {
+      QuoteStatus.accepted => (
+        colors.successSoft,
+        colors.success,
+        Icons.check_circle_outline_rounded,
+        l10n.quoteAccepted,
+      ),
+      QuoteStatus.declined => (
+        colors.dangerSoft,
+        colors.dangerDeep,
+        Icons.cancel_outlined,
+        l10n.platformJobQuoteDeclined,
+      ),
+      _ => (
+        colors.warningSoft,
+        colors.warning,
+        Icons.schedule,
+        l10n.jobQuoteSent,
+      ),
+    };
     return Container(
       constraints: const BoxConstraints(minHeight: 48),
       padding: const EdgeInsetsDirectional.only(start: 14, end: 4),
@@ -273,26 +335,36 @@ class _ReplyNotice extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(
-            accepted ? Icons.check_circle_outline_rounded : Icons.schedule,
-            size: 20,
-            color: foreground,
-          ),
+          Icon(icon, size: 20, color: foreground),
           const SizedBox(width: 8),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                accepted ? l10n.quoteAccepted : l10n.jobQuoteSent,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: foreground,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    text,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: foreground,
+                    ),
+                  ),
+                  if (status == QuoteStatus.declined)
+                    Text(
+                      l10n.platformJobQuoteDeclinedHint,
+                      style: TextStyle(
+                        fontSize: 13,
+                        height: 1.6,
+                        color: foreground,
+                      ),
+                    ),
+                ],
               ),
             ),
           ),
-          if (!accepted)
+          if (status == QuoteStatus.sent && canMarkAccepted)
             TextButton(
               onPressed: onAccepted,
               style: TextButton.styleFrom(foregroundColor: colors.primary),
