@@ -38,6 +38,10 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.chartOutstanding,
     required this.whatsappOutline,
     required this.whatsappDeep,
+    required this.attentionRow,
+    required this.selectedTint,
+    required this.dangerOutline,
+    required this.inkQuiet,
   });
 
   static const light = AppColors(
@@ -75,6 +79,10 @@ class AppColors extends ThemeExtension<AppColors> {
     chartOutstanding: Color(0xFFE07A88),
     whatsappOutline: Color(0xFF1FA855),
     whatsappDeep: Color(0xFF0B5C2C),
+    attentionRow: Color(0xFFFBF3EF),
+    selectedTint: Color(0xFFFBEFEA),
+    dangerOutline: Color(0xFFC98A95),
+    inkQuiet: Color(0xFF4A5243),
   );
 
   final Color primary;
@@ -142,6 +150,19 @@ class AppColors extends ThemeExtension<AppColors> {
   /// Text of secondary WhatsApp actions.
   final Color whatsappDeep;
 
+  /// Background of a row waiting for an answer: an unread notification, a price
+  /// line added later.
+  final Color attentionRow;
+
+  /// Background of the chosen option in a list, e.g. a complaint reason.
+  final Color selectedTint;
+
+  /// Border of a destructive secondary button.
+  final Color dangerOutline;
+
+  /// Text on neutral pills.
+  final Color inkQuiet;
+
   @override
   AppColors copyWith({
     Color? primary,
@@ -178,6 +199,10 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? chartOutstanding,
     Color? whatsappOutline,
     Color? whatsappDeep,
+    Color? attentionRow,
+    Color? selectedTint,
+    Color? dangerOutline,
+    Color? inkQuiet,
   }) {
     return AppColors(
       primary: primary ?? this.primary,
@@ -214,6 +239,10 @@ class AppColors extends ThemeExtension<AppColors> {
       chartOutstanding: chartOutstanding ?? this.chartOutstanding,
       whatsappOutline: whatsappOutline ?? this.whatsappOutline,
       whatsappDeep: whatsappDeep ?? this.whatsappDeep,
+      attentionRow: attentionRow ?? this.attentionRow,
+      selectedTint: selectedTint ?? this.selectedTint,
+      dangerOutline: dangerOutline ?? this.dangerOutline,
+      inkQuiet: inkQuiet ?? this.inkQuiet,
     );
   }
 
@@ -259,6 +288,10 @@ class AppColors extends ThemeExtension<AppColors> {
       )!,
       whatsappOutline: Color.lerp(whatsappOutline, other.whatsappOutline, t)!,
       whatsappDeep: Color.lerp(whatsappDeep, other.whatsappDeep, t)!,
+      attentionRow: Color.lerp(attentionRow, other.attentionRow, t)!,
+      selectedTint: Color.lerp(selectedTint, other.selectedTint, t)!,
+      dangerOutline: Color.lerp(dangerOutline, other.dangerOutline, t)!,
+      inkQuiet: Color.lerp(inkQuiet, other.inkQuiet, t)!,
     );
   }
 }

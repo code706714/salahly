@@ -162,10 +162,15 @@ class _RequestCard extends StatelessWidget {
         stage == RequestStage.cancelled || stage == RequestStage.expired;
     final highlight =
         stage == RequestStage.confirmed || stage == RequestStage.started;
+    final asksAgain =
+        stage == RequestStage.done &&
+        technicianId != null &&
+        technician != null;
     return Opacity(
       opacity: over ? 0.8 : 1,
       child: AppCard(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        // The button under the line has its own room at the bottom.
+        padding: EdgeInsets.fromLTRB(16, 14, 16, asksAgain ? 0 : 14),
         borderColor: highlight ? colors.primary : null,
         borderWidth: highlight ? 2 : 1.5,
         onTap: () => context.push(AppRoutes.request(request.id)),
@@ -206,9 +211,7 @@ class _RequestCard extends StatelessWidget {
                 color: colors.inkMuted,
               ),
             ),
-            if (stage == RequestStage.done &&
-                technicianId != null &&
-                technician != null)
+            if (asksAgain)
               TextButton(
                 onPressed: () => context.push(
                   AppRoutes.newRequestFor(

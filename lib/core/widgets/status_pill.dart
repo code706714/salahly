@@ -45,7 +45,7 @@ class StatusPill extends StatelessWidget {
       PillTone.attention => (colors.primarySoft, colors.primaryPressed),
       PillTone.danger => (colors.dangerSoft, colors.dangerDeep),
       PillTone.dark => (colors.ink, colors.surface),
-      PillTone.neutral => (colors.divider, colors.inkMuted),
+      PillTone.neutral => (colors.divider, colors.inkQuiet),
     };
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -53,7 +53,7 @@ class StatusPill extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadii.pill),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
