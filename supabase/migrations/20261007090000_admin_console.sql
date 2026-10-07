@@ -807,7 +807,6 @@ $$;
 create function public.admin_overview(p_period text default 'week')
 returns jsonb
 language plpgsql
-stable
 security definer
 set search_path = ''
 as $$
@@ -936,7 +935,6 @@ create function public.admin_list_areas(
 )
 returns jsonb
 language plpgsql
-stable
 security definer
 set search_path = ''
 as $$
@@ -1002,7 +1000,6 @@ create function public.admin_list_verifications(
 )
 returns jsonb
 language plpgsql
-stable
 security definer
 set search_path = ''
 as $$
@@ -1217,7 +1214,6 @@ create function public.admin_list_topups(
 )
 returns jsonb
 language plpgsql
-stable
 security definer
 set search_path = ''
 as $$
@@ -1365,7 +1361,6 @@ create function public.admin_list_requests(
 )
 returns jsonb
 language plpgsql
-stable
 security definer
 set search_path = ''
 as $$
@@ -1462,7 +1457,6 @@ create function public.admin_list_complaints(
 )
 returns jsonb
 language plpgsql
-stable
 security definer
 set search_path = ''
 as $$
@@ -1565,7 +1559,6 @@ create function public.admin_list_users(
 )
 returns jsonb
 language plpgsql
-stable
 security definer
 set search_path = ''
 as $$
@@ -1793,7 +1786,6 @@ $$;
 create function public.admin_get_settings()
 returns jsonb
 language plpgsql
-stable
 security definer
 set search_path = ''
 as $$
@@ -2141,7 +2133,6 @@ create function public.admin_list_audit_log(
 )
 returns jsonb
 language plpgsql
-stable
 security definer
 set search_path = ''
 as $$
