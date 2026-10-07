@@ -45,7 +45,7 @@ class AdminTabs<T> extends StatelessWidget {
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(minHeight: 40),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 14),
                         child: Center(
                           child: Text(
                             labelOf(value),
