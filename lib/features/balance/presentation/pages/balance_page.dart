@@ -7,6 +7,7 @@ import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/text/money.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
+import 'package:salahly/core/theme/app_theme.dart';
 import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
@@ -163,6 +164,7 @@ class _UsesCard extends StatelessWidget {
               minimumSize: const Size(0, 48),
               padding: const EdgeInsets.symmetric(horizontal: 20),
               textStyle: const TextStyle(
+                fontFamily: AppTheme.fontFamily,
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
               ),

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/failure_message.dart';
 import 'package:salahly/core/theme/app_colors.dart';
+import 'package:salahly/core/theme/app_theme.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
@@ -64,6 +65,7 @@ class NotificationsView extends StatelessWidget {
                 style: TextButton.styleFrom(
                   foregroundColor: context.appColors.primary,
                   textStyle: const TextStyle(
+                    fontFamily: AppTheme.fontFamily,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),

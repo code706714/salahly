@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
+import 'package:salahly/core/theme/app_theme.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/balance/presentation/balance_navigation.dart';
@@ -161,7 +162,7 @@ class _CreditsRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadii.md),
       ),
       child: Padding(
-        padding: const EdgeInsetsDirectional.only(start: 14, end: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
           children: [
             Expanded(
@@ -181,9 +182,12 @@ class _CreditsRow extends StatelessWidget {
             TextButton(
               onPressed: () => context.openBuyUses(UserRole.technician),
               style: TextButton.styleFrom(
-                minimumSize: const Size(48, 48),
+                minimumSize: Size.zero,
+                padding: EdgeInsets.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 foregroundColor: colors.primary,
                 textStyle: const TextStyle(
+                  fontFamily: AppTheme.fontFamily,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                 ),

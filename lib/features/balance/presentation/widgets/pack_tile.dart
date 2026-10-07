@@ -76,7 +76,7 @@ class PackTile extends StatelessWidget {
       inMutuallyExclusiveGroup: true,
       checked: selected,
       child: Material(
-        color: selected ? colors.noticeSoft : colors.surface,
+        color: selected ? colors.primaryFaint : colors.surface,
         shape: shape,
         child: InkWell(
           onTap: onTap,
