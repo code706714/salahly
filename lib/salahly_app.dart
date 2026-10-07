@@ -24,6 +24,7 @@ class _SalahlyAppState extends State<SalahlyApp> {
     authRepository: widget.dependencies.authRepository,
     accountRepository: widget.dependencies.accountRepository,
     userData: widget.dependencies.userData,
+    push: widget.dependencies.pushService,
   );
   late final SessionRefresh _refresh = SessionRefresh(_session.stream);
   late final GoRouter _router = createRouter(_session, refresh: _refresh);
@@ -57,6 +58,7 @@ class _SalahlyAppState extends State<SalahlyApp> {
         ),
         RepositoryProvider.value(value: dependencies.balanceRepository),
         RepositoryProvider.value(value: dependencies.notificationsRepository),
+        RepositoryProvider.value(value: dependencies.pushService),
         RepositoryProvider.value(value: dependencies.database),
         RepositoryProvider.value(value: dependencies.syncEngine),
         RepositoryProvider.value(value: dependencies.networkStatus),

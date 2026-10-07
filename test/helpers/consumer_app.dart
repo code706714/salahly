@@ -19,6 +19,7 @@ import 'package:salahly/features/auth/domain/entities/auth_user.dart';
 import 'package:salahly/salahly_app.dart';
 
 import 'balance_fixtures.dart';
+import 'fake_push_service.dart';
 import 'fake_sync_remote.dart';
 import 'fixtures.dart';
 import 'mocks.dart';
@@ -114,6 +115,7 @@ class ConsumerApp {
     technicianRequestsRepository: MockTechnicianRequestsRepository(),
     balanceRepository: balance,
     notificationsRepository: notifications,
+    pushService: FakePushService(),
     locationService: location,
     photoPicker: photoPicker,
     userData: userData,

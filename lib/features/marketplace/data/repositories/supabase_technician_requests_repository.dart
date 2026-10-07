@@ -5,7 +5,9 @@ import 'package:salahly/features/marketplace/data/models/marketplace_models.dart
 import 'package:salahly/features/marketplace/data/models/wire.dart';
 import 'package:salahly/features/marketplace/data/repositories/marketplace_errors.dart';
 import 'package:salahly/features/marketplace/domain/entities/incoming_request.dart';
+import 'package:salahly/features/marketplace/domain/entities/job_request_link.dart';
 import 'package:salahly/features/marketplace/domain/entities/technician_card.dart';
+import 'package:salahly/features/marketplace/domain/failures/marketplace_failures.dart';
 import 'package:salahly/features/marketplace/domain/repositories/technician_requests_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -66,6 +68,35 @@ class SupabaseTechnicianRequestsRepository
         ),
     ];
   });
+
+  @override
+  Future<Result<JobRequestLink?>> fetchJobRequest(String jobId) =>
+      _call(() async {
+        final json = await _client.rpc<Map<String, dynamic>?>(
+          'platform_job_request',
+          params: {'p_job_id': jobId},
+        );
+        return json == null ? null : MarketplaceModels.jobRequestLink(json);
+      });
+
+  @override
+  Future<Result<DateTime>> sendArriving(String requestId) async {
+    try {
+      final json = await _client.rpc<Map<String, dynamic>>(
+        'technician_arriving',
+        params: {'p_request_id': requestId},
+      );
+      return Ok(timeFromWire(json['sent_at']));
+    } on PostgrestException catch (error) {
+      // The same code the address book uses for its own limit.
+      if (error.message == 'limit_reached') {
+        return const Err(ArrivalLimitFailure());
+      }
+      return Err(_failureFrom(error));
+    } on Object catch (error) {
+      return Err(_failureFrom(error));
+    }
+  }
 
   @override
   Future<Result<String>> photoUrl(String path) => _call(

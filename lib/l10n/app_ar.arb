@@ -931,6 +931,13 @@
   "unitDeleted": "اتمسح التكييف.",
   "unitRestore": "رجّعه",
   "unitUntitled": "تكييف",
+  "arrivalButton": "قربت أوصل",
+  "arrivalSent": "اتبعت للعميل",
+  "arrivalHint": "هنبلّغ العميل إنك قربت.",
+  "arrivalOffline": "محتاج نت عشان تبلّغ العميل.",
+  "arrivalNeedsInternet": "ما اتبعتش للعميل. محتاج نت، اتأكد منه وجرّب تاني.",
+  "arrivalNotReady": "المعاد لسه ما وصلش للسيرفر. استنى لما النت يرجع وجرّب تاني.",
+  "arrivalLimit": "العميل اتبلّغ كذا مرة بالفعل.",
   "jobPageNoDate": "لسه ملهاش معاد",
   "jobPageStatusStarted": "شغال دلوقتي",
   "jobPageStatusAwaitingPayment": "خلصت · مستني الفلوس",
@@ -1820,6 +1827,22 @@
   "@trackConfirmed": {
     "placeholders": {
       "name": {
+        "type": "String"
+      }
+    }
+  },
+  "trackTitleArriving": "{name} قرّب يوصلك",
+  "@trackTitleArriving": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "trackArrivingNote": "بلّغك إنه قرّب · {when}",
+  "@trackArrivingNote": {
+    "placeholders": {
+      "when": {
         "type": "String"
       }
     }
@@ -3503,6 +3526,28 @@
     }
   },
   "notifOfferReceived": "وصلك عرض جديد",
+  "pushRationaleTitle": "تحب نبلّغك؟",
+  "pushRationaleConsumer": "{honorific, select, ms{هنبعتلك إشعار لما يوصلك عرض جديد أو الفني يقرّب منك، حتى لو التطبيق مقفول. تسمحي بالإشعارات؟} other{هنبعتلك إشعار لما يوصلك عرض جديد أو الفني يقرّب منك، حتى لو التطبيق مقفول. تسمح بالإشعارات؟}}",
+  "@pushRationaleConsumer": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "pushRationaleTechnician": "هنبعتلك إشعار أول ما يجيلك طلب جديد أو عميل يختار عرضك، حتى لو التطبيق مقفول. تسمح بالإشعارات؟",
+  "pushRationaleAllow": "اسمح",
+  "pushRationaleLater": "مش دلوقتي",
+  "pushOpen": "افتح",
+  "notifTechnicianArriving": "{name} قرّب يوصلك",
+  "@notifTechnicianArriving": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifTechnicianArrivingBody": "خلّي تليفونك معاك.",
   "notifJobConfirmed": "{name} أكّد معادك",
   "@notifJobConfirmed": {
     "placeholders": {

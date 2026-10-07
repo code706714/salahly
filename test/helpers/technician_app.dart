@@ -25,6 +25,7 @@ import 'package:salahly/features/jobs/data/repositories/drift_jobs_repository.da
 import 'package:salahly/salahly_app.dart';
 
 import 'balance_fixtures.dart';
+import 'fake_push_service.dart';
 import 'fake_sync_remote.dart';
 import 'fixtures.dart';
 import 'mocks.dart';
@@ -157,6 +158,7 @@ class TechnicianApp {
     technicianRequestsRepository: requests,
     balanceRepository: balance,
     notificationsRepository: notifications,
+    pushService: FakePushService(),
     locationService: MockLocationService(),
     photoPicker: photoPicker,
     userData: userData,

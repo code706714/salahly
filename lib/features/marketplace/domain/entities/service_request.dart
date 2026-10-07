@@ -161,6 +161,7 @@ final class RequestDetails extends Equatable {
     this.technicianPhone,
     this.job,
     this.review,
+    this.technicianArrivingAt,
   });
 
   final String id;
@@ -204,6 +205,9 @@ final class RequestDetails extends Equatable {
   final SubmittedReview? review;
   final bool hasOpenComplaint;
 
+  /// When the technician last told the consumer he is almost there.
+  final DateTime? technicianArrivingAt;
+
   RequestOffer? get chosenOffer =>
       offers.where((offer) => offer.id == chosenOfferId).firstOrNull;
 
@@ -245,6 +249,7 @@ final class RequestDetails extends Equatable {
     job,
     review,
     hasOpenComplaint,
+    technicianArrivingAt,
   ];
 }
 

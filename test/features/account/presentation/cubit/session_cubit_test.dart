@@ -12,6 +12,7 @@ import 'package:salahly/features/account/domain/entities/verification_status.dar
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
 
+import '../../../../helpers/fake_push_service.dart';
 import '../../../../helpers/mocks.dart';
 
 const _userId = '5b1f5c2e-6a43-4d1b-9a0e-2f7c8d9e0a11';
@@ -61,6 +62,7 @@ void main() {
   late MockAuthRepository authRepository;
   late MockAccountRepository accountRepository;
   late MockUserScopedData userData;
+  late FakePushService push;
   late StreamController<AuthUser?> userChanges;
   AuthUser? currentUser;
 
@@ -73,12 +75,14 @@ void main() {
     authRepository: authRepository,
     accountRepository: accountRepository,
     userData: userData,
+    push: push,
   );
 
   setUp(() {
     authRepository = MockAuthRepository();
     accountRepository = MockAccountRepository();
     userData = MockUserScopedData();
+    push = FakePushService();
     when(() => userData.claimFor(any())).thenAnswer((_) async {});
     when(() => userData.clear()).thenAnswer((_) async {});
     userChanges = StreamController<AuthUser?>.broadcast();
@@ -383,6 +387,22 @@ void main() {
           verify(() => accountRepository.clearCache()).called(1);
         },
       );
+
+      test('forgets this phone for pushes before the session ends', () async {
+        currentUser = _user;
+        final order = <String>[];
+        push = _OrderedPush(order);
+        when(() => authRepository.signOut()).thenAnswer((_) async {
+          order.add('signOut');
+          authChanged(null);
+        });
+        final cubit = buildCubit();
+
+        await cubit.signOut();
+
+        expect(order, ['stop', 'signOut']);
+        await cubit.close();
+      });
     });
 
     group('signOutAndReturnTo', () {
@@ -447,4 +467,14 @@ void main() {
       );
     });
   });
+}
+
+/// A push service that records when it is stopped, among other calls.
+class _OrderedPush extends FakePushService {
+  _OrderedPush(this.order);
+
+  final List<String> order;
+
+  @override
+  Future<void> stop() async => order.add('stop');
 }

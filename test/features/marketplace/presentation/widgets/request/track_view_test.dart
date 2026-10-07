@@ -7,6 +7,7 @@ import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/jobs/domain/entities/job.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/request_cubit.dart';
+import 'package:salahly/features/marketplace/presentation/request_follow_up.dart';
 import 'package:salahly/features/marketplace/presentation/widgets/request/track_view.dart';
 
 import '../../../../../helpers/follow_up_harness.dart';
@@ -79,6 +80,48 @@ void main() {
       expect(find.text(l10n.trackConfirmed('محمود')), findsNWidgets(2));
       expect(find.text('السبت 12:00 الضهر'), findsOneWidget);
       await reveal(tester, find.text(l10n.trackCancel));
+    });
+
+    testWidgets('says when the technician is almost there', (tester) async {
+      await pump(
+        tester,
+        testRequestDetails(
+          job: testRequestJob(),
+          technicianArrivingAt: DateTime(2026, 10, 3, 11, 50),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(find.text(l10n.trackTitleArriving('محمود')), findsOneWidget);
+      expect(find.text(l10n.trackConfirmed('محمود')), findsOneWidget);
+      expect(
+        find.text(
+          l10n.trackArrivingNote(
+            momentLabel(l10n, DateTime(2026, 10, 3, 11, 50)),
+          ),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('says nothing of it before the technician did', (tester) async {
+      await pump(tester, at(JobStatus.confirmed));
+
+      expect(find.text(l10n.trackTitleArriving('محمود')), findsNothing);
+      expect(find.textContaining('بلّغك'), findsNothing);
+    });
+
+    testWidgets('stops saying it once the work started', (tester) async {
+      await pump(
+        tester,
+        testRequestDetails(
+          job: testRequestJob(status: JobStatus.started),
+          technicianArrivingAt: DateTime(2026, 10, 3, 11, 50),
+        ),
+      );
+
+      expect(find.text(l10n.trackTitleStarted('محمود')), findsOneWidget);
+      expect(find.textContaining('بلّغك'), findsNothing);
     });
 
     testWidgets('can no longer be cancelled once the work started', (

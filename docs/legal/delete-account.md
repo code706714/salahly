@@ -15,7 +15,7 @@
 - اسمك ورقمك وبياناتك الشخصية وعناوينك، وحسابك نفسه.
 - صورتك وصور البطاقة وصور العطل وصور الشغل وصور التحويلات. الصور بتتمسح من السيرفر خلال يوم.
 - تقييماتك وشكاواك، ودفتر الفني (عملاؤه وفواتيره).
-- الإشعارات.
+- الإشعارات ورمز الإشعارات بتاع موبايلك.
 - بياناتك المحفوظة على الموبايل.
 
 ### اللي بيحصل في الطلبات
@@ -47,7 +47,7 @@ If a balance top-up is still under review, the app asks you to wait until the re
 - Your name, phone number, personal details, saved addresses and the account itself.
 - Your photo, ID photos, problem photos, job photos and transfer receipts. Files are purged from storage within a day.
 - Your reviews and complaints, and a technician's customer book and invoices.
-- Notifications.
+- Notifications and the push token of your phone.
 - Data stored on your phone.
 
 ### What happens to your requests

@@ -172,6 +172,7 @@ RequestDetails testRequestDetails({
   bool hasOpenComplaint = false,
   int sentTo = 5,
   int seenBy = 3,
+  DateTime? technicianArrivingAt,
 }) {
   final assigned = job != null;
   final shownOffers =
@@ -203,6 +204,7 @@ RequestDetails testRequestDetails({
     job: job,
     review: review,
     hasOpenComplaint: hasOpenComplaint,
+    technicianArrivingAt: technicianArrivingAt,
   );
 }
 

@@ -4,6 +4,7 @@ import 'package:salahly/features/jobs/domain/entities/job.dart';
 import 'package:salahly/features/marketplace/data/models/wire.dart';
 import 'package:salahly/features/marketplace/domain/entities/consumer_address.dart';
 import 'package:salahly/features/marketplace/domain/entities/incoming_request.dart';
+import 'package:salahly/features/marketplace/domain/entities/job_request_link.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_window.dart';
 import 'package:salahly/features/marketplace/domain/entities/review.dart';
@@ -43,6 +44,12 @@ abstract final class MarketplaceModels {
     );
   }
 
+  static JobRequestLink jobRequestLink(Map<String, dynamic> json) =>
+      JobRequestLink(
+        requestId: json['request_id'] as String,
+        arrivingSentAt: optionalTimeFromWire(json['arriving_sent_at']),
+      );
+
   static RequestDetails details(Map<String, dynamic> json) {
     final job = json['job'] as Map<String, dynamic>?;
     final review = json['review'] as Map<String, dynamic>?;
@@ -72,6 +79,9 @@ abstract final class MarketplaceModels {
       job: job == null ? null : _job(job),
       review: review == null ? null : _review(review),
       hasOpenComplaint: json['open_complaint'] as bool,
+      technicianArrivingAt: optionalTimeFromWire(
+        json['technician_arriving_at'],
+      ),
     );
   }
 

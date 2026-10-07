@@ -36,6 +36,7 @@ Map<String, dynamic> requestDetailsJson({
   String? chosenOfferId = 'offer-1',
   Map<String, dynamic>? job,
   Map<String, dynamic>? review,
+  String? arrivingAt,
 }) => {
   'id': 'request-1',
   'category_id': 'ac',
@@ -62,6 +63,7 @@ Map<String, dynamic> requestDetailsJson({
   'job': job,
   'review': review,
   'open_complaint': false,
+  'technician_arriving_at': arrivingAt,
 };
 
 Map<String, dynamic> requestJobJson({

@@ -103,6 +103,11 @@ class NotificationTile extends StatelessWidget {
       colors.successSoft,
       colors.success,
     ),
+    NotificationKind.technicianArriving => (
+      Icons.directions_walk_rounded,
+      colors.primarySoft,
+      colors.primary,
+    ),
     NotificationKind.jobStarted => (
       Icons.build_outlined,
       colors.primarySoft,

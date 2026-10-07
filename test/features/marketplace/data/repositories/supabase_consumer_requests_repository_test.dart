@@ -154,6 +154,34 @@ void main() {
       expect(details.review, isNull);
     });
 
+    test('reads when the technician said he is almost there', () async {
+      server.body = requestDetailsJson(
+        job: requestJobJson(),
+        arrivingAt: '2026-10-03T08:50:00+00:00',
+      );
+
+      final details =
+          (await server.repository().fetchRequest('request-1')
+                  as Ok<RequestDetails?>)
+              .value!;
+
+      expect(
+        details.technicianArrivingAt?.toUtc(),
+        DateTime.utc(2026, 10, 3, 8, 50),
+      );
+    });
+
+    test('reads a request nobody said that about', () async {
+      server.body = requestDetailsJson(job: requestJobJson());
+
+      final details =
+          (await server.repository().fetchRequest('request-1')
+                  as Ok<RequestDetails?>)
+              .value!;
+
+      expect(details.technicianArrivingAt, isNull);
+    });
+
     test('reads a rated request', () async {
       server.body = requestDetailsJson(
         job: requestJobJson(status: 'paid', quoteStatus: 'accepted'),

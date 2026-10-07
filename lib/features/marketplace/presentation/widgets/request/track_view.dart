@@ -36,6 +36,8 @@ class TrackView extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final name = firstNameOf(offer.technician.name);
     final title = switch (details.stage) {
+      RequestStage.confirmed when details.technicianArrivingAt != null =>
+        l10n.trackTitleArriving(name),
       RequestStage.confirmed => l10n.trackConfirmed(name),
       RequestStage.started => l10n.trackTitleStarted(name),
       _ => l10n.trackTitleChosen(name),
@@ -215,6 +217,7 @@ class _Steps extends StatelessWidget {
         stage == RequestStage.confirmed || stage == RequestStage.started;
     final started = stage == RequestStage.started;
     String? at(DateTime? time) => time == null ? null : momentLabel(l10n, time);
+    final arrivingAt = details.technicianArrivingAt;
     return [
       (
         title: l10n.trackStepSent,
@@ -248,7 +251,11 @@ class _Steps extends StatelessWidget {
         ),
       (
         title: l10n.trackStepStarted,
-        note: at(job?.startedAt),
+        note: started
+            ? at(job?.startedAt)
+            : confirmed && arrivingAt != null
+            ? l10n.trackArrivingNote(momentLabel(l10n, arrivingAt))
+            : null,
         state: started
             ? _StepState.done
             : confirmed
