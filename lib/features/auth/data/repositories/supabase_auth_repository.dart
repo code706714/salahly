@@ -69,7 +69,7 @@ class SupabaseAuthRepository implements AuthRepository {
   }
 
   static AuthUser? _toAuthUser(supabase.User? user) =>
-      user == null ? null : AuthUser(id: user.id);
+      user == null ? null : AuthUser(id: user.id, phone: user.phone);
 
   // Codes: https://supabase.com/docs/guides/auth/debugging/error-codes
   static Failure _failureFrom(Object error) {

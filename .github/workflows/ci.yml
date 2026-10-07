@@ -34,6 +34,26 @@ jobs:
       - run: flutter analyze
       - run: flutter test
 
+  web:
+    name: Build admin console (web)
+    needs: flutter
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter gen-l10n
+      - run: dart run build_runner build
+      - run: cp env/dev.example.json env/dev.json
+      - run: >-
+          flutter build web --release --target lib/main_admin.dart
+          --dart-define-from-file=env/dev.json --no-web-resources-cdn
+
   database:
     name: Database tests
     runs-on: ubuntu-latest

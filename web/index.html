@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--
+    The console loads everything from its own origin (build it with
+    --no-web-resources-cdn) and talks only to Supabase. Signed file URLs
+    come from the Supabase storage host. A <meta> CSP can not set
+    frame-ancestors; send that header from the host (see docs/admin/setup.md).
+  -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.supabase.co; font-src 'self' data: blob:; connect-src 'self' blob: data: https://*.supabase.co wss://*.supabase.co; worker-src 'self' blob:; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="لوحة فريق صلحلي">
+  <meta name="theme-color" content="#2F3B2A">
+
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="manifest" href="manifest.json">
+
+  <title>صلحلي · لوحة الفريق</title>
+</head>
+<body style="margin: 0; background: #F7F2EA">
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
