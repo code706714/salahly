@@ -4,7 +4,7 @@
 // them done, so a failed batch is simply tried again later (up to 10 times; the
 // database then keeps the row flagged failed).
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { isAuthorized } from "./auth.ts";
+import { isAuthorized } from "../_shared/shared_secret.ts";
 
 const batchSize = 100;
 const maxBatches = 10;

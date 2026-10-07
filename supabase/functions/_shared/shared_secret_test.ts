@@ -1,5 +1,5 @@
 import { assertEquals } from "jsr:@std/assert@1";
-import { isAuthorized, minSecretLength, safeEqual } from "./auth.ts";
+import { isAuthorized, minSecretLength, safeEqual } from "./shared_secret.ts";
 
 const secret = "s".repeat(minSecretLength);
 

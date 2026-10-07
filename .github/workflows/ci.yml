@@ -70,6 +70,18 @@ jobs:
       - run: supabase db lint --level warning --fail-on warning
       - run: supabase test db
 
+  functions:
+    name: Edge Function tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: deno fmt --check supabase/functions
+      - run: deno test supabase/functions
+
   secrets:
     name: Secret scan
     runs-on: ubuntu-latest
