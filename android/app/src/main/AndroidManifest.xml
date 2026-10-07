@@ -4,6 +4,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <!-- Dictating a job's problem instead of typing it. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <!-- Push notifications (a runtime permission from Android 13). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <!-- No backups: the session lives in the Keystore, which a restore on
          another device cannot decrypt. -->

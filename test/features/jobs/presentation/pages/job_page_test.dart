@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/failure.dart';
+import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/launch/external_apps.dart';
 import 'package:salahly/core/media/photo_picker.dart';
 import 'package:salahly/core/phone/phone_number.dart';
@@ -19,6 +20,8 @@ import 'package:salahly/features/jobs/domain/entities/job_details.dart';
 import 'package:salahly/features/jobs/domain/entities/job_photo.dart';
 import 'package:salahly/features/jobs/presentation/cubit/job_details_cubit.dart';
 import 'package:salahly/features/jobs/presentation/pages/job_page.dart';
+import 'package:salahly/features/marketplace/domain/entities/job_request_link.dart';
+import 'package:salahly/features/marketplace/domain/repositories/technician_requests_repository.dart';
 
 import '../../../../helpers/fixtures.dart';
 import '../../../../helpers/job_details_fixtures.dart';
@@ -36,6 +39,7 @@ void main() {
   late MockAreasCubit areas;
   late MockExternalApps apps;
   late MockPhotoPicker picker;
+  late MockTechnicianRequestsRepository requests;
   final today = DateTime(2026, 10, 2, 11);
   final phone = PhoneNumber.tryParse('01002345678')!;
 
@@ -57,6 +61,12 @@ void main() {
     areas = MockAreasCubit();
     apps = MockExternalApps();
     picker = MockPhotoPicker();
+    requests = MockTechnicianRequestsRepository();
+    when(() => requests.fetchJobRequest(any())).thenAnswer(
+      (_) async => const Ok<JobRequestLink?>(
+        JobRequestLink(requestId: 'request-1'),
+      ),
+    );
     when(() => sync.state).thenReturn(const SyncState());
     when(
       () => areas.state,
@@ -108,6 +118,7 @@ void main() {
     repositories: [
       RepositoryProvider<ExternalApps>.value(value: apps),
       RepositoryProvider<PhotoPicker>.value(value: picker),
+      RepositoryProvider<TechnicianRequestsRepository>.value(value: requests),
     ],
     blocs: [
       BlocProvider<JobDetailsCubit>.value(value: cubit),
@@ -459,6 +470,38 @@ void main() {
       await scrollTo(tester, find.text(l10n.jobPageInvoice));
       expect(tester.takeException(), isNull);
       expect(find.text(l10n.jobPageQuoteAccepted), findsOneWidget);
+    });
+
+    testWidgets('offers "almost there" only while confirmed', (tester) async {
+      Future<void> pumpIn(JobDetails details) async {
+        show(ready(details));
+        await pumpPage(tester);
+        await tester.pump();
+      }
+
+      await pumpIn(platform());
+      expect(find.text(l10n.arrivalButton), findsOneWidget);
+
+      await pumpIn(platform(status: JobStatus.unconfirmed));
+      expect(find.text(l10n.arrivalButton), findsNothing);
+
+      await pumpIn(platform(status: JobStatus.started));
+      expect(find.text(l10n.arrivalButton), findsNothing);
+
+      await pumpIn(platform(status: JobStatus.finished));
+      expect(find.text(l10n.arrivalButton), findsNothing);
+
+      await pumpIn(platform(status: JobStatus.cancelled));
+      expect(find.text(l10n.arrivalButton), findsNothing);
+    });
+
+    testWidgets('a job of my own has no "almost there"', (tester) async {
+      show(ready(visit()));
+      await pumpPage(tester);
+      await tester.pump();
+
+      expect(find.text(l10n.arrivalButton), findsNothing);
+      verifyNever(() => requests.fetchJobRequest(any()));
     });
 
     testWidgets('shows a declined price change', (tester) async {

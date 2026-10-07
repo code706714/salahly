@@ -8,6 +8,7 @@ import 'package:salahly/features/account/domain/entities/user_profile.dart';
 import 'package:salahly/features/account/domain/repositories/account_repository.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
 import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
+import 'package:salahly/features/notifications/domain/repositories/push_service.dart';
 
 part 'session_state.dart';
 
@@ -22,6 +23,7 @@ class SessionCubit extends Cubit<SessionState> {
     required this._authRepository,
     required this._accountRepository,
     required this._userData,
+    required this._push,
   }) : super(const SessionLoading()) {
     _subscription = _authRepository.userChanges.listen(_onUserChanged);
   }
@@ -29,6 +31,7 @@ class SessionCubit extends Cubit<SessionState> {
   final AuthRepository _authRepository;
   final AccountRepository _accountRepository;
   final UserScopedData _userData;
+  final PushService _push;
   late final StreamSubscription<AuthUser?> _subscription;
 
   /// Fetches the profile again, e.g. after onboarding or to retry.
@@ -37,7 +40,12 @@ class SessionCubit extends Cubit<SessionState> {
     if (user != null) await _loadProfile(user);
   }
 
-  Future<void> signOut() => _authRepository.signOut();
+  /// Forgets this phone for pushes while the session still works, then
+  /// signs out.
+  Future<void> signOut() async {
+    await _push.stop();
+    await _authRepository.signOut();
+  }
 
   ({String userId, String location})? _returnTo;
 

@@ -8,6 +8,7 @@ import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/my_requests_cubit.dart';
 import 'package:salahly/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:salahly/features/notifications/presentation/widgets/push_scope.dart';
 
 /// Wraps every consumer screen: the area and category names, the
 /// consumer's requests and how many notifications are unread, fetched
@@ -83,7 +84,7 @@ class _ConsumerScopeState extends State<ConsumerScope> {
           unawaited(context.read<SessionCubit>().refreshProfile());
           unawaited(_notifications.refreshUnread());
         },
-        child: widget.child,
+        child: PushScope(role: UserRole.consumer, child: widget.child),
       ),
     );
   }

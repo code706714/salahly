@@ -35,8 +35,12 @@ import 'package:salahly/features/marketplace/data/repositories/supabase_consumer
 import 'package:salahly/features/marketplace/data/repositories/supabase_technician_requests_repository.dart';
 import 'package:salahly/features/marketplace/domain/repositories/consumer_requests_repository.dart';
 import 'package:salahly/features/marketplace/domain/repositories/technician_requests_repository.dart';
+import 'package:salahly/features/notifications/data/repositories/supabase_device_tokens_repository.dart';
 import 'package:salahly/features/notifications/data/repositories/supabase_notifications_repository.dart';
+import 'package:salahly/features/notifications/data/services/messaging_push_service.dart';
 import 'package:salahly/features/notifications/domain/repositories/notifications_repository.dart';
+import 'package:salahly/features/notifications/domain/repositories/push_service.dart';
+import 'package:salahly/features/notifications/domain/repositories/push_transport.dart';
 import 'package:salahly/features/onboarding/data/repositories/supabase_onboarding_repository.dart';
 import 'package:salahly/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -55,6 +59,7 @@ class AppDependencies {
     required this.technicianRequestsRepository,
     required this.balanceRepository,
     required this.notificationsRepository,
+    required this.pushService,
     required this.locationService,
     required this.photoPicker,
     required this.userData,
@@ -73,6 +78,7 @@ class AppDependencies {
     required FlutterSecureStorage storage,
     required Directory supportDirectory,
     required Directory cacheDirectory,
+    required PushTransport pushTransport,
   }) {
     final authRepository = SupabaseAuthRepository(client.auth);
     final database = AppDatabase.open();
@@ -112,6 +118,10 @@ class AppDependencies {
       ),
       balanceRepository: SupabaseBalanceRepository(client),
       notificationsRepository: SupabaseNotificationsRepository(client),
+      pushService: MessagingPushService(
+        transport: pushTransport,
+        devices: SupabaseDeviceTokensRepository(client),
+      ),
       locationService: const GeolocatorLocationService(),
       photoPicker: PhotoPicker(),
       userData: LocalUserData(database, photos, sharedFiles),
@@ -140,6 +150,7 @@ class AppDependencies {
   final TechnicianRequestsRepository technicianRequestsRepository;
   final BalanceRepository balanceRepository;
   final NotificationsRepository notificationsRepository;
+  final PushService pushService;
   final LocationService locationService;
   final PhotoPicker photoPicker;
   final UserScopedData userData;

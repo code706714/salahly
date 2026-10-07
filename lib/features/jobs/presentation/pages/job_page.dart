@@ -23,6 +23,7 @@ import 'package:salahly/features/jobs/presentation/widgets/job_missing_view.dart
 import 'package:salahly/features/jobs/presentation/widgets/job_photos_card.dart';
 import 'package:salahly/features/jobs/presentation/widgets/job_progress_steps.dart';
 import 'package:salahly/features/jobs/presentation/widgets/schedule_picker.dart';
+import 'package:salahly/features/marketplace/presentation/widgets/arrival_button.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
 /// One job: where it stands, who it is for, its photos, quote and money,
@@ -201,17 +202,29 @@ class _JobScreen extends StatelessWidget {
       bottomNavigationBar: action == null
           ? null
           : BottomActionBar(
-              child: FilledButton(
-                onPressed: action.$2,
-                style: FilledButton.styleFrom(
-                  minimumSize: const Size.fromHeight(60),
-                  textStyle: const TextStyle(
-                    fontFamily: AppTheme.fontFamily,
-                    fontSize: 19,
-                    fontWeight: FontWeight.w700,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // The consumer can be told once the visit is confirmed
+                  // and until the work starts.
+                  if (isPlatform && job.status == JobStatus.confirmed) ...[
+                    ArrivalButton(jobId: job.id, isOffline: isOffline),
+                    const SizedBox(height: 10),
+                  ],
+                  FilledButton(
+                    onPressed: action.$2,
+                    style: FilledButton.styleFrom(
+                      minimumSize: const Size.fromHeight(60),
+                      textStyle: const TextStyle(
+                        fontFamily: AppTheme.fontFamily,
+                        fontSize: 19,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    child: Text(action.$1),
                   ),
-                ),
-                child: Text(action.$1),
+                ],
               ),
             ),
     );

@@ -4,6 +4,16 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Push notifications need the Firebase configuration downloaded from the
+// Firebase console (docs/push/setup.md). It is not in the repository: without
+// it the app still builds and runs, with push switched off. A file for all
+// flavors, or one per flavor, is picked up.
+val hasFirebaseConfig = listOf("", "src/dev/", "src/staging/", "src/prod/")
+    .any { file("${it}google-services.json").exists() }
+if (hasFirebaseConfig) {
+    apply(plugin = "com.google.gms.google-services")
+}
+
 android {
     namespace = "com.salahly.app"
     compileSdk = flutter.compileSdkVersion

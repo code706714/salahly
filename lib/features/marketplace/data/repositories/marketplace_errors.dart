@@ -22,6 +22,7 @@ Failure? marketplaceFailureFrom(Object error) {
     'already_reviewed' ||
     'already_complained' => const AlreadySentFailure(),
     'limit_reached' => const AddressLimitFailure(),
+    'not_confirmed' => const ArrivalNotReadyFailure(),
     _ => null,
   };
 }

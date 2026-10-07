@@ -39,3 +39,14 @@ String technicianOfferFailureMessage(AppLocalizations l10n, Failure failure) {
     _ => commonFailureMessage(l10n, failure),
   };
 }
+
+/// What to tell a technician whose "قربت أوصل" didn't reach the consumer.
+String arrivalFailureMessage(AppLocalizations l10n, Failure failure) {
+  return switch (failure) {
+    NetworkFailure() => l10n.arrivalNeedsInternet,
+    ArrivalNotReadyFailure() => l10n.arrivalNotReady,
+    ArrivalLimitFailure() => l10n.arrivalLimit,
+    MarketplaceNotFoundFailure() => l10n.marketplaceNotFound,
+    _ => commonFailureMessage(l10n, failure),
+  };
+}

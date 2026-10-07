@@ -53,6 +53,10 @@ NotificationText notificationText(
       title: l10n.notifOfferReceived,
       body: _join([?notification.technicianName, ?pounds, ?arrival]),
     ),
+    NotificationKind.technicianArriving => (
+      title: l10n.notifTechnicianArriving(technician),
+      body: l10n.notifTechnicianArrivingBody,
+    ),
     NotificationKind.jobConfirmed => (
       title: l10n.notifJobConfirmed(technician),
       body: request,
@@ -197,12 +201,22 @@ String notificationDayHeading(
 };
 
 /// The screen a notification opens, on [role]'s side of the app.
-String notificationRoute(AppNotification notification, UserRole role) {
-  final requestId = notification.requestId;
-  if (notification.kind.isAboutTopup) return AppRoutes.balanceFor(role);
-  if (notification.kind.isAboutVerification) {
-    return AppRoutes.technicianAccount;
-  }
+String notificationRoute(AppNotification notification, UserRole role) =>
+    notificationKindRoute(
+      notification.kind,
+      role,
+      requestId: notification.requestId,
+    );
+
+/// The screen a notification of [kind] opens: the transfer, the documents,
+/// the request it is about, or the list of requests.
+String notificationKindRoute(
+  NotificationKind kind,
+  UserRole role, {
+  String? requestId,
+}) {
+  if (kind.isAboutTopup) return AppRoutes.balanceFor(role);
+  if (kind.isAboutVerification) return AppRoutes.technicianAccount;
   return switch (role) {
     UserRole.consumer =>
       requestId == null

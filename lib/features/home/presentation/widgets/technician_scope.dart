@@ -9,6 +9,7 @@ import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/incoming_requests_cubit.dart';
 import 'package:salahly/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:salahly/features/notifications/presentation/widgets/push_scope.dart';
 
 /// Wraps every technician screen: keeps the phone's records syncing while
 /// the app is open, the area and category names at hand, and the new
@@ -93,7 +94,7 @@ class _TechnicianScopeState extends State<TechnicianScope> {
         listenWhen: (previous, current) =>
             previous.lastSyncedAt != current.lastSyncedAt,
         listener: (context, state) => _load(),
-        child: widget.child,
+        child: PushScope(role: UserRole.technician, child: widget.child),
       ),
     );
   }

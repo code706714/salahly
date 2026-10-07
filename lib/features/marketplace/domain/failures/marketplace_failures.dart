@@ -51,3 +51,14 @@ final class AlreadySentFailure extends Failure {
 final class AddressLimitFailure extends Failure {
   const AddressLimitFailure();
 }
+
+/// The job isn't confirmed on the server (yet, or any more), so the
+/// consumer can't be told the technician is almost there.
+final class ArrivalNotReadyFailure extends Failure {
+  const ArrivalNotReadyFailure();
+}
+
+/// The consumer was already told several times for this request.
+final class ArrivalLimitFailure extends Failure {
+  const ArrivalLimitFailure();
+}

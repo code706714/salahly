@@ -426,3 +426,8 @@ enabled = true
 # Called by pg_cron with its own shared secret, not by a signed-in user.
 [functions.purge-storage]
 verify_jwt = false
+
+# Called by the database (pg_net, pg_cron) with its own shared secret, not by a
+# signed-in user.
+[functions.send-push]
+verify_jwt = false

@@ -7,6 +7,7 @@ import 'package:salahly/features/marketplace/domain/entities/request_window.dart
 enum NotificationKind {
   // The consumer's.
   offerReceived,
+  technicianArriving,
   jobConfirmed,
   jobStarted,
   jobFinished,

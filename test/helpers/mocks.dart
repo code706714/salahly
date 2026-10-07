@@ -17,10 +17,20 @@ import 'package:salahly/features/customers/domain/repositories/customers_reposit
 import 'package:salahly/features/jobs/domain/repositories/jobs_repository.dart';
 import 'package:salahly/features/marketplace/domain/repositories/consumer_requests_repository.dart';
 import 'package:salahly/features/marketplace/domain/repositories/technician_requests_repository.dart';
+import 'package:salahly/features/notifications/domain/repositories/device_tokens_repository.dart';
 import 'package:salahly/features/notifications/domain/repositories/notifications_repository.dart';
+import 'package:salahly/features/notifications/domain/repositories/push_service.dart';
+import 'package:salahly/features/notifications/domain/repositories/push_transport.dart';
 import 'package:salahly/features/onboarding/domain/repositories/onboarding_repository.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
+
+class MockPushService extends Mock implements PushService {}
+
+class MockPushTransport extends Mock implements PushTransport {}
+
+class MockDeviceTokensRepository extends Mock
+    implements DeviceTokensRepository {}
 
 class MockAccountRepository extends Mock implements AccountRepository {}
 

@@ -7,6 +7,7 @@ import 'package:salahly/core/error/result.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/marketplace/data/repositories/supabase_technician_requests_repository.dart';
 import 'package:salahly/features/marketplace/domain/entities/incoming_request.dart';
+import 'package:salahly/features/marketplace/domain/entities/job_request_link.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_window.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
@@ -163,6 +164,99 @@ void main() {
         ),
       ]),
     );
+  });
+
+  group('almost there', () {
+    test('finds the request behind a platform job', () async {
+      body = {
+        'request_id': 'request-1',
+        'arriving_sent_at': '2026-10-03T09:00:00+00:00',
+      };
+
+      final link =
+          (await repository().fetchJobRequest('job-1') as Ok<JobRequestLink?>)
+              .value!;
+
+      expect(requests.single.url.path, '/rest/v1/rpc/platform_job_request');
+      expect(jsonDecode(requests.single.body), {'p_job_id': 'job-1'});
+      expect(link.requestId, 'request-1');
+      expect(link.arrivingSentAt, DateTime.utc(2026, 10, 3, 9).toLocal());
+    });
+
+    test('finds nothing for a job that is not his', () async {
+      body = null;
+
+      expect(
+        (await repository().fetchJobRequest('job-1') as Ok<JobRequestLink?>)
+            .value,
+        isNull,
+      );
+    });
+
+    test('has no time yet when the consumer was never told', () async {
+      body = {'request_id': 'request-1', 'arriving_sent_at': null};
+
+      final link =
+          (await repository().fetchJobRequest('job-1') as Ok<JobRequestLink?>)
+              .value!;
+
+      expect(link.arrivingSentAt, isNull);
+    });
+
+    test('tells the consumer and gets when', () async {
+      body = {'status': 'sent', 'sent_at': '2026-10-03T09:00:00+00:00'};
+
+      final result = await repository().sendArriving('request-1');
+
+      expect(requests.single.url.path, '/rest/v1/rpc/technician_arriving');
+      expect(jsonDecode(requests.single.body), {'p_request_id': 'request-1'});
+      expect(
+        (result as Ok<DateTime>).value,
+        DateTime.utc(2026, 10, 3, 9).toLocal(),
+      );
+    });
+
+    test('says the job is not confirmed on the server', () async {
+      status = 400;
+      body = {'code': 'P0001', 'message': 'not_confirmed', 'details': null};
+
+      expect(
+        await repository().sendArriving('request-1'),
+        isA<Err<DateTime>>().having(
+          (err) => err.failure,
+          'failure',
+          const ArrivalNotReadyFailure(),
+        ),
+      );
+    });
+
+    test('says the consumer was told often enough', () async {
+      status = 400;
+      body = {'code': '54000', 'message': 'limit_reached', 'details': null};
+
+      expect(
+        await repository().sendArriving('request-1'),
+        isA<Err<DateTime>>().having(
+          (err) => err.failure,
+          'failure',
+          const ArrivalLimitFailure(),
+        ),
+      );
+    });
+
+    test('says the request is not his', () async {
+      status = 404;
+      body = {'code': 'P0002', 'message': 'not_found', 'details': null};
+
+      expect(
+        await repository().sendArriving('request-1'),
+        isA<Err<DateTime>>().having(
+          (err) => err.failure,
+          'failure',
+          const MarketplaceNotFoundFailure(),
+        ),
+      );
+    });
   });
 
   test('dismisses a request', () async {

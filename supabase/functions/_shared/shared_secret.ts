@@ -1,4 +1,5 @@
-// The shared secret that wakes the purge function.
+// The shared secret that wakes a function called by the database (pg_cron
+// and pg_net): the purge and the push sender.
 
 /** The shortest secret the function accepts; shorter ones are guessable. */
 export const minSecretLength = 32;

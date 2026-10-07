@@ -67,6 +67,26 @@ void main() {
       ));
     });
 
+    test('"almost there" names the technician and suits either gender', () {
+      final arriving = of(NotificationKind.technicianArriving);
+
+      expect(consumerText(arriving), (
+        title: 'أحمد رمضان قرّب يوصلك',
+        body: 'خلّي تليفونك معاك.',
+      ));
+      expect(consumerText(arriving, honorific: 'mr'), consumerText(arriving));
+      expect(
+        consumerText(
+          AppNotification(
+            id: 'n4',
+            kind: NotificationKind.technicianArriving,
+            createdAt: _epoch,
+          ),
+        ).title,
+        'الفني قرّب يوصلك',
+      );
+    });
+
     test('a new price is asked for in her grammar or his', () {
       final change = of(NotificationKind.priceChange);
 
@@ -342,6 +362,16 @@ void main() {
           UserRole.consumer,
         ),
         AppRoutes.consumerRequests,
+      );
+    });
+
+    test('"almost there" opens the request the technician is coming for', () {
+      expect(
+        notificationRoute(
+          of(NotificationKind.technicianArriving),
+          UserRole.consumer,
+        ),
+        AppRoutes.request('request-1'),
       );
     });
 
