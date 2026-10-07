@@ -7,6 +7,7 @@ import 'package:salahly/core/text/person_name.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
 import 'package:salahly/core/theme/app_theme.dart';
+import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/busy_filled_button.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
@@ -95,13 +96,8 @@ class _Lines extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = context.appColors;
-    return Material(
-      color: colors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadii.xl),
-        side: BorderSide(color: colors.border, width: 1.5),
-      ),
-      clipBehavior: Clip.antiAlias,
+    return AppCard(
+      padding: EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -137,7 +133,6 @@ class _Lines extends StatelessWidget {
                     l10n.pounds(formatPounds(totalPiastres)),
                     style: const TextStyle(
                       fontSize: 24,
-                      height: 1.4,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -166,7 +161,7 @@ class _Line extends StatelessWidget {
     final colors = context.appColors;
     final color = isNew ? colors.primaryPressed : colors.ink;
     return ColoredBox(
-      color: isNew ? colors.dangerFaint : colors.surface,
+      color: isNew ? colors.attentionRow : colors.surface,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
@@ -327,7 +322,7 @@ class _Answer extends StatelessWidget {
                     foregroundColor: colors.danger,
                     minimumSize: const Size.fromHeight(48),
                     shape: rounded,
-                    side: BorderSide(color: colors.dangerLine, width: 1.5),
+                    side: BorderSide(color: colors.dangerOutline, width: 1.5),
                     textStyle: label,
                   ),
                   child: busy == RequestAction.declinePrice

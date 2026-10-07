@@ -9,6 +9,7 @@ class ChoiceChipButton extends StatelessWidget {
     required this.selected,
     required this.onTap,
     this.icon,
+    this.inkWhenSelected = false,
     this.fontSize = 15,
     this.minHeight = 44,
     this.padding = const EdgeInsets.symmetric(horizontal: 14),
@@ -22,14 +23,21 @@ class ChoiceChipButton extends StatelessWidget {
   /// unavailable.
   final VoidCallback? onTap;
   final IconData? icon;
+
+  /// Keeps the label in the ink color when selected, instead of the brand's.
+  final bool inkWhenSelected;
   final double fontSize;
   final double minHeight;
   final EdgeInsetsGeometry padding;
 
+  static const _borderWidth = 1.5;
+
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final foreground = selected ? colors.primaryPressed : colors.ink;
+    final foreground = selected && !inkWhenSelected
+        ? colors.primaryPressed
+        : colors.ink;
     return Semantics(
       button: true,
       selected: selected,
@@ -42,7 +50,7 @@ class ChoiceChipButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppRadii.sm),
             side: BorderSide(
               color: selected ? colors.primary : colors.fieldBorder,
-              width: 1.5,
+              width: _borderWidth,
             ),
           ),
           child: InkWell(
@@ -51,7 +59,8 @@ class ChoiceChipButton extends StatelessWidget {
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: minHeight),
               child: Padding(
-                padding: padding,
+                // The border takes room from the chip.
+                padding: padding.add(const EdgeInsets.all(_borderWidth)),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,

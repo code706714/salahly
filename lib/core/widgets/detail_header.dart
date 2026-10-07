@@ -28,7 +28,8 @@ class DetailHeader extends StatelessWidget implements PreferredSizeWidget {
       color: colors.background,
       child: SafeArea(
         bottom: false,
-        child: DecoratedBox(
+        // A container, so the border adds to the height as in the design.
+        child: Container(
           decoration: BoxDecoration(
             border: Border(bottom: BorderSide(color: colors.border)),
           ),
@@ -50,7 +51,6 @@ class DetailHeader extends StatelessWidget implements PreferredSizeWidget {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
-                          height: 1.4,
                           color: colors.ink,
                         ),
                       ),
@@ -61,7 +61,6 @@ class DetailHeader extends StatelessWidget implements PreferredSizeWidget {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 13,
-                            height: 1.4,
                             color: colors.inkMuted,
                           ),
                         ),

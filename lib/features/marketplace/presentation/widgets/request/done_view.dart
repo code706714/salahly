@@ -6,7 +6,7 @@ import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/text/money.dart';
 import 'package:salahly/core/text/person_name.dart';
 import 'package:salahly/core/theme/app_colors.dart';
-import 'package:salahly/core/theme/app_radii.dart';
+import 'package:salahly/core/theme/app_spacing.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/busy_filled_button.dart';
@@ -85,13 +85,8 @@ class _Invoice extends StatelessWidget {
     final job = details.job;
     final finishedAt = job?.finishedAt;
     final note = _note(l10n, context.watchHonorific());
-    return Material(
-      color: colors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadii.xl),
-        side: BorderSide(color: colors.border, width: 1.5),
-      ),
-      clipBehavior: Clip.antiAlias,
+    return AppCard(
+      padding: EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -167,7 +162,6 @@ class _Invoice extends StatelessWidget {
                     l10n.pounds(formatPounds(job?.totalPiastres ?? 0)),
                     style: const TextStyle(
                       fontSize: 24,
-                      height: 1.4,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -302,7 +296,7 @@ class _ReviewForm extends StatelessWidget {
                   decoration: InputDecoration(
                     hintText: l10n.doneComment(honorific),
                     hintStyle: TextStyle(fontSize: 15, color: colors.inkMuted),
-                    contentPadding: const EdgeInsets.all(12),
+                    contentPadding: AppSpacing.textArea,
                   ),
                 ),
               ],

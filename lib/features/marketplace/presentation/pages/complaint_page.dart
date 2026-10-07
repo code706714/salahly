@@ -8,6 +8,7 @@ import 'package:salahly/core/error/upload_failures.dart';
 import 'package:salahly/core/media/photo_picker.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
+import 'package:salahly/core/theme/app_spacing.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/busy_filled_button.dart';
@@ -166,7 +167,7 @@ class _ComplaintViewState extends State<ComplaintView> {
               decoration: InputDecoration(
                 hintText: l10n.complaintDetailsHint,
                 hintStyle: TextStyle(fontSize: 16, color: colors.inkMuted),
-                contentPadding: const EdgeInsets.all(12),
+                contentPadding: AppSpacing.textArea,
               ),
             ),
             const SizedBox(height: 14),
@@ -205,54 +206,47 @@ class _ReasonTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.appColors;
     final edge = selected ? colors.primary : colors.border;
-    final shape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(AppRadii.md),
-      side: BorderSide(color: edge, width: 2),
-    );
     return Semantics(
       inMutuallyExclusiveGroup: true,
       checked: selected,
-      child: Material(
-        color: selected ? colors.noticeSoft : colors.surface,
-        shape: shape,
-        child: InkWell(
-          onTap: onTap,
-          customBorder: shape,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: 52),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              child: Row(
-                children: [
-                  Container(
-                    width: 20,
-                    height: 20,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: edge, width: 2),
-                    ),
-                    child: selected
-                        ? Container(
-                            width: 9,
-                            height: 9,
-                            decoration: BoxDecoration(
-                              color: colors.primary,
-                              shape: BoxShape.circle,
-                            ),
-                          )
-                        : null,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      label,
-                      style: TextStyle(fontSize: 16, color: colors.ink),
-                    ),
-                  ),
-                ],
+      child: AppCard(
+        radius: AppRadii.md,
+        color: selected ? colors.selectedTint : colors.surface,
+        borderColor: edge,
+        borderWidth: 2,
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        onTap: onTap,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 48),
+          child: Row(
+            children: [
+              Container(
+                width: 20,
+                height: 20,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: edge, width: 2),
+                ),
+                child: selected
+                    ? Container(
+                        width: 9,
+                        height: 9,
+                        decoration: BoxDecoration(
+                          color: colors.primary,
+                          shape: BoxShape.circle,
+                        ),
+                      )
+                    : null,
               ),
-            ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(fontSize: 16, color: colors.ink),
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/text/money.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
+import 'package:salahly/core/theme/app_theme.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/busy_filled_button.dart';
@@ -467,6 +468,7 @@ class _OfferForm extends StatelessWidget {
                       formatPounds(choice.pounds * 100),
                     ),
                     selected: choice.serviceId == serviceId,
+                    inkWhenSelected: true,
                     onTap: () => onService(choice),
                   ),
               ],
@@ -483,6 +485,7 @@ class _OfferForm extends StatelessWidget {
                 ChoiceChipButton(
                   label: arrivalChoiceLabel(l10n, at, today: today),
                   selected: at == arriveAt,
+                  inkWhenSelected: true,
                   onTap: () => onArrival(at),
                 ),
             ],
@@ -573,6 +576,7 @@ class _Notice extends StatelessWidget {
                           minimumSize: const Size(0, 48),
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           textStyle: const TextStyle(
+                            fontFamily: AppTheme.fontFamily,
                             fontSize: 15,
                             fontWeight: FontWeight.w700,
                           ),

@@ -56,6 +56,7 @@ void main() {
         AppRoutes.consumerAddresses,
         AppRoutes.consumerBalance,
         AppRoutes.pastTechnicians,
+        AppRoutes.consumerNotifications,
         AppRoutes.consumerRequests,
         AppRoutes.terms,
         AppRoutes.privacy,
@@ -78,6 +79,7 @@ void main() {
     expect(find.text('+20 111 456 7720'), findsOneWidget);
     expect(find.text(l10n.consumerAccountCreditsTitle), findsOneWidget);
     expect(find.text(l10n.consumerAccountCredits(4)), findsOneWidget);
+    expect(find.text(l10n.balanceBuy('ms')), findsOneWidget);
     expect(find.text(l10n.addressesTitle), findsOneWidget);
     expect(find.text('2'), findsOneWidget);
     expect(find.text(l10n.pastTechniciansTitle), findsOneWidget);
@@ -110,6 +112,7 @@ void main() {
   for (final (row, path) in [
     (l10n.consumerAccountCreditsTitle, AppRoutes.consumerBalance),
     (l10n.pastTechniciansTitle, AppRoutes.pastTechnicians),
+    (l10n.notifTitle, AppRoutes.consumerNotifications),
     (l10n.legalTermsTitle, AppRoutes.terms),
     (l10n.legalPrivacyTitle, AppRoutes.privacy),
     (l10n.consumerAccountRequestProblem, AppRoutes.consumerRequests),
@@ -260,6 +263,10 @@ void main() {
       when(app.auth.signOut).thenAnswer((_) async {});
       await app.pump(tester, location: AppRoutes.consumerAccount);
 
+      await tester.scrollUntilVisible(
+        find.text(l10n.consumerAccountSignOut('ms')),
+        100,
+      );
       await tester.tap(find.text(l10n.consumerAccountSignOut('ms')));
       await app.settle(tester);
       await tester.tap(find.text(l10n.consumerAccountSignOut('ms')).last);

@@ -573,7 +573,7 @@ void main() {
       expect(
         find.text(
           '${l10n.newRequestSentTo(5, 'تكييف')} '
-          '${l10n.newRequestSentOffers('ms')}',
+          '${l10n.newRequestSentOffers}',
         ),
         findsOneWidget,
       );
