@@ -3756,5 +3756,799 @@
       }
     }
   },
-  "acctDeleteRelogCancel": "مش دلوقتي"
+  "acctDeleteRelogCancel": "مش دلوقتي",
+  "adminTitle": "صلحلي · لوحة الفريق",
+  "adminTeamPanel": "لوحة فريق المنصة",
+  "adminNavOverview": "نظرة عامة",
+  "adminNavVerification": "توثيق الفنيين",
+  "adminNavRequests": "الطلبات والشكاوي",
+  "adminNavTransfers": "التحويلات",
+  "adminNavUsers": "الفنيين والعملاء",
+  "adminNavSettings": "الإعدادات",
+  "adminNavAudit": "سجل العمليات",
+  "adminSignOut": "تسجيل الخروج",
+  "adminLoginTitle": "دخول فريق المنصة",
+  "adminLoginSubtitle": "ادخل برقم موبايلك المسجّل كأدمن. هنبعتلك كود تأكيد، ومفيش باسورد.",
+  "adminCodeLabel": "كود التأكيد",
+  "adminCodeHint": "6 أرقام",
+  "adminChecking": "بنتأكد من صلاحياتك...",
+  "adminNoAccessTitle": "الحساب ده مالوش صلاحية",
+  "adminNoAccessBody": "الرقم ده مش مضاف كأدمن، فخرّجناك من اللوحة. لو المفروض يكون عندك صلاحية، كلّم صاحب المنصة.",
+  "adminNoAccessBack": "رجوع لتسجيل الدخول",
+  "adminUnavailableTitle": "مقدرناش نتأكد من حسابك",
+  "adminReloginTitle": "اتأكد إن ده إنت",
+  "adminReloginBody": "الفلوس والأسعار محتاجة دخول جديد في آخر 15 دقيقة. هنبعتلك كود على {phone} وبعدها نكمّل اللي كنت بتعمله.",
+  "@adminReloginBody": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "adminReloginNoPhone": "مقدرناش نعرف رقمك. اخرج وادخل من الأول.",
+  "adminReloginCancel": "لاغي",
+  "adminReloginSignOut": "اخرج وادخل تاني",
+  "adminCancel": "لاغي",
+  "adminClose": "اقفل",
+  "adminCopy": "انسخ",
+  "adminCopied": "اتنسخ",
+  "adminAllAreas": "كل المناطق",
+  "adminAllStatuses": "كل الحالات",
+  "adminAreaFilter": "المنطقة",
+  "adminStatusFilter": "الحالة",
+  "adminPeriodFilter": "الفترة",
+  "adminPageIndicator": "صفحة {page} من {pages}",
+  "@adminPageIndicator": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "pages": {
+        "type": "int"
+      }
+    }
+  },
+  "adminRowsOfTotal": "{shown} من {total}",
+  "@adminRowsOfTotal": {
+    "placeholders": {
+      "shown": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "adminNextPage": "اللي بعده",
+  "adminPreviousPage": "اللي قبله",
+  "adminDeletedAccount": "حساب اتمسح",
+  "adminNever": "لسه",
+  "adminNone": "—",
+  "adminAgeNow": "دلوقتي",
+  "adminAgeMinutes": "{count, plural, =1{من دقيقة} =2{من دقيقتين} few{من {count} دقايق} other{من {count} دقيقة}}",
+  "@adminAgeMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminAgeHours": "{count, plural, =1{من ساعة} =2{من ساعتين} few{من {count} ساعات} other{من {count} ساعة}}",
+  "@adminAgeHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminReasonLabel": "السبب",
+  "adminReasonHint": "اكتب السبب (من {min} لـ {max} حرف)",
+  "@adminReasonHint": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "adminErrorForbidden": "الحساب ده مالوش صلاحية دلوقتي. اخرج وادخل تاني.",
+  "adminErrorNotPending": "حد راجع ده قبل كده بقرار تاني. حدّث الصفحة.",
+  "adminErrorNotFound": "العنصر ده مش موجود.",
+  "adminErrorInvalid": "في قيمة مش مقبولة. راجع اللي كتبته وجرّب تاني.",
+  "adminErrorDuplicate": "في واحد زيه موجود بالفعل.",
+  "adminErrorLastActive": "لازم يفضل واحد شغال على الأقل.",
+  "adminErrorCannotSuspendAdmin": "مينفعش توقّف أدمن.",
+  "adminErrorRecentLogin": "لازم تدخل من جديد عشان تكمّل.",
+  "adminImageFailed": "الصورة ماتحمّلتش",
+  "adminRolePillTechnician": "فني",
+  "adminRolePillConsumer": "عميل",
+  "adminOverviewTitle": "نظرة عامة",
+  "adminOverviewSubtitle": "الأرقام اللي بتتغيّر بالفترة اللي تختارها، واللي مستني قرار منك.",
+  "adminPeriodToday": "النهارده",
+  "adminPeriodWeek": "الأسبوع ده",
+  "adminPeriodMonth": "الشهر ده",
+  "adminKpiVerified": "فنيين موثّقين",
+  "adminKpiOfTarget": "من {target}",
+  "@adminKpiOfTarget": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "adminKpiTargetCaption": "هدف ما قبل الإطلاق",
+  "adminKpiRequestsToday": "طلبات النهارده",
+  "adminKpiRequestsWeek": "طلبات الأسبوع",
+  "adminKpiRequestsMonth": "طلبات الشهر",
+  "adminKpiRequestsUp": "+{change} عن الفترة اللي فاتت",
+  "@adminKpiRequestsUp": {
+    "placeholders": {
+      "change": {
+        "type": "int"
+      }
+    }
+  },
+  "adminKpiRequestsDown": "−{change} عن الفترة اللي فاتت",
+  "@adminKpiRequestsDown": {
+    "placeholders": {
+      "change": {
+        "type": "int"
+      }
+    }
+  },
+  "adminKpiRequestsSame": "زي الفترة اللي فاتت",
+  "adminKpiNoOffers": "طلبات من غير عروض",
+  "adminKpiNoOffersCaption": "عدّى عليها أكتر من {hours} ساعات",
+  "@adminKpiNoOffersCaption": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "adminKpiRating": "متوسط التقييم",
+  "adminKpiRatingCaption": "{count, plural, =1{من تقييم واحد} =2{من تقييمين} few{من {count} تقييمات} other{من {count} تقييم}}",
+  "@adminKpiRatingCaption": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminKpiRatingNone": "مفيش تقييمات في الفترة دي",
+  "adminFunnelTitle": "رحلة الطلبات",
+  "adminFunnelSent": "طلب اتبعت",
+  "adminFunnelWithOffer": "جاله عرض أو أكتر ({percent}%)",
+  "@adminFunnelWithOffer": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "adminFunnelChosen": "العميل اختار فني ({percent}%)",
+  "@adminFunnelChosen": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "adminFunnelFinished": "خلصت ({percent}%)",
+  "@adminFunnelFinished": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "adminAttentionTitle": "محتاج تتصرف فيه",
+  "adminAttentionNothing": "مفيش حاجة مستنياك دلوقتي. كله تمام.",
+  "adminAttentionVerifications": "{count, plural, =1{فني واحد مستني توثيق} =2{فنيين مستنيين توثيق} few{{count} فنيين مستنيين توثيق} other{{count} فني مستنيين توثيق}}",
+  "@adminAttentionVerifications": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminAttentionOldest": "أقدمهم {age}",
+  "@adminAttentionOldest": {
+    "placeholders": {
+      "age": {
+        "type": "String"
+      }
+    }
+  },
+  "adminAttentionNoOffers": "{count, plural, =1{طلب واحد من غير عروض} =2{طلبين من غير عروض} few{{count} طلبات من غير عروض} other{{count} طلب من غير عروض}}",
+  "@adminAttentionNoOffers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminAttentionNoOffersAreas": "الأكتر في {areas}",
+  "@adminAttentionNoOffersAreas": {
+    "placeholders": {
+      "areas": {
+        "type": "String"
+      }
+    }
+  },
+  "adminAttentionComplaints": "{count, plural, =1{شكوى مفتوحة} =2{شكويين مفتوحين} few{{count} شكاوي مفتوحة} other{{count} شكوى مفتوحة}}",
+  "@adminAttentionComplaints": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminAttentionTopups": "{count, plural, =1{تحويل مستني مراجعة} =2{تحويلين مستنيين مراجعة} few{{count} تحويلات مستنية مراجعة} other{{count} تحويل مستني مراجعة}}",
+  "@adminAttentionTopups": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminAttentionTopupsSplit": "{technicians} من فنيين و{consumers} من عملاء",
+  "@adminAttentionTopupsSplit": {
+    "placeholders": {
+      "technicians": {
+        "type": "int"
+      },
+      "consumers": {
+        "type": "int"
+      }
+    }
+  },
+  "adminAttentionLowRated": "في تقييم نزل تحت 3.5",
+  "adminAttentionLowRatedLine": "{name} · {rating} من {count} تقييم",
+  "@adminAttentionLowRatedLine": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "rating": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminCoverageTitle": "التغطية حسب المنطقة",
+  "adminCoverageHint": "الإعلانات بتشتغل بس في منطقة فيها {count} فنيين موثّقين أو أكتر",
+  "@adminCoverageHint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminCoverageArea": "المنطقة",
+  "adminCoverageTechnicians": "فنيين موثّقين",
+  "adminCoverageRequests": "طلبات",
+  "adminCoverageGotOffer": "جالها عرض",
+  "adminCoverageAds": "الإعلانات",
+  "adminAdsActive": "شغالة",
+  "adminAdsPaused": "واقفة (أقل من {count})",
+  "@adminAdsPaused": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminAdsAreaClosed": "المنطقة مقفولة",
+  "adminAdsPausedShort": "واقفة (فاضل {count})",
+  "@adminAdsPausedShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminVerifyTitle": "توثيق الفنيين",
+  "adminVerifySubtitle": "مفيش فني بيستلم طلبات قبل ما يتوثّق.",
+  "adminVerifyPendingCount": "{count, plural, =0{مفيش حد مستني} =1{فني واحد مستني} =2{فنيين مستنيين} few{{count} فنيين مستنيين} other{{count} فني مستنيين}}",
+  "@adminVerifyPendingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminVerifyTabPending": "مستنيين",
+  "adminVerifyTabApproved": "اتوثّقوا",
+  "adminVerifyTabRejected": "اترفضوا",
+  "adminVerifyStatusPending": "مستني مراجعة",
+  "adminVerifyStatusApproved": "اتوثّق",
+  "adminVerifyStatusRejected": "اترفض",
+  "adminVerifyEmptyPending": "مفيش فنيين مستنيين. كله اتراجع.",
+  "adminVerifyEmpty": "مفيش فنيين هنا.",
+  "adminVerifyPickOne": "اختار فني من القايمة عشان تراجع بياناته.",
+  "adminVerifyHeaderLine": "فني · {area} · سجّل {age}",
+  "@adminVerifyHeaderLine": {
+    "placeholders": {
+      "area": {
+        "type": "String"
+      },
+      "age": {
+        "type": "String"
+      }
+    }
+  },
+  "adminVerifyPhone": "الموبايل",
+  "adminVerifyPhoneConfirmed": "اتأكد بالكود",
+  "adminVerifyPhoneUnconfirmed": "مش متأكد بالكود",
+  "adminVerifyExperience": "الخبرة",
+  "adminVerifyYears": "{count, plural, =0{أقل من سنة} =1{سنة} =2{سنتين} few{{count} سنين} other{{count} سنة}}",
+  "@adminVerifyYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminVerifyShop": "المحل",
+  "adminVerifyBase": "مكانه الأساسي",
+  "adminVerifyAreas": "مناطق الشغل",
+  "adminVerifyRadius": "نطاق الشغل",
+  "adminVerifyRadiusKm": "{km} كم",
+  "@adminVerifyRadiusKm": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "adminVerifyDays": "أيام الشغل",
+  "adminVerifyServices": "الخدمات وأسعار البداية",
+  "adminVerifyPreviousAttempts": "{count, plural, =1{قدّم مرة قبل كده} =2{قدّم مرتين قبل كده} few{قدّم {count} مرات قبل كده} other{قدّم {count} مرة قبل كده}}",
+  "@adminVerifyPreviousAttempts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminVerifySuspended": "الحساب موقوف",
+  "adminVerifyIdFront": "وش البطاقة",
+  "adminVerifyIdBack": "ضهر البطاقة",
+  "adminVerifySelfie": "سيلفي ماسك البطاقة",
+  "adminVerifyChecklist": "راجع قبل ما توثّق ({done} من {total})",
+  "@adminVerifyChecklist": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "adminVerifyCheckName": "الاسم في البطاقة زي الاسم المسجّل",
+  "adminVerifyCheckFace": "الصورة الشخصية شبه صورة البطاقة",
+  "adminVerifyCheckValid": "البطاقة سارية ومش متقصوصة",
+  "adminVerifyCheckTrade": "كلّمناه واتأكدنا إنه فني تكييف فعلاً",
+  "adminVerifyApprove": "وثّق الفني",
+  "adminVerifyReject": "ارفض",
+  "adminVerifyNote": "الفني بيوصله إشعار بالنتيجة. صور البطاقة بيشوفها فريق التوثيق بس، وفتحها بيتسجّل في سجل العمليات.",
+  "adminVerifyApproveTitle": "توثيق {name}",
+  "@adminVerifyApproveTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminVerifyApproveBody": "الفني هيبدأ يستلم طلبات وهيوصله إشعار بكده.",
+  "adminVerifyApproveConfirm": "وثّق",
+  "adminVerifyRejectTitle": "رفض {name}",
+  "@adminVerifyRejectTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminVerifyRejectBody": "اكتب سبب الرفض. الفني هيشوفه.",
+  "adminVerifyRejectConfirm": "ارفض",
+  "adminVerifyReasonBlurry": "صورة البطاقة مش واضحة",
+  "adminVerifyReasonName": "الاسم في البطاقة مش زي الاسم المسجّل",
+  "adminVerifyReasonExpired": "البطاقة منتهية أو متقصوصة",
+  "adminVerifyReasonFace": "الصورة الشخصية مش شبه صورة البطاقة",
+  "adminVerifyApproved": "الفني اتوثّق",
+  "adminVerifyRejected": "الفني اترفض",
+  "adminVerifyRejectedReason": "سبب الرفض: {reason}",
+  "@adminVerifyRejectedReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "adminTopupsTitle": "مراجعة التحويلات",
+  "adminTopupsSubtitle": "الرصيد مش بيتشحن غير بعد ما نلاقي التحويل في حسابنا.",
+  "adminTopupsPendingCount": "{count, plural, =0{مفيش تحويلات مستنية} =1{تحويل واحد مستني} =2{تحويلين مستنيين} few{{count} تحويلات مستنية} other{{count} تحويل مستني}}",
+  "@adminTopupsPendingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminTopupsTabPending": "مستنية",
+  "adminTopupsTabApproved": "اتأكدت",
+  "adminTopupsTabRejected": "اترفضت",
+  "adminTopupsTabAll": "الكل",
+  "adminTopupsEmptyPending": "مفيش تحويلات مستنية. كله اتراجع.",
+  "adminTopupsEmpty": "مفيش تحويلات هنا.",
+  "adminTopupsPickOne": "اختار تحويل من القايمة عشان تراجعه.",
+  "adminTopupsRowLine": "{method} · {age}",
+  "@adminTopupsRowLine": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      },
+      "age": {
+        "type": "String"
+      }
+    }
+  },
+  "adminTopupsHeaderLine": "{role} · طلب {pack}",
+  "@adminTopupsHeaderLine": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      },
+      "pack": {
+        "type": "String"
+      }
+    }
+  },
+  "adminTopupsPackConsumer": "{count, plural, =1{طلب واحد} =2{طلبين} few{{count} طلبات} other{{count} طلب}}",
+  "@adminTopupsPackConsumer": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminTopupsPackTechnician": "{count, plural, =1{شغلانة واحدة} =2{شغلانتين} few{{count} شغلانات} other{{count} شغلانة}}",
+  "@adminTopupsPackTechnician": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminTopupsRoleConsumer": "عميل",
+  "adminTopupsRoleTechnician": "فني",
+  "adminTopupsStatusPending": "مستني مراجعة",
+  "adminTopupsStatusApproved": "اتأكد · الرصيد اتشحن",
+  "adminTopupsStatusRejected": "اترفض",
+  "adminTopupsScreenshot": "سكرين شوت التحويل اللي رفعه",
+  "adminTopupsAmount": "المبلغ المطلوب",
+  "adminTopupsMethod": "الطريقة",
+  "adminTopupsFrom": "حوّل من",
+  "adminTopupsAccountPhone": "رقم حسابه في الأبلكيشن",
+  "adminTopupsDifferentSender": "حوّل من رقم غير رقم حسابه. ده عادي لو من محفظة حد من أهله، بس اتأكد من الاسم في الصورة.",
+  "adminTopupsChecklist": "راجع ({done} من {total})",
+  "@adminTopupsChecklist": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "adminTopupsCheckAmount": "المبلغ في الصورة زي المبلغ المطلوب",
+  "adminTopupsCheckFound": "التحويل ظاهر في حساب المنصة",
+  "adminTopupsCheckUnique": "رقم العملية مش متكرر قبل كده",
+  "adminTopupsCheckTime": "التاريخ والوقت في الصورة مظبوطين",
+  "adminTopupsApprove": "أكّد واشحن الرصيد",
+  "adminTopupsNote": "بيوصله إشعار بالنتيجة. لو اترفض بنقوله السبب ويقدر يبعت تحويل تاني بصورة جديدة.",
+  "adminTopupsApproveTitle": "شحن رصيد {name}",
+  "@adminTopupsApproveTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminTopupsApproveBody": "هيتضاف {pack} لرصيده مقابل {amount} ج.م. التحويل ده مش بيتراجع فيه.",
+  "@adminTopupsApproveBody": {
+    "placeholders": {
+      "pack": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "adminTopupsApproveConfirm": "اشحن الرصيد",
+  "adminTopupsRejectTitle": "رفض تحويل {name}",
+  "@adminTopupsRejectTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminTopupsRejectBody": "اكتب السبب. هيشوفه ويقدر يبعت تحويل تاني.",
+  "adminTopupsRejectConfirm": "ارفض",
+  "adminTopupsReasonAmount": "المبلغ في الصورة مش زي المبلغ المطلوب",
+  "adminTopupsReasonNotFound": "مالقيناش التحويل في حساب المنصة",
+  "adminTopupsApproved": "الرصيد اتشحن",
+  "adminTopupsRejected": "التحويل اترفض",
+  "adminTopupsRejectedReason": "سبب الرفض: {reason}",
+  "@adminTopupsRejectedReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "adminRequestsTitle": "الطلبات والشكاوي",
+  "adminRequestsTabRequests": "الطلبات",
+  "adminRequestsTabComplaints": "الشكاوي",
+  "adminRequestsSearchHint": "دوّر برقم الطلب أو اسم أو موبايل",
+  "adminRequestsRangeToday": "النهارده",
+  "adminRequestsRange7": "آخر 7 أيام",
+  "adminRequestsRange30": "آخر 30 يوم",
+  "adminRequestsRange90": "آخر 90 يوم",
+  "adminRequestsRangeAll": "من الأول",
+  "adminRequestsColRequest": "الطلب",
+  "adminRequestsColCustomer": "العميل",
+  "adminRequestsColIssue": "المشكلة",
+  "adminRequestsColArea": "المنطقة",
+  "adminRequestsColOffers": "العروض",
+  "adminRequestsColTechnician": "الفني",
+  "adminRequestsColStatus": "الحالة",
+  "adminRequestsColWhen": "من",
+  "adminRequestsStatusNoOffers": "من غير عروض",
+  "adminRequestsStatusAwaiting": "مستني اختيار",
+  "adminRequestsStatusInProgress": "شغال",
+  "adminRequestsStatusDone": "خلص",
+  "adminRequestsStatusDoneStars": "خلص · {stars} من 5",
+  "@adminRequestsStatusDoneStars": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "adminRequestsStatusCancelled": "اتلغى",
+  "adminRequestsStatusExpired": "معاده فات",
+  "adminRequestsComplaintOpen": "شكوى مفتوحة",
+  "adminRequestsComplaintClosed": "فيه شكوى اتحلّت",
+  "adminRequestsNoTechnician": "لسه",
+  "adminRequestsEmpty": "مفيش طلبات بالفلتر ده.",
+  "adminRequestsTotal": "{shown} من {total} طلب",
+  "@adminRequestsTotal": {
+    "placeholders": {
+      "shown": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "adminComplaintsTabOpen": "مفتوحة",
+  "adminComplaintsTabResolved": "اتحلّت",
+  "adminComplaintsTabAll": "الكل",
+  "adminComplaintsEmpty": "مفيش شكاوي هنا.",
+  "adminComplaintsEmptyOpen": "مفيش شكاوي مفتوحة. كله تمام.",
+  "adminComplaintOpen": "جديدة",
+  "adminComplaintResolved": "اتحلّت",
+  "adminComplaintReasonNoShow": "الفني ماجاش أو اتأخر",
+  "adminComplaintReasonPriceRaised": "السعر زاد عن العرض",
+  "adminComplaintReasonPoorWork": "الشغل مش مظبوط",
+  "adminComplaintReasonBadConduct": "تعامل مش كويس",
+  "adminComplaintReasonOther": "حاجة تانية",
+  "adminComplaintNoDetails": "العميل ماكتبش تفاصيل.",
+  "adminComplaintFrom": "من",
+  "adminComplaintAbout": "عن",
+  "adminComplaintRequest": "الطلب",
+  "adminComplaintCustomer": "عميل",
+  "adminComplaintTechnician": "فني",
+  "adminComplaintTechnicianSuspended": "الفني موقوف",
+  "adminComplaintPhoto": "الصورة المرفقة",
+  "adminComplaintResolve": "اتحلّت",
+  "adminComplaintSuspend": "وقّف الفني مؤقتاً",
+  "adminComplaintResolveTitle": "قفل الشكوى",
+  "adminComplaintResolveBody": "اكتب اللي اتعمل في الشكوى دي. بيتسجّل للفريق.",
+  "adminComplaintNoteLabel": "الملاحظة",
+  "adminComplaintResolveConfirm": "اقفلها",
+  "adminComplaintClosed": "الشكوى اتقفلت",
+  "adminComplaintResolutionNote": "اللي اتعمل: {note}",
+  "@adminComplaintResolutionNote": {
+    "placeholders": {
+      "note": {
+        "type": "String"
+      }
+    }
+  },
+  "adminSuspendTitle": "وقف {name}",
+  "@adminSuspendTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminSuspendBody": "الحساب هيتوقّف عن أي تعديل: الفني مش هيستلم طلبات، والعميل طلباته المفتوحة هتتلغي ويرجعله رصيده. السبب بيتسجّل للفريق بس.",
+  "adminSuspendConfirm": "وقّف",
+  "adminSuspended": "الحساب اتوقّف",
+  "adminUsersTitle": "الفنيين والعملاء",
+  "adminUsersTabTechnicians": "الفنيين",
+  "adminUsersTabConsumers": "العملاء",
+  "adminUsersSearchHint": "دوّر بالاسم أو الموبايل",
+  "adminUsersStatusVerified": "موثّق",
+  "adminUsersStatusPending": "مستني توثيق",
+  "adminUsersStatusRejected": "اترفض",
+  "adminUsersStatusActive": "شغال",
+  "adminUsersStatusSuspended": "موقوف",
+  "adminUsersColTechnician": "الفني",
+  "adminUsersColCustomer": "العميل",
+  "adminUsersColArea": "المنطقة",
+  "adminUsersColStatus": "الحالة",
+  "adminUsersColRating": "التقييم",
+  "adminUsersColJobs": "شغلانات المنصة",
+  "adminUsersColRequests": "الطلبات",
+  "adminUsersColComplaints": "شكاوي",
+  "adminUsersColBalance": "الرصيد",
+  "adminUsersColLastRequest": "آخر طلب",
+  "adminUsersColLastSeen": "آخر دخول",
+  "adminUsersPendingTransfer": "مستني تحويل",
+  "adminUsersNoRating": "—",
+  "adminUsersSuspend": "وقّفه",
+  "adminUsersRestore": "رجّعه",
+  "adminUsersReasonLine": "السبب: {reason}",
+  "@adminUsersReasonLine": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "adminUsersEmpty": "مفيش حد بالفلتر ده.",
+  "adminUsersTotal": "{shown} من {total}",
+  "@adminUsersTotal": {
+    "placeholders": {
+      "shown": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "adminUsersRestoreTitle": "رجوع {name}",
+  "@adminUsersRestoreTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminUsersRestoreBody": "الحساب هيرجع يشتغل عادي، حتى لو اتعمل بنفس الرقم تاني.",
+  "adminUsersRestoreConfirm": "رجّعه",
+  "adminUsersRestored": "الحساب رجع",
+  "adminSettingsTitle": "الإعدادات",
+  "adminSettingsSubtitle": "أي تغيير هنا بيظهر في الأبلكيشن للناس الجديدة على طول. الرصيد اللي اتشحن قبل كده مش بيتغير.",
+  "adminSettingsSave": "احفظ التغييرات",
+  "adminSettingsSaved": "اتحفظ",
+  "adminSettingsSaveTitle": "تحفظ التغييرات دي؟",
+  "adminSettingsSaveBody": "الأسعار والأرقام الجديدة هتظهر للناس الجديدة على طول. الرصيد اللي اتشحن قبل كده مش بيتغير.",
+  "adminSettingsSaveConfirm": "احفظ",
+  "adminSettingsConsumerFree": "طلبات مجانية لكل عميل جديد",
+  "adminSettingsTechnicianFree": "شغلانات مجانية لكل فني جديد",
+  "adminSettingsTarget": "هدف الفنيين الموثّقين قبل الإطلاق",
+  "adminSettingsTargetInvalid": "اكتب رقم من 1 لـ 100000",
+  "adminSettingsMore": "أكتر",
+  "adminSettingsLess": "أقل",
+  "adminSettingsConsumerPacks": "باقات العملاء",
+  "adminSettingsTechnicianPacks": "باقات الفنيين",
+  "adminSettingsPackPrice": "سعر {pack}",
+  "@adminSettingsPackPrice": {
+    "placeholders": {
+      "pack": {
+        "type": "String"
+      }
+    }
+  },
+  "adminSettingsPackPriceInvalid": "السعر من 1 لـ 1,000,000 ج.م",
+  "adminSettingsPackOnSale": "على البيع",
+  "adminSettingsPackOffSale": "مقفولة",
+  "adminSettingsConsumerPacksNote": "الطلب اللي ماجالوش عروض مش بيتخصم. الإلغاء بيرجّع الطلب للرصيد.",
+  "adminSettingsTechnicianPacksNote": "الشغلانة بتتخصم لما العميل يختار عرض الفني، مش لما يبعته.",
+  "adminSettingsAddPack": "+ ضيف باقة",
+  "adminSettingsAddPackTitle": "باقة جديدة",
+  "adminSettingsPackUses": "عدد الاستخدامات",
+  "adminSettingsPackUsesInvalid": "اكتب رقم من 1 لـ 1000",
+  "adminSettingsPackPriceField": "السعر بالجنيه",
+  "adminSettingsPackAdd": "ضيف",
+  "adminSettingsAccountsTitle": "الأرقام اللي الناس بتحوّل عليها",
+  "adminSettingsAccountNumber": "الرقم أو العنوان",
+  "adminSettingsAccountHolder": "اسم صاحب الحساب",
+  "adminSettingsAccountOn": "ظاهر في شاشة الشحن",
+  "adminSettingsAccountsNote": "اللي مقفول مش بيظهر في شاشة الشحن. لازم يفضل واحد على الأقل شغال.",
+  "adminSettingsAreasTitle": "المناطق",
+  "adminSettingsAreasHint": "الإعدادات بتتحفظ على طول لما تقفل أو تفتح منطقة. الإعلانات بتشتغل لوحدها لما المنطقة يبقى فيها {count} فنيين موثّقين أو أكتر.",
+  "@adminSettingsAreasHint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminSettingsAreaOpen": "مفتوحة للطلبات",
+  "adminSettingsAddArea": "+ ضيف منطقة",
+  "adminSettingsAddAreaTitle": "منطقة جديدة",
+  "adminSettingsAreaId": "الكود (حروف إنجليزي صغيرة وأرقام و_)",
+  "adminSettingsAreaName": "اسم المنطقة",
+  "adminSettingsAreaCity": "المدينة",
+  "adminSettingsAreaLat": "خط العرض (من 22 لـ 32)",
+  "adminSettingsAreaLng": "خط الطول (من 24 لـ 37)",
+  "adminSettingsAreaAdd": "ضيف",
+  "adminSettingsAreaInvalid": "راجع بيانات المنطقة",
+  "adminSettingsAreaCloseTitle": "قفل {name}؟",
+  "@adminSettingsAreaCloseTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminSettingsAreaCloseBody": "الناس مش هتقدر تبعت طلبات جديدة في المنطقة دي.",
+  "adminSettingsAreaCloseConfirm": "اقفلها",
+  "adminSettingsAreaOpenTitle": "فتح {name}؟",
+  "@adminSettingsAreaOpenTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminSettingsAreaOpenBody": "الناس هتقدر تبعت طلبات في المنطقة دي.",
+  "adminSettingsAreaOpenConfirm": "افتحها",
+  "adminSettingsAreaSaved": "المنطقة اتحفظت",
+  "adminSettingsPackSaved": "الباقة اتضافت",
+  "adminAuditTitle": "سجل العمليات",
+  "adminAuditSubtitle": "كل حاجة عملها فريق المنصة. مابتتعدّلش ومابتتمسحش.",
+  "adminAuditActionFilter": "العملية",
+  "adminAuditAllActions": "كل العمليات",
+  "adminAuditTargetHint": "دوّر بكود اللي اتعمل عليه",
+  "adminAuditColWhen": "الوقت",
+  "adminAuditColAdmin": "الأدمن",
+  "adminAuditColAction": "العملية",
+  "adminAuditColTarget": "اللي اتعمل عليه",
+  "adminAuditColDetails": "تفاصيل",
+  "adminAuditEmpty": "مفيش عمليات بالفلتر ده.",
+  "adminAuditUnknownAdmin": "أدمن اتمسح حسابه",
+  "adminAuditViewVerification": "فتح صور توثيق",
+  "adminAuditApproveVerification": "توثيق فني",
+  "adminAuditRejectVerification": "رفض توثيق",
+  "adminAuditApproveTopup": "تأكيد تحويل",
+  "adminAuditRejectTopup": "رفض تحويل",
+  "adminAuditResolveComplaint": "قفل شكوى",
+  "adminAuditSuspendUser": "وقف حساب",
+  "adminAuditRestoreUser": "رجوع حساب",
+  "adminAuditUpdateSettings": "تعديل الإعدادات",
+  "adminAuditCreatePack": "إضافة باقة",
+  "adminAuditUpdatePack": "تعديل باقة",
+  "adminAuditUpdatePaymentAccount": "تعديل رقم تحويل",
+  "adminAuditCreateArea": "إضافة منطقة",
+  "adminAuditUpdateArea": "تعديل منطقة",
+  "adminAuditSetAreaOpen": "فتح أو قفل منطقة"
 }

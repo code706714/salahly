@@ -55,7 +55,7 @@ import 'package:salahly/features/onboarding/presentation/pages/technician_onboar
 import 'package:salahly/features/splash/presentation/pages/splash_page.dart';
 
 /// The app's routes. [refresh] must notify whenever [session] changes, so
-/// redirects re-run; see [SessionRefresh].
+/// redirects re-run; see `SessionRefresh`.
 GoRouter createRouter(SessionCubit session, {required Listenable refresh}) {
   return GoRouter(
     refreshListenable: refresh,
@@ -343,19 +343,4 @@ RouteBase _technicianRoutes() {
       ),
     ],
   );
-}
-
-/// Notifies on every session change, to re-run the router's redirects.
-class SessionRefresh extends ChangeNotifier {
-  SessionRefresh(Stream<Object?> stream) {
-    _subscription = stream.listen((_) => notifyListeners());
-  }
-
-  late final StreamSubscription<Object?> _subscription;
-
-  @override
-  void dispose() {
-    unawaited(_subscription.cancel());
-    super.dispose();
-  }
 }

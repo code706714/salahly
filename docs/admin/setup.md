@@ -101,3 +101,61 @@ block at the auth layer is ever wanted, also set `auth.users.banned_until`.
   security rules: admins sign in by the same OTP.
 - Never put a service-role key in the console. It talks to the API with the
   admin's own session only.
+
+## The web console
+
+The console is the Flutter web app in `lib/main_admin.dart` (Arabic, right to
+left, made for a desktop screen of 1100 px or more). It reuses the app's phone
+OTP sign in. After signing in it asks the server for the overview once; an
+`admin_required` answer shows a no-access screen and signs the person out.
+Every later call is checked by the server again, so the console's routing is
+only for tidiness.
+
+Build it with the same defines file as the app (never commit `env/dev.json`;
+it holds the project URL and the publishable key, nothing else):
+
+```sh
+flutter build web --release --target lib/main_admin.dart \
+  --dart-define-from-file=env/dev.json --no-web-resources-cdn
+```
+
+- `--no-web-resources-cdn` makes the build load CanvasKit and every font from
+  its own origin, which the content security policy below relies on. The app
+  font has no fallback, so text outside its Arabic and Latin glyphs would show
+  as empty boxes; keep symbols out of the strings.
+- A release build writes no source maps. Do not add `--source-maps`.
+- Run it locally with `flutter run -d chrome --target lib/main_admin.dart
+  --dart-define-from-file=env/dev.json`.
+- Host `build/web` on any static host over HTTPS. Do not serve it from the
+  same origin as anything else that stores credentials.
+
+**Content security policy.** `web/index.html` carries a restrictive policy in
+a `<meta>` tag: scripts and styles from the console's own origin only
+(`wasm-unsafe-eval` for CanvasKit), connections and images only to
+`https://*.supabase.co` (the API and the signed file links), no framing
+rules, no forms, no plugins. A `<meta>` policy can not set `frame-ancestors`;
+send that header from the host instead:
+
+```
+Content-Security-Policy: frame-ancestors 'none'
+X-Content-Type-Options: nosniff
+```
+
+If the project uses a custom domain for Supabase, add it to `img-src` and
+`connect-src`.
+
+**What the console never does.** It does not log URLs or personal data, does
+not open ID photos or transfer screenshots in a new tab, and shows every
+user-written text as plain text. Photos and screenshots come from signed URLs
+made with the admin's session that live for 60 seconds and are fetched right
+away; reloading the page asks for fresh ones (and an ID photo opened is
+recorded in the audit log each time).
+
+**Money and prices** need a sign in from the last 15 minutes. When the server
+answers `recent_login_required` the console opens a dialog that sends a code
+to the admin's own number (it can not be changed) and repeats the change once
+the code is accepted.
+
+**Not in the console** (the backend has no support yet): complaints by
+technicians about consumers, and asking a technician to upload a clearer ID
+photo. Both are future backend work.
