@@ -6,12 +6,15 @@ import 'package:salahly/core/error/failure.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Whether [error] means the server could not be reached.
+///
+/// An [AuthRetryableFetchException] with a status code is the server
+/// answering with a 5xx, which is a server fault, not a lost connection.
 bool isNetworkError(Object error) =>
     error is ClientException ||
     error is SocketException ||
     error is HttpException ||
     error is TimeoutException ||
-    error is AuthRetryableFetchException;
+    (error is AuthRetryableFetchException && error.statusCode == null);
 
 /// Maps errors every Supabase call can throw. Repositories handle their
 /// feature-specific errors first and delegate the rest here.

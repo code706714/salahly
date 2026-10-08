@@ -35,6 +35,13 @@ class SupabaseAuthRepository implements AuthRepository {
         },
       );
       return const Ok(null);
+    } on supabase.AuthRetryableFetchException catch (error) {
+      // The server answered with a 5xx: usually the messaging provider.
+      return Err(
+        error.statusCode == null
+            ? const NetworkFailure()
+            : const OtpDeliveryFailure(),
+      );
     } on Object catch (error) {
       return Err(_failureFrom(error));
     }

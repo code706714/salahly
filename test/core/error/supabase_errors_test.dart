@@ -29,6 +29,13 @@ void main() {
       expect(isNetworkError(error), isFalse);
     });
 
+    test('is false for a server error answered with 5xx', () {
+      final error = AuthRetryableFetchException(statusCode: '500');
+
+      expect(isNetworkError(error), isFalse);
+      expect(commonFailureFrom(error), UnexpectedFailure(error));
+    });
+
     test('is false for an unrelated error', () {
       expect(isNetworkError(StateError('boom')), isFalse);
     });

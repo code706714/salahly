@@ -99,6 +99,13 @@ void main() {
         ),
         const OtpDeliveryFailure(),
       ),
+      'a server error answered with 500': (
+        supabase.AuthRetryableFetchException(
+          message: 'Error sending OTP',
+          statusCode: '500',
+        ),
+        const OtpDeliveryFailure(),
+      ),
       ...commonErrors,
     };
 
