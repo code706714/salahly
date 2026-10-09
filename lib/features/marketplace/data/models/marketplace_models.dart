@@ -175,7 +175,7 @@ abstract final class MarketplaceModels {
     ],
   );
 
-  static OfferState offerState(Map<String, dynamic> json) => OfferState(
+  static OfferTalk offerState(Map<String, dynamic> json) => OfferTalk(
     offerId: json['offer_id'] as String,
     requestId: json['request_id'] as String,
     status: enumFromWire(OfferStatus.values, json['status']),

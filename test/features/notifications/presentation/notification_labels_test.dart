@@ -100,6 +100,25 @@ void main() {
       );
     });
 
+    test('the price talk names the technician and suits either gender', () {
+      expect(consumerText(of(NotificationKind.offerRevised)), (
+        title: 'أحمد رمضان نزّل السعر',
+        body: 'شوفي السعر الجديد واختاري.',
+      ));
+      expect(
+        consumerText(of(NotificationKind.offerRevised), honorific: 'mr').body,
+        'شوف السعر الجديد واختار.',
+      );
+      expect(consumerText(of(NotificationKind.offerWithdrawn)), (
+        title: 'أحمد رمضان سحب عرضه',
+        body: 'اختاري من العروض التانية.',
+      ));
+      expect(consumerText(of(NotificationKind.counterAccepted)), (
+        title: 'أحمد رمضان وافق على سعرك',
+        body: 'اتفقتوا على السعر. تابعي طلبك.',
+      ));
+    });
+
     test('a request the technician cancelled says the use came back', () {
       final cancelled = of(NotificationKind.requestCancelledByTechnician);
 
@@ -184,6 +203,16 @@ void main() {
         'تكييف مش بيبرّد · 2.4 كم منك · الخميس 8 أكتوبر الضهر',
       );
     });
+
+    test(
+      'a price asked for follows the consumer, then points to the offer',
+      () {
+        expect(technicianText(of(NotificationKind.offerCountered)), (
+          title: 'نورهان م. عايزة سعر أقل',
+          body: 'افتح الطلب وردّ على السعر.',
+        ));
+      },
+    );
 
     test('a new request without its area is only "new request"', () {
       final text = notificationText(
@@ -362,6 +391,27 @@ void main() {
           UserRole.consumer,
         ),
         AppRoutes.consumerRequests,
+      );
+    });
+
+    test('a price talk opens the request, on either side', () {
+      for (final kind in [
+        NotificationKind.offerRevised,
+        NotificationKind.offerWithdrawn,
+        NotificationKind.counterAccepted,
+      ]) {
+        expect(
+          notificationRoute(of(kind), UserRole.consumer),
+          AppRoutes.request('request-1'),
+          reason: kind.name,
+        );
+      }
+      expect(
+        notificationRoute(
+          of(NotificationKind.offerCountered),
+          UserRole.technician,
+        ),
+        AppRoutes.incomingRequest('request-1'),
       );
     });
 

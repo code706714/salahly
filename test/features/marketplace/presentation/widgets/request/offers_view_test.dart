@@ -2,18 +2,24 @@ import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
+import 'package:salahly/features/account/domain/entities/user_role.dart';
+import 'package:salahly/features/marketplace/domain/entities/offer_thread.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
+import 'package:salahly/features/marketplace/domain/repositories/consumer_requests_repository.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/request_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/widgets/request/offers_view.dart';
 
 import '../../../../../helpers/marketplace_fixtures.dart';
+import '../../../../../helpers/mocks.dart';
 import '../../../../../helpers/request_views_fixtures.dart';
 import '../../../../../helpers/request_views_harness.dart';
 import '../../../../../pump_app.dart';
@@ -352,6 +358,135 @@ void main() {
 
       expect(find.text(l10n.offersTitle), findsOneWidget);
       verifyNever(() => harness.request.acceptOffer(any()));
+    });
+  });
+  group('price talks', () {
+    late MockConsumerRequestsRepository requests;
+
+    setUp(() {
+      requests = MockConsumerRequestsRepository();
+      when(
+        () => harness.request.counterOffer(any(), any()),
+      ).thenAnswer((_) async => true);
+    });
+
+    RequestOffer soonOffer({int? counterPricePiastres, int countersLeft = 3}) =>
+        testOffer(
+          arriveAt: tomorrowAt(12),
+          counterPricePiastres: counterPricePiastres,
+          countersLeft: countersLeft,
+        );
+
+    Future<void> pumpTalk(WidgetTester tester, RequestOffer offer) {
+      harness.show(liveRequest(offers: [offer]));
+      return harness.pump(
+        tester,
+        OffersView(details: harness.request.state.details!),
+        repositories: [
+          RepositoryProvider<ConsumerRequestsRepository>.value(
+            value: requests,
+          ),
+        ],
+        stubRoutes: [AppRoutes.technicianProfile('tech-1')],
+        surfaceSize: tall,
+      );
+    }
+
+    testWidgets('asks for a lower price in whole pounds', (tester) async {
+      await pumpTalk(tester, soonOffer());
+      await tapAndSettle(tester, find.text(l10n.offersCounter('ms')));
+
+      await tester.enterText(find.byType(TextField), '350');
+      await tester.tap(find.text(l10n.counterSend('ms')));
+      await tester.pump();
+      verifyNever(() => harness.request.counterOffer(any(), any()));
+      expect(find.byType(AlertDialog), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), '300');
+      await tester.tap(find.text(l10n.counterSend('ms')));
+      await tester.pumpAndSettle();
+
+      verify(() => harness.request.counterOffer('offer-1', 30000)).called(1);
+    });
+
+    testWidgets('asks for nothing when the dialog is dismissed', (
+      tester,
+    ) async {
+      await pumpTalk(tester, soonOffer());
+      await tapAndSettle(tester, find.text(l10n.offersCounter('ms')));
+
+      await tester.tap(find.text(l10n.priceDialogCancel));
+      await tester.pumpAndSettle();
+
+      verifyNever(() => harness.request.counterOffer(any(), any()));
+    });
+
+    testWidgets('says the counters are used up, and shows the talk', (
+      tester,
+    ) async {
+      when(() => requests.fetchOfferThread('offer-1')).thenAnswer(
+        (_) async => Ok(
+          OfferThread(
+            state: const OfferTalk(
+              offerId: 'offer-1',
+              requestId: 'request-1',
+              status: OfferStatus.sent,
+              pricePiastres: 35000,
+              awaiting: OfferTurn.consumer,
+              countersLeft: 0,
+              revisionsLeft: 0,
+            ),
+            events: [
+              OfferEvent(
+                kind: OfferEventKind.offer,
+                actor: UserRole.technician,
+                pricePiastres: 35000,
+                createdAt: DateTime(2026, 10, 2, 20),
+              ),
+            ],
+          ),
+        ),
+      );
+      await pumpTalk(tester, soonOffer(countersLeft: 0));
+
+      expect(find.text(l10n.offersCounter('ms')), findsNothing);
+      await tapAndSettle(tester, find.text(l10n.offersThread));
+
+      expect(
+        find.text(l10n.threadConsumerOffer('350 ج.م')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('waits for the technician after asking', (tester) async {
+      await pumpTalk(
+        tester,
+        soonOffer(counterPricePiastres: 30000, countersLeft: 2),
+      );
+
+      expect(
+        find.text(l10n.offersAwaitingTechnician('ms', '300 ج.م')),
+        findsOneWidget,
+      );
+      expect(find.text(l10n.offersCounter('ms')), findsNothing);
+      expect(find.text(l10n.offersThread), findsOneWidget);
+    });
+
+    testWidgets('cannot ask while another action runs', (tester) async {
+      harness.show(
+        liveRequest(offers: [soonOffer()]),
+        busy: RequestAction.cancel,
+      );
+      await harness.pump(
+        tester,
+        OffersView(details: harness.request.state.details!),
+        surfaceSize: tall,
+      );
+
+      await tester.tap(find.text(l10n.offersCounter('ms')));
+      await tester.pump();
+
+      expect(find.byType(AlertDialog), findsNothing);
     });
   });
 }

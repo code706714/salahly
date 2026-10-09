@@ -63,6 +63,14 @@ class ConsumerApp {
     when(requests.fetchRequests).thenAnswer((_) async => const Ok([]));
     when(requests.fetchAddresses).thenAnswer((_) async => const Ok([]));
     when(
+      () => requests.browseTechnicians(
+        categoryId: any(named: 'categoryId'),
+        areaId: any(named: 'areaId'),
+        sort: any(named: 'sort'),
+        offset: any(named: 'offset'),
+      ),
+    ).thenAnswer((_) async => const Ok([]));
+    when(
       () => requests.availableTechnicianCount(
         categoryId: any(named: 'categoryId'),
         areaId: any(named: 'areaId'),

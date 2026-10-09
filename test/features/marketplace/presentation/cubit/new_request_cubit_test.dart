@@ -8,6 +8,7 @@ import 'package:salahly/features/marketplace/domain/entities/consumer_address.da
 import 'package:salahly/features/marketplace/domain/entities/request_draft.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_window.dart';
+import 'package:salahly/features/marketplace/domain/entities/technician_card.dart';
 import 'package:salahly/features/marketplace/domain/failures/marketplace_failures.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/new_request_cubit.dart';
 
@@ -86,6 +87,95 @@ void main() {
 
       expect(cubit.state.category, isNull);
       expect(cubit.state.problemDone, isFalse);
+      await cubit.close();
+    });
+  });
+
+  group('trade and problem', () {
+    const trades = [TestCategories.airConditioning, TestCategories.plumbing];
+
+    NewRequestCubit twoTrades({String? categoryId, String? technicianId}) =>
+        NewRequestCubit(
+          requests: requests,
+          speech: speech,
+          categoryId: categoryId,
+          technicianId: technicianId,
+          clock: () => now,
+        )..useCategories(trades);
+
+    test('starts on the trade asked for', () async {
+      final cubit = twoTrades(categoryId: 'plumbing');
+
+      expect(cubit.state.category, TestCategories.plumbing);
+      expect(cubit.state.categoryChoices, trades);
+      await cubit.close();
+    });
+
+    test('shows the problems of the trade, in the catalog words', () async {
+      final cubit = twoTrades();
+
+      expect(
+        cubit.state.issueChoices.map((choice) => choice.name),
+        TestCategories.airConditioning.issues.map((issue) => issue.name),
+      );
+
+      cubit.selectCategory(TestCategories.plumbing);
+
+      expect(cubit.state.category, TestCategories.plumbing);
+      expect(
+        cubit.state.issueChoices.map((choice) => choice.issue),
+        [
+          RequestIssue.plumbingLeak,
+          RequestIssue.plumbingClog,
+          RequestIssue.other,
+        ],
+      );
+      await cubit.close();
+    });
+
+    test('drops a problem that the new trade does not have', () async {
+      final cubit = twoTrades()
+        ..selectIssue(RequestIssue.notCooling)
+        ..selectCategory(TestCategories.plumbing);
+      expect(cubit.state.issue, isNull);
+
+      cubit
+        ..selectIssue(RequestIssue.other)
+        ..selectCategory(TestCategories.airConditioning);
+      expect(cubit.state.issue, RequestIssue.other);
+      await cubit.close();
+    });
+
+    test('ignores a trade that is not open', () async {
+      final cubit = twoTrades()..selectCategory(TestCategories.all[1]);
+
+      expect(cubit.state.category, TestCategories.airConditioning);
+      await cubit.close();
+    });
+
+    test('offers only the trades the technician asked works in', () async {
+      when(() => requests.fetchListedTechnician('tech-1')).thenAnswer(
+        (_) async => Ok(
+          TechnicianPublicProfile(
+            card: testTechnicianCard(),
+            areaIds: const [],
+            services: const [
+              ServicePrice(
+                serviceId: 'plumbing_inspection',
+                startingPricePiastres: 15000,
+              ),
+            ],
+            reviews: const [],
+          ),
+        ),
+      );
+      final cubit = twoTrades(categoryId: 'ac', technicianId: 'tech-1');
+      expect(cubit.state.category, TestCategories.airConditioning);
+
+      await cubit.start();
+
+      expect(cubit.state.categoryChoices, [TestCategories.plumbing]);
+      expect(cubit.state.category, TestCategories.plumbing);
       await cubit.close();
     });
   });

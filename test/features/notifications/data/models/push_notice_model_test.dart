@@ -28,6 +28,24 @@ void main() {
     );
   });
 
+  test('reads the kinds of the price talk', () {
+    const kinds = {
+      'offer_countered': (NotificationKind.offerCountered, UserRole.technician),
+      'offer_revised': (NotificationKind.offerRevised, UserRole.consumer),
+      'offer_withdrawn': (NotificationKind.offerWithdrawn, UserRole.consumer),
+      'counter_accepted': (NotificationKind.counterAccepted, UserRole.consumer),
+    };
+    for (final MapEntry(key: wire, value: (kind, role)) in kinds.entries) {
+      expect(
+        PushNoticeModel.fromMessage(
+          data: {'kind': wire, 'role': role.name, 'request_id': requestId},
+        ),
+        PushNotice(kind: kind, role: role, requestId: requestId),
+        reason: wire,
+      );
+    }
+  });
+
   test('reads a message that is not about a request', () {
     final notice = PushNoticeModel.fromMessage(
       data: {'kind': 'topup_approved', 'role': 'technician'},

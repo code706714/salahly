@@ -143,6 +143,55 @@ void main() {
       verify(() => cubit.editDescription('بينقّط من جوه')).called(1);
     });
 
+    testWidgets('picks the trade first, when there is more than one', (
+      tester,
+    ) async {
+      final trades = problem.copyWith(
+        categories: const [
+          TestCategories.airConditioning,
+          TestCategories.plumbing,
+        ],
+      );
+      await pumpView(tester, trades);
+
+      await tester.tap(find.text(TestCategories.plumbing.name));
+      verify(
+        () => cubit.selectCategory(TestCategories.plumbing),
+      ).called(1);
+    });
+
+    testWidgets('shows the problems of the picked trade only', (tester) async {
+      final plumbing = problem.copyWith(
+        categories: const [
+          TestCategories.airConditioning,
+          TestCategories.plumbing,
+        ],
+        category: TestCategories.plumbing,
+      );
+      await pumpView(tester, plumbing);
+
+      for (final issue in TestCategories.plumbing.issues) {
+        expect(find.text(issue.name), findsOneWidget);
+      }
+      expect(
+        find.text(TestCategories.airConditioning.issues.first.name),
+        findsNothing,
+      );
+    });
+
+    testWidgets('has no trade to pick when there is only one', (tester) async {
+      await pumpView(
+        tester,
+        problem.copyWith(
+          categories: const [
+            TestCategories.airConditioning,
+          ],
+        ),
+      );
+
+      expect(find.text(TestCategories.plumbing.name), findsNothing);
+    });
+
     testWidgets('fills the field with dictated words', (tester) async {
       final states = StreamController<NewRequestState>();
       await pumpView(tester, problem, states: states.stream);

@@ -29,8 +29,8 @@ enum OfferEventKind {
 }
 
 /// Where an offer's price talk stands.
-final class OfferState extends Equatable {
-  const OfferState({
+final class OfferTalk extends Equatable {
+  const OfferTalk({
     required this.offerId,
     required this.requestId,
     required this.status,
@@ -94,7 +94,7 @@ final class OfferEvent extends Equatable {
 final class OfferThread extends Equatable {
   const OfferThread({required this.state, required this.events});
 
-  final OfferState state;
+  final OfferTalk state;
   final List<OfferEvent> events;
 
   @override

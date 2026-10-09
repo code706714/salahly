@@ -227,6 +227,42 @@ void main() {
       expect(find.text(AppRoutes.incomingRequest(requestId)), findsOneWidget);
     });
 
+    testWidgets('opens the request a price was asked for, for either side', (
+      tester,
+    ) async {
+      final push = available();
+      await pump(tester, push, role: UserRole.technician);
+
+      push.tap(
+        const PushNotice(
+          kind: NotificationKind.offerCountered,
+          role: UserRole.technician,
+          requestId: requestId,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text(AppRoutes.incomingRequest(requestId)), findsOneWidget);
+    });
+
+    testWidgets("opens the consumer's request when the price moved", (
+      tester,
+    ) async {
+      final push = available();
+      await pump(tester, push);
+
+      push.tap(
+        const PushNotice(
+          kind: NotificationKind.offerRevised,
+          role: UserRole.consumer,
+          requestId: requestId,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text(AppRoutes.request(requestId)), findsOneWidget);
+    });
+
     testWidgets('opens the request that started the app', (tester) async {
       await pump(tester, available(initial: arriving));
       await tester.pumpAndSettle();

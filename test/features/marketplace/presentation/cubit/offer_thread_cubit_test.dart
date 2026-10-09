@@ -8,7 +8,7 @@ import 'package:salahly/features/marketplace/presentation/cubit/offer_thread_cub
 
 void main() {
   final thread = OfferThread(
-    state: const OfferState(
+    state: const OfferTalk(
       offerId: 'offer-1',
       requestId: 'request-1',
       status: OfferStatus.sent,

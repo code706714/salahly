@@ -21,6 +21,8 @@ import 'package:salahly/features/jobs/presentation/pages/new_job_page.dart';
 import 'package:salahly/features/jobs/presentation/pages/quote_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/incoming_request_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/incoming_requests_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/open_requests_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/technician_offering_page.dart';
 import 'package:salahly/features/money/presentation/pages/money_page.dart';
 import 'package:salahly/features/notifications/presentation/pages/notifications_page.dart';
 
@@ -44,13 +46,14 @@ void main() {
     expect(find.text(l10n.navJobs), findsOneWidget);
   });
 
-  testTechnicianApp('the tabs switch between the four main screens', (
+  testTechnicianApp('the tabs switch between the five main screens', (
     tester,
     app,
   ) async {
     await app.pump(tester);
 
     for (final (label, page) in [
+      (l10n.navOpenRequests, OpenRequestsPage),
       (l10n.navJobs, JobsPage),
       (l10n.navCustomers, CustomersPage),
       (l10n.navMoney, MoneyPage),
@@ -65,6 +68,7 @@ void main() {
   group('screens pushed over the tabs', () {
     for (final (location, page) in [
       (AppRoutes.technicianAccount, TechnicianAccountPage),
+      (AppRoutes.technicianOffering, TechnicianOfferingPage),
       (AppRoutes.incomingRequests, IncomingRequestsPage),
       (AppRoutes.incomingRequest('request-1'), IncomingRequestPage),
       (AppRoutes.technicianCalendar, CalendarPage),

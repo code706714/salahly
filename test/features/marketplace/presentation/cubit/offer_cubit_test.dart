@@ -6,6 +6,7 @@ import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/features/marketplace/domain/entities/incoming_request.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_window.dart';
+import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
 import 'package:salahly/features/marketplace/domain/entities/technician_card.dart';
 import 'package:salahly/features/marketplace/domain/failures/marketplace_failures.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/offer_cubit.dart';
@@ -278,6 +279,91 @@ void main() {
       expect(await cubit.dismissRequest(), isFalse);
 
       expect(cubit.state.failure, const NetworkFailure());
+      await cubit.close();
+    });
+  });
+  group('price talks', () {
+    final countered = testIncoming(
+      myOffer: testMyOffer(counterPricePiastres: 30000),
+    );
+
+    test('lowers the price and shows the request as it is then', () async {
+      serve(Ok(countered));
+      final lowered = testIncoming(
+        myOffer: testMyOffer(pricePiastres: 32000, revisionsLeft: 1),
+      );
+      when(() => requests.reviseOffer('offer-1', 32000)).thenAnswer((_) async {
+        serve(Ok(lowered));
+        return const Ok(null);
+      });
+      final cubit = cubitFor();
+      await cubit.start();
+
+      expect(await cubit.reviseOffer(32000), isTrue);
+
+      expect(cubit.state.request, lowered);
+      expect(cubit.state.busy, isNull);
+      await cubit.close();
+    });
+
+    test('says why a price was refused', () async {
+      serve(Ok(countered));
+      when(
+        () => requests.reviseOffer('offer-1', 32000),
+      ).thenAnswer((_) async => const Err(NegotiationLimitFailure()));
+      final cubit = cubitFor();
+      await cubit.start();
+
+      expect(await cubit.reviseOffer(32000), isFalse);
+
+      expect(cubit.state.failure, const NegotiationLimitFailure());
+      await cubit.close();
+    });
+
+    test('takes the consumer price', () async {
+      serve(Ok(countered));
+      when(
+        () => requests.acceptCounter('offer-1'),
+      ).thenAnswer((_) async => const Ok(null));
+      final cubit = cubitFor();
+      await cubit.start();
+
+      expect(await cubit.acceptCounter(), isTrue);
+
+      verify(() => requests.acceptCounter('offer-1')).called(1);
+      await cubit.close();
+    });
+
+    test('takes the offer back', () async {
+      serve(Ok(countered));
+      final withdrawn = testIncoming(
+        myOffer: testMyOffer(status: OfferStatus.withdrawn),
+      );
+      when(() => requests.withdrawOffer('offer-1')).thenAnswer((_) async {
+        serve(Ok(withdrawn));
+        return const Ok(null);
+      });
+      final cubit = cubitFor();
+      await cubit.start();
+
+      expect(await cubit.withdrawOffer(), isTrue);
+
+      expect(cubit.state.request!.myOffer!.status, OfferStatus.withdrawn);
+      await cubit.close();
+    });
+
+    test('has nothing to talk about before an offer was sent', () async {
+      serve(Ok(testIncoming()));
+      final cubit = cubitFor();
+      await cubit.start();
+
+      expect(await cubit.reviseOffer(32000), isFalse);
+      expect(await cubit.acceptCounter(), isFalse);
+      expect(await cubit.withdrawOffer(), isFalse);
+
+      verifyNever(() => requests.reviseOffer(any(), any()));
+      verifyNever(() => requests.acceptCounter(any()));
+      verifyNever(() => requests.withdrawOffer(any()));
       await cubit.close();
     });
   });
