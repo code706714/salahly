@@ -7,5 +7,8 @@ IconData categoryIcon(String? categoryId) => switch (categoryId) {
   'electrical' => Icons.bolt_rounded,
   'washing_machines' => Icons.local_laundry_service_outlined,
   'refrigerators' => Icons.kitchen_outlined,
+  'carpentry' => Icons.carpenter_outlined,
+  'satellite_tv' => Icons.satellite_alt_outlined,
+  'aluminum' => Icons.window_outlined,
   _ => Icons.handyman_outlined,
 };

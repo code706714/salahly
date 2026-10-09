@@ -36,5 +36,20 @@ enum RequestIssue {
   fridgeLeaking,
   fridgeDoorSeal,
 
+  // Carpentry.
+  carpentryDoor,
+  carpentryFurniture,
+  carpentryCustom,
+
+  // Satellite dishes and TVs.
+  tvNoSignal,
+  tvScreen,
+  tvNotStarting,
+
+  // Aluminum work.
+  aluminumWindow,
+  aluminumDoor,
+  aluminumGlass,
+
   other,
 }
