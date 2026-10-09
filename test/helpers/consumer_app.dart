@@ -19,6 +19,7 @@ import 'package:salahly/features/auth/domain/entities/auth_user.dart';
 import 'package:salahly/salahly_app.dart';
 
 import 'balance_fixtures.dart';
+import 'fake_live_updates.dart';
 import 'fake_push_service.dart';
 import 'fake_sync_remote.dart';
 import 'fixtures.dart';
@@ -106,6 +107,7 @@ class ConsumerApp {
 
   /// The notifications: none, all read, unless a test stubs some.
   final notifications = MockNotificationsRepository();
+  final live = FakeLiveUpdates();
   final apps = MockExternalApps();
   final speech = MockSpeechInput();
   final photoPicker = MockPhotoPicker();
@@ -123,6 +125,7 @@ class ConsumerApp {
     technicianRequestsRepository: MockTechnicianRequestsRepository(),
     balanceRepository: balance,
     notificationsRepository: notifications,
+    liveUpdates: live,
     pushService: FakePushService(),
     locationService: location,
     photoPicker: photoPicker,

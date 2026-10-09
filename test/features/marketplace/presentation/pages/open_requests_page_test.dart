@@ -6,6 +6,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
+import 'package:salahly/core/live/live_updates.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
@@ -19,6 +20,7 @@ import 'package:salahly/features/marketplace/domain/repositories/technician_requ
 import 'package:salahly/features/marketplace/presentation/cubit/open_requests_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/pages/open_requests_page.dart';
 
+import '../../../../helpers/fake_live_updates.dart';
 import '../../../../helpers/fixtures.dart';
 import '../../../../helpers/incoming_fixtures.dart';
 import '../../../../helpers/mocks.dart';
@@ -72,8 +74,11 @@ void main() {
   void show(OpenRequestsState state) =>
       when(() => cubit.state).thenReturn(state);
 
+  final live = FakeLiveUpdates();
+
   Future<void> pumpView(WidgetTester tester) => tester.pumpApp(
     const OpenRequestsView(),
+    repositories: [RepositoryProvider<LiveUpdates>.value(value: live)],
     blocs: [
       BlocProvider<OpenRequestsCubit>.value(value: cubit),
       BlocProvider<AreasCubit>.value(value: areas),
@@ -96,6 +101,7 @@ void main() {
         RepositoryProvider<TechnicianRequestsRepository>.value(
           value: requests,
         ),
+        RepositoryProvider<LiveUpdates>.value(value: live),
       ],
       blocs: [
         BlocProvider<SessionCubit>.value(value: session),
@@ -149,6 +155,21 @@ void main() {
         offset: any(named: 'offset'),
       ),
     ).called(1);
+  });
+
+  testWidgets('a new request fetches the list again at once', (tester) async {
+    await pumpPage(tester, VerificationStatus.approved);
+    await tester.pump();
+
+    live.fire();
+    await tester.pump();
+
+    verify(
+      () => requests.browseOpenRequests(
+        categoryId: any(named: 'categoryId'),
+        offset: any(named: 'offset'),
+      ),
+    ).called(2);
   });
 
   group('states', () {
