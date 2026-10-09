@@ -30,6 +30,15 @@ String requestIssueLabel(AppLocalizations l10n, RequestIssue issue) =>
       RequestIssue.fridgeNoisy => l10n.requestIssueFridgeNoisy,
       RequestIssue.fridgeLeaking => l10n.requestIssueFridgeLeaking,
       RequestIssue.fridgeDoorSeal => l10n.requestIssueFridgeDoorSeal,
+      RequestIssue.carpentryDoor => l10n.requestIssueCarpentryDoor,
+      RequestIssue.carpentryFurniture => l10n.requestIssueCarpentryFurniture,
+      RequestIssue.carpentryCustom => l10n.requestIssueCarpentryCustom,
+      RequestIssue.tvNoSignal => l10n.requestIssueTvNoSignal,
+      RequestIssue.tvScreen => l10n.requestIssueTvScreen,
+      RequestIssue.tvNotStarting => l10n.requestIssueTvNotStarting,
+      RequestIssue.aluminumWindow => l10n.requestIssueAluminumWindow,
+      RequestIssue.aluminumDoor => l10n.requestIssueAluminumDoor,
+      RequestIssue.aluminumGlass => l10n.requestIssueAluminumGlass,
       RequestIssue.other => l10n.requestIssueOther,
     };
 
@@ -65,7 +74,16 @@ String requestTitle(
   RequestIssue.fridgeIceBuildup ||
   RequestIssue.fridgeNoisy ||
   RequestIssue.fridgeLeaking ||
-  RequestIssue.fridgeDoorSeal => l10n.requestTitleCategoryIssue(
+  RequestIssue.fridgeDoorSeal ||
+  RequestIssue.carpentryDoor ||
+  RequestIssue.carpentryFurniture ||
+  RequestIssue.carpentryCustom ||
+  RequestIssue.tvNoSignal ||
+  RequestIssue.tvScreen ||
+  RequestIssue.tvNotStarting ||
+  RequestIssue.aluminumWindow ||
+  RequestIssue.aluminumDoor ||
+  RequestIssue.aluminumGlass => l10n.requestTitleCategoryIssue(
     category,
     requestIssueLabel(l10n, issue),
   ),

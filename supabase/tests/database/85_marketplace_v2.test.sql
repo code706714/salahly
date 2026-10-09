@@ -98,8 +98,11 @@ grant all on table pg_temp.ids to authenticated;
 
 select is(
   (select array_agg(id order by sort_order) from public.service_categories where is_active),
-  array['ac', 'plumbing', 'electrical', 'washing_machines', 'refrigerators'],
-  'plumbing, air conditioning, electrical, washing machines and refrigerators are open'
+  array[
+    'ac', 'plumbing', 'electrical', 'washing_machines', 'refrigerators',
+    'carpentry', 'satellite_tv', 'aluminum'
+  ],
+  'the eight trades are open'
 );
 
 select is_empty(

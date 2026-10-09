@@ -4604,6 +4604,15 @@
   "requestIssueFridgeNoisy": "صوتها عالي",
   "requestIssueFridgeLeaking": "بتسرّب مية",
   "requestIssueFridgeDoorSeal": "جوان الباب بايظ",
+  "requestIssueCarpentryDoor": "باب أو شباك خشب",
+  "requestIssueCarpentryFurniture": "أثاث محتاج إصلاح",
+  "requestIssueCarpentryCustom": "تفصيل نجارة",
+  "requestIssueTvNoSignal": "مفيش إشارة أو قنوات",
+  "requestIssueTvScreen": "الشاشة بايظة",
+  "requestIssueTvNotStarting": "مش بيشتغل",
+  "requestIssueAluminumWindow": "شباك",
+  "requestIssueAluminumDoor": "باب",
+  "requestIssueAluminumGlass": "زجاج مكسور",
   "requestTitleCategoryIssue": "{category}: {issue}",
   "@requestTitleCategoryIssue": {
     "placeholders": {
