@@ -11,6 +11,7 @@ import 'package:salahly/core/theme/app_theme.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
 import 'package:salahly/core/widgets/initials_avatar.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/core/widgets/square_icon_button.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
@@ -46,29 +47,32 @@ class TrackView extends StatelessWidget {
       appBar: DetailHeader(
         title: context.watchRequestName(details.categoryId, details.issue),
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
-        children: [
-          Semantics(
-            header: true,
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                height: 1.5,
+      body: PullToRefresh(
+        onRefresh: () => context.read<RequestCubit>().refresh(),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
+          children: [
+            Semantics(
+              header: true,
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                  height: 1.5,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 16),
-          _TechnicianCard(details: details, offer: offer),
-          const SizedBox(height: 16),
-          _Steps(details: details, offer: offer),
-          const SizedBox(height: 16),
-          _Summary(details: details, offer: offer),
-          const SizedBox(height: 20),
-          _Footer(details: details, technician: name),
-        ],
+            const SizedBox(height: 16),
+            _TechnicianCard(details: details, offer: offer),
+            const SizedBox(height: 16),
+            _Steps(details: details, offer: offer),
+            const SizedBox(height: 16),
+            _Summary(details: details, offer: offer),
+            const SizedBox(height: 20),
+            _Footer(details: details, technician: name),
+          ],
+        ),
       ),
     );
   }

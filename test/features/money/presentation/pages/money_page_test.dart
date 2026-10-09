@@ -509,6 +509,17 @@ void main() {
       isEmpty,
     );
   });
+
+  testWidgets('pulling the page down syncs the phone again', (tester) async {
+    when(sync.syncNow).thenAnswer((_) async {});
+    showing();
+    await pumpView(tester);
+
+    await tester.fling(find.byType(ListView), const Offset(0, 400), 1000);
+    await tester.pumpAndSettle();
+
+    verify(sync.syncNow).called(1);
+  });
 }
 
 T ok<T>(Result<T> result) => switch (result) {

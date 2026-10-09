@@ -8,6 +8,7 @@ import 'package:salahly/core/time/clock_cubit.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_window.dart';
@@ -58,20 +59,23 @@ class _WaitingScreen extends StatelessWidget {
           today: now,
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(
-          AppSpacing.md,
-          AppSpacing.lg,
-          AppSpacing.md,
-          AppSpacing.lg,
+      body: PullToRefresh(
+        onRefresh: () => context.read<RequestCubit>().refresh(),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.md,
+            AppSpacing.lg,
+            AppSpacing.md,
+            AppSpacing.lg,
+          ),
+          children: [
+            _Hero(sentTo: details.sentTo),
+            const SizedBox(height: AppSpacing.md),
+            _Progress(details: details, now: now),
+            const SizedBox(height: AppSpacing.md),
+            _WidenCard(details: details, today: now, busy: busy),
+          ],
         ),
-        children: [
-          _Hero(sentTo: details.sentTo),
-          const SizedBox(height: AppSpacing.md),
-          _Progress(details: details, now: now),
-          const SizedBox(height: AppSpacing.md),
-          _WidenCard(details: details, today: now, busy: busy),
-        ],
       ),
       bottomNavigationBar: BottomActionBar(
         child: Column(

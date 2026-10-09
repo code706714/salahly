@@ -10,10 +10,12 @@ import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
+import 'package:salahly/features/marketplace/presentation/cubit/request_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/marketplace_labels.dart';
 import 'package:salahly/features/marketplace/presentation/request_view_labels.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
@@ -63,65 +65,68 @@ class ClosedRequestView extends StatelessWidget {
       appBar: DetailHeader(
         title: requestHeadline(l10n, details.issue, category: category),
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(
-          AppSpacing.md,
-          AppSpacing.lg,
-          AppSpacing.md,
-          AppSpacing.lg,
+      body: PullToRefresh(
+        onRefresh: () => context.read<RequestCubit>().refresh(),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.md,
+            AppSpacing.lg,
+            AppSpacing.md,
+            AppSpacing.lg,
+          ),
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: AppSpacing.sm, bottom: 4),
+              child: Column(
+                children: [
+                  Container(
+                    width: 84,
+                    height: 84,
+                    decoration: BoxDecoration(
+                      color: colors.inkSoft,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(icon, size: 40, color: colors.inkMuted),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    body,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 15,
+                      height: 1.7,
+                      color: colors.inkMuted,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            AppCard(
+              child: Column(
+                children: [
+                  _SummaryLine(
+                    icon: Icons.event_outlined,
+                    text:
+                        '${weekdayDate(details.day)} · '
+                        '${requestWindowLabel(l10n, details.window)}',
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  _SummaryLine(
+                    icon: Icons.location_on_outlined,
+                    text: [details.addressLabel, ?area].join(' · '),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: AppSpacing.sm, bottom: 4),
-            child: Column(
-              children: [
-                Container(
-                  width: 84,
-                  height: 84,
-                  decoration: BoxDecoration(
-                    color: colors.inkSoft,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(icon, size: 40, color: colors.inkMuted),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  body,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 15,
-                    height: 1.7,
-                    color: colors.inkMuted,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          AppCard(
-            child: Column(
-              children: [
-                _SummaryLine(
-                  icon: Icons.event_outlined,
-                  text:
-                      '${weekdayDate(details.day)} · '
-                      '${requestWindowLabel(l10n, details.window)}',
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                _SummaryLine(
-                  icon: Icons.location_on_outlined,
-                  text: [details.addressLabel, ?area].join(' · '),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
       bottomNavigationBar: BottomActionBar(
         child: FilledButton(

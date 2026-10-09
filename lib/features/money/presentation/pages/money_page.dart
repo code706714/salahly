@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:salahly/core/sync/sync_cubit.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/offline_banner.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/core/widgets/section_header.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/money/presentation/cubit/money_cubit.dart';
@@ -46,50 +48,53 @@ class MoneyView extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
-          children: [
-            _Header(state: state),
-            const OfflineBanner(padding: EdgeInsets.only(top: 16)),
-            const SizedBox(height: 16),
-            IncomeCard(
-              month: state.month,
-              today: state.today,
-              income: state.income,
-            ),
-            if (state.awaitingPayment != null) ...[
+        child: PullToRefresh(
+          onRefresh: () => context.read<SyncCubit>().syncNow(),
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
+            children: [
+              _Header(state: state),
+              const OfflineBanner(padding: EdgeInsets.only(top: 16)),
               const SizedBox(height: 16),
-              SectionHeader(
-                title: l10n.moneyOwingTitle,
-                note: owed.isEmpty
-                    ? null
-                    : l10n.moneyOwingCustomers(state.owingCustomers),
+              IncomeCard(
+                month: state.month,
+                today: state.today,
+                income: state.income,
               ),
-              const SizedBox(height: 16),
-              if (owed.isEmpty)
-                const _NobodyOwes()
-              else
-                OwedList(
-                  jobs: owed,
-                  today: state.today,
-                  technicianName: technicianName,
-                ),
-              if (owed.any((job) => job.canRemind)) ...[
+              if (state.awaitingPayment != null) ...[
                 const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text(
-                    l10n.moneyRemindNote,
-                    style: TextStyle(
-                      fontSize: 13,
-                      height: 1.6,
-                      color: colors.inkMuted,
+                SectionHeader(
+                  title: l10n.moneyOwingTitle,
+                  note: owed.isEmpty
+                      ? null
+                      : l10n.moneyOwingCustomers(state.owingCustomers),
+                ),
+                const SizedBox(height: 16),
+                if (owed.isEmpty)
+                  const _NobodyOwes()
+                else
+                  OwedList(
+                    jobs: owed,
+                    today: state.today,
+                    technicianName: technicianName,
+                  ),
+                if (owed.any((job) => job.canRemind)) ...[
+                  const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Text(
+                      l10n.moneyRemindNote,
+                      style: TextStyle(
+                        fontSize: 13,
+                        height: 1.6,
+                        color: colors.inkMuted,
+                      ),
                     ),
                   ),
-                ),
+                ],
               ],
             ],
-          ],
+          ),
         ),
       ),
     );

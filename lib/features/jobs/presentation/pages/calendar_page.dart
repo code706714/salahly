@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:salahly/core/sync/sync_cubit.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_theme.dart';
 import 'package:salahly/core/time/calendar_date.dart';
 import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/features/jobs/presentation/cubit/calendar_cubit.dart';
 import 'package:salahly/features/jobs/presentation/widgets/calendar_day_schedule.dart';
 import 'package:salahly/features/jobs/presentation/widgets/calendar_week_strip.dart';
@@ -74,29 +76,32 @@ class CalendarView extends StatelessWidget {
             onWeekChanged: cubit.showWeek,
           ),
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 150),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Semantics(
-                    header: true,
-                    child: Text(
-                      relative
-                          ? '${weekdayDate(day)} · '
-                                '${dayLabel(l10n, day, today: state.today)}'
-                          : weekdayDate(day),
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: colors.inkMuted,
+            child: PullToRefresh(
+              onRefresh: () => context.read<SyncCubit>().syncNow(),
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(16, 14, 16, 150),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Semantics(
+                      header: true,
+                      child: Text(
+                        relative
+                            ? '${weekdayDate(day)} · '
+                                  '${dayLabel(l10n, day, today: state.today)}'
+                            : weekdayDate(day),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: colors.inkMuted,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                if (state.jobs != null)
-                  CalendarDaySchedule(day: day, slots: state.slots),
-              ],
+                  if (state.jobs != null)
+                    CalendarDaySchedule(day: day, slots: state.slots),
+                ],
+              ),
             ),
           ),
         ],

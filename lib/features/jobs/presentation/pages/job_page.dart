@@ -12,6 +12,7 @@ import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/core/widgets/status_pill.dart';
 import 'package:salahly/features/jobs/domain/entities/job.dart';
 import 'package:salahly/features/jobs/domain/entities/job_details.dart';
@@ -156,48 +157,51 @@ class _JobScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          if (isPlatform || (isOffline && !details.isSynced)) ...[
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: [
-                  if (isPlatform)
-                    StatusPill(
-                      label: l10n.jobFromPlatform,
-                      tone: PillTone.dark,
-                    ),
-                  if (isOffline && !details.isSynced)
-                    StatusPill(
-                      label: l10n.jobPendingSync,
-                      tone: PillTone.waiting,
-                      icon: Icons.schedule_rounded,
-                    ),
-                ],
+      body: PullToRefresh(
+        onRefresh: () => context.read<SyncCubit>().syncNow(),
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            if (isPlatform || (isOffline && !details.isSynced)) ...[
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: [
+                    if (isPlatform)
+                      StatusPill(
+                        label: l10n.jobFromPlatform,
+                        tone: PillTone.dark,
+                      ),
+                    if (isOffline && !details.isSynced)
+                      StatusPill(
+                        label: l10n.jobPendingSync,
+                        tone: PillTone.waiting,
+                        icon: Icons.schedule_rounded,
+                      ),
+                  ],
+                ),
               ),
-            ),
+              const SizedBox(height: 14),
+            ],
+            if (job.status != JobStatus.cancelled) ...[
+              JobProgressSteps(status: job.status),
+              const SizedBox(height: 14),
+            ],
+            JobCustomerCard(details: details),
+            if (job.tags.isNotEmpty || description != null) ...[
+              const SizedBox(height: 14),
+              _ProblemCard(job: job),
+            ],
             const SizedBox(height: 14),
-          ],
-          if (job.status != JobStatus.cancelled) ...[
-            JobProgressSteps(status: job.status),
+            JobPhotosCard(details: details),
             const SizedBox(height: 14),
-          ],
-          JobCustomerCard(details: details),
-          if (job.tags.isNotEmpty || description != null) ...[
+            _QuoteCard(details: details),
             const SizedBox(height: 14),
-            _ProblemCard(job: job),
+            _PaymentCard(details: details),
           ],
-          const SizedBox(height: 14),
-          JobPhotosCard(details: details),
-          const SizedBox(height: 14),
-          _QuoteCard(details: details),
-          const SizedBox(height: 14),
-          _PaymentCard(details: details),
-        ],
+        ),
       ),
       bottomNavigationBar: action == null
           ? null

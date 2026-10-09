@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:salahly/core/router/app_routes.dart';
+import 'package:salahly/core/sync/sync_cubit.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/time/calendar_date.dart';
 import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/core/widgets/app_card.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/core/widgets/segmented_tabs.dart';
 import 'package:salahly/core/widgets/square_icon_button.dart';
 import 'package:salahly/core/widgets/status_pill.dart';
@@ -179,37 +181,40 @@ class _JobsList extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final sections = state.sectionsOf(state.tab);
     final now = state.now;
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 150),
-      children: [
-        if (sections.isEmpty)
-          _Empty(tab: state.tab, isSearch: state.query.trim().isNotEmpty),
-        for (final (index, section) in sections.indexed) ...[
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(
-              4,
-              index == 0 ? 6 : 16,
-              4,
-              8,
-            ),
-            child: Semantics(
-              header: true,
-              child: Text(
-                _heading(l10n, section, now: now),
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: context.appColors.inkMuted,
+    return PullToRefresh(
+      onRefresh: () => context.read<SyncCubit>().syncNow(),
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 150),
+        children: [
+          if (sections.isEmpty)
+            _Empty(tab: state.tab, isSearch: state.query.trim().isNotEmpty),
+          for (final (index, section) in sections.indexed) ...[
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(
+                4,
+                index == 0 ? 6 : 16,
+                4,
+                8,
+              ),
+              child: Semantics(
+                header: true,
+                child: Text(
+                  _heading(l10n, section, now: now),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: context.appColors.inkMuted,
+                  ),
                 ),
               ),
             ),
-          ),
-          for (final (index, summary) in section.jobs.indexed) ...[
-            if (index > 0) const SizedBox(height: 10),
-            _card(l10n, section, summary, now: now),
+            for (final (index, summary) in section.jobs.indexed) ...[
+              if (index > 0) const SizedBox(height: 10),
+              _card(l10n, section, summary, now: now),
+            ],
           ],
         ],
-      ],
+      ),
     );
   }
 

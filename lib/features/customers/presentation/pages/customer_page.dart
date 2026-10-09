@@ -5,6 +5,7 @@ import 'package:salahly/core/error/failure_message.dart';
 import 'package:salahly/core/launch/launch_feedback.dart';
 import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/core/router/app_routes.dart';
+import 'package:salahly/core/sync/sync_cubit.dart';
 import 'package:salahly/core/text/money.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
@@ -13,6 +14,7 @@ import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
 import 'package:salahly/core/widgets/money_text.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/core/widgets/whatsapp_button.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
@@ -156,38 +158,41 @@ class _Body extends StatelessWidget {
     final phone = customer.phone;
     final notes = customer.notes;
     final jobs = state.jobs ?? const <JobSummary>[];
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        if (phone != null) ...[
-          _ContactButtons(phone: phone),
-          const SizedBox(height: 14),
+    return PullToRefresh(
+      onRefresh: () => context.read<SyncCubit>().syncNow(),
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          if (phone != null) ...[
+            _ContactButtons(phone: phone),
+            const SizedBox(height: 14),
+          ],
+          if (state.owedPiastres > 0) ...[
+            _OwedCard(state: state, customer: customer),
+            const SizedBox(height: 14),
+          ],
+          if (phone != null ||
+              customer.address != null ||
+              customer.areaId != null) ...[
+            _DetailsCard(customer: customer),
+            const SizedBox(height: 14),
+          ],
+          _UnitsCard(state: state, customer: customer),
+          if (notes != null) ...[
+            const SizedBox(height: 14),
+            _Card(
+              label: AppLocalizations.of(context).customerNotes,
+              children: [
+                Text(notes, style: const TextStyle(fontSize: 15, height: 1.7)),
+              ],
+            ),
+          ],
+          if (jobs.isNotEmpty) ...[
+            const SizedBox(height: 14),
+            _JobsCard(jobs: jobs, today: state.today),
+          ],
         ],
-        if (state.owedPiastres > 0) ...[
-          _OwedCard(state: state, customer: customer),
-          const SizedBox(height: 14),
-        ],
-        if (phone != null ||
-            customer.address != null ||
-            customer.areaId != null) ...[
-          _DetailsCard(customer: customer),
-          const SizedBox(height: 14),
-        ],
-        _UnitsCard(state: state, customer: customer),
-        if (notes != null) ...[
-          const SizedBox(height: 14),
-          _Card(
-            label: AppLocalizations.of(context).customerNotes,
-            children: [
-              Text(notes, style: const TextStyle(fontSize: 15, height: 1.7)),
-            ],
-          ),
-        ],
-        if (jobs.isNotEmpty) ...[
-          const SizedBox(height: 14),
-          _JobsCard(jobs: jobs, today: state.today),
-        ],
-      ],
+      ),
     );
   }
 }

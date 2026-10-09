@@ -7,6 +7,7 @@ import 'package:salahly/core/theme/app_radii.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/choice_chip_button.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/marketplace/domain/entities/consumer_address.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/addresses_cubit.dart';
@@ -85,38 +86,41 @@ class AddressesView extends StatelessWidget {
               ),
             ),
           ),
-          AddressesStatus.ready => ListView(
-            padding: const EdgeInsets.fromLTRB(16, 18, 16, 24),
-            children: [
-              if (state.addresses.isEmpty)
-                const _NoAddresses()
-              else
-                for (final address in state.addresses) ...[
-                  _AddressRow(
-                    address: address,
-                    deleting: state.deleting == address.id,
+          AddressesStatus.ready => PullToRefresh(
+            onRefresh: context.read<AddressesCubit>().load,
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 18, 16, 24),
+              children: [
+                if (state.addresses.isEmpty)
+                  const _NoAddresses()
+                else
+                  for (final address in state.addresses) ...[
+                    _AddressRow(
+                      address: address,
+                      deleting: state.deleting == address.id,
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                const SizedBox(height: 4),
+                if (state.isFull)
+                  Text(
+                    l10n.consumerAddressLimit(honorific),
+                    style: TextStyle(fontSize: 14, color: colors.inkMuted),
+                  )
+                else
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: ChoiceChipButton(
+                      label: l10n.addressesNew,
+                      icon: Icons.add_rounded,
+                      selected: false,
+                      onTap: () => showAddressForm(context, onSave: cubit.save),
+                    ),
                   ),
-                  const SizedBox(height: 12),
-                ],
-              const SizedBox(height: 4),
-              if (state.isFull)
-                Text(
-                  l10n.consumerAddressLimit(honorific),
-                  style: TextStyle(fontSize: 14, color: colors.inkMuted),
-                )
-              else
-                Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: ChoiceChipButton(
-                    label: l10n.addressesNew,
-                    icon: Icons.add_rounded,
-                    selected: false,
-                    onTap: () => showAddressForm(context, onSave: cubit.save),
-                  ),
-                ),
-              const SizedBox(height: 16),
-              const AddressPrivacyNote(),
-            ],
+                const SizedBox(height: 16),
+                const AddressPrivacyNote(),
+              ],
+            ),
           ),
         },
       ),

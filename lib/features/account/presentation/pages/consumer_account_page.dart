@@ -9,6 +9,7 @@ import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/initials_avatar.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
@@ -78,75 +79,83 @@ class ConsumerAccountView extends StatelessWidget {
           unawaited(context.read<AddressesCubit>().load()),
       child: Scaffold(
         body: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
-            children: [
-              _ProfileHeader(profile: profile),
-              const SizedBox(height: 16),
-              _CreditsCard(
-                credits: consumer.requestCredits,
-                onTap: () => context.push(AppRoutes.consumerBalance),
-              ),
-              const SizedBox(height: 16),
-              _GroupLabel(l10n.consumerAccountMyData),
-              const SizedBox(height: 16),
-              _Group(
-                children: [
-                  _Row(
-                    icon: Icons.location_on_outlined,
-                    label: l10n.addressesTitle,
-                    count: addresses,
-                    onTap: () => _openAddresses(context),
-                  ),
-                  _Row(
-                    icon: Icons.format_list_bulleted_rounded,
-                    label: l10n.pastTechniciansTitle,
-                    onTap: () => context.push(AppRoutes.pastTechnicians),
-                  ),
-                  _Row(
-                    icon: Icons.notifications_none_rounded,
-                    label: l10n.notifTitle,
-                    onTap: () => context.push(AppRoutes.consumerNotifications),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              _GroupLabel(l10n.accountHelp),
-              const SizedBox(height: 16),
-              _Group(
-                children: [
-                  _Row(
-                    icon: Icons.flag_outlined,
-                    label: l10n.consumerAccountRequestProblem,
-                    onTap: () => context.go(AppRoutes.consumerRequests),
-                  ),
-                  _Row(
-                    label: l10n.legalTermsTitle,
-                    onTap: () => context.push(AppRoutes.terms),
-                  ),
-                  _Row(
-                    label: l10n.legalPrivacyTitle,
-                    onTap: () => context.push(AppRoutes.privacy),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              _Group(
-                children: [
-                  _Row(
-                    label: l10n.consumerAccountSignOut(honorific),
-                    opensPage: false,
-                    onTap: () => _signOut(context),
-                  ),
-                  _Row(
-                    label: l10n.acctDeleteRow,
-                    opensPage: false,
-                    danger: true,
-                    onTap: () => context.push(AppRoutes.consumerDeleteAccount),
-                  ),
-                ],
-              ),
-            ],
+          child: PullToRefresh(
+            onRefresh: () => Future.wait([
+              context.read<SessionCubit>().refreshProfile(),
+              context.read<AddressesCubit>().load(),
+            ]),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
+              children: [
+                _ProfileHeader(profile: profile),
+                const SizedBox(height: 16),
+                _CreditsCard(
+                  credits: consumer.requestCredits,
+                  onTap: () => context.push(AppRoutes.consumerBalance),
+                ),
+                const SizedBox(height: 16),
+                _GroupLabel(l10n.consumerAccountMyData),
+                const SizedBox(height: 16),
+                _Group(
+                  children: [
+                    _Row(
+                      icon: Icons.location_on_outlined,
+                      label: l10n.addressesTitle,
+                      count: addresses,
+                      onTap: () => _openAddresses(context),
+                    ),
+                    _Row(
+                      icon: Icons.format_list_bulleted_rounded,
+                      label: l10n.pastTechniciansTitle,
+                      onTap: () => context.push(AppRoutes.pastTechnicians),
+                    ),
+                    _Row(
+                      icon: Icons.notifications_none_rounded,
+                      label: l10n.notifTitle,
+                      onTap: () =>
+                          context.push(AppRoutes.consumerNotifications),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                _GroupLabel(l10n.accountHelp),
+                const SizedBox(height: 16),
+                _Group(
+                  children: [
+                    _Row(
+                      icon: Icons.flag_outlined,
+                      label: l10n.consumerAccountRequestProblem,
+                      onTap: () => context.go(AppRoutes.consumerRequests),
+                    ),
+                    _Row(
+                      label: l10n.legalTermsTitle,
+                      onTap: () => context.push(AppRoutes.terms),
+                    ),
+                    _Row(
+                      label: l10n.legalPrivacyTitle,
+                      onTap: () => context.push(AppRoutes.privacy),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                _Group(
+                  children: [
+                    _Row(
+                      label: l10n.consumerAccountSignOut(honorific),
+                      opensPage: false,
+                      onTap: () => _signOut(context),
+                    ),
+                    _Row(
+                      label: l10n.acctDeleteRow,
+                      opensPage: false,
+                      danger: true,
+                      onTap: () =>
+                          context.push(AppRoutes.consumerDeleteAccount),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

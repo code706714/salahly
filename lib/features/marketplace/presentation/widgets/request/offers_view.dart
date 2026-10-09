@@ -16,6 +16,7 @@ import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
 import 'package:salahly/core/widgets/money_text.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
@@ -83,52 +84,59 @@ class _OffersScreenState extends State<_OffersScreen> {
         title: l10n.offersTitle,
         subtitle: '$headline · $when',
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        children: [
-          Text(
-            l10n.offersReceived(
-              details.offers.length,
-              max(details.sentTo, details.offers.length),
+      body: PullToRefresh(
+        onRefresh: () => context.read<RequestCubit>().refresh(),
+        child: ListView(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          children: [
+            Text(
+              l10n.offersReceived(
+                details.offers.length,
+                max(details.sentTo, details.offers.length),
+              ),
+              style: TextStyle(
+                fontSize: 15,
+                height: 1.6,
+                color: colors.inkMuted,
+              ),
             ),
-            style: TextStyle(fontSize: 15, height: 1.6, color: colors.inkMuted),
-          ),
-          const SizedBox(height: 14),
-          Wrap(
-            spacing: AppSpacing.xs,
-            runSpacing: AppSpacing.xs,
-            children: [
-              for (final sort in OfferSort.values)
-                _SortChip(
-                  label: switch (sort) {
-                    OfferSort.nearest => l10n.offersSortNearest,
-                    OfferSort.cheapest => l10n.offersSortCheapest,
-                    OfferSort.topRated => l10n.offersSortTopRated,
-                  },
-                  selected: sort == _sort,
-                  onTap: () => setState(() => _sort = sort),
-                ),
-            ],
-          ),
-          for (final offer in sortOffers(details.offers, _sort)) ...[
             const SizedBox(height: 14),
-            _OfferCard(
-              offer: offer,
-              today: today,
-              expired: !offer.arriveAt.isAfter(today),
-              picking:
-                  busy == RequestAction.acceptOffer && _picking == offer.id,
-              onProfile: busy == null ? () => _openProfile(offer) : null,
-              onPick: busy == null ? () => _confirmPick(offer, today) : null,
-              onCounter: busy == null && offer.counterRange != null
-                  ? () => _counter(offer)
-                  : null,
-              onThread: () => _showThread(offer),
+            Wrap(
+              spacing: AppSpacing.xs,
+              runSpacing: AppSpacing.xs,
+              children: [
+                for (final sort in OfferSort.values)
+                  _SortChip(
+                    label: switch (sort) {
+                      OfferSort.nearest => l10n.offersSortNearest,
+                      OfferSort.cheapest => l10n.offersSortCheapest,
+                      OfferSort.topRated => l10n.offersSortTopRated,
+                    },
+                    selected: sort == _sort,
+                    onTap: () => setState(() => _sort = sort),
+                  ),
+              ],
             ),
+            for (final offer in sortOffers(details.offers, _sort)) ...[
+              const SizedBox(height: 14),
+              _OfferCard(
+                offer: offer,
+                today: today,
+                expired: !offer.arriveAt.isAfter(today),
+                picking:
+                    busy == RequestAction.acceptOffer && _picking == offer.id,
+                onProfile: busy == null ? () => _openProfile(offer) : null,
+                onPick: busy == null ? () => _confirmPick(offer, today) : null,
+                onCounter: busy == null && offer.counterRange != null
+                    ? () => _counter(offer)
+                    : null,
+                onThread: () => _showThread(offer),
+              ),
+            ],
+            const SizedBox(height: 14),
+            const _PricesNote(),
           ],
-          const SizedBox(height: 14),
-          const _PricesNote(),
-        ],
+        ),
       ),
     );
   }
