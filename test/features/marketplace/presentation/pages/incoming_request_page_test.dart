@@ -410,7 +410,7 @@ void main() {
 
     testWidgets('says why a closed request takes no offer', (tester) async {
       for (final (request, reason) in [
-        (testIncoming(offerCount: 3), l10n.incomingClosedFull),
+        (testIncoming(offerCount: 5), l10n.incomingClosedFull),
         (
           testIncoming(status: RequestStatus.cancelled),
           l10n.incomingClosedCancelled('ms'),
@@ -439,7 +439,7 @@ void main() {
     testWidgets('shows it read-only, waiting for the consumer', (
       tester,
     ) async {
-      show(ready(testIncoming(offerCount: 3, myOffer: testMyOffer())));
+      show(ready(testIncoming(offerCount: 5, myOffer: testMyOffer())));
       await pumpView(tester);
       await scrollTo(tester, find.text('هجيب معايا الفريون'));
 

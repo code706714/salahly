@@ -1,15 +1,17 @@
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/jobs/domain/entities/job.dart';
-import 'package:salahly/features/marketplace/data/models/wire.dart';
 import 'package:salahly/features/marketplace/domain/entities/consumer_address.dart';
 import 'package:salahly/features/marketplace/domain/entities/incoming_request.dart';
 import 'package:salahly/features/marketplace/domain/entities/job_request_link.dart';
+import 'package:salahly/features/marketplace/domain/entities/offer_thread.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_window.dart';
 import 'package:salahly/features/marketplace/domain/entities/review.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
 import 'package:salahly/features/marketplace/domain/entities/technician_card.dart';
+import 'package:salahly/features/marketplace/domain/entities/technician_offering.dart';
 
 /// Maps the marketplace tables and functions' JSON to domain entities.
 abstract final class MarketplaceModels {
@@ -100,7 +102,7 @@ abstract final class MarketplaceModels {
         reviews: [
           for (final review in listFromWire(json['reviews']))
             PublicReview(
-              author: review['author'] as String,
+              author: review['author'] as String?,
               stars: review['stars'] as int,
               comment: review['comment'] as String?,
               tags: enumSetFromWire(ReviewTag.values, review['tags']),
@@ -108,6 +110,90 @@ abstract final class MarketplaceModels {
               createdAt: timeFromWire(review['created_at']),
             ),
         ],
+      );
+
+  /// A technician in `browse_technicians`. Only verified technicians are
+  /// listed, and the listing never says so.
+  static TechnicianListing listing(Map<String, dynamic> json) =>
+      TechnicianListing(
+        card: _listedCard(json),
+        areaIds: _strings(json['area_ids']),
+        services: _servicePrices(json['services']),
+        minPricePiastres: json['min_price_piastres'] as int?,
+      );
+
+  /// A technician's page from `technician_public_profile`: the listing plus
+  /// the shop name and reviews, none of them signed.
+  static TechnicianPublicProfile listedProfile(Map<String, dynamic> json) =>
+      TechnicianPublicProfile(
+        card: _listedCard(json),
+        areaIds: _strings(json['area_ids']),
+        services: _servicePrices(json['services']),
+        reviews: [
+          for (final review in listFromWire(json['reviews']))
+            PublicReview(
+              stars: review['stars'] as int,
+              comment: review['comment'] as String?,
+              tags: enumSetFromWire(ReviewTag.values, review['tags']),
+              issue: enumFromWire(RequestIssue.values, review['issue']),
+              createdAt: timeFromWire(review['created_at']),
+            ),
+        ],
+      );
+
+  static TechnicianCard _listedCard(Map<String, dynamic> json) =>
+      TechnicianCard(
+        id: json['id'] as String,
+        name: json['name'] as String,
+        shopName: json['shop_name'] as String?,
+        avatarPath: json['avatar_path'] as String,
+        yearsExperience: json['years_experience'] as int,
+        verified: true,
+        rating: (json['rating'] as num?)?.toDouble(),
+        reviewCount: json['review_count'] as int,
+        jobsDone: json['jobs_done'] as int,
+      );
+
+  static List<ServicePrice> _servicePrices(Object? wire) => [
+    for (final service in listFromWire(wire))
+      ServicePrice(
+        serviceId: service['service_id'] as String,
+        startingPricePiastres: service['starting_price_piastres'] as int,
+      ),
+  ];
+
+  static OfferThread offerThread(Map<String, dynamic> json) => OfferThread(
+    state: offerState(json['offer'] as Map<String, dynamic>),
+    events: [
+      for (final event in listFromWire(json['events']))
+        OfferEvent(
+          kind: enumFromWire(OfferEventKind.values, event['kind']),
+          actor: enumFromWire(UserRole.values, event['actor']),
+          pricePiastres: event['price_piastres'] as int?,
+          createdAt: timeFromWire(event['created_at']),
+        ),
+    ],
+  );
+
+  static OfferTalk offerState(Map<String, dynamic> json) => OfferTalk(
+    offerId: json['offer_id'] as String,
+    requestId: json['request_id'] as String,
+    status: enumFromWire(OfferStatus.values, json['status']),
+    pricePiastres: json['price_piastres'] as int,
+    counterPricePiastres: json['counter_price_piastres'] as int?,
+    awaiting: enumFromWire(OfferTurn.values, json['awaiting']),
+    countersLeft: json['counters_left'] as int,
+    revisionsLeft: json['revisions_left'] as int,
+  );
+
+  static TechnicianOffering offering(Map<String, dynamic> json) =>
+      TechnicianOffering(
+        services: _servicePrices(json['services']),
+        areaIds: _strings(json['area_ids']).toSet(),
+        workDays: {
+          for (final day in (json['work_days'] as List<Object?>)) day! as int,
+        },
+        radiusKm: json['service_radius_km'] as int?,
       );
 
   static TechnicianCard technicianCard(Map<String, dynamic> json) =>
@@ -155,6 +241,9 @@ abstract final class MarketplaceModels {
               arriveAt: timeFromWire(offer['arrive_at']),
               note: offer['note'] as String?,
               status: enumFromWire(OfferStatus.values, offer['status']),
+              counterPricePiastres: offer['counter_price_piastres'] as int?,
+              awaiting: enumFromWire(OfferTurn.values, offer['awaiting']),
+              revisionsLeft: offer['revisions_left'] as int,
             ),
     );
   }
@@ -168,6 +257,9 @@ abstract final class MarketplaceModels {
     distanceKm: (json['distance_km'] as num?)?.toDouble(),
     createdAt: timeFromWire(json['created_at']),
     technician: technicianCard(json['technician'] as Map<String, dynamic>),
+    counterPricePiastres: json['counter_price_piastres'] as int?,
+    awaiting: enumFromWire(OfferTurn.values, json['awaiting']),
+    countersLeft: json['counters_left'] as int,
   );
 
   static RequestJob _job(Map<String, dynamic> json) => RequestJob(

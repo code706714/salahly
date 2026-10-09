@@ -1,11 +1,11 @@
 import 'package:salahly/core/error/result.dart';
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/account/domain/entities/verification_status.dart';
 import 'package:salahly/features/admin/data/models/verification_models.dart';
 import 'package:salahly/features/admin/data/repositories/admin_rpc.dart';
 import 'package:salahly/features/admin/domain/entities/paged_result.dart';
 import 'package:salahly/features/admin/domain/entities/verification.dart';
 import 'package:salahly/features/admin/domain/repositories/verification_repository.dart';
-import 'package:salahly/features/marketplace/data/models/wire.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseVerificationRepository implements VerificationRepository {

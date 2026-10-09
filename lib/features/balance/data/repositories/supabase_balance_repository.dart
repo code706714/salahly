@@ -2,6 +2,7 @@ import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/error/supabase_errors.dart';
 import 'package:salahly/core/media/photo_uploader.dart';
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/balance/data/models/balance_models.dart';
 import 'package:salahly/features/balance/data/repositories/balance_errors.dart';
@@ -10,7 +11,6 @@ import 'package:salahly/features/balance/domain/entities/ledger_entry.dart';
 import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
 import 'package:salahly/features/balance/domain/repositories/balance_repository.dart';
-import 'package:salahly/features/marketplace/data/models/wire.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseBalanceRepository implements BalanceRepository {

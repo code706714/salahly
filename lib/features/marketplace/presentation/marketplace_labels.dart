@@ -10,6 +10,26 @@ String requestIssueLabel(AppLocalizations l10n, RequestIssue issue) =>
       RequestIssue.noisy => l10n.requestIssueNoisy,
       RequestIssue.needsCleaning => l10n.requestIssueNeedsCleaning,
       RequestIssue.installation => l10n.requestIssueInstallation,
+      RequestIssue.plumbingLeak => l10n.requestIssuePlumbingLeak,
+      RequestIssue.plumbingClog => l10n.requestIssuePlumbingClog,
+      RequestIssue.plumbingMixer => l10n.requestIssuePlumbingMixer,
+      RequestIssue.plumbingHeater => l10n.requestIssuePlumbingHeater,
+      RequestIssue.plumbingLowPressure => l10n.requestIssuePlumbingLowPressure,
+      RequestIssue.electricalNoPower => l10n.requestIssueElectricalNoPower,
+      RequestIssue.electricalShort => l10n.requestIssueElectricalShort,
+      RequestIssue.electricalOutlet => l10n.requestIssueElectricalOutlet,
+      RequestIssue.electricalLighting => l10n.requestIssueElectricalLighting,
+      RequestIssue.electricalPanel => l10n.requestIssueElectricalPanel,
+      RequestIssue.washerNotSpinning => l10n.requestIssueWasherNotSpinning,
+      RequestIssue.washerNotDraining => l10n.requestIssueWasherNotDraining,
+      RequestIssue.washerLeaking => l10n.requestIssueWasherLeaking,
+      RequestIssue.washerNoisy => l10n.requestIssueWasherNoisy,
+      RequestIssue.washerNotStarting => l10n.requestIssueWasherNotStarting,
+      RequestIssue.fridgeNotCooling => l10n.requestIssueFridgeNotCooling,
+      RequestIssue.fridgeIceBuildup => l10n.requestIssueFridgeIceBuildup,
+      RequestIssue.fridgeNoisy => l10n.requestIssueFridgeNoisy,
+      RequestIssue.fridgeLeaking => l10n.requestIssueFridgeLeaking,
+      RequestIssue.fridgeDoorSeal => l10n.requestIssueFridgeDoorSeal,
       RequestIssue.other => l10n.requestIssueOther,
     };
 
@@ -26,6 +46,29 @@ String requestTitle(
   RequestIssue.needsCleaning => l10n.requestTitleNeedsCleaning(category),
   RequestIssue.installation => l10n.requestTitleInstallation(category),
   RequestIssue.other => l10n.requestTitleOther(category),
+  RequestIssue.plumbingLeak ||
+  RequestIssue.plumbingClog ||
+  RequestIssue.plumbingMixer ||
+  RequestIssue.plumbingHeater ||
+  RequestIssue.plumbingLowPressure ||
+  RequestIssue.electricalNoPower ||
+  RequestIssue.electricalShort ||
+  RequestIssue.electricalOutlet ||
+  RequestIssue.electricalLighting ||
+  RequestIssue.electricalPanel ||
+  RequestIssue.washerNotSpinning ||
+  RequestIssue.washerNotDraining ||
+  RequestIssue.washerLeaking ||
+  RequestIssue.washerNoisy ||
+  RequestIssue.washerNotStarting ||
+  RequestIssue.fridgeNotCooling ||
+  RequestIssue.fridgeIceBuildup ||
+  RequestIssue.fridgeNoisy ||
+  RequestIssue.fridgeLeaking ||
+  RequestIssue.fridgeDoorSeal => l10n.requestTitleCategoryIssue(
+    category,
+    requestIssueLabel(l10n, issue),
+  ),
 };
 
 /// The time window as a choice: "الضهر 12 لـ 3".

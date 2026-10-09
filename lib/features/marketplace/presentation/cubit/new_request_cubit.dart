@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/core/speech/speech_input.dart';
 import 'package:salahly/core/text/text_limit.dart';
 import 'package:salahly/features/catalog/domain/entities/service_category.dart';
@@ -58,29 +59,66 @@ class NewRequestCubit extends Cubit<NewRequestState> {
     ]);
   }
 
-  /// Takes the catalog's categories: the one asked for while it is open,
-  /// else the first open one.
+  /// Takes the catalog's categories: the one asked for while it is open
+  /// (and, when asking a technician, one they work in), else the first one
+  /// that is.
   void useCategories(List<ServiceCategory> categories) {
-    final open = categories.where((category) => category.isActive);
+    final open = [
+      for (final category in categories)
+        if (category.isActive) category,
+    ];
+    final next = state.copyWith(categories: open);
+    final choices = next.categoryChoices;
     final category =
-        open.where((category) => category.id == _categoryId).firstOrNull ??
-        open.firstOrNull;
-    if (category != null && category != state.category) {
-      emit(state.copyWith(category: category));
+        choices.where((category) => category.id == _categoryId).firstOrNull ??
+        choices
+            .where((category) => category.id == state.category?.id)
+            .firstOrNull ??
+        choices.firstOrNull;
+    emit(category == null ? next : _withCategory(next, category));
+  }
+
+  /// Picks the trade; the problem picked for another trade is dropped.
+  void selectCategory(ServiceCategory category) {
+    if (state.categoryChoices.contains(category)) {
+      emit(_withCategory(state, category));
     }
   }
 
+  static NewRequestState _withCategory(
+    NewRequestState state,
+    ServiceCategory category,
+  ) {
+    final next = state.copyWith(category: category);
+    return next.issue != null &&
+            !next.issueChoices.any(
+              (choice) => choice.issue == next.issue,
+            )
+        ? next.copyWith(issue: () => null)
+        : next;
+  }
+
   Future<void> _loadTechnician(String id) async {
-    final result = await _requests.fetchTechnician(id);
+    final result = await _requests.fetchListedTechnician(id);
     if (isClosed) return;
     // Without the profile the request goes out like any other: it only
     // goes to a technician first once the form names them.
     if (result case Ok(value: final profile?)) {
-      emit(state.copyWith(technician: profile.card));
+      emit(
+        state.copyWith(
+          technician: profile.card,
+          technicianServiceIds: {
+            for (final service in profile.services) service.serviceId,
+          },
+        ),
+      );
+      // The trade may have to change to one this technician works in.
+      useCategories(state.categories);
     }
   }
 
-  void selectIssue(RequestIssue issue) => emit(state.copyWith(issue: issue));
+  void selectIssue(RequestIssue issue) =>
+      emit(state.copyWith(issue: () => issue));
 
   /// The description as typed. Typing takes over from dictation.
   void editDescription(String text) {

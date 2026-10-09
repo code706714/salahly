@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:salahly/features/marketplace/data/models/wire.dart';
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/marketplace/domain/entities/complaint.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_window.dart';
 import 'package:salahly/features/marketplace/domain/entities/review.dart';

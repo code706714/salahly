@@ -5,6 +5,7 @@ import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/geo/geo_point.dart';
 import 'package:salahly/core/location/location_service.dart';
 import 'package:salahly/core/text/digits.dart';
+import 'package:salahly/core/text/money.dart';
 import 'package:salahly/core/text/person_name.dart';
 import 'package:salahly/features/catalog/domain/entities/service_area.dart';
 import 'package:salahly/features/catalog/domain/entities/service_category.dart';

@@ -62,3 +62,33 @@ final class ArrivalNotReadyFailure extends Failure {
 final class ArrivalLimitFailure extends Failure {
   const ArrivalLimitFailure();
 }
+
+/// The technician isn't verified yet, so they can't offer.
+final class NotVerifiedFailure extends Failure {
+  const NotVerifiedFailure();
+}
+
+/// The offer was taken back or already picked, so it takes no more answers.
+final class OfferUnavailableFailure extends Failure {
+  const OfferUnavailableFailure();
+}
+
+/// The price talk of the offer reached its limit.
+final class NegotiationLimitFailure extends Failure {
+  const NegotiationLimitFailure();
+}
+
+/// The consumer's last price waits for the technician's answer.
+final class CounterPendingFailure extends Failure {
+  const CounterPendingFailure();
+}
+
+/// No price from the consumer waits for an answer.
+final class NoCounterFailure extends Failure {
+  const NoCounterFailure();
+}
+
+/// The price isn't one this step of the talk takes.
+final class InvalidPriceFailure extends Failure {
+  const InvalidPriceFailure();
+}

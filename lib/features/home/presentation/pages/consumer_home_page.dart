@@ -12,6 +12,7 @@ import 'package:salahly/features/account/presentation/cubit/consumer_session.dar
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/balance/presentation/balance_navigation.dart';
 import 'package:salahly/features/catalog/domain/entities/service_category.dart';
+import 'package:salahly/features/catalog/presentation/category_icon.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/home/presentation/cubit/consumer_home_cubit.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
@@ -404,14 +405,6 @@ class _CategoryTile extends StatelessWidget {
   /// Technicians nearby, once counted.
   final int? technicians;
 
-  static IconData _icon(String categoryId) => switch (categoryId) {
-    'ac' => Icons.ac_unit_rounded,
-    'electrical' => Icons.power_outlined,
-    'plumbing' => Icons.water_drop_outlined,
-    'appliances' => Icons.local_laundry_service_outlined,
-    _ => Icons.handyman_outlined,
-  };
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -448,7 +441,7 @@ class _CategoryTile extends StatelessWidget {
                     borderRadius: BorderRadius.circular(AppRadii.md),
                   ),
                   child: Icon(
-                    _icon(category.id),
+                    categoryIcon(category.id),
                     size: 28,
                     color: open ? colors.primary : colors.inkMuted,
                   ),

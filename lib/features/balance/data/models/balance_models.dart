@@ -1,8 +1,8 @@
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/balance/domain/entities/credit_pack.dart';
 import 'package:salahly/features/balance/domain/entities/ledger_entry.dart';
 import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
-import 'package:salahly/features/marketplace/data/models/wire.dart';
 
 /// Maps the balance tables' JSON to domain entities.
 abstract final class BalanceModels {

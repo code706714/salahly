@@ -30,7 +30,8 @@ import 'package:salahly/l10n/generated/app_localizations.dart';
 /// A technician's public profile: ratings, areas, prices and reviews.
 ///
 /// Opened from [offer], it offers picking it and pops `true` when picked;
-/// otherwise it offers sending this technician a new request.
+/// otherwise it is the directory's page of a verified technician, with a
+/// button to send them a new request.
 class TechnicianProfilePage extends StatelessWidget {
   const TechnicianProfilePage({
     required this.technicianId,
@@ -48,6 +49,7 @@ class TechnicianProfilePage extends StatelessWidget {
         final cubit = TechnicianProfileCubit(
           requests: context.read(),
           technicianId: technicianId,
+          listed: offer == null,
         );
         unawaited(cubit.load());
         return cubit;
@@ -585,6 +587,7 @@ class _ReviewCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final colors = context.appColors;
     final comment = review.comment;
+    final author = review.author;
     return AppCard(
       radius: AppRadii.lg,
       padding: const EdgeInsets.all(14),
@@ -594,17 +597,19 @@ class _ReviewCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: Text(
-                  review.author,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    height: 1.5,
-                    color: colors.ink,
-                  ),
-                ),
+                child: author == null
+                    ? _Stars(stars: review.stars)
+                    : Text(
+                        author,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          height: 1.5,
+                          color: colors.ink,
+                        ),
+                      ),
               ),
-              _Stars(stars: review.stars),
+              if (author != null) _Stars(stars: review.stars),
             ],
           ),
           if (comment != null) ...[

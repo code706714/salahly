@@ -38,7 +38,7 @@ void main() {
       'العرض ساري 3 أيام.\n'
       '\n'
       'لو موافق ابعتلي "تمام" وأنا أثبّتلك المعاد.\n'
-      'محمود السيد · فني تكييف\n'
+      'محمود السيد · فني صيانة\n'
       '\u20660100 234 5678\u2069',
     );
   });
@@ -57,7 +57,7 @@ void main() {
     expect(message, contains('العرض ساري يوم.'));
     expect(message, contains('لو موافقة ابعتلي "تمام".'));
     expect(message, isNot(contains('المعاد')));
-    expect(message, endsWith('محمود السيد · فني تكييف'));
+    expect(message, endsWith('محمود السيد · فني صيانة'));
   });
 
   test('says how long it holds in Egyptian counting', () {

@@ -5,6 +5,7 @@ enum RequestLoadStatus { loading, ready, missing, failed }
 /// What the consumer is doing to the request right now.
 enum RequestAction {
   acceptOffer,
+  counterOffer,
   cancel,
   widenWindow,
   approvePrice,

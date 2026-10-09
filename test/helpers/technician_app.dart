@@ -22,6 +22,8 @@ import 'package:salahly/features/auth/domain/entities/auth_user.dart';
 import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/customers/data/repositories/drift_customers_repository.dart';
 import 'package:salahly/features/jobs/data/repositories/drift_jobs_repository.dart';
+import 'package:salahly/features/marketplace/domain/entities/technician_card.dart';
+import 'package:salahly/features/marketplace/domain/entities/technician_offering.dart';
 import 'package:salahly/salahly_app.dart';
 
 import 'balance_fixtures.dart';
@@ -79,6 +81,17 @@ class TechnicianApp {
     when(requests.fetchNewRequests).thenAnswer((_) async => const Ok([]));
     when(requests.fetchMyServices).thenAnswer((_) async => const Ok([]));
     when(
+      () => requests.browseOpenRequests(
+        categoryId: any(named: 'categoryId'),
+        offset: any(named: 'offset'),
+      ),
+    ).thenAnswer((_) async => const Ok([]));
+    when(requests.fetchOffering).thenAnswer(
+      (_) async => const Ok(
+        TechnicianOffering(services: [], areaIds: {}, workDays: {}),
+      ),
+    );
+    when(
       catalog.fetchCategories,
     ).thenAnswer((_) async => const Ok(TestCategories.all));
     when(
@@ -104,6 +117,7 @@ class TechnicianApp {
     registerFallbackValue(phone);
     registerFallbackValue(UserRole.consumer);
     registerFallbackValue(TopupMethod.instapay);
+    registerFallbackValue(TechnicianSort.rating);
   }
 
   final database = AppDatabase(NativeDatabase.memory());

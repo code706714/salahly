@@ -156,6 +156,39 @@ void main() {
       await cubit.close();
     });
 
+    test(
+      'asking for a lower price shows the offers as they are then',
+      () async {
+        serve(testRequestDetails(offers: testOffers()));
+        final cubit = cubitFor();
+        await cubit.start();
+        when(
+          () => requests.counterOffer('offer-1', 30000),
+        ).thenAnswer((_) async => const Ok(null));
+
+        final countered = await cubit.counterOffer('offer-1', 30000);
+
+        expect(countered, isTrue);
+        verify(() => requests.counterOffer('offer-1', 30000)).called(1);
+        expect(cubit.state.busy, isNull);
+        await cubit.close();
+      },
+    );
+
+    test('a refused counter keeps its reason', () async {
+      serve(testRequestDetails(offers: testOffers()));
+      final cubit = cubitFor();
+      await cubit.start();
+      when(
+        () => requests.counterOffer(any(), any()),
+      ).thenAnswer((_) async => const Err(CounterPendingFailure()));
+
+      expect(await cubit.counterOffer('offer-1', 30000), isFalse);
+
+      expect(cubit.state.failure, const CounterPendingFailure());
+      await cubit.close();
+    });
+
     test('a refused action keeps its reason and shows the request as it '
         'is now', () async {
       serve(testRequestDetails(offers: testOffers()));

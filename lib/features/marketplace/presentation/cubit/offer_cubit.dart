@@ -99,6 +99,36 @@ class OfferCubit extends Cubit<OfferState> {
     });
   }
 
+  /// Lowers the price of the offer sent, if it can still be lowered.
+  Future<bool> reviseOffer(int pricePiastres) {
+    final offer = state.request?.myOffer;
+    if (offer == null) return Future.value(false);
+    return _act(
+      OfferAction.revise,
+      () => _requests.reviseOffer(offer.id, pricePiastres),
+    );
+  }
+
+  /// Takes the consumer's price, which picks this technician.
+  Future<bool> acceptCounter() {
+    final offer = state.request?.myOffer;
+    if (offer == null) return Future.value(false);
+    return _act(
+      OfferAction.acceptCounter,
+      () => _requests.acceptCounter(offer.id),
+    );
+  }
+
+  /// Takes the offer back, which can't be undone.
+  Future<bool> withdrawOffer() {
+    final offer = state.request?.myOffer;
+    if (offer == null) return Future.value(false);
+    return _act(
+      OfferAction.withdraw,
+      () => _requests.withdrawOffer(offer.id),
+    );
+  }
+
   /// "مش مناسب ليا": the request leaves the technician's new requests.
   Future<bool> dismissRequest() => _act(
     OfferAction.dismiss,

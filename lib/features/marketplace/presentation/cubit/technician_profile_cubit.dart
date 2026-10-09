@@ -12,11 +12,16 @@ class TechnicianProfileCubit extends Cubit<TechnicianProfileState> {
   TechnicianProfileCubit({
     required this._requests,
     required this._technicianId,
+    this._listed = false,
     DateTime Function() clock = DateTime.now,
   }) : super(TechnicianProfileState(today: clock()));
 
   final ConsumerRequestsRepository _requests;
   final String _technicianId;
+
+  /// Whether the page is the directory's, open to any verified technician,
+  /// and not the one a technician's offer opens.
+  final bool _listed;
 
   /// Fetches the page; again after a failure.
   Future<void> load() async {
@@ -28,7 +33,9 @@ class TechnicianProfileCubit extends Cubit<TechnicianProfileState> {
         ),
       );
     }
-    final result = await _requests.fetchTechnician(_technicianId);
+    final result = _listed
+        ? await _requests.fetchListedTechnician(_technicianId)
+        : await _requests.fetchTechnician(_technicianId);
     if (isClosed) return;
     emit(switch (result) {
       Ok(value: final profile?) => state.copyWith(

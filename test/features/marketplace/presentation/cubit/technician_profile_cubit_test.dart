@@ -47,6 +47,24 @@ void main() {
     await cubit.close();
   });
 
+  test('reads a technician from the directory by what is listed', () async {
+    when(
+      () => requests.fetchListedTechnician('tech-1'),
+    ).thenAnswer((_) async => Ok(profile));
+    final cubit = TechnicianProfileCubit(
+      requests: requests,
+      technicianId: 'tech-1',
+      clock: () => today,
+      listed: true,
+    );
+
+    await cubit.load();
+
+    expect(cubit.state.profile, profile);
+    verifyNever(() => requests.fetchTechnician(any()));
+    await cubit.close();
+  });
+
   test('says when the technician is gone', () async {
     when(
       () => requests.fetchTechnician('tech-1'),

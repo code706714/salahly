@@ -1,7 +1,7 @@
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/admin/data/models/json_values.dart';
 import 'package:salahly/features/admin/domain/entities/admin_overview.dart';
 import 'package:salahly/features/admin/domain/entities/area_coverage.dart';
-import 'package:salahly/features/marketplace/data/models/wire.dart';
 import 'package:salahly/features/marketplace/domain/entities/complaint.dart';
 
 /// Maps what `admin_overview` and `admin_list_areas` return.

@@ -51,6 +51,8 @@ RequestOffer testOffer({
   OfferStatus status = OfferStatus.sent,
   double distanceKm = 2.4,
   TechnicianCard? technician,
+  int? counterPricePiastres,
+  int countersLeft = RequestOffer.maxCounters,
 }) => RequestOffer(
   id: id,
   pricePiastres: pricePiastres,
@@ -60,6 +62,11 @@ RequestOffer testOffer({
   distanceKm: distanceKm,
   createdAt: DateTime(2026, 10, 2, 20, 5),
   technician: technician ?? testTechnicianCard(),
+  counterPricePiastres: counterPricePiastres,
+  awaiting: counterPricePiastres == null
+      ? OfferTurn.consumer
+      : OfferTurn.technician,
+  countersLeft: countersLeft,
 );
 
 /// The design's three offers: Yasser, Mahmoud and Ahmed.
@@ -297,4 +304,24 @@ IncomingRequest testIncomingRequest({
   offerCount: offerCount,
   dismissed: false,
   myOffer: myOffer,
+);
+
+TechnicianListing testListing({
+  String id = 'tech-1',
+  String name = 'محمود السيد',
+  int? minPricePiastres = 15000,
+}) => TechnicianListing(
+  card: testTechnicianCard(id: id, name: name),
+  areaIds: const ['nasr_city', 'heliopolis'],
+  services: const [
+    ServicePrice(
+      serviceId: 'plumbing_inspection',
+      startingPricePiastres: 15000,
+    ),
+    ServicePrice(
+      serviceId: 'plumbing_leak_repair',
+      startingPricePiastres: 25000,
+    ),
+  ],
+  minPricePiastres: minPricePiastres,
 );

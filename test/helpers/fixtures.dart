@@ -68,6 +68,38 @@ abstract final class TestCategories {
         suggestedPricePiastres: 65000,
       ),
     ],
+    issues: [
+      CatalogIssue(id: 'not_cooling', name: 'مش بيبرّد'),
+      CatalogIssue(id: 'leaking', name: 'بينقّط مية'),
+      CatalogIssue(id: 'noisy', name: 'صوته عالي'),
+      CatalogIssue(id: 'needs_cleaning', name: 'محتاج تنضيف'),
+      CatalogIssue(id: 'installation', name: 'تركيب أو نقل'),
+      CatalogIssue(id: 'other', name: 'حاجة تانية'),
+    ],
+  );
+
+  /// An open trade with its own services and problems.
+  static const plumbing = ServiceCategory(
+    id: 'plumbing',
+    name: 'سباكة',
+    isActive: true,
+    services: [
+      CatalogService(
+        id: 'plumbing_inspection',
+        name: 'كشف وتحديد العطل',
+        suggestedPricePiastres: 15000,
+      ),
+      CatalogService(
+        id: 'plumbing_leak_repair',
+        name: 'إصلاح تسريب مية',
+        suggestedPricePiastres: 25000,
+      ),
+    ],
+    issues: [
+      CatalogIssue(id: 'plumbing_leak', name: 'تسريب مية'),
+      CatalogIssue(id: 'plumbing_clog', name: 'الصرف مسدود'),
+      CatalogIssue(id: 'other', name: 'حاجة تانية'),
+    ],
   );
 
   static const List<ServiceCategory> all = [

@@ -8,10 +8,12 @@ import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/marketplace/data/repositories/supabase_technician_requests_repository.dart';
 import 'package:salahly/features/marketplace/domain/entities/incoming_request.dart';
 import 'package:salahly/features/marketplace/domain/entities/job_request_link.dart';
+import 'package:salahly/features/marketplace/domain/entities/offer_thread.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_window.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
 import 'package:salahly/features/marketplace/domain/entities/technician_card.dart';
+import 'package:salahly/features/marketplace/domain/entities/technician_offering.dart';
 import 'package:salahly/features/marketplace/domain/failures/marketplace_failures.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -68,6 +70,9 @@ void main() {
         'arrive_at': '2026-10-03T09:00:00+00:00',
         'note': null,
         'status': 'not_chosen',
+        'counter_price_piastres': null,
+        'awaiting': 'consumer',
+        'revisions_left': 2,
       },
     );
 
@@ -263,6 +268,211 @@ void main() {
     await repository().dismissRequest('request-1');
 
     expect(requests.single.url.path, '/rest/v1/rpc/dismiss_request');
+  });
+
+  group('browseOpenRequests', () {
+    test('asks for a page, for one trade or all', () async {
+      body = [incomingRequestJson(), incomingRequestJson(offerCount: 4)];
+
+      final result = await repository().browseOpenRequests(
+        categoryId: 'plumbing',
+        offset: 20,
+      );
+
+      expect(requests.single.url.path, '/rest/v1/rpc/browse_open_requests');
+      expect(jsonDecode(requests.single.body), {
+        'p_category_id': 'plumbing',
+        'p_limit': 20,
+        'p_offset': 20,
+      });
+      final list = (result as Ok<List<IncomingRequest>>).value;
+      expect(list.map((request) => request.offerCount), [2, 4]);
+    });
+
+    test('is refused for a technician who is not verified', () async {
+      status = 403;
+      body = {'code': '42501', 'message': 'not_verified'};
+
+      expect(
+        await repository().browseOpenRequests(),
+        isA<Err<List<IncomingRequest>>>().having(
+          (err) => err.failure,
+          'failure',
+          isA<NotVerifiedFailure>(),
+        ),
+      );
+    });
+  });
+
+  group('price talks', () {
+    test('lowers the price', () async {
+      body = offerStateJson();
+
+      final result = await repository().reviseOffer('offer-1', 30000);
+
+      expect(result, isA<Ok<void>>());
+      expect(requests.single.url.path, '/rest/v1/rpc/revise_offer');
+      expect(jsonDecode(requests.single.body), {
+        'p_offer_id': 'offer-1',
+        'p_price_piastres': 30000,
+      });
+    });
+
+    test('takes the price the consumer asked for', () async {
+      body = 'job-1';
+
+      final result = await repository().acceptCounter('offer-1');
+
+      expect(result, isA<Ok<void>>());
+      expect(requests.single.url.path, '/rest/v1/rpc/accept_counter');
+      expect(jsonDecode(requests.single.body), {'p_offer_id': 'offer-1'});
+    });
+
+    test('takes the offer back', () async {
+      body = offerStateJson(status: 'withdrawn');
+
+      final result = await repository().withdrawOffer('offer-1');
+
+      expect(result, isA<Ok<void>>());
+      expect(requests.single.url.path, '/rest/v1/rpc/withdraw_offer');
+      expect(jsonDecode(requests.single.body), {'p_offer_id': 'offer-1'});
+    });
+
+    test('names why an answer was refused', () async {
+      final failures = {
+        'offer_unavailable': const OfferUnavailableFailure(),
+        'negotiation_limit': const NegotiationLimitFailure(),
+        'no_counter': const NoCounterFailure(),
+        'invalid_price': const InvalidPriceFailure(),
+        'not_verified': const NotVerifiedFailure(),
+        'technician_unavailable': const TechnicianUnavailableFailure(),
+      };
+      for (final MapEntry(key: message, value: failure) in failures.entries) {
+        status = 400;
+        body = {'code': 'P0001', 'message': message, 'details': null};
+        expect(
+          await repository().reviseOffer('offer-1', 30000),
+          isA<Err<void>>().having((err) => err.failure, message, failure),
+        );
+      }
+    });
+
+    test('reads the thread of an offer', () async {
+      body = offerThreadJson();
+
+      final thread =
+          (await repository().fetchOfferThread('offer-1') as Ok<OfferThread?>)
+              .value!;
+
+      expect(requests.single.url.path, '/rest/v1/rpc/offer_thread');
+      expect(thread.state.status, OfferStatus.sent);
+      expect(thread.events, hasLength(3));
+    });
+
+    test('has no thread for an offer that is not theirs', () async {
+      body = null;
+
+      expect(
+        await repository().fetchOfferThread('offer-9'),
+        isA<Ok<OfferThread?>>().having((ok) => ok.value, 'value', isNull),
+      );
+    });
+
+    test("reads the offer's price talk on a request", () async {
+      body = incomingRequestJson(
+        myOffer: {
+          'id': 'offer-1',
+          'service_id': null,
+          'price_piastres': 35000,
+          'arrive_at': '2026-10-03T09:00:00+00:00',
+          'note': null,
+          'status': 'sent',
+          'counter_price_piastres': 30000,
+          'awaiting': 'technician',
+          'revisions_left': 1,
+        },
+      );
+
+      final offer =
+          (await repository().fetchRequest('request-1') as Ok<IncomingRequest?>)
+              .value!
+              .myOffer!;
+
+      expect(offer.counterPricePiastres, 30000);
+      expect(offer.isCountered, isTrue);
+      expect(offer.revisionsLeft, 1);
+      expect(offer.reviseRange, (min: 30100, max: 34900));
+    });
+  });
+
+  group('what the technician offers', () {
+    test('reads it', () async {
+      body = offeringJson();
+
+      final offering =
+          (await repository().fetchOffering() as Ok<TechnicianOffering>).value;
+
+      expect(requests.single.url.path, '/rest/v1/rpc/my_technician_offering');
+      expect(offering.workDays, {1, 6, 7});
+      expect(offering.radiusKm, 15);
+      expect(offering.areaIds, {'heliopolis', 'nasr_city'});
+      expect(offering.services.map((service) => service.serviceId), [
+        'ac_inspection',
+        'plumbing_inspection',
+      ]);
+      expect(offering.services.last.startingPricePiastres, 15000);
+    });
+
+    test('replaces it and says how many open requests it brought', () async {
+      body = 3;
+
+      final result = await repository().updateOffering(
+        const TechnicianOffering(
+          services: [
+            ServicePrice(
+              serviceId: 'plumbing_inspection',
+              startingPricePiastres: 15000,
+            ),
+          ],
+          areaIds: {'nasr_city', 'heliopolis'},
+          workDays: {7, 1},
+          radiusKm: 10,
+        ),
+      );
+
+      expect(result, isA<Ok<int>>().having((ok) => ok.value, 'value', 3));
+      expect(
+        requests.single.url.path,
+        '/rest/v1/rpc/update_technician_offering',
+      );
+      expect(jsonDecode(requests.single.body), {
+        'p_services': [
+          {
+            'service_id': 'plumbing_inspection',
+            'starting_price_piastres': 15000,
+          },
+        ],
+        'p_area_ids': ['heliopolis', 'nasr_city'],
+        'p_work_days': [1, 7],
+        'p_service_radius_km': 10,
+      });
+    });
+
+    test('is refused when something is not valid', () async {
+      status = 400;
+      body = {'code': '22023', 'message': 'invalid_services'};
+
+      expect(
+        await repository().updateOffering(
+          const TechnicianOffering(
+            services: [],
+            areaIds: {},
+            workDays: {},
+          ),
+        ),
+        isA<Err<int>>(),
+      );
+    });
   });
 }
 

@@ -9,8 +9,10 @@ final class NewRequestState extends Equatable {
   const NewRequestState({
     required this.now,
     this.step = NewRequestStep.problem,
+    this.categories = const [],
     this.category,
     this.technician,
+    this.technicianServiceIds = const {},
     this.issue,
     this.description = '',
     this.isListening = false,
@@ -34,11 +36,17 @@ final class NewRequestState extends Equatable {
   final DateTime now;
   final NewRequestStep step;
 
-  /// The open category asked for; null until the catalog arrives.
+  /// The open trades, in display order; empty until the catalog arrives.
+  final List<ServiceCategory> categories;
+
+  /// The trade picked; null until the catalog arrives.
   final ServiceCategory? category;
 
-  /// Who the request goes to first, when the consumer asks someone again.
+  /// Who the request goes to first, when the consumer asks a technician.
   final TechnicianCard? technician;
+
+  /// The services [technician] offers, to limit the trades to theirs.
+  final Set<String> technicianServiceIds;
   final RequestIssue? issue;
   final String description;
 
@@ -94,6 +102,30 @@ final class NewRequestState extends Equatable {
   bool hasOpenWindow(DateTime day) =>
       RequestWindow.choices.any((window) => isOpen(day, window));
 
+  /// The trades to pick from: the open ones, or only those [technician]
+  /// works in once known.
+  List<ServiceCategory> get categoryChoices {
+    final worksIn = [
+      for (final category in categories)
+        if (category.services.any(
+          (service) => technicianServiceIds.contains(service.id),
+        ))
+          category,
+    ];
+    return technician == null || worksIn.isEmpty ? categories : worksIn;
+  }
+
+  /// The problems of the picked trade, in display order, with the words the
+  /// server gives them. Problems this version doesn't know are left out.
+  List<({RequestIssue issue, String name})> get issueChoices => [
+    for (final choice in category?.issues ?? const <CatalogIssue>[])
+      if (RequestIssue.values
+              .where((issue) => toWire(issue) == choice.id)
+              .firstOrNull
+          case final issue?)
+        (issue: issue, name: choice.name),
+  ];
+
   bool get needsDescription => issue == RequestIssue.other;
 
   bool get problemDone =>
@@ -112,9 +144,11 @@ final class NewRequestState extends Equatable {
   NewRequestState copyWith({
     DateTime? now,
     NewRequestStep? step,
+    List<ServiceCategory>? categories,
     ServiceCategory? category,
     TechnicianCard? technician,
-    RequestIssue? issue,
+    Set<String>? technicianServiceIds,
+    RequestIssue? Function()? issue,
     String? description,
     bool? isListening,
     List<String>? photos,
@@ -132,9 +166,11 @@ final class NewRequestState extends Equatable {
     return NewRequestState(
       now: now ?? this.now,
       step: step ?? this.step,
+      categories: categories ?? this.categories,
       category: category ?? this.category,
       technician: technician ?? this.technician,
-      issue: issue ?? this.issue,
+      technicianServiceIds: technicianServiceIds ?? this.technicianServiceIds,
+      issue: issue != null ? issue() : this.issue,
       description: description ?? this.description,
       isListening: isListening ?? this.isListening,
       photos: photos ?? this.photos,
@@ -155,8 +191,10 @@ final class NewRequestState extends Equatable {
   List<Object?> get props => [
     now,
     step,
+    categories,
     category,
     technician,
+    technicianServiceIds,
     issue,
     description,
     isListening,

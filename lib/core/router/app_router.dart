@@ -41,9 +41,12 @@ import 'package:salahly/features/marketplace/presentation/pages/incoming_request
 import 'package:salahly/features/marketplace/presentation/pages/incoming_requests_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/my_requests_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/new_request_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/open_requests_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/past_technicians_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/request_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/technician_offering_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/technician_profile_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/technicians_page.dart';
 import 'package:salahly/features/money/presentation/pages/money_page.dart';
 import 'package:salahly/features/notifications/presentation/pages/notifications_page.dart';
 import 'package:salahly/features/onboarding/domain/usecases/submit_technician_onboarding.dart';
@@ -166,7 +169,7 @@ GoRouter createRouter(SessionCubit session, {required Listenable refresh}) {
 }
 
 /// Everything under [AppRoutes.consumerHome], inside [ConsumerScope]:
-/// three tabs that keep their place, and the screens pushed over them.
+/// four tabs that keep their place, and the screens pushed over them.
 RouteBase _consumerRoutes() {
   String id(GoRouterState state) => state.pathParameters['id']!;
 
@@ -178,6 +181,7 @@ RouteBase _consumerRoutes() {
             ConsumerShell(navigationShell: navigationShell),
         branches: [
           _tab(AppRoutes.consumerHome, const ConsumerHomePage()),
+          _tab(AppRoutes.consumerTechnicians, const TechniciansPage()),
           _tab(AppRoutes.consumerRequests, const MyRequestsPage()),
           _tab(AppRoutes.consumerAccount, const ConsumerAccountPage()),
         ],
@@ -246,7 +250,7 @@ StatefulShellBranch _tab(String path, Widget page) => StatefulShellBranch(
 );
 
 /// Everything under [AppRoutes.technicianHome], inside [TechnicianScope]:
-/// four tabs that keep their place, and the screens pushed over them.
+/// five tabs that keep their place, and the screens pushed over them.
 RouteBase _technicianRoutes() {
   String id(GoRouterState state) => state.pathParameters['id']!;
 
@@ -258,6 +262,7 @@ RouteBase _technicianRoutes() {
             TechnicianShell(navigationShell: navigationShell),
         branches: [
           _tab(AppRoutes.technicianHome, const TodayPage()),
+          _tab(AppRoutes.openRequests, const OpenRequestsPage()),
           _tab(AppRoutes.technicianJobs, const JobsPage()),
           _tab(AppRoutes.technicianCustomers, const CustomersPage()),
           _tab(AppRoutes.technicianMoney, const MoneyPage()),
@@ -268,6 +273,10 @@ RouteBase _technicianRoutes() {
       GoRoute(
         path: AppRoutes.technicianAccount,
         builder: (context, state) => const TechnicianAccountPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.technicianOffering,
+        builder: (context, state) => const TechnicianOfferingPage(),
       ),
       GoRoute(
         path: AppRoutes.technicianBalance,

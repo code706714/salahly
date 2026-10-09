@@ -141,7 +141,7 @@ void main() {
       expect(find.text('من 20 دقيقة'), findsOneWidget);
       expect(find.text('نورهان م. · مدينة نصر · 2.4 كم منك'), findsOneWidget);
       expect(find.textContaining('من 12 لـ 3 الضهر'), findsOneWidget);
-      expect(find.text(l10n.incomingOfferCount(2, 3)), findsOneWidget);
+      expect(find.text(l10n.incomingOfferCount(2, 5)), findsOneWidget);
     });
 
     testWidgets('marks the offer sent, and the closed requests dimmed', (
@@ -173,7 +173,7 @@ void main() {
       expect(find.text(l10n.incomingClosed), findsOneWidget);
       expect(dimmed(l10n.incomingClosed), findsOneWidget);
       // Offers so far only on requests still in play.
-      expect(find.text(l10n.incomingOfferCount(2, 3)), findsOneWidget);
+      expect(find.text(l10n.incomingOfferCount(2, 5)), findsOneWidget);
     });
 
     testWidgets('opens a request', (tester) async {

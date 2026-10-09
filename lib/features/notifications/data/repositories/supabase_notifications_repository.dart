@@ -1,7 +1,7 @@
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/error/supabase_errors.dart';
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
-import 'package:salahly/features/marketplace/data/models/wire.dart';
 import 'package:salahly/features/notifications/data/models/notification_model.dart';
 import 'package:salahly/features/notifications/domain/entities/app_notification.dart';
 import 'package:salahly/features/notifications/domain/repositories/notifications_repository.dart';

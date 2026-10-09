@@ -36,8 +36,6 @@ final class TechnicianOnboardingState extends Equatable {
   /// Saturday to Thursday, as ISO weekdays.
   static const defaultWorkDays = {6, 7, 1, 2, 3, 4};
 
-  static const maxPriceEgp = 1000000;
-
   final LoadStatus loadStatus;
   final List<ServiceCategory> categories;
   final List<ServiceArea> areas;
@@ -92,11 +90,8 @@ final class TechnicianOnboardingState extends Equatable {
       yearsExperience != null;
 
   /// The typed price of [serviceId] in piastres, if it's a valid amount.
-  int? pricePiastres(String serviceId) {
-    final pounds = parseWholeNumber(priceTexts[serviceId] ?? '');
-    if (pounds == null || pounds < 1 || pounds > maxPriceEgp) return null;
-    return pounds * 100;
-  }
+  int? pricePiastres(String serviceId) =>
+      parseStartingPrice(priceTexts[serviceId] ?? '');
 
   bool get isServicesValid =>
       selectedServiceIds.isNotEmpty &&

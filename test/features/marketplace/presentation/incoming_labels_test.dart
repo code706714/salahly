@@ -114,7 +114,7 @@ void main() {
         standingOf(testIncoming(status: RequestStatus.expired)),
         IncomingStanding.expired,
       );
-      expect(standingOf(testIncoming(offerCount: 3)), IncomingStanding.full);
+      expect(standingOf(testIncoming(offerCount: 5)), IncomingStanding.full);
       expect(
         standingOf(testIncoming(), closedSince: true),
         IncomingStanding.closed,

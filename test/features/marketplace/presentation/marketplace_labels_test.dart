@@ -11,9 +11,14 @@ void main() {
       expect(requestIssueLabel(l10n, issue), isNotEmpty);
     }
     expect(
-      RequestIssue.values.map(
-        (issue) => requestTitle(l10n, issue, category: 'تكييف'),
-      ),
+      [
+        RequestIssue.notCooling,
+        RequestIssue.leaking,
+        RequestIssue.noisy,
+        RequestIssue.needsCleaning,
+        RequestIssue.installation,
+        RequestIssue.other,
+      ].map((issue) => requestTitle(l10n, issue, category: 'تكييف')),
       [
         'تكييف مش بيبرّد',
         'تكييف بينقّط مية',

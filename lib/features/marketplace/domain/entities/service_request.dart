@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/jobs/domain/entities/job.dart';
+import 'package:salahly/features/marketplace/domain/entities/offer_thread.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_window.dart';
 import 'package:salahly/features/marketplace/domain/entities/review.dart';
@@ -254,7 +255,10 @@ final class RequestDetails extends Equatable {
 }
 
 /// Whether an offer is still in the running.
-enum OfferStatus { sent, accepted, notChosen }
+enum OfferStatus { sent, accepted, notChosen, withdrawn }
+
+/// Whose answer an offer's price talk waits for.
+enum OfferTurn { consumer, technician }
 
 /// A technician's offer on a consumer's request.
 final class RequestOffer extends Equatable {
@@ -267,11 +271,17 @@ final class RequestOffer extends Equatable {
     required this.technician,
     this.note,
     this.distanceKm,
+    this.counterPricePiastres,
+    this.awaiting = OfferTurn.consumer,
+    this.countersLeft = maxCounters,
   });
+
+  /// How many prices the consumer can ask for on one offer.
+  static const maxCounters = 3;
 
   final String id;
 
-  /// The starting price.
+  /// The technician's current price.
   final int pricePiastres;
   final DateTime arriveAt;
   final String? note;
@@ -281,6 +291,23 @@ final class RequestOffer extends Equatable {
   final double? distanceKm;
   final DateTime createdAt;
   final TechnicianCard technician;
+
+  /// The price the consumer asked for, while the technician has yet to
+  /// answer it.
+  final int? counterPricePiastres;
+  final OfferTurn awaiting;
+
+  /// Prices the consumer can still ask for.
+  final int countersLeft;
+
+  /// The consumer asked for a lower price and waits for the technician.
+  bool get isCountered => awaiting == OfferTurn.technician;
+
+  /// The prices the consumer can ask for now, or null when they can't.
+  ({int min, int max})? get counterRange =>
+      status == OfferStatus.sent && !isCountered && countersLeft > 0
+      ? poundsBelow(pricePiastres)
+      : null;
 
   @override
   List<Object?> get props => [
@@ -292,6 +319,9 @@ final class RequestOffer extends Equatable {
     distanceKm,
     createdAt,
     technician,
+    counterPricePiastres,
+    awaiting,
+    countersLeft,
   ];
 }
 

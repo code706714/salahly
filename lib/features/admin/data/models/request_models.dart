@@ -1,8 +1,8 @@
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/admin/data/models/json_values.dart';
 import 'package:salahly/features/admin/domain/entities/admin_complaint.dart';
 import 'package:salahly/features/admin/domain/entities/admin_request.dart';
 import 'package:salahly/features/admin/domain/entities/paged_result.dart';
-import 'package:salahly/features/marketplace/data/models/wire.dart';
 import 'package:salahly/features/marketplace/domain/entities/complaint.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
 

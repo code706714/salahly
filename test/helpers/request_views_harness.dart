@@ -75,11 +75,13 @@ class ConsumerViewHarness {
   Future<void> pump(
     WidgetTester tester,
     Widget view, {
+    List<RepositoryProvider<Object>> repositories = const [],
     List<BlocProvider<StateStreamableSource<Object?>>> blocs = const [],
     List<String> stubRoutes = const [],
     Size surfaceSize = smallPhone,
   }) => tester.pumpApp(
     view,
+    repositories: repositories,
     blocs: [
       BlocProvider<SessionCubit>.value(value: session),
       BlocProvider<CategoriesCubit>.value(value: categories),

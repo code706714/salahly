@@ -7,6 +7,7 @@ final class ServiceCategory extends Equatable {
     required this.name,
     required this.isActive,
     required this.services,
+    this.issues = const [],
   });
 
   final String id;
@@ -16,8 +17,24 @@ final class ServiceCategory extends Equatable {
   final bool isActive;
   final List<CatalogService> services;
 
+  /// What a consumer can say is wrong in this trade, in display order;
+  /// ends with "other".
+  final List<CatalogIssue> issues;
+
   @override
-  List<Object?> get props => [id, name, isActive, services];
+  List<Object?> get props => [id, name, isActive, services, issues];
+}
+
+/// A problem a consumer can pick for a trade.
+final class CatalogIssue extends Equatable {
+  const CatalogIssue({required this.id, required this.name});
+
+  /// The server's name for the problem: `not_cooling`.
+  final String id;
+  final String name;
+
+  @override
+  List<Object?> get props => [id, name];
 }
 
 final class CatalogService extends Equatable {

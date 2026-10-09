@@ -18,6 +18,7 @@ import 'package:salahly/features/marketplace/presentation/pages/new_request_page
 import 'package:salahly/features/marketplace/presentation/pages/past_technicians_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/request_page.dart';
 import 'package:salahly/features/marketplace/presentation/pages/technician_profile_page.dart';
+import 'package:salahly/features/marketplace/presentation/pages/technicians_page.dart';
 import 'package:salahly/features/notifications/presentation/pages/notifications_page.dart';
 
 import '../../helpers/consumer_app.dart';
@@ -48,13 +49,14 @@ void main() {
     expect(find.byType(ConsumerHomePage), findsOneWidget);
   });
 
-  testConsumerApp('the tabs switch between the three main screens', (
+  testConsumerApp('the tabs switch between the four main screens', (
     tester,
     app,
   ) async {
     await app.pump(tester);
 
     for (final (label, page) in [
+      (l10n.navTechnicians, TechniciansPage),
       (l10n.navMyRequests, MyRequestsPage),
       (l10n.navMyAccount, ConsumerAccountPage),
       (l10n.navHome, ConsumerHomePage),
@@ -97,6 +99,9 @@ void main() {
         when(
           () => app.requests.fetchTechnician(any()),
         ).thenAnswer((_) async => Ok(testTechnicianProfile()));
+        when(
+          () => app.requests.fetchListedTechnician(any()),
+        ).thenAnswer((_) async => Ok(testTechnicianProfile()));
         await app.pump(tester);
 
         unawaited(app.router(tester).push(location));
@@ -113,7 +118,7 @@ void main() {
     app,
   ) async {
     when(
-      () => app.requests.fetchTechnician('tech-1'),
+      () => app.requests.fetchListedTechnician('tech-1'),
     ).thenAnswer((_) async => Ok(testTechnicianProfile()));
     await app.pump(tester);
 

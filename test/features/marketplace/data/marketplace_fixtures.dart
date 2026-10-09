@@ -28,6 +28,9 @@ Map<String, dynamic> offerJson({
   'distance_km': 2.4,
   'created_at': '2026-10-02T17:10:00+00:00',
   'technician': technicianCardJson(),
+  'counter_price_piastres': null,
+  'awaiting': 'consumer',
+  'counters_left': 3,
 };
 
 Map<String, dynamic> requestDetailsJson({
@@ -119,4 +122,98 @@ Map<String, dynamic> incomingRequestJson({
   'offer_count': offerCount,
   'dismissed': false,
   'my_offer': myOffer,
+};
+
+Map<String, dynamic> listingJson({
+  String id = 'tech-1',
+  String name = 'محمود السيد',
+}) => {
+  'id': id,
+  'name': name,
+  'avatar_path': '$id/avatar.jpg',
+  'rating': 4.8,
+  'review_count': 126,
+  'years_experience': 12,
+  'jobs_done': 214,
+  'area_id': 'nasr_city',
+  'area_ids': ['heliopolis', 'nasr_city'],
+  'services': [
+    {
+      'service_id': 'plumbing_inspection',
+      'category_id': 'plumbing',
+      'name_ar': 'كشف وتحديد العطل',
+      'starting_price_piastres': 15000,
+    },
+    {
+      'service_id': 'ac_inspection',
+      'category_id': 'ac',
+      'name_ar': 'كشف',
+      'starting_price_piastres': 12000,
+    },
+  ],
+  'min_price_piastres': 12000,
+};
+
+Map<String, dynamic> publicProfileJson() => {
+  ...listingJson(),
+  'shop_name': 'ورشة السيد',
+  'reviews': [
+    {
+      'stars': 5,
+      'tags': ['on_time', 'unknown_tag'],
+      'comment': 'شغل نضيف',
+      'issue': 'plumbing_leak',
+      'created_at': '2026-10-01T10:00:00+00:00',
+    },
+  ],
+};
+
+Map<String, dynamic> offerStateJson({
+  String status = 'sent',
+  int price = 35000,
+  int? counter,
+}) => {
+  'offer_id': 'offer-1',
+  'request_id': 'request-1',
+  'status': status,
+  'price_piastres': price,
+  'counter_price_piastres': counter,
+  'awaiting': counter == null ? 'consumer' : 'technician',
+  'counters_left': 2,
+  'revisions_left': 1,
+};
+
+Map<String, dynamic> offerThreadJson() => {
+  'offer': offerStateJson(counter: 30000),
+  'events': [
+    {
+      'kind': 'offer',
+      'actor': 'technician',
+      'price_piastres': 35000,
+      'created_at': '2026-10-02T17:10:00+00:00',
+    },
+    {
+      'kind': 'counter',
+      'actor': 'consumer',
+      'price_piastres': 30000,
+      'created_at': '2026-10-02T17:20:00+00:00',
+    },
+    {
+      'kind': 'withdraw',
+      'actor': 'technician',
+      'price_piastres': null,
+      'created_at': '2026-10-02T17:30:00+00:00',
+    },
+  ],
+};
+
+Map<String, dynamic> offeringJson() => {
+  'work_days': [6, 7, 1],
+  'service_radius_km': 15,
+  'base_area_id': 'nasr_city',
+  'area_ids': ['heliopolis', 'nasr_city'],
+  'services': [
+    {'service_id': 'ac_inspection', 'starting_price_piastres': 12000},
+    {'service_id': 'plumbing_inspection', 'starting_price_piastres': 15000},
+  ],
 };
