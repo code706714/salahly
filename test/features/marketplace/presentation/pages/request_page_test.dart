@@ -34,6 +34,21 @@ void main() {
   Future<void> open(WidgetTester tester, ConsumerApp app) =>
       app.pump(tester, location: AppRoutes.request('request-1'));
 
+  testWidgets('an offer that arrives shows at once, without waiting', (
+    tester,
+  ) async {
+    final app = ConsumerApp();
+    serve(app, Ok(testRequestDetails()));
+    await open(tester, app);
+    expect(find.byType(WaitingView), findsOneWidget);
+
+    serve(app, Ok(testRequestDetails(offers: testOffers())));
+    app.live.fire();
+    await tester.pumpAndSettle();
+
+    expect(find.byType(OffersView), findsOneWidget);
+  });
+
   group('shows the screen for where the request stands', () {
     for (final (name, details, view) in [
       ('no offers yet', testRequestDetails(), WaitingView),

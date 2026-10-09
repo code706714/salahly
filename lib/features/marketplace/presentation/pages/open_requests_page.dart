@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/widgets/choice_chip_button.dart';
+import 'package:salahly/core/widgets/live_refresh.dart';
 import 'package:salahly/features/account/domain/entities/verification_status.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/catalog/presentation/category_icon.dart';
@@ -107,93 +108,96 @@ class OpenRequestsView extends StatelessWidget {
       for (final category in context.watch<CategoriesCubit>().state.categories)
         if (category.isActive) category,
     ];
-    return Scaffold(
-      body: SafeArea(
-        child: switch (state.status) {
-          OpenRequestsStatus.failed => Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.fromLTRB(16, 20, 16, 0),
-                child: Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: _Title(),
-                ),
-              ),
-              Expanded(
-                child: LoadFailedView(
-                  message: technicianOfferFailureMessage(
-                    l10n,
-                    state.failure!,
+    return LiveRefresh(
+      onChange: () => unawaited(cubit.load()),
+      child: Scaffold(
+        body: SafeArea(
+          child: switch (state.status) {
+            OpenRequestsStatus.failed => Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(16, 20, 16, 0),
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: _Title(),
                   ),
-                  retryLabel: l10n.retry,
-                  onRetry: cubit.load,
                 ),
-              ),
-            ],
-          ),
-          _ => NotificationListener<ScrollNotification>(
-            onNotification: (notification) {
-              if (notification.metrics.extentAfter < 200) {
-                unawaited(cubit.loadMore());
-              }
-              return false;
-            },
-            child: RefreshIndicator(
-              onRefresh: cubit.load,
-              child: ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
-                children: [
-                  const _Title(),
-                  const SizedBox(height: 14),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      spacing: 8,
-                      children: [
-                        ChoiceChipButton(
-                          label: l10n.directoryAll,
-                          selected: state.categoryId == null,
-                          onTap: () => cubit.selectCategory(null),
-                        ),
-                        for (final category in categories)
-                          ChoiceChipButton(
-                            label: category.name,
-                            icon: categoryIcon(category.id),
-                            selected: state.categoryId == category.id,
-                            onTap: () => cubit.selectCategory(category.id),
-                          ),
-                      ],
+                Expanded(
+                  child: LoadFailedView(
+                    message: technicianOfferFailureMessage(
+                      l10n,
+                      state.failure!,
                     ),
+                    retryLabel: l10n.retry,
+                    onRetry: cubit.load,
                   ),
-                  const SizedBox(height: 14),
-                  if (state.status == OpenRequestsStatus.loading)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 64),
-                      child: Center(child: CircularProgressIndicator()),
-                    )
-                  else if (state.requests.isEmpty)
-                    const _Empty()
-                  else ...[
-                    for (final request in state.requests) ...[
-                      IncomingRequestCard(
-                        request: request,
-                        standing: standingOf(request),
-                        now: now,
+                ),
+              ],
+            ),
+            _ => NotificationListener<ScrollNotification>(
+              onNotification: (notification) {
+                if (notification.metrics.extentAfter < 200) {
+                  unawaited(cubit.loadMore());
+                }
+                return false;
+              },
+              child: RefreshIndicator(
+                onRefresh: cubit.load,
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
+                  children: [
+                    const _Title(),
+                    const SizedBox(height: 14),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        spacing: 8,
+                        children: [
+                          ChoiceChipButton(
+                            label: l10n.directoryAll,
+                            selected: state.categoryId == null,
+                            onTap: () => cubit.selectCategory(null),
+                          ),
+                          for (final category in categories)
+                            ChoiceChipButton(
+                              label: category.name,
+                              icon: categoryIcon(category.id),
+                              selected: state.categoryId == category.id,
+                              onTap: () => cubit.selectCategory(category.id),
+                            ),
+                        ],
                       ),
-                      const SizedBox(height: 10),
-                    ],
-                    if (state.loadingMore)
+                    ),
+                    const SizedBox(height: 14),
+                    if (state.status == OpenRequestsStatus.loading)
                       const Padding(
-                        padding: EdgeInsets.all(8),
+                        padding: EdgeInsets.only(top: 64),
                         child: Center(child: CircularProgressIndicator()),
-                      ),
+                      )
+                    else if (state.requests.isEmpty)
+                      const _Empty()
+                    else ...[
+                      for (final request in state.requests) ...[
+                        IncomingRequestCard(
+                          request: request,
+                          standing: standingOf(request),
+                          now: now,
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                      if (state.loadingMore)
+                        const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Center(child: CircularProgressIndicator()),
+                        ),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
-          ),
-        },
+          },
+        ),
       ),
     );
   }

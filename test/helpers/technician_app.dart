@@ -27,6 +27,7 @@ import 'package:salahly/features/marketplace/domain/entities/technician_offering
 import 'package:salahly/salahly_app.dart';
 
 import 'balance_fixtures.dart';
+import 'fake_live_updates.dart';
 import 'fake_push_service.dart';
 import 'fake_sync_remote.dart';
 import 'fixtures.dart';
@@ -141,6 +142,7 @@ class TechnicianApp {
 
   /// The notifications: none, all read, unless a test stubs some.
   final notifications = MockNotificationsRepository();
+  final live = FakeLiveUpdates();
   final photos = LocalPhotoStore(Directory.systemTemp.createTempSync());
   final sharedFiles = SharedFiles(Directory.systemTemp.createTempSync());
 
@@ -172,6 +174,7 @@ class TechnicianApp {
     technicianRequestsRepository: requests,
     balanceRepository: balance,
     notificationsRepository: notifications,
+    liveUpdates: live,
     pushService: FakePushService(),
     locationService: MockLocationService(),
     photoPicker: photoPicker,

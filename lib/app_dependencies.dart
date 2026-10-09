@@ -5,6 +5,8 @@ import 'package:salahly/core/contacts/contact_picker.dart';
 import 'package:salahly/core/database/app_database.dart';
 import 'package:salahly/core/database/local_user_data.dart';
 import 'package:salahly/core/launch/external_apps.dart';
+import 'package:salahly/core/live/live_updates.dart';
+import 'package:salahly/core/live/supabase_live_updates.dart';
 import 'package:salahly/core/location/geolocator_location_service.dart';
 import 'package:salahly/core/location/location_service.dart';
 import 'package:salahly/core/media/photo_picker.dart';
@@ -59,6 +61,7 @@ class AppDependencies {
     required this.technicianRequestsRepository,
     required this.balanceRepository,
     required this.notificationsRepository,
+    required this.liveUpdates,
     required this.pushService,
     required this.locationService,
     required this.photoPicker,
@@ -118,6 +121,7 @@ class AppDependencies {
       ),
       balanceRepository: SupabaseBalanceRepository(client),
       notificationsRepository: SupabaseNotificationsRepository(client),
+      liveUpdates: SupabaseLiveUpdates(client),
       pushService: MessagingPushService(
         transport: pushTransport,
         devices: SupabaseDeviceTokensRepository(client),
@@ -150,6 +154,7 @@ class AppDependencies {
   final TechnicianRequestsRepository technicianRequestsRepository;
   final BalanceRepository balanceRepository;
   final NotificationsRepository notificationsRepository;
+  final LiveUpdates liveUpdates;
   final PushService pushService;
   final LocationService locationService;
   final PhotoPicker photoPicker;

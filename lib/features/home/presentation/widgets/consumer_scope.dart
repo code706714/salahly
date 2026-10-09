@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:salahly/core/widgets/live_refresh.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
@@ -84,7 +85,10 @@ class _ConsumerScopeState extends State<ConsumerScope> {
           unawaited(context.read<SessionCubit>().refreshProfile());
           unawaited(_notifications.refreshUnread());
         },
-        child: PushScope(role: UserRole.consumer, child: widget.child),
+        child: LiveRefresh(
+          onChange: _load,
+          child: PushScope(role: UserRole.consumer, child: widget.child),
+        ),
       ),
     );
   }
