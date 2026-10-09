@@ -21,6 +21,10 @@ String consumerFailureMessage(
     TooLateToCancelFailure() => l10n.consumerTooLateToCancel(honorific),
     PriceChangeGoneFailure() => l10n.consumerPriceChangeGone(honorific),
     AlreadySentFailure() => l10n.consumerAlreadySent,
+    OfferUnavailableFailure() => l10n.consumerOfferUnavailable(honorific),
+    NegotiationLimitFailure() => l10n.consumerNegotiationLimit(honorific),
+    CounterPendingFailure() => l10n.consumerCounterPending,
+    InvalidPriceFailure() => l10n.consumerInvalidPrice(honorific),
     AddressLimitFailure() => l10n.consumerAddressLimit(honorific),
     NetworkFailure() => l10n.consumerErrorNetwork(honorific),
     RateLimitedFailure() => l10n.consumerErrorRateLimited(honorific),
@@ -36,6 +40,11 @@ String technicianOfferFailureMessage(AppLocalizations l10n, Failure failure) {
     MarketplaceNotFoundFailure() => l10n.marketplaceNotFound,
     InvalidTimeFailure() => l10n.technicianInvalidTime,
     AlreadySentFailure() => l10n.technicianAlreadyOffered,
+    NotVerifiedFailure() => l10n.technicianNotVerified,
+    OfferUnavailableFailure() => l10n.technicianOfferUnavailable,
+    NegotiationLimitFailure() => l10n.technicianNegotiationLimit,
+    NoCounterFailure() => l10n.technicianNoCounter,
+    InvalidPriceFailure() => l10n.technicianInvalidPrice,
     _ => commonFailureMessage(l10n, failure),
   };
 }

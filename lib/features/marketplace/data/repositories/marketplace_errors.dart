@@ -23,6 +23,12 @@ Failure? marketplaceFailureFrom(Object error) {
     'already_complained' => const AlreadySentFailure(),
     'limit_reached' => const AddressLimitFailure(),
     'not_confirmed' => const ArrivalNotReadyFailure(),
+    'not_verified' => const NotVerifiedFailure(),
+    'offer_unavailable' => const OfferUnavailableFailure(),
+    'negotiation_limit' => const NegotiationLimitFailure(),
+    'counter_pending' => const CounterPendingFailure(),
+    'no_counter' => const NoCounterFailure(),
+    'invalid_price' => const InvalidPriceFailure(),
     _ => null,
   };
 }

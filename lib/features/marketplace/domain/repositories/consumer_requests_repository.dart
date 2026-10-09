@@ -1,10 +1,14 @@
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/features/marketplace/domain/entities/complaint.dart';
 import 'package:salahly/features/marketplace/domain/entities/consumer_address.dart';
+import 'package:salahly/features/marketplace/domain/entities/offer_thread.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_draft.dart';
 import 'package:salahly/features/marketplace/domain/entities/review.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
 import 'package:salahly/features/marketplace/domain/entities/technician_card.dart';
+
+/// Technicians fetched per page of the directory.
+const technicianPageSize = 20;
 
 /// The consumer's side of the marketplace. Every call needs the network;
 /// failures name what went wrong (see marketplace_failures.dart).
@@ -38,8 +42,28 @@ abstract interface class ConsumerRequestsRepository {
   /// A technician's page, or null unless they made the consumer an offer.
   Future<Result<TechnicianPublicProfile?>> fetchTechnician(String id);
 
+  /// Verified technicians for the directory, filtered by trade and area and
+  /// ordered by [sort]. [offset] pages through them.
+  Future<Result<List<TechnicianListing>>> browseTechnicians({
+    String? categoryId,
+    String? areaId,
+    TechnicianSort sort = TechnicianSort.rating,
+    int limit = technicianPageSize,
+    int offset = 0,
+  });
+
+  /// A verified technician's page for anyone browsing, or null if they
+  /// aren't listed.
+  Future<Result<TechnicianPublicProfile?>> fetchListedTechnician(String id);
+
   /// Picks an offer; the technician gets the job.
   Future<Result<void>> acceptOffer(String offerId);
+
+  /// Asks for a lower price on an offer, in piastres.
+  Future<Result<void>> counterOffer(String offerId, int pricePiastres);
+
+  /// The price talk of an offer, or null if it isn't theirs.
+  Future<Result<OfferThread?>> fetchOfferThread(String offerId);
 
   Future<Result<void>> cancelRequest(String id);
 

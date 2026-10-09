@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
+import 'package:salahly/features/marketplace/domain/entities/offer_thread.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_window.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
@@ -63,8 +64,8 @@ final class IncomingRequest extends Equatable {
   final bool dismissed;
   final MyOffer? myOffer;
 
-  /// A request takes at most three offers.
-  static const maxOffers = 3;
+  /// A request takes at most five offers.
+  static const maxOffers = 5;
 
   /// Whether this technician can still send an offer.
   bool get acceptsOffers =>
@@ -102,14 +103,40 @@ final class MyOffer extends Equatable {
     required this.status,
     this.serviceId,
     this.note,
+    this.counterPricePiastres,
+    this.awaiting = OfferTurn.consumer,
+    this.revisionsLeft = maxRevisions,
   });
+
+  /// How many times the technician can lower the price of one offer.
+  static const maxRevisions = 2;
 
   final String id;
   final String? serviceId;
+
+  /// The current price.
   final int pricePiastres;
   final DateTime arriveAt;
   final String? note;
   final OfferStatus status;
+
+  /// The consumer's price, while the technician has yet to answer it.
+  final int? counterPricePiastres;
+  final OfferTurn awaiting;
+  final int revisionsLeft;
+
+  /// The consumer asked for a lower price and waits for the technician.
+  bool get isCountered =>
+      status == OfferStatus.sent &&
+      awaiting == OfferTurn.technician &&
+      counterPricePiastres != null;
+
+  /// The prices the technician can lower the offer to, or null when they
+  /// can't: above the consumer's price, below their own.
+  ({int min, int max})? get reviseRange =>
+      status == OfferStatus.sent && revisionsLeft > 0
+      ? poundsBelow(pricePiastres, above: counterPricePiastres ?? 0)
+      : null;
 
   @override
   List<Object?> get props => [
@@ -119,6 +146,9 @@ final class MyOffer extends Equatable {
     arriveAt,
     note,
     status,
+    counterPricePiastres,
+    awaiting,
+    revisionsLeft,
   ];
 }
 

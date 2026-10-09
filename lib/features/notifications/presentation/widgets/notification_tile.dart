@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
+import 'package:salahly/features/catalog/presentation/category_icon.dart';
 import 'package:salahly/features/notifications/domain/entities/app_notification.dart';
 
 /// One notification: an icon tile for its kind, the text, and when it
@@ -25,7 +26,7 @@ class NotificationTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.appColors;
     final body = this.body;
-    final (icon, background, foreground) = _look(notification.kind, colors);
+    final (icon, background, foreground) = _look(notification, colors);
     return Material(
       color: notification.isRead ? colors.surface : colors.attentionRow,
       child: InkWell(
@@ -88,9 +89,9 @@ class NotificationTile extends StatelessWidget {
   }
 
   static (IconData, Color, Color) _look(
-    NotificationKind kind,
+    AppNotification notification,
     AppColors colors,
-  ) => switch (kind) {
+  ) => switch (notification.kind) {
     NotificationKind.offerReceived => (
       Icons.description_outlined,
       colors.successSoft,
@@ -98,6 +99,7 @@ class NotificationTile extends StatelessWidget {
     ),
     NotificationKind.jobConfirmed ||
     NotificationKind.offerPicked ||
+    NotificationKind.counterAccepted ||
     NotificationKind.topupApproved => (
       Icons.check_rounded,
       colors.successSoft,
@@ -136,11 +138,21 @@ class NotificationTile extends StatelessWidget {
       colors.ink,
     ),
     NotificationKind.newRequest => (
-      Icons.ac_unit_rounded,
+      categoryIcon(notification.categoryId),
       colors.primarySoft,
       colors.primary,
     ),
-    NotificationKind.offerNotPicked => (
+    NotificationKind.offerCountered => (
+      Icons.sell_outlined,
+      colors.primarySoft,
+      colors.primary,
+    ),
+    NotificationKind.offerRevised => (
+      Icons.trending_down_rounded,
+      colors.successSoft,
+      colors.success,
+    ),
+    NotificationKind.offerNotPicked || NotificationKind.offerWithdrawn => (
       Icons.person_outline_rounded,
       colors.inkSoft,
       colors.ink,

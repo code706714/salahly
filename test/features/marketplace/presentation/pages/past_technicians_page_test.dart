@@ -167,7 +167,7 @@ void main() {
   ) async {
     when(app.requests.fetchRequests).thenAnswer((_) async => Ok(requests));
     when(
-      () => app.requests.fetchTechnician('tech-1'),
+      () => app.requests.fetchListedTechnician('tech-1'),
     ).thenAnswer((_) async => Ok(testTechnicianProfile()));
     await app.pump(tester, location: AppRoutes.consumerAccount);
 

@@ -52,7 +52,7 @@ class IncomingRequestCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          RequestIssueBadge(issue: request.issue),
+          RequestIssueBadge(categoryId: request.categoryId),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

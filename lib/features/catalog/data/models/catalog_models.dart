@@ -5,13 +5,19 @@ import 'package:salahly/features/catalog/domain/entities/service_category.dart';
 abstract final class ServiceCategoryModel {
   static const select =
       'id, name_ar, is_active, sort_order, '
-      'services(id, name_ar, suggested_price_piastres, is_active, sort_order)';
+      'services(id, name_ar, suggested_price_piastres, is_active, sort_order), '
+      'category_issues(issue, name_ar, sort_order)';
 
   static ServiceCategory fromJson(Map<String, dynamic> json) {
     final services =
         (json['services'] as List<dynamic>)
             .cast<Map<String, dynamic>>()
             .where((service) => service['is_active'] as bool)
+            .toList()
+          ..sort(_bySortOrder);
+    final issues =
+        (json['category_issues'] as List<dynamic>? ?? const [])
+            .cast<Map<String, dynamic>>()
             .toList()
           ..sort(_bySortOrder);
     return ServiceCategory(
@@ -24,6 +30,13 @@ abstract final class ServiceCategoryModel {
             id: service['id'] as String,
             name: service['name_ar'] as String,
             suggestedPricePiastres: service['suggested_price_piastres'] as int,
+          ),
+      ],
+      issues: [
+        for (final issue in issues)
+          CatalogIssue(
+            id: issue['issue'] as String,
+            name: issue['name_ar'] as String,
           ),
       ],
     );

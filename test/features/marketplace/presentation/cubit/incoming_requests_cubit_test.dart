@@ -77,7 +77,7 @@ void main() {
     test('counts only requests still waiting for an offer as new', () async {
       final answered = testIncoming(id: 'answered', myOffer: testMyOffer());
       final dismissed = testIncoming(id: 'dismissed', dismissed: true);
-      final full = testIncoming(id: 'full', offerCount: 3);
+      final full = testIncoming(id: 'full', offerCount: 5);
       final cancelled = testIncoming(
         id: 'cancelled',
         status: RequestStatus.cancelled,
@@ -153,7 +153,7 @@ void main() {
       final full = testIncoming(
         id: 'older',
         createdAt: DateTime(2026, 10, 2, 18),
-        offerCount: 3,
+        offerCount: 5,
       );
 
       cubit.updateRequest(full);

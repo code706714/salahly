@@ -3,7 +3,7 @@ part of 'offer_cubit.dart';
 enum OfferLoadStatus { loading, ready, missing, failed }
 
 /// What the technician is doing to the request right now.
-enum OfferAction { send, dismiss }
+enum OfferAction { send, dismiss, revise, acceptCounter, withdraw }
 
 final class OfferState extends Equatable {
   const OfferState({

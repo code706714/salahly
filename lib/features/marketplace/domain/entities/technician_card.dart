@@ -91,16 +91,17 @@ final class ServicePrice extends Equatable {
 /// A review as anyone reading a technician's page sees it.
 final class PublicReview extends Equatable {
   const PublicReview({
-    required this.author,
     required this.stars,
     required this.issue,
     required this.createdAt,
+    this.author,
     this.comment,
     this.tags = const {},
   });
 
-  /// First name and initial: "دعاء م.".
-  final String author;
+  /// First name and initial: "دعاء م."; unknown on the directory's page,
+  /// which never says who wrote a review.
+  final String? author;
   final int stars;
   final String? comment;
   final Set<ReviewTag> tags;
@@ -112,3 +113,27 @@ final class PublicReview extends Equatable {
   @override
   List<Object?> get props => [author, stars, comment, tags, issue, createdAt];
 }
+
+/// A technician in the directory: their card, where they work and what they
+/// offer.
+final class TechnicianListing extends Equatable {
+  const TechnicianListing({
+    required this.card,
+    required this.areaIds,
+    required this.services,
+    this.minPricePiastres,
+  });
+
+  final TechnicianCard card;
+  final List<String> areaIds;
+  final List<ServicePrice> services;
+
+  /// The lowest starting price among [services].
+  final int? minPricePiastres;
+
+  @override
+  List<Object?> get props => [card, areaIds, services, minPricePiastres];
+}
+
+/// How the directory orders technicians.
+enum TechnicianSort { rating, reviews, experience, jobs, price }

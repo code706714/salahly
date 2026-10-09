@@ -62,6 +62,12 @@ class RequestCubit extends Cubit<RequestState> {
     () => _requests.acceptOffer(offerId),
   );
 
+  /// Asks the technician of [offerId] for a lower price.
+  Future<bool> counterOffer(String offerId, int pricePiastres) => _act(
+    RequestAction.counterOffer,
+    () => _requests.counterOffer(offerId, pricePiastres),
+  );
+
   Future<bool> cancel() =>
       _act(RequestAction.cancel, () => _requests.cancelRequest(_requestId));
 

@@ -20,13 +20,21 @@ class MockIncomingRequestsCubit extends MockCubit<IncomingRequestsState>
 MyOffer testMyOffer({
   OfferStatus status = OfferStatus.sent,
   String? note = 'هجيب معايا الفريون',
+  int pricePiastres = 35000,
+  int? counterPricePiastres,
+  int revisionsLeft = MyOffer.maxRevisions,
 }) => MyOffer(
   id: 'offer-1',
   serviceId: 'ac_inspection_cleaning',
-  pricePiastres: 35000,
+  pricePiastres: pricePiastres,
   arriveAt: DateTime(2026, 10, 3, 12, 30),
   note: note,
   status: status,
+  counterPricePiastres: counterPricePiastres,
+  awaiting: counterPricePiastres == null
+      ? OfferTurn.consumer
+      : OfferTurn.technician,
+  revisionsLeft: revisionsLeft,
 );
 
 /// Nourhan's request in Nasr City for tomorrow noon, sent at 7:40 pm on

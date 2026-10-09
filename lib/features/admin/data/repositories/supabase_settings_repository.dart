@@ -1,9 +1,9 @@
 import 'package:salahly/core/error/result.dart';
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/admin/data/models/settings_models.dart';
 import 'package:salahly/features/admin/data/repositories/admin_rpc.dart';
 import 'package:salahly/features/admin/domain/entities/admin_settings.dart';
 import 'package:salahly/features/admin/domain/repositories/settings_repository.dart';
-import 'package:salahly/features/marketplace/data/models/wire.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseSettingsRepository implements SettingsRepository {

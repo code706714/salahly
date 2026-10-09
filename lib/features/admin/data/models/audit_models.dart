@@ -1,7 +1,7 @@
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/admin/data/models/json_values.dart';
 import 'package:salahly/features/admin/domain/entities/audit_entry.dart';
 import 'package:salahly/features/admin/domain/entities/paged_result.dart';
-import 'package:salahly/features/marketplace/data/models/wire.dart';
 
 /// Maps what `admin_list_audit_log` returns.
 abstract final class AuditModels {

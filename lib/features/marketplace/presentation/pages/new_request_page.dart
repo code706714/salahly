@@ -23,11 +23,11 @@ import 'package:salahly/core/widgets/initials_avatar.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/balance/presentation/balance_navigation.dart';
+import 'package:salahly/features/catalog/presentation/category_icon.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/marketplace/domain/entities/consumer_address.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_draft.dart';
-import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_window.dart';
 import 'package:salahly/features/marketplace/domain/entities/technician_card.dart';
 import 'package:salahly/features/marketplace/domain/failures/marketplace_failures.dart';
@@ -338,17 +338,35 @@ class _ProblemStep extends StatelessWidget {
           _FirstTechnician(technician: technician),
           const SizedBox(height: 16),
         ],
+        if (state.categoryChoices.length > 1) ...[
+          _StepTitle(l10n.newRequestCategoryTitle(honorific)),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final category in state.categoryChoices)
+                ChoiceChipButton(
+                  label: category.name,
+                  icon: categoryIcon(category.id),
+                  selected: state.category == category,
+                  onTap: () => cubit.selectCategory(category),
+                ),
+            ],
+          ),
+          const SizedBox(height: 24),
+        ],
         _StepTitle(l10n.newRequestIssueTitle),
         const SizedBox(height: 16),
         Wrap(
           spacing: 8,
           runSpacing: 8,
           children: [
-            for (final issue in RequestIssue.values)
+            for (final choice in state.issueChoices)
               ChoiceChipButton(
-                label: requestIssueLabel(l10n, issue),
-                selected: state.issue == issue,
-                onTap: () => cubit.selectIssue(issue),
+                label: choice.name,
+                selected: state.issue == choice.issue,
+                onTap: () => cubit.selectIssue(choice.issue),
               ),
           ],
         ),

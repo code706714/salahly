@@ -50,7 +50,7 @@ class IncomingRequestDetails extends StatelessWidget {
         children: [
           Row(
             children: [
-              RequestIssueBadge(issue: request.issue),
+              RequestIssueBadge(categoryId: request.categoryId),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(

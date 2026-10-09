@@ -81,6 +81,22 @@ NotificationText notificationText(
       title: l10n.notifExpired,
       body: l10n.notifExpiredBody(honorific),
     ),
+    NotificationKind.offerRevised => (
+      title: l10n.notifOfferRevised(technician),
+      body: l10n.notifOfferRevisedBody(honorific),
+    ),
+    NotificationKind.offerWithdrawn => (
+      title: l10n.notifOfferWithdrawn(technician),
+      body: l10n.notifOfferWithdrawnBody(honorific),
+    ),
+    NotificationKind.counterAccepted => (
+      title: l10n.notifCounterAccepted(technician),
+      body: l10n.notifCounterAcceptedBody(honorific),
+    ),
+    NotificationKind.offerCountered => (
+      title: l10n.notifOfferCountered(gender, consumer),
+      body: l10n.notifOfferCounteredBody,
+    ),
     NotificationKind.newRequest => (
       title: areaName == null
           ? l10n.notifNewRequest

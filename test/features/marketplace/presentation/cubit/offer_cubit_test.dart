@@ -179,7 +179,7 @@ void main() {
   group('sending an offer', () {
     test('sends it and shows it as sent', () async {
       serve(Ok(testIncoming()));
-      final sent = testIncoming(offerCount: 3, myOffer: testMyOffer());
+      final sent = testIncoming(offerCount: 5, myOffer: testMyOffer());
       when(() => requests.sendOffer('request-1', offer)).thenAnswer((_) async {
         serve(Ok(sent));
         return const Ok('offer-1');
@@ -201,7 +201,7 @@ void main() {
 
     test('says why it was refused and shows the request as it is', () async {
       serve(Ok(testIncoming()));
-      final full = testIncoming(offerCount: 3);
+      final full = testIncoming(offerCount: 5);
       when(() => requests.sendOffer('request-1', offer)).thenAnswer((_) async {
         serve(Ok(full));
         return const Err(RequestClosedFailure());

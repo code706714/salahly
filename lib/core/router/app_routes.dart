@@ -27,7 +27,9 @@ abstract final class AppRoutes {
   static const technicianCustomers = '/technician/customers';
   static const newCustomer = '/technician/customers/new';
   static const technicianMoney = '/technician/money';
+  static const openRequests = '/technician/open-requests';
   static const technicianAccount = '/technician/account';
+  static const technicianOffering = '/technician/account/offering';
   static const technicianBalance = '/technician/account/balance';
   static const technicianBuyUses = '/technician/account/balance/buy';
   static const incomingRequests = '/technician/requests';

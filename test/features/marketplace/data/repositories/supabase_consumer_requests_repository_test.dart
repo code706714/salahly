@@ -11,6 +11,7 @@ import 'package:salahly/features/jobs/domain/entities/job.dart';
 import 'package:salahly/features/marketplace/data/repositories/supabase_consumer_requests_repository.dart';
 import 'package:salahly/features/marketplace/domain/entities/complaint.dart';
 import 'package:salahly/features/marketplace/domain/entities/consumer_address.dart';
+import 'package:salahly/features/marketplace/domain/entities/offer_thread.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_draft.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_window.dart';
@@ -431,5 +432,188 @@ void main() {
       'p_area_id': 'heliopolis',
       'p_details': 'شارع النزهة',
     });
+  });
+
+  group('browseTechnicians', () {
+    test('asks for a page of the directory and reads the listings', () async {
+      server.body = [listingJson()];
+
+      final result = await server.repository().browseTechnicians(
+        categoryId: 'plumbing',
+        areaId: 'nasr_city',
+        sort: TechnicianSort.price,
+        offset: 20,
+      );
+
+      expect(server.lastPath, '/rest/v1/rpc/browse_technicians');
+      expect(server.lastParams, {
+        'p_category_id': 'plumbing',
+        'p_area_id': 'nasr_city',
+        'p_sort': 'price',
+        'p_limit': 20,
+        'p_offset': 20,
+      });
+      final listing = (result as Ok<List<TechnicianListing>>).value.single;
+      expect(listing.card.name, 'محمود السيد');
+      expect(listing.card.verified, isTrue);
+      expect(listing.card.rating, 4.8);
+      expect(listing.card.shopName, isNull);
+      expect(listing.areaIds, ['heliopolis', 'nasr_city']);
+      expect(listing.services.first.serviceId, 'plumbing_inspection');
+      expect(listing.minPricePiastres, 12000);
+    });
+
+    test('asks for everyone by default', () async {
+      server.body = <Object>[];
+
+      final result = await server.repository().browseTechnicians();
+
+      expect(server.lastParams, {
+        'p_category_id': null,
+        'p_area_id': null,
+        'p_sort': 'rating',
+        'p_limit': 20,
+        'p_offset': 0,
+      });
+      expect((result as Ok<List<TechnicianListing>>).value, isEmpty);
+    });
+
+    test('is refused for someone who is not a consumer', () async {
+      server
+        ..status = 403
+        ..body = {'code': '42501', 'message': 'not_consumer'};
+
+      expect(
+        await server.repository().browseTechnicians(),
+        isA<Err<List<TechnicianListing>>>(),
+      );
+    });
+  });
+
+  group('fetchListedTechnician', () {
+    test("reads a technician's page without who wrote the reviews", () async {
+      server.body = publicProfileJson();
+
+      final profile =
+          (await server.repository().fetchListedTechnician('tech-1')
+                  as Ok<TechnicianPublicProfile?>)
+              .value!;
+
+      expect(server.lastPath, '/rest/v1/rpc/technician_public_profile');
+      expect(server.lastParams, {'p_technician_id': 'tech-1'});
+      expect(profile.card.shopName, 'ورشة السيد');
+      expect(profile.onTimePercent, isNull);
+      expect(profile.services, hasLength(2));
+      final review = profile.reviews.single;
+      expect(review.author, isNull);
+      expect(review.stars, 5);
+      expect(review.tags, {ReviewTag.onTime});
+      expect(review.issue, RequestIssue.plumbingLeak);
+    });
+
+    test('is null for a technician who is not listed', () async {
+      server.body = null;
+
+      expect(
+        await server.repository().fetchListedTechnician('tech-9'),
+        isA<Ok<TechnicianPublicProfile?>>().having(
+          (ok) => ok.value,
+          'value',
+          isNull,
+        ),
+      );
+    });
+  });
+
+  group('price talks', () {
+    test('asks for a lower price', () async {
+      server.body = offerStateJson(counter: 30000);
+
+      final result = await server.repository().counterOffer('offer-1', 30000);
+
+      expect(result, isA<Ok<void>>());
+      expect(server.lastPath, '/rest/v1/rpc/counter_offer');
+      expect(server.lastParams, {
+        'p_offer_id': 'offer-1',
+        'p_price_piastres': 30000,
+      });
+    });
+
+    test('names why asking was refused', () async {
+      final failures = {
+        'offer_unavailable': const OfferUnavailableFailure(),
+        'negotiation_limit': const NegotiationLimitFailure(),
+        'counter_pending': const CounterPendingFailure(),
+        'invalid_price': const InvalidPriceFailure(),
+        'offer_expired': const OfferExpiredFailure(),
+        'request_closed': const RequestClosedFailure(),
+      };
+      for (final MapEntry(key: message, value: failure) in failures.entries) {
+        server.fails(message);
+        expect(
+          await server.repository().counterOffer('offer-1', 30000),
+          isA<Err<void>>().having((err) => err.failure, message, failure),
+        );
+      }
+    });
+
+    test('reads the thread of an offer', () async {
+      server.body = offerThreadJson();
+
+      final thread =
+          (await server.repository().fetchOfferThread('offer-1')
+                  as Ok<OfferThread?>)
+              .value!;
+
+      expect(server.lastPath, '/rest/v1/rpc/offer_thread');
+      expect(server.lastParams, {'p_offer_id': 'offer-1'});
+      expect(thread.state.counterPricePiastres, 30000);
+      expect(thread.state.awaiting, OfferTurn.technician);
+      expect(thread.state.countersLeft, 2);
+      expect(thread.state.revisionsLeft, 1);
+      expect(thread.events.map((event) => event.kind), [
+        OfferEventKind.offer,
+        OfferEventKind.counter,
+        OfferEventKind.withdraw,
+      ]);
+      expect(thread.events[1].actor, UserRole.consumer);
+      expect(thread.events[1].pricePiastres, 30000);
+      expect(thread.events[2].pricePiastres, isNull);
+    });
+
+    test('has no thread for an offer that is not theirs', () async {
+      server.body = null;
+
+      expect(
+        await server.repository().fetchOfferThread('offer-9'),
+        isA<Ok<OfferThread?>>().having((ok) => ok.value, 'value', isNull),
+      );
+    });
+  });
+
+  test('reads what a request says about each offer in a price talk', () async {
+    server.body = requestDetailsJson(
+      status: 'open',
+      offers: [
+        {
+          ...offerJson(),
+          'counter_price_piastres': 30000,
+          'awaiting': 'technician',
+          'counters_left': 2,
+        },
+      ],
+    );
+
+    final offer =
+        (await server.repository().fetchRequest('request-1')
+                as Ok<RequestDetails?>)
+            .value!
+            .offers
+            .single;
+
+    expect(offer.counterPricePiastres, 30000);
+    expect(offer.isCountered, isTrue);
+    expect(offer.countersLeft, 2);
+    expect(offer.counterRange, isNull);
   });
 }

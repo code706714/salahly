@@ -16,14 +16,18 @@ import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
 import 'package:salahly/core/widgets/money_text.dart';
+import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
 import 'package:salahly/features/marketplace/domain/entities/technician_card.dart';
+import 'package:salahly/features/marketplace/domain/repositories/consumer_requests_repository.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/request_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/marketplace_labels.dart';
 import 'package:salahly/features/marketplace/presentation/offer_sort.dart';
 import 'package:salahly/features/marketplace/presentation/request_view_labels.dart';
+import 'package:salahly/features/marketplace/presentation/widgets/offer_thread_sheet.dart';
+import 'package:salahly/features/marketplace/presentation/widgets/price_dialog.dart';
 import 'package:salahly/features/marketplace/presentation/widgets/request/confirm_choice_dialog.dart';
 import 'package:salahly/features/marketplace/presentation/widgets/technician_avatar.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
@@ -116,6 +120,10 @@ class _OffersScreenState extends State<_OffersScreen> {
                   busy == RequestAction.acceptOffer && _picking == offer.id,
               onProfile: busy == null ? () => _openProfile(offer) : null,
               onPick: busy == null ? () => _confirmPick(offer, today) : null,
+              onCounter: busy == null && offer.counterRange != null
+                  ? () => _counter(offer)
+                  : null,
+              onThread: () => _showThread(offer),
             ),
           ],
           const SizedBox(height: 14),
@@ -149,6 +157,37 @@ class _OffersScreenState extends State<_OffersScreen> {
       confirm: l10n.offersPick(honorific, name),
     );
     if (confirmed && mounted) await _accept(offer);
+  }
+
+  Future<void> _counter(RequestOffer offer) async {
+    final range = offer.counterRange;
+    if (range == null) return;
+    final l10n = AppLocalizations.of(context);
+    final honorific = context.readHonorific();
+    final cubit = context.read<RequestCubit>();
+    final price = await showPriceDialog(
+      context,
+      title: l10n.counterTitle(honorific),
+      body: l10n.counterBody(
+        honorific,
+        firstNameOf(offer.technician.name),
+        l10n.pounds(formatPounds(offer.pricePiastres)),
+        offer.countersLeft,
+      ),
+      confirm: l10n.counterSend(honorific),
+      range: range,
+    );
+    if (price != null) await cubit.counterOffer(offer.id, price);
+  }
+
+  Future<void> _showThread(RequestOffer offer) {
+    final requests = context.read<ConsumerRequestsRepository>();
+    return showOfferThreadSheet(
+      context,
+      fetch: () => requests.fetchOfferThread(offer.id),
+      viewer: UserRole.consumer,
+      honorific: context.readHonorific(),
+    );
   }
 
   Future<void> _accept(RequestOffer offer) async {
@@ -220,6 +259,8 @@ class _OfferCard extends StatelessWidget {
     required this.picking,
     required this.onProfile,
     required this.onPick,
+    required this.onCounter,
+    required this.onThread,
   });
 
   final RequestOffer offer;
@@ -232,6 +273,10 @@ class _OfferCard extends StatelessWidget {
   /// Null while another action runs.
   final VoidCallback? onProfile;
   final VoidCallback? onPick;
+
+  /// Null when the consumer can't ask for a price now.
+  final VoidCallback? onCounter;
+  final VoidCallback onThread;
 
   @override
   Widget build(BuildContext context) {
@@ -386,6 +431,10 @@ class _OfferCard extends StatelessWidget {
                 style: TextStyle(fontSize: 14, height: 1.6, color: colors.ink),
               ),
             ],
+            if (offer.isCountered) ...[
+              const SizedBox(height: AppSpacing.sm),
+              _CounterNotice(offer: offer),
+            ],
             const SizedBox(height: AppSpacing.sm),
             Row(
               children: [
@@ -449,6 +498,67 @@ class _OfferCard extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+            if (!expired &&
+                (offer.counterRange != null ||
+                    offer.countersLeft < RequestOffer.maxCounters))
+              Row(
+                children: [
+                  if (offer.counterRange != null)
+                    TextButton(
+                      onPressed: onCounter,
+                      child: Text(l10n.offersCounter(context.watchHonorific())),
+                    ),
+                  const Spacer(),
+                  if (offer.countersLeft < RequestOffer.maxCounters)
+                    TextButton(
+                      onPressed: onThread,
+                      child: Text(l10n.offersThread),
+                    ),
+                ],
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The price the consumer asked for and that the technician has yet to
+/// answer.
+class _CounterNotice extends StatelessWidget {
+  const _CounterNotice({required this.offer});
+
+  final RequestOffer offer;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final colors = context.appColors;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.warningSoft,
+        borderRadius: BorderRadius.circular(AppRadii.md),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.sm),
+        child: Row(
+          children: [
+            Icon(Icons.schedule_rounded, size: 20, color: colors.warning),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                l10n.offersAwaitingTechnician(
+                  context.watchHonorific(),
+                  l10n.pounds(formatPounds(offer.counterPricePiastres ?? 0)),
+                ),
+                style: TextStyle(
+                  fontSize: 14,
+                  height: 1.6,
+                  fontWeight: FontWeight.w600,
+                  color: colors.warning,
+                ),
+              ),
             ),
           ],
         ),

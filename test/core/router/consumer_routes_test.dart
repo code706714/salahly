@@ -97,6 +97,9 @@ void main() {
         when(
           () => app.requests.fetchTechnician(any()),
         ).thenAnswer((_) async => Ok(testTechnicianProfile()));
+        when(
+          () => app.requests.fetchListedTechnician(any()),
+        ).thenAnswer((_) async => Ok(testTechnicianProfile()));
         await app.pump(tester);
 
         unawaited(app.router(tester).push(location));
@@ -113,7 +116,7 @@ void main() {
     app,
   ) async {
     when(
-      () => app.requests.fetchTechnician('tech-1'),
+      () => app.requests.fetchListedTechnician('tech-1'),
     ).thenAnswer((_) async => Ok(testTechnicianProfile()));
     await app.pump(tester);
 

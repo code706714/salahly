@@ -1,9 +1,9 @@
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/domain/entities/verification_status.dart';
 import 'package:salahly/features/admin/data/models/json_values.dart';
 import 'package:salahly/features/admin/domain/entities/admin_user.dart';
 import 'package:salahly/features/admin/domain/entities/paged_result.dart';
-import 'package:salahly/features/marketplace/data/models/wire.dart';
 
 /// Maps what `admin_list_users` returns.
 abstract final class UserModels {

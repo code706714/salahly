@@ -1,10 +1,10 @@
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/admin/data/models/json_values.dart';
 import 'package:salahly/features/admin/domain/entities/paged_result.dart';
 import 'package:salahly/features/admin/domain/entities/topup_review.dart';
 import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
-import 'package:salahly/features/marketplace/data/models/wire.dart';
 
 /// Maps what `admin_list_topups` returns.
 abstract final class TopupModels {

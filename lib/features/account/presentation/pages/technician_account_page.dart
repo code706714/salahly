@@ -60,6 +60,10 @@ class TechnicianAccountPage extends StatelessWidget {
                   _Group(
                     children: [
                       _Row(
+                        label: l10n.offeringTitle,
+                        onTap: () => context.push(AppRoutes.technicianOffering),
+                      ),
+                      _Row(
                         label: l10n.balanceTitle,
                         onTap: () => context.push(AppRoutes.technicianBalance),
                       ),

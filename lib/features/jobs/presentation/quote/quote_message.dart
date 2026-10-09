@@ -13,7 +13,7 @@ import 'package:salahly/l10n/generated/app_localizations.dart';
 ///     العرض ساري 3 أيام.
 ///
 ///     لو موافق ابعتلي "تمام" وأنا أثبّتلك المعاد.
-///     محمود السيد · فني تكييف
+///     محمود السيد · فني صيانة
 ///     0100 234 5678
 ///
 /// [toBook] asks the customer to agree so the visit can be booked, for a

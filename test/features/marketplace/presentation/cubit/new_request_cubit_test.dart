@@ -97,13 +97,13 @@ void main() {
 
       expect(cubit.state.addresses, [testHome, testMomsHome]);
       expect(cubit.state.address, testHome);
-      verifyNever(() => requests.fetchTechnician(any()));
+      verifyNever(() => requests.fetchListedTechnician(any()));
       await cubit.close();
     });
 
     test('names the technician asked first', () async {
       when(
-        () => requests.fetchTechnician('tech-1'),
+        () => requests.fetchListedTechnician('tech-1'),
       ).thenAnswer((_) async => Ok(testTechnicianProfile()));
       final cubit = build(technicianId: 'tech-1');
       await cubit.start();
@@ -116,7 +116,7 @@ void main() {
       'goes on without the technician when they cannot be fetched',
       () async {
         when(
-          () => requests.fetchTechnician('tech-1'),
+          () => requests.fetchListedTechnician('tech-1'),
         ).thenAnswer((_) async => const Err(NetworkFailure()));
         final cubit = build(technicianId: 'tech-1');
         await cubit.start();
@@ -501,7 +501,7 @@ void main() {
         (_) async => const Ok(SentRequest(id: 'request-9', sentTo: 1)),
       );
       when(
-        () => requests.fetchTechnician('tech-1'),
+        () => requests.fetchListedTechnician('tech-1'),
       ).thenAnswer((_) async => Ok(testTechnicianProfile()));
       final cubit = await filled(technicianId: 'tech-1');
       cubit.editDescription('');
@@ -519,7 +519,7 @@ void main() {
 
     test('asks no one first when the form could not name them', () async {
       when(
-        () => requests.fetchTechnician('tech-1'),
+        () => requests.fetchListedTechnician('tech-1'),
       ).thenAnswer((_) async => const Err(NetworkFailure()));
       when(() => requests.sendRequest(any())).thenAnswer(
         (_) async => const Ok(SentRequest(id: 'request-9', sentTo: 3)),

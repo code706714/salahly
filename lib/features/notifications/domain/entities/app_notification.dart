@@ -14,12 +14,16 @@ enum NotificationKind {
   priceChange,
   requestCancelledByTechnician,
   requestExpired,
+  offerRevised,
+  offerWithdrawn,
+  counterAccepted,
 
   // The technician's.
   newRequest,
   offerPicked,
   offerNotPicked,
   requestCancelledByConsumer,
+  offerCountered,
   verificationApproved,
   verificationRejected,
 

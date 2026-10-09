@@ -25,6 +25,7 @@ import 'package:salahly/features/marketplace/presentation/cubit/incoming_request
 import 'package:salahly/features/marketplace/presentation/cubit/offer_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/incoming_labels.dart';
 import 'package:salahly/features/marketplace/presentation/widgets/incoming/incoming_request_details.dart';
+import 'package:salahly/features/marketplace/presentation/widgets/incoming/offer_negotiation.dart';
 import 'package:salahly/features/marketplace/presentation/widgets/incoming/sent_offer_card.dart';
 import 'package:salahly/features/marketplace/presentation/widgets/marketplace_failure_message.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
@@ -311,9 +312,13 @@ class _RequestScreenState extends State<_RequestScreen> {
             ),
           ),
           const SizedBox(height: 14),
-          if (offer != null)
-            SentOfferCard(request: request, offer: offer, now: state.now)
-          else if (notice != null)
+          if (offer != null) ...[
+            SentOfferCard(request: request, offer: offer, now: state.now),
+            if (standing == IncomingStanding.offerSent) ...[
+              const SizedBox(height: 12),
+              OfferNegotiation(offer: offer),
+            ],
+          ] else if (notice != null)
             _Notice(
               text: notice,
               action: credits == 0 && standing == IncomingStanding.open

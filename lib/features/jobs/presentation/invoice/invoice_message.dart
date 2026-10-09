@@ -15,7 +15,7 @@ import 'package:salahly/l10n/generated/app_localizations.dart';
 ///     الباقي: 400 ج.م
 ///     تقدر تدفع كاش أو تحويل إنستاباي أو فودافون كاش.
 ///
-///     محمود السيد · فني تكييف
+///     محمود السيد · فني صيانة
 ///     0100 234 5678
 ///
 /// A settled invoice thanks the customer instead of asking for the rest.

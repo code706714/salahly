@@ -48,7 +48,7 @@ void main() {
   );
   final address = problem.copyWith(
     step: NewRequestStep.address,
-    issue: RequestIssue.notCooling,
+    issue: () => RequestIssue.notCooling,
     addresses: [testHome, testMomsHome],
     addressId: 'address-1',
   );
@@ -109,8 +109,8 @@ void main() {
       expect(find.text(l10n.newRequestTitle('ms', 'تكييف')), findsOneWidget);
       expect(find.text(l10n.newRequestStep(1)), findsOneWidget);
       expect(find.text(l10n.newRequestIssueTitle), findsOneWidget);
-      for (final issue in RequestIssue.values) {
-        expect(find.text(requestIssueLabel(l10n, issue)), findsOneWidget);
+      for (final choice in problem.issueChoices) {
+        expect(find.text(choice.name), findsOneWidget);
       }
       expect(find.text(l10n.newRequestDictate('ms')), findsOneWidget);
       expect(
@@ -182,7 +182,7 @@ void main() {
     ) async {
       await pumpView(
         tester,
-        problem.copyWith(issue: RequestIssue.other, showsErrors: true),
+        problem.copyWith(issue: () => RequestIssue.other, showsErrors: true),
       );
 
       expect(find.text(l10n.newRequestIssueRequired('ms')), findsNothing);

@@ -49,7 +49,7 @@
   "welcomeTitle": "أهلاً بيك\nهتستخدم الأبلكيشن إزاي؟",
   "welcomeSubtitle": "اختار اللي يناسبك دلوقتي، وتقدر تغيّره بعدين من حسابك.",
   "roleConsumerTitle": "محتاج فني",
-  "roleConsumerBody": "اطلب فني تكييف لبيتك، وخد لحد 3 عروض بأسعارها قبل ما تختار.",
+  "roleConsumerBody": "اطلب فني لبيتك: تكييف أو سباكة أو كهرباء أو غسالات أو ثلاجات. وخد لحد 5 عروض بأسعارها قبل ما تختار.",
   "roleTechnicianTitle": "أنا فني",
   "roleTechnicianBody": "نظّم مواعيدك، ابعت عرض السعر والفاتورة على الواتساب، واستلم طلبات من منطقتك.",
   "trustBadge": "كل الفنيين موثّقين بالبطاقة ورقم الموبايل",
@@ -135,14 +135,6 @@
   "techYearsInvalid": "اكتب عدد السنين من 0 لـ 60",
   "techServicesTitle": "بتشتغل في إيه وبكام؟",
   "techServicesHint": "علّم على الخدمات اللي بتعملها واكتب سعرها المبدئي. العميل بيشوفه على صفحتك، وإنت بتحدد السعر النهائي في كل عرض.",
-  "categoryComingSoon": "{name} · قريب",
-  "@categoryComingSoon": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "priceFrom": "من",
   "techServicesRequired": "علّم على خدمة واحدة على الأقل",
   "techPriceInvalid": "اكتب سعر كل خدمة علّمت عليها",
@@ -1126,7 +1118,7 @@
   },
   "invoiceTitleUnnumbered": "الفاتورة",
   "invoiceFromQuote": "اتعملت من عرض السعر",
-  "invoiceSignature": "{name} · فني تكييف",
+  "invoiceSignature": "{name} · فني صيانة",
   "@invoiceSignature": {
     "placeholders": {
       "name": {
@@ -1368,7 +1360,7 @@
   "requestTitle": "طلبك",
   "requestLoadFailed": "مقدرناش نجيب الطلب دلوقتي.",
   "technicianNoCredits": "خلصت شغلاناتك من المنصة، فمينفعش تبعت عروض دلوقتي.",
-  "technicianRequestClosed": "الطلب ده اتقفل: العميل اختار فني أو لغاه أو وصله 3 عروض.",
+  "technicianRequestClosed": "الطلب ده اتقفل: العميل اختار فني أو لغاه أو وصله 5 عروض.",
   "technicianInvalidTime": "اختار معاد جوه اليوم والوقت اللي العميل طلبهم.",
   "technicianAlreadyOffered": "إنت بعت عرض على الطلب ده قبل كده.",
   "requestIssueNotCooling": "مش بيبرّد",
@@ -2557,7 +2549,7 @@
     }
   },
   "newRequestDescription": "احكي باختصار",
-  "newRequestDescriptionHint": "مثلاً: التكييف شغال بس الهوا مش ساقع، شارب 1.5 حصان",
+  "newRequestDescriptionHint": "مثلاً: الجهاز شغال بس مش بيعمل المطلوب، وبدأ من إمبارح",
   "newRequestDescriptionRequired": "{honorific, select, ms{اكتبي المشكلة باختصار عشان الفنيين يفهموها} other{اكتب المشكلة باختصار عشان الفنيين يفهموها}}",
   "@newRequestDescriptionRequired": {
     "placeholders": {
@@ -2732,7 +2724,7 @@
       }
     }
   },
-  "newRequestSentOffers": "هيجيلك إشعار أول ما يوصل عرض، ولحد 3 عروض.",
+  "newRequestSentOffers": "هيجيلك إشعار أول ما يوصل عرض، ولحد 5 عروض.",
   "@newRequestSentOffers": {},
   "newRequestSentToNobody": "{honorific, select, ms{مفيش فني {category} متاح قريب منك دلوقتي، بس طلبك لسه مستني. لو مجالكيش عرض في ساعتين هنبعته لفنيين أبعد شوية.} other{مفيش فني {category} متاح قريب منك دلوقتي، بس طلبك لسه مستني. لو مجالكش عرض في ساعتين هنبعته لفنيين أبعد شوية.}}",
   "@newRequestSentToNobody": {
@@ -3050,7 +3042,7 @@
       }
     }
   },
-  "incomingClosedFull": "وصله 3 عروض",
+  "incomingClosedFull": "وصله 5 عروض",
   "incomingClosedCancelled": "{honorific, select, ms{العميلة لغت الطلب} other{العميل لغى الطلب}}",
   "@incomingClosedCancelled": {
     "placeholders": {
@@ -4173,7 +4165,7 @@
   "adminVerifyCheckName": "الاسم في البطاقة زي الاسم المسجّل",
   "adminVerifyCheckFace": "الصورة الشخصية شبه صورة البطاقة",
   "adminVerifyCheckValid": "البطاقة سارية ومش متقصوصة",
-  "adminVerifyCheckTrade": "كلّمناه واتأكدنا إنه فني تكييف فعلاً",
+  "adminVerifyCheckTrade": "كلّمناه واتأكدنا إنه فني في مجاله فعلاً",
   "adminVerifyApprove": "وثّق الفني",
   "adminVerifyReject": "ارفض",
   "adminVerifyNote": "الفني بيوصله إشعار بالنتيجة. صور البطاقة بيشوفها فريق التوثيق بس، وفتحها بيتسجّل في سجل العمليات.",
@@ -4590,5 +4582,353 @@
   "adminAuditCreateArea": "إضافة منطقة",
   "adminAuditUpdateArea": "تعديل منطقة",
   "adminAuditSetAreaOpen": "فتح أو قفل منطقة",
-  "accountCredits": "رصيدك من المنصة"
+  "accountCredits": "رصيدك من المنصة",
+  "requestIssuePlumbingLeak": "تسريب مية",
+  "requestIssuePlumbingClog": "الصرف مسدود",
+  "requestIssuePlumbingMixer": "الخلاط بايظ",
+  "requestIssuePlumbingHeater": "السخان بايظ",
+  "requestIssuePlumbingLowPressure": "المية ضعيفة",
+  "requestIssueElectricalNoPower": "الكهرباء قاطعة",
+  "requestIssueElectricalShort": "ماس أو الكهرباء بتفصل",
+  "requestIssueElectricalOutlet": "بريزة أو مفتاح بايظ",
+  "requestIssueElectricalLighting": "إضاءة أو نجف",
+  "requestIssueElectricalPanel": "لوحة الكهرباء",
+  "requestIssueWasherNotSpinning": "مش بتعصر",
+  "requestIssueWasherNotDraining": "مش بتصرّف المية",
+  "requestIssueWasherLeaking": "بتسرّب مية",
+  "requestIssueWasherNoisy": "صوتها عالي",
+  "requestIssueWasherNotStarting": "مش بتشتغل",
+  "requestIssueFridgeNotCooling": "مش بتبرّد",
+  "requestIssueFridgeIceBuildup": "تلج زيادة في الفريزر",
+  "requestIssueFridgeNoisy": "صوتها عالي",
+  "requestIssueFridgeLeaking": "بتسرّب مية",
+  "requestIssueFridgeDoorSeal": "جوان الباب بايظ",
+  "requestTitleCategoryIssue": "{category}: {issue}",
+  "@requestTitleCategoryIssue": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      },
+      "issue": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerOfferUnavailable": "{honorific, select, ms{العرض ده مبقاش متاح. اختاري عرض تاني.} other{العرض ده مبقاش متاح. اختار عرض تاني.}}",
+  "@consumerOfferUnavailable": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerNegotiationLimit": "{honorific, select, ms{خلصت مرات طلب السعر على العرض ده. اقبلي السعر أو اختاري عرض تاني.} other{خلصت مرات طلب السعر على العرض ده. اقبل السعر أو اختار عرض تاني.}}",
+  "@consumerNegotiationLimit": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerCounterPending": "لسه مستنيين رد الفني على السعر المطلوب.",
+  "consumerInvalidPrice": "{honorific, select, ms{اكتبي سعر أقل من سعر العرض.} other{اكتب سعر أقل من سعر العرض.}}",
+  "@consumerInvalidPrice": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "technicianNotVerified": "لازم بطاقتك تتوثّق الأول عشان تبعت عروض.",
+  "technicianOfferUnavailable": "العرض ده اتسحب أو اتقفل.",
+  "technicianNegotiationLimit": "خلصت مرات تنزيل السعر على العرض ده.",
+  "technicianNoCounter": "مفيش سعر مستني ردك على العرض ده.",
+  "technicianInvalidPrice": "السعر لازم يكون أقل من سعرك دلوقتي وأعلى من السعر المطلوب.",
+  "navTechnicians": "الفنيين",
+  "navOpenRequests": "طلبات متاحة",
+  "directoryTitle": "الفنيين",
+  "directoryAll": "الكل",
+  "directoryAllAreas": "كل المناطق",
+  "directorySortRating": "الأعلى تقييم",
+  "directorySortReviews": "الأكتر تقييمات",
+  "directorySortExperience": "الأكتر خبرة",
+  "directorySortJobs": "الأكتر شغلانات",
+  "directorySortPrice": "الأرخص",
+  "directoryEmpty": "مفيش فنيين بالاختيار ده",
+  "directoryEmptyHint": "جرّب مجال أو منطقة تانية.",
+  "openRequestsTitle": "طلبات متاحة",
+  "openRequestsLocked": "الطلبات المتاحة بتظهر لما بطاقتك تتوثّق. وقتها هتشوف كل طلب في مجالك ومنطقتك وتبعت عرضك عليه.",
+  "openRequestsEmpty": "مفيش طلبات متاحة دلوقتي",
+  "openRequestsEmptyHint": "أول ما يظهر طلب في مجالك ومنطقتك هتلاقيه هنا وهيجيلك إشعار.",
+  "newRequestCategoryTitle": "{honorific, select, ms{محتاجة إيه؟} other{محتاج إيه؟}}",
+  "@newRequestCategoryTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "offersCounter": "{honorific, select, ms{اطلبي سعر أقل} other{اطلب سعر أقل}}",
+  "@offersCounter": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "offersThread": "تاريخ السعر",
+  "offersAwaitingTechnician": "{honorific, select, ms{طلبتي {price}.} other{طلبت {price}.}} مستنيين رد الفني.",
+  "@offersAwaitingTechnician": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "counterTitle": "{honorific, select, ms{اطلبي سعر أقل} other{اطلب سعر أقل}}",
+  "@counterTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "counterBody": "{honorific, select, ms{سعر {name} دلوقتي {price}. اكتبي السعر اللي يناسبك بالجنيه. فاضل ليكي} other{سعر {name} دلوقتي {price}. اكتب السعر اللي يناسبك بالجنيه. فاضل ليك}} {count, plural, =1{مرة واحدة} =2{مرتين} few{{count} مرات} other{{count} مرة}}.",
+  "@counterBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "counterSend": "{honorific, select, ms{ابعتي السعر} other{ابعت السعر}}",
+  "@counterSend": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "priceRange": "من {min} لـ {max} ج.م",
+  "@priceRange": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "priceDialogCancel": "إلغاء",
+  "offerThreadTitle": "تاريخ السعر",
+  "offerThreadFailed": "مقدرناش نجيب تاريخ السعر. جرّب تاني.",
+  "threadConsumerOffer": "الفني بدأ بسعر {price}",
+  "@threadConsumerOffer": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "threadConsumerCounter": "{honorific, select, ms{إنتي طلبتي سعر {price}} other{إنت طلبت سعر {price}}}",
+  "@threadConsumerCounter": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "threadConsumerRevise": "الفني نزّل السعر لـ {price}",
+  "@threadConsumerRevise": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "threadConsumerAccept": "الفني وافق على السعر {price}",
+  "@threadConsumerAccept": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "threadConsumerWithdraw": "الفني سحب العرض",
+  "threadTechnicianOffer": "إنت بدأت بسعر {price}",
+  "@threadTechnicianOffer": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "threadTechnicianCounter": "اتطلب منك سعر {price}",
+  "@threadTechnicianCounter": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "threadTechnicianRevise": "إنت نزّلت السعر لـ {price}",
+  "@threadTechnicianRevise": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "threadTechnicianAccept": "إنت وافقت على السعر {price}",
+  "@threadTechnicianAccept": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "threadTechnicianWithdraw": "إنت سحبت العرض",
+  "incomingOfferWithdrawn": "سحبت عرضك",
+  "negCounterTitle": "اتطلب منك سعر {price}",
+  "@negCounterTitle": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "negCounterBody": "وافق على السعر ده وتاخد الشغلانة، أو نزّل سعرك، أو سيب عرضك زي ما هو.",
+  "negAccept": "وافق على {price}",
+  "@negAccept": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "negAcceptTitle": "توافق على {price}؟",
+  "@negAcceptTitle": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "negAcceptBody": "العميل هيختارك بالسعر ده فورًا، وهتتخصم شغلانة من رصيدك. العنوان ورقم العميل هيظهروا في الشغلانة.",
+  "negAcceptConfirm": "وافق",
+  "negKeep": "لأ، سيبه",
+  "negRevise": "نزّل السعر",
+  "negReviseTitle": "نزّل سعرك",
+  "negReviseBody": "سعرك دلوقتي {price}. تقدر تنزّله {count, plural, =1{مرة واحدة} =2{مرتين} few{{count} مرات} other{{count} مرة}} كمان.",
+  "@negReviseBody": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "negReviseConfirm": "نزّل",
+  "negRevisionsLeft": "تقدر تنزّل السعر {count, plural, =1{مرة واحدة} =2{مرتين} few{{count} مرات} other{{count} مرة}} كمان",
+  "@negRevisionsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "negWithdraw": "اسحب العرض",
+  "negWithdrawTitle": "تسحب عرضك؟",
+  "negWithdrawBody": "العميل مش هيشوفه تاني، ومش هتقدر تبعت عرض تاني على الطلب ده.",
+  "negWithdrawConfirm": "اسحب",
+  "notifOfferRevised": "{name} نزّل السعر",
+  "@notifOfferRevised": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifOfferRevisedBody": "{honorific, select, ms{شوفي السعر الجديد واختاري.} other{شوف السعر الجديد واختار.}}",
+  "@notifOfferRevisedBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "notifOfferWithdrawn": "{name} سحب عرضه",
+  "@notifOfferWithdrawn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifOfferWithdrawnBody": "{honorific, select, ms{اختاري من العروض التانية.} other{اختار من العروض التانية.}}",
+  "@notifOfferWithdrawnBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "notifCounterAccepted": "{name} وافق على سعرك",
+  "@notifCounterAccepted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifCounterAcceptedBody": "{honorific, select, ms{اتفقتوا على السعر. تابعي طلبك.} other{اتفقتوا على السعر. تابع طلبك.}}",
+  "@notifCounterAcceptedBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "notifOfferCountered": "{honorific, select, ms{{name} عايزة سعر أقل} other{{name} عايز سعر أقل}}",
+  "@notifOfferCountered": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifOfferCounteredBody": "افتح الطلب وردّ على السعر.",
+  "offeringTitle": "خدماتي ومناطقي",
+  "offeringIntro": "غيّر خدماتك وأسعارها المبدئية ومناطقك وأيام شغلك، وبعدين احفظ. أي طلب مفتوح يناسب التغيير هيوصلك.",
+  "offeringSave": "احفظ",
+  "offeringSaved": "اتحفظت خدماتك ومناطقك.",
+  "offeringSavedWithRequests": "اتحفظت. وصلك {count, plural, =1{طلب مفتوح} =2{طلبين مفتوحين} few{{count} طلبات مفتوحة} other{{count} طلب مفتوح}} يناسبوك.",
+  "@offeringSavedWithRequests": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

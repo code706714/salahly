@@ -2,12 +2,13 @@ import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/error/supabase_errors.dart';
 import 'package:salahly/core/media/photo_uploader.dart';
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/core/time/calendar_date.dart';
 import 'package:salahly/features/marketplace/data/models/marketplace_models.dart';
-import 'package:salahly/features/marketplace/data/models/wire.dart';
 import 'package:salahly/features/marketplace/data/repositories/marketplace_errors.dart';
 import 'package:salahly/features/marketplace/domain/entities/complaint.dart';
 import 'package:salahly/features/marketplace/domain/entities/consumer_address.dart';
+import 'package:salahly/features/marketplace/domain/entities/offer_thread.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_draft.dart';
 import 'package:salahly/features/marketplace/domain/entities/review.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
@@ -117,9 +118,58 @@ class SupabaseConsumerRequestsRepository implements ConsumerRequestsRepository {
       });
 
   @override
+  Future<Result<List<TechnicianListing>>> browseTechnicians({
+    String? categoryId,
+    String? areaId,
+    TechnicianSort sort = TechnicianSort.rating,
+    int limit = technicianPageSize,
+    int offset = 0,
+  }) => _call(() async {
+    final json = await _client.rpc<List<dynamic>>(
+      'browse_technicians',
+      params: {
+        'p_category_id': categoryId,
+        'p_area_id': areaId,
+        'p_sort': toWire(sort),
+        'p_limit': limit,
+        'p_offset': offset,
+      },
+    );
+    return listFromWire(json).map(MarketplaceModels.listing).toList();
+  });
+
+  @override
+  Future<Result<TechnicianPublicProfile?>> fetchListedTechnician(String id) =>
+      _call(() async {
+        final json = await _client.rpc<Map<String, dynamic>?>(
+          'technician_public_profile',
+          params: {'p_technician_id': id},
+        );
+        return json == null ? null : MarketplaceModels.listedProfile(json);
+      });
+
+  @override
   Future<Result<void>> acceptOffer(String offerId) => _call(
     () => _client.rpc<void>('accept_offer', params: {'p_offer_id': offerId}),
   );
+
+  @override
+  Future<Result<void>> counterOffer(String offerId, int pricePiastres) => _call(
+    () => _client.rpc<void>(
+      'counter_offer',
+      params: {'p_offer_id': offerId, 'p_price_piastres': pricePiastres},
+    ),
+  );
+
+  @override
+  Future<Result<OfferThread?>> fetchOfferThread(String offerId) =>
+      _call(() async {
+        final json = await _client.rpc<Map<String, dynamic>?>(
+          'offer_thread',
+          params: {'p_offer_id': offerId},
+        );
+        return json == null ? null : MarketplaceModels.offerThread(json);
+      });
 
   @override
   Future<Result<void>> cancelRequest(String id) => _call(

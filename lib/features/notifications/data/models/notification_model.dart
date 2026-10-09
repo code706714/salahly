@@ -1,5 +1,5 @@
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
-import 'package:salahly/features/marketplace/data/models/wire.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_window.dart';
 import 'package:salahly/features/notifications/domain/entities/app_notification.dart';

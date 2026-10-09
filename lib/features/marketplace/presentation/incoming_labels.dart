@@ -93,10 +93,13 @@ enum IncomingStanding {
 
   /// The consumer picked another technician.
   notChosen,
+
+  /// They took their offer back.
+  withdrawn,
   cancelled,
   expired,
 
-  /// It has its three offers.
+  /// It has its five offers.
   full,
 
   /// Closed for a reason not known here.
@@ -117,6 +120,7 @@ IncomingStanding standingOf(
 }) {
   final offer = request.myOffer;
   if (offer?.status == OfferStatus.accepted) return IncomingStanding.chosen;
+  if (offer?.status == OfferStatus.withdrawn) return IncomingStanding.withdrawn;
   return switch (request.status) {
     RequestStatus.assigned => IncomingStanding.notChosen,
     _ when offer?.status == OfferStatus.notChosen => IncomingStanding.notChosen,
@@ -145,6 +149,7 @@ String? standingLabel(
     ),
     IncomingStanding.chosen => l10n.incomingOfferChosen(honorific),
     IncomingStanding.notChosen => l10n.incomingOfferNotChosen(honorific),
+    IncomingStanding.withdrawn => l10n.incomingOfferWithdrawn,
     IncomingStanding.cancelled => l10n.incomingClosedCancelled(honorific),
     IncomingStanding.expired => l10n.incomingClosedExpired,
     IncomingStanding.full => l10n.incomingClosedFull,

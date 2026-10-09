@@ -1,11 +1,11 @@
 import 'package:salahly/core/error/result.dart';
+import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/admin/data/models/request_models.dart';
 import 'package:salahly/features/admin/data/repositories/admin_rpc.dart';
 import 'package:salahly/features/admin/domain/entities/admin_complaint.dart';
 import 'package:salahly/features/admin/domain/entities/admin_request.dart';
 import 'package:salahly/features/admin/domain/entities/paged_result.dart';
 import 'package:salahly/features/admin/domain/repositories/requests_repository.dart';
-import 'package:salahly/features/marketplace/data/models/wire.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseRequestsRepository implements RequestsRepository {

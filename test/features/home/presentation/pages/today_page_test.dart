@@ -476,7 +476,7 @@ void main() {
       showRequests([
         testIncoming(myOffer: testMyOffer()),
         testIncoming(id: 'request-2', dismissed: true),
-        testIncoming(id: 'request-3', offerCount: 3),
+        testIncoming(id: 'request-3', offerCount: 5),
       ]);
       await pumpPage(tester);
 
