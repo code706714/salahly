@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 enum LedgerReason {
   requestSent,
   requestRefunded,
+  jobFinished,
   topup,
   adminAdjustment,
   freeGrant,
