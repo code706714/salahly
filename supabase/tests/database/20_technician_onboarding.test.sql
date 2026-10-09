@@ -19,9 +19,10 @@ insert into storage.objects (bucket_id, name, owner_id) values
   ('verification-docs', '00000000-0000-4000-8000-0000000000d2/20000000-0000-4000-8000-000000000003.jpg', '00000000-0000-4000-8000-0000000000d2'),
   ('verification-docs', '00000000-0000-4000-8000-0000000000d2/20000000-0000-4000-8000-000000000004.jpg', '00000000-0000-4000-8000-0000000000d2');
 
--- A service under a category that isn't open yet.
+-- A service under a category that isn't open (electrical is open in the catalog, so close it here).
 insert into public.services (id, category_id, name_ar, suggested_price_piastres)
 values ('electrical_wiring', 'electrical', 'تأسيس كهربا', 50000);
+update public.service_categories set is_active = false where id = 'electrical';
 
 create function pg_temp.sign_in_as(p_user_id uuid)
 returns void

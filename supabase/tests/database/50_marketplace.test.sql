@@ -157,7 +157,7 @@ select throws_ok(
 
 select throws_ok(
   $$select public.create_service_request(
-      'electrical', 'other', null, null, (select id from pg_temp.ids where name = 'home'),
+      'unicorn', 'other', null, null, (select id from pg_temp.ids where name = 'home'),
       pg_temp.tomorrow(), 'noon')$$,
   '22023',
   'invalid_category',
@@ -683,9 +683,14 @@ select is(
   'the consumer widens the time to any time that day'
 );
 
+-- Meant for one technician only (the other recipient is taken off).
 reset role;
+delete from public.request_recipients
+ where request_id = (select id from pg_temp.ids where name = 'r5')
+   and technician_id = '00000000-0000-4000-8000-0000000000a2';
 update public.service_requests
-   set created_at = now() - interval '3 hours'
+   set created_at = now() - interval '3 hours',
+       preferred_technician_id = '00000000-0000-4000-8000-0000000000a1'
  where id = (select id from pg_temp.ids where name = 'r5');
 select private.marketplace_housekeeping();
 
@@ -693,9 +698,9 @@ select ok(
   exists (
     select 1 from public.request_recipients
      where request_id = (select id from pg_temp.ids where name = 'r5')
-       and technician_id = '00000000-0000-4000-8000-0000000000a3'
+       and technician_id = '00000000-0000-4000-8000-0000000000a2'
   ),
-  'a request with no offer after two hours reaches technicians a bit further away'
+  'a request meant for one technician reaches the others after two hours with no offer'
 );
 
 update public.service_requests
@@ -730,7 +735,7 @@ select results_eq(
   'housekeeping records the expiry and gives the use back'
 );
 
--- At most three offers.
+-- Only verified technicians offer (the five-offer cap is in 85_marketplace_v2).
 update public.technician_profiles set job_credits = 5;
 insert into public.request_recipients (request_id, technician_id, distance_km)
 select (select id from pg_temp.ids where name = 'r1'), id, 1
@@ -756,9 +761,9 @@ select pg_temp.sign_in_as('00000000-0000-4000-8000-0000000000a4');
 select throws_ok(
   $$select public.send_offer(
       (select id from pg_temp.ids where name = 'r1'), null, 30000, pg_temp.at_cairo(13), null)$$,
-  'P0001',
-  'request_closed',
-  'a request takes at most three offers'
+  '42501',
+  'not_verified',
+  'a technician who isn''t verified can''t send an offer'
 );
 
 select * from finish();
