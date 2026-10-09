@@ -3183,6 +3183,7 @@
   "balanceLedgerRequestSent": "طلب اتبعت",
   "balanceLedgerOfferPicked": "عميل اختار عرضك",
   "balanceLedgerRefunded": "اترجّع استخدام",
+  "balanceLedgerJobFinished": "شغلانة خلصت",
   "balanceLedgerTopup": "شحن رصيد",
   "balanceLedgerAdjustment": "تعديل من صلحلي",
   "balanceLoadFailed": "{honorific, select, ms{مقدرناش نفتح الرصيد. اتأكدي من النت وجرّبي تاني.} other{مقدرناش نفتح الرصيد. اتأكد من النت وجرّب تاني.}}",
@@ -3227,7 +3228,7 @@
     }
   },
   "buyUsesTechnicianIntroNone": "خلصت أول شغلانتين ببلاش",
-  "buyUsesTechnicianIntroBody": "جالك من المنصة شغلانتين بـ 1,000 ج.م. من دلوقتي كل شغلانة من المنصة بتتخصم من رصيدك لما العميل يختار عرضك. رصيدك دلوقتي: {count, plural, =0{0 شغلانة} =1{شغلانة واحدة} =2{شغلانتين} few{{count} شغلانات} other{{count} شغلانة}}.",
+  "buyUsesTechnicianIntroBody": "جالك من المنصة شغلانتين بـ 1,000 ج.م. من دلوقتي كل شغلانة من المنصة بتتخصم من رصيدك لما تخلصها. رصيدك دلوقتي: {count, plural, =0{0 شغلانة} =1{شغلانة واحدة} =2{شغلانتين} few{{count} شغلانات} other{{count} شغلانة}}.",
   "@buyUsesTechnicianIntroBody": {
     "placeholders": {
       "count": {
@@ -3652,7 +3653,7 @@
       }
     }
   },
-  "notifOfferPickedBody": "{honorific, select, ms{العنوان ورقمها ظهروا في الشغلانة. اتخصمت شغلانة من رصيدك.} other{العنوان ورقمه ظهروا في الشغلانة. اتخصمت شغلانة من رصيدك.}}",
+  "notifOfferPickedBody": "{honorific, select, ms{العنوان ورقمها ظهروا في الشغلانة. هتتخصم شغلانة من رصيدك لما تخلصها.} other{العنوان ورقمه ظهروا في الشغلانة. هتتخصم شغلانة من رصيدك لما تخلصها.}}",
   "@notifOfferPickedBody": {
     "placeholders": {
       "honorific": {
@@ -3683,7 +3684,7 @@
       }
     }
   },
-  "notifCancelledByConsumerBody": "لو كانت شغلانة اتخصمت من رصيدك، رجعتلك.",
+  "notifCancelledByConsumerBody": "الشغلانة ماتخصمتش من رصيدك.",
   "notifVerificationApproved": "حسابك اتوثّق",
   "notifVerificationApprovedBody": "شارة \"موثّق\" ظهرت على صفحتك، وبقيت تستلم طلبات من المنصة.",
   "notifVerificationRejected": "حسابك ماتوثّقش",
@@ -4502,7 +4503,7 @@
   "adminSettingsPackOnSale": "على البيع",
   "adminSettingsPackOffSale": "مقفولة",
   "adminSettingsConsumerPacksNote": "الطلب اللي ماجالوش عروض مش بيتخصم. الإلغاء بيرجّع الطلب للرصيد.",
-  "adminSettingsTechnicianPacksNote": "الشغلانة بتتخصم لما العميل يختار عرض الفني، مش لما يبعته.",
+  "adminSettingsTechnicianPacksNote": "الشغلانة بتتخصم لما الفني يخلصها، مش لما العميل يختار عرضه.",
   "adminSettingsAddPack": "+ ضيف باقة",
   "adminSettingsAddPackTitle": "باقة جديدة",
   "adminSettingsPackUses": "عدد الاستخدامات",
@@ -4830,7 +4831,7 @@
       }
     }
   },
-  "negAcceptBody": "العميل هيختارك بالسعر ده فورًا، وهتتخصم شغلانة من رصيدك. العنوان ورقم العميل هيظهروا في الشغلانة.",
+  "negAcceptBody": "العميل هيختارك بالسعر ده فورًا، وهتتخصم شغلانة من رصيدك لما تخلصها. العنوان ورقم العميل هيظهروا في الشغلانة.",
   "negAcceptConfirm": "وافق",
   "negKeep": "لأ، سيبه",
   "negRevise": "نزّل السعر",

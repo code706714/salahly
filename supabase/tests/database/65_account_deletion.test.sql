@@ -375,8 +375,8 @@ select is(pg_temp.leftovers('00000000-0000-4000-8000-0000000000c1'), '',
   'no table still points at the person');
 select is(
   (select job_credits from public.technician_profiles where id = '00000000-0000-4000-8000-0000000000a1'),
-  (select t1_uses + 1 from before_c1),
-  'the technician of a job that had not started gets their use back'
+  (select t1_uses from before_c1),
+  'the technician of a job that had not started loses nothing: the use was never charged'
 );
 select is(
   (select status::text from public.jobs where id = (select id from pg_temp.ids where name = 'j_b')),

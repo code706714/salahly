@@ -35,6 +35,7 @@ String ledgerReasonLabel(
     UserRole.technician => l10n.balanceLedgerOfferPicked,
   },
   LedgerReason.requestRefunded => l10n.balanceLedgerRefunded,
+  LedgerReason.jobFinished => l10n.balanceLedgerJobFinished,
   LedgerReason.topup => l10n.balanceLedgerTopup,
   LedgerReason.adminAdjustment => l10n.balanceLedgerAdjustment,
   LedgerReason.freeGrant => l10n.balanceLedgerFreeGrant,

@@ -323,8 +323,8 @@ select results_eq(
            (select job_credits from public.technician_profiles where id = o.technician_id)
       from public.request_offers o join public.service_requests r on r.id = o.request_id
      where o.id = (select id from pg_temp.ids where name = 'o1')$$,
-  $$select 40000::bigint, 'accepted', 'assigned', (select id from pg_temp.ids where name = 'job1'), 40000::numeric, 4$$,
-  'the counter became the price, the request is assigned, the job carries that price and one use was taken'
+  $$select 40000::bigint, 'accepted', 'assigned', (select id from pg_temp.ids where name = 'job1'), 40000::numeric, 5$$,
+  'the counter became the price, the request is assigned, the job carries that price and no use is taken before it finishes'
 );
 select is(
   (select status::text from public.request_offers where id = (select id from pg_temp.ids where name = 'o2')),

@@ -1,7 +1,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(66);
+select plan(68);
 
 -- Consumers C and D; technicians: A and B cover Nasr City (B has no uses
 -- left), F covers Maadi only, P covers Nasr City but isn't verified yet.
@@ -391,8 +391,8 @@ select results_eq(
 
 select is(
   (select job_credits from public.technician_profiles),
-  1,
-  'being picked takes one of the technician''s uses'
+  2,
+  'being picked holds a use but takes none yet'
 );
 
 select is(
@@ -511,6 +511,17 @@ select is(
   'the technician finishes the platform job'
 );
 
+select is(
+  (select job_credits from public.technician_profiles),
+  1,
+  'finishing the platform job takes one of the technician''s uses'
+);
+select is(
+  (select count(*)::int from public.credit_ledger where reason = 'job_finished'),
+  1,
+  'and writes it in the technician''s ledger'
+);
+
 select pg_temp.sign_in_as('00000000-0000-4000-8000-0000000000c1');
 
 select lives_ok(
@@ -594,7 +605,7 @@ select results_eq(
       from public.jobs j, public.technician_profiles t
      where j.id = (select id from pg_temp.ids where name = 'job3')$$,
   $$values ('cancelled', 1)$$,
-  'when the consumer cancels after picking, the job is cancelled and the technician gets the use back'
+  'when the consumer cancels after picking, the job is cancelled and the technician loses nothing'
 );
 
 select is(
