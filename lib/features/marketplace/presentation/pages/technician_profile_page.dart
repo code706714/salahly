@@ -15,6 +15,7 @@ import 'package:salahly/core/widgets/app_back_button.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/catalog/domain/entities/service_category.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
@@ -77,32 +78,37 @@ class TechnicianProfileView extends StatelessWidget {
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            _Header(card: profile.card, trade: trade?.name),
-            // The stats card overlaps the header's bottom edge.
-            Transform.translate(
-              offset: const Offset(0, -14),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-                child: _Stats(profile: profile),
+        child: PullToRefresh(
+          onRefresh: context.read<TechnicianProfileCubit>().load,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              _Header(card: profile.card, trade: trade?.name),
+              // The stats card overlaps the header's bottom edge.
+              Transform.translate(
+                offset: const Offset(0, -14),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md,
+                  ),
+                  child: _Stats(profile: profile),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.md,
-                4,
-                AppSpacing.md,
-                18,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.md,
+                  4,
+                  AppSpacing.md,
+                  18,
+                ),
+                child: _Sections(
+                  profile: profile,
+                  trade: trade?.name,
+                  today: state.today,
+                ),
               ),
-              child: _Sections(
-                profile: profile,
-                trade: trade?.name,
-                today: state.today,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomActionBar(

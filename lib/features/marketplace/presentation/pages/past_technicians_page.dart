@@ -7,6 +7,7 @@ import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
 import 'package:salahly/core/widgets/initials_avatar.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
@@ -100,21 +101,24 @@ class PastTechniciansPage extends StatelessWidget {
             ),
           ),
         ),
-        MyRequestsStatus.ready => ListView(
-          padding: const EdgeInsets.fromLTRB(16, 18, 16, 24),
-          children: [
-            AppCard(
-              padding: EdgeInsets.zero,
-              child: Column(
-                children: [
-                  for (final (index, technician) in technicians.indexed) ...[
-                    if (index > 0) const Divider(),
-                    _TechnicianRow(technician: technician),
+        MyRequestsStatus.ready => PullToRefresh(
+          onRefresh: context.read<MyRequestsCubit>().load,
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 18, 16, 24),
+            children: [
+              AppCard(
+                padding: EdgeInsets.zero,
+                child: Column(
+                  children: [
+                    for (final (index, technician) in technicians.indexed) ...[
+                      if (index > 0) const Divider(),
+                      _TechnicianRow(technician: technician),
+                    ],
                   ],
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       },
     );

@@ -11,6 +11,7 @@ import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/busy_filled_button.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/request_cubit.dart';
@@ -40,41 +41,47 @@ class PriceChangeView extends StatelessWidget {
     final agreed = kept > 0 ? kept : details.chosenOffer?.pricePiastres ?? 0;
     return Scaffold(
       appBar: DetailHeader(title: l10n.priceChangeTitle(technician)),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _Lines(
-            lines: lines,
-            totalPiastres: details.job?.totalPiastres ?? 0,
-          ),
-          const SizedBox(height: 14),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: colors.inkSoft,
-              borderRadius: BorderRadius.circular(AppRadii.md),
+      body: PullToRefresh(
+        onRefresh: () => context.read<RequestCubit>().refresh(),
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            _Lines(
+              lines: lines,
+              totalPiastres: details.job?.totalPiastres ?? 0,
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.shield_outlined, color: colors.ink),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      l10n.priceChangeShield(honorific, formatPounds(agreed)),
-                      style: TextStyle(
-                        fontSize: 14,
-                        height: 1.6,
-                        color: colors.ink,
+            const SizedBox(height: 14),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: colors.inkSoft,
+                borderRadius: BorderRadius.circular(AppRadii.md),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.shield_outlined, color: colors.ink),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        l10n.priceChangeShield(honorific, formatPounds(agreed)),
+                        style: TextStyle(
+                          fontSize: 14,
+                          height: 1.6,
+                          color: colors.ink,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: _Answer(
         details: details,

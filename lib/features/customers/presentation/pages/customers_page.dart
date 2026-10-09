@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/router/app_routes.dart';
+import 'package:salahly/core/sync/sync_cubit.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/offline_banner.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/customers/presentation/add_customer.dart';
 import 'package:salahly/features/customers/presentation/cubit/customers_cubit.dart';
@@ -41,22 +43,25 @@ class CustomersView extends StatelessWidget {
     final total = state.customers?.length ?? 0;
     return Scaffold(
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
-          children: [
-            _Header(count: total),
-            const OfflineBanner(padding: EdgeInsets.only(top: 14)),
-            if (state.isEmpty)
-              const CustomersEmpty()
-            else if (!state.isLoading) ...[
-              const SizedBox(height: 14),
-              const _SearchField(),
-              const SizedBox(height: 14),
-              _FilterChips(state: state),
-              const SizedBox(height: 14),
-              _CustomerList(state: state),
+        child: PullToRefresh(
+          onRefresh: () => context.read<SyncCubit>().syncNow(),
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
+            children: [
+              _Header(count: total),
+              const OfflineBanner(padding: EdgeInsets.only(top: 14)),
+              if (state.isEmpty)
+                const CustomersEmpty()
+              else if (!state.isLoading) ...[
+                const SizedBox(height: 14),
+                const _SearchField(),
+                const SizedBox(height: 14),
+                _FilterChips(state: state),
+                const SizedBox(height: 14),
+                _CustomerList(state: state),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

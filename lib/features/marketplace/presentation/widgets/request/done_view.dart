@@ -12,6 +12,7 @@ import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/busy_filled_button.dart';
 import 'package:salahly/core/widgets/choice_chip_button.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/jobs/domain/entities/job.dart';
 import 'package:salahly/features/marketplace/domain/entities/review.dart';
@@ -210,99 +211,105 @@ class _ReviewForm extends StatelessWidget {
     final draft = state.draft;
     return Scaffold(
       appBar: DetailHeader(title: l10n.doneTitle),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          invoice,
-          const SizedBox(height: 16),
-          Text(
-            l10n.donePaidQuestion(honorific),
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            spacing: 8,
-            children: [
-              for (final payment in ConsumerPayment.values)
-                Expanded(
-                  child: ChoiceChipButton(
-                    label: _paymentLabel(l10n, payment),
-                    selected: state.paidWith == payment,
-                    minHeight: 48,
-                    onTap: () => form.payWith(payment),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          AppCard(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
-            child: Column(
+      body: PullToRefresh(
+        onRefresh: () => context.read<RequestCubit>().refresh(),
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            invoice,
+            const SizedBox(height: 16),
+            Text(
+              l10n.donePaidQuestion(honorific),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              spacing: 8,
               children: [
-                Text(
-                  l10n.doneRateQuestion(firstNameOf(technician)),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                _Stars(stars: state.stars, onRate: form.rate),
-                const SizedBox(height: 10),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: 24),
-                  child: Text(
-                    _ratingWord(l10n, state.stars) ?? '',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: colors.warning,
+                for (final payment in ConsumerPayment.values)
+                  Expanded(
+                    child: ChoiceChipButton(
+                      label: _paymentLabel(l10n, payment),
+                      selected: state.paidWith == payment,
+                      minHeight: 48,
+                      onTap: () => form.payWith(payment),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    for (final tag in ReviewTag.values)
-                      _TagChip(
-                        label: _tagLabel(l10n, tag),
-                        selected: state.tags.contains(tag),
-                        onTap: () => form.toggleTag(tag),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  onChanged: form.writeComment,
-                  minLines: 2,
-                  maxLines: 5,
-                  maxLength: _commentLimit,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  keyboardType: TextInputType.multiline,
-                  style: const TextStyle(fontSize: 15, height: 1.6),
-                  buildCounter:
-                      (
-                        context, {
-                        required currentLength,
-                        required isFocused,
-                        maxLength,
-                      }) => currentLength >= _counterFrom
-                      ? Text('$currentLength/$maxLength')
-                      : null,
-                  decoration: InputDecoration(
-                    hintText: l10n.doneComment(honorific),
-                    hintStyle: TextStyle(fontSize: 15, color: colors.inkMuted),
-                    contentPadding: AppSpacing.textArea,
-                  ),
-                ),
               ],
             ),
-          ),
-        ],
+            const SizedBox(height: 16),
+            AppCard(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
+              child: Column(
+                children: [
+                  Text(
+                    l10n.doneRateQuestion(firstNameOf(technician)),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  _Stars(stars: state.stars, onRate: form.rate),
+                  const SizedBox(height: 10),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 24),
+                    child: Text(
+                      _ratingWord(l10n, state.stars) ?? '',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: colors.warning,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final tag in ReviewTag.values)
+                        _TagChip(
+                          label: _tagLabel(l10n, tag),
+                          selected: state.tags.contains(tag),
+                          onTap: () => form.toggleTag(tag),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    onChanged: form.writeComment,
+                    minLines: 2,
+                    maxLines: 5,
+                    maxLength: _commentLimit,
+                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                    keyboardType: TextInputType.multiline,
+                    style: const TextStyle(fontSize: 15, height: 1.6),
+                    buildCounter:
+                        (
+                          context, {
+                          required currentLength,
+                          required isFocused,
+                          maxLength,
+                        }) => currentLength >= _counterFrom
+                        ? Text('$currentLength/$maxLength')
+                        : null,
+                    decoration: InputDecoration(
+                      hintText: l10n.doneComment(honorific),
+                      hintStyle: TextStyle(
+                        fontSize: 15,
+                        color: colors.inkMuted,
+                      ),
+                      contentPadding: AppSpacing.textArea,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomActionBar(
         child: BusyFilledButton(
@@ -440,87 +447,101 @@ class _Reviewed extends StatelessWidget {
     final comment = review.comment;
     return Scaffold(
       appBar: DetailHeader(title: l10n.doneTitle),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          invoice,
-          const SizedBox(height: 24),
-          Center(
-            child: Container(
-              width: 72,
-              height: 72,
-              decoration: BoxDecoration(
-                color: colors.successSoft,
-                shape: BoxShape.circle,
+      body: PullToRefresh(
+        onRefresh: () => context.read<RequestCubit>().refresh(),
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            invoice,
+            const SizedBox(height: 24),
+            Center(
+              child: Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: colors.successSoft,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.check_rounded,
+                  size: 36,
+                  color: colors.success,
+                ),
               ),
-              child: Icon(Icons.check_rounded, size: 36, color: colors.success),
             ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            l10n.doneThanks,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            l10n.doneThanksBody(honorific, firstNameOf(technician)),
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 15, height: 1.7, color: colors.inkMuted),
-          ),
-          const SizedBox(height: 20),
-          AppCard(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-            child: Column(
-              children: [
-                Text(
-                  l10n.doneYourRating,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: colors.inkMuted,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                _Stars(stars: review.stars, size: 28),
-                Text(
-                  _ratingWord(l10n, review.stars) ?? '',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: colors.warning,
-                  ),
-                ),
-                if (review.tags.isNotEmpty) ...[
-                  const SizedBox(height: 10),
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      for (final tag in ReviewTag.values)
-                        if (review.tags.contains(tag))
-                          _TagChip(label: _tagLabel(l10n, tag), selected: true),
-                    ],
-                  ),
-                ],
-                if (comment != null) ...[
-                  const SizedBox(height: 10),
+            const SizedBox(height: 10),
+            Text(
+              l10n.doneThanks,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              l10n.doneThanksBody(honorific, firstNameOf(technician)),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 15,
+                height: 1.7,
+                color: colors.inkMuted,
+              ),
+            ),
+            const SizedBox(height: 20),
+            AppCard(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+              child: Column(
+                children: [
                   Text(
-                    comment,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 15, height: 1.6),
+                    l10n.doneYourRating,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: colors.inkMuted,
+                    ),
                   ),
+                  const SizedBox(height: 6),
+                  _Stars(stars: review.stars, size: 28),
+                  Text(
+                    _ratingWord(l10n, review.stars) ?? '',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: colors.warning,
+                    ),
+                  ),
+                  if (review.tags.isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        for (final tag in ReviewTag.values)
+                          if (review.tags.contains(tag))
+                            _TagChip(
+                              label: _tagLabel(l10n, tag),
+                              selected: true,
+                            ),
+                      ],
+                    ),
+                  ],
+                  if (comment != null) ...[
+                    const SizedBox(height: 10),
+                    Text(
+                      comment,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 15, height: 1.6),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          if (details.hasOpenComplaint)
-            const OpenComplaintNote()
-          else
-            Center(child: ComplaintButton(requestId: details.id)),
-        ],
+            const SizedBox(height: 12),
+            if (details.hasOpenComplaint)
+              const OpenComplaintNote()
+            else
+              Center(child: ComplaintButton(requestId: details.id)),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomActionBar(
         child: FilledButton(

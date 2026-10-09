@@ -235,4 +235,17 @@ void main() {
       expect(widen.onPressed, isNull);
     });
   });
+
+  testWidgets('pulling the page down fetches the request again', (
+    tester,
+  ) async {
+    when(harness.request.refresh).thenAnswer((_) async {});
+    harness.show(liveRequest());
+    await pumpView(tester);
+
+    await tester.fling(find.byType(ListView), const Offset(0, 400), 1000);
+    await tester.pumpAndSettle();
+
+    verify(harness.request.refresh).called(1);
+  });
 }

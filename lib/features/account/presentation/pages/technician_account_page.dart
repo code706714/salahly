@@ -10,11 +10,13 @@ import 'package:salahly/core/theme/app_theme.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
 import 'package:salahly/core/widgets/initials_avatar.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/core/widgets/status_pill.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/domain/entities/verification_status.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
+import 'package:salahly/features/account/presentation/refresh_technician.dart';
 import 'package:salahly/features/account/presentation/widgets/sign_out_dialog.dart';
 import 'package:salahly/features/balance/presentation/balance_navigation.dart';
 import 'package:salahly/features/balance/presentation/uses_left.dart';
@@ -50,58 +52,63 @@ class TechnicianAccountPage extends StatelessWidget {
           ? null
           : SafeArea(
               top: false,
-              child: ListView(
-                padding: const EdgeInsets.all(16),
-                children: [
-                  _ProfileHeader(profile: profile),
-                  const SizedBox(height: 16),
-                  const _CreditsCard(),
-                  const SizedBox(height: 16),
-                  _Group(
-                    children: [
-                      _Row(
-                        label: l10n.offeringTitle,
-                        onTap: () => context.push(AppRoutes.technicianOffering),
-                      ),
-                      _Row(
-                        label: l10n.balanceTitle,
-                        onTap: () => context.push(AppRoutes.technicianBalance),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  _GroupLabel(l10n.accountHelp),
-                  const SizedBox(height: 16),
-                  _Group(
-                    children: [
-                      _Row(
-                        label: l10n.legalTermsTitle,
-                        onTap: () => context.push(AppRoutes.terms),
-                      ),
-                      _Row(
-                        label: l10n.legalPrivacyTitle,
-                        onTap: () => context.push(AppRoutes.privacy),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  _Group(
-                    children: [
-                      _Row(
-                        label: l10n.signOut,
-                        opensPage: false,
-                        onTap: () => _signOut(context),
-                      ),
-                      _Row(
-                        label: l10n.acctDeleteRow,
-                        opensPage: false,
-                        danger: true,
-                        onTap: () =>
-                            context.push(AppRoutes.technicianDeleteAccount),
-                      ),
-                    ],
-                  ),
-                ],
+              child: PullToRefresh(
+                onRefresh: () => refreshTechnician(context),
+                child: ListView(
+                  padding: const EdgeInsets.all(16),
+                  children: [
+                    _ProfileHeader(profile: profile),
+                    const SizedBox(height: 16),
+                    const _CreditsCard(),
+                    const SizedBox(height: 16),
+                    _Group(
+                      children: [
+                        _Row(
+                          label: l10n.offeringTitle,
+                          onTap: () =>
+                              context.push(AppRoutes.technicianOffering),
+                        ),
+                        _Row(
+                          label: l10n.balanceTitle,
+                          onTap: () =>
+                              context.push(AppRoutes.technicianBalance),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    _GroupLabel(l10n.accountHelp),
+                    const SizedBox(height: 16),
+                    _Group(
+                      children: [
+                        _Row(
+                          label: l10n.legalTermsTitle,
+                          onTap: () => context.push(AppRoutes.terms),
+                        ),
+                        _Row(
+                          label: l10n.legalPrivacyTitle,
+                          onTap: () => context.push(AppRoutes.privacy),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    _Group(
+                      children: [
+                        _Row(
+                          label: l10n.signOut,
+                          opensPage: false,
+                          onTap: () => _signOut(context),
+                        ),
+                        _Row(
+                          label: l10n.acctDeleteRow,
+                          opensPage: false,
+                          danger: true,
+                          onTap: () =>
+                              context.push(AppRoutes.technicianDeleteAccount),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
     );

@@ -12,6 +12,7 @@ import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/initials_avatar.dart';
 import 'package:salahly/core/widgets/money_text.dart';
 import 'package:salahly/core/widgets/offline_banner.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/core/widgets/section_header.dart';
 import 'package:salahly/core/widgets/status_pill.dart';
 import 'package:salahly/core/widgets/whatsapp_button.dart';
@@ -19,6 +20,7 @@ import 'package:salahly/features/account/domain/entities/user_profile.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/domain/entities/verification_status.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
+import 'package:salahly/features/account/presentation/refresh_technician.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/customers/presentation/add_customer.dart';
 import 'package:salahly/features/home/presentation/cubit/today_cubit.dart';
@@ -74,39 +76,42 @@ class TodayView extends StatelessWidget {
     return Scaffold(
       floatingActionButton: showsJobs ? const NewJobButton() : null,
       body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.fromLTRB(16, 20, 16, showsJobs ? 140 : 24),
-          children: [
-            _Header(
-              profile: profile,
-              now: state.now,
-              isFirstDay: state.isFirstDay,
-            ),
-            VerificationBanner(
-              status: profile.technician?.verificationStatus,
-              padding: const EdgeInsets.only(top: 16),
-            ),
-            const OfflineBanner(padding: EdgeInsets.only(top: 16)),
-            if (state.isFirstDay) ...[
-              if (requests != null) ...[const SizedBox(height: 16), requests],
-              const _FirstSteps(),
-            ] else if (showsJobs) ...[
-              if (state.owedPiastres > 0) ...[
-                const SizedBox(height: 16),
-                _OwedCard(state: state),
-              ],
-              if (requests != null) ...[const SizedBox(height: 16), requests],
-              const SizedBox(height: 20),
-              SectionHeader(
-                title: AppLocalizations.of(context).todayScheduleTitle,
-                note: AppLocalizations.of(
-                  context,
-                ).jobCount(state.schedule!.length),
+        child: PullToRefresh(
+          onRefresh: () => refreshTechnician(context),
+          child: ListView(
+            padding: EdgeInsets.fromLTRB(16, 20, 16, showsJobs ? 140 : 24),
+            children: [
+              _Header(
+                profile: profile,
+                now: state.now,
+                isFirstDay: state.isFirstDay,
               ),
-              const SizedBox(height: 16),
-              ..._schedule(state, profile),
+              VerificationBanner(
+                status: profile.technician?.verificationStatus,
+                padding: const EdgeInsets.only(top: 16),
+              ),
+              const OfflineBanner(padding: EdgeInsets.only(top: 16)),
+              if (state.isFirstDay) ...[
+                if (requests != null) ...[const SizedBox(height: 16), requests],
+                const _FirstSteps(),
+              ] else if (showsJobs) ...[
+                if (state.owedPiastres > 0) ...[
+                  const SizedBox(height: 16),
+                  _OwedCard(state: state),
+                ],
+                if (requests != null) ...[const SizedBox(height: 16), requests],
+                const SizedBox(height: 20),
+                SectionHeader(
+                  title: AppLocalizations.of(context).todayScheduleTitle,
+                  note: AppLocalizations.of(
+                    context,
+                  ).jobCount(state.schedule!.length),
+                ),
+                const SizedBox(height: 16),
+                ..._schedule(state, profile),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

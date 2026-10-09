@@ -185,4 +185,18 @@ void main() {
       'tech-1',
     );
   });
+
+  testWidgets('pulling the page down fetches the requests again', (
+    tester,
+  ) async {
+    final blocs = await pumpPage(
+      tester,
+      ConsumerScreenBlocs(requests: requests),
+    );
+
+    await tester.fling(find.byType(ListView), const Offset(0, 400), 1000);
+    await tester.pumpAndSettle();
+
+    verify(blocs.myRequests.load).called(1);
+  });
 }

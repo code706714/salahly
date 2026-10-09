@@ -12,6 +12,7 @@ import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/busy_filled_button.dart';
 import 'package:salahly/core/widgets/choice_chip_button.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
+import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/balance/presentation/balance_navigation.dart';
@@ -279,69 +280,72 @@ class _RequestScreenState extends State<_RequestScreen> {
 
     return Scaffold(
       appBar: DetailHeader(title: l10n.incomingRequestTitle),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          IncomingRequestDetails(
-            request: request,
-            photoUrls: state.photoUrls,
-            now: state.now,
-          ),
-          const SizedBox(height: 14),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.person_outline_rounded,
-                  size: 18,
-                  color: colors.inkMuted,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    l10n.incomingSentTo(request.sentTo, request.offerCount),
-                    style: TextStyle(
-                      fontSize: 14,
-                      height: 1.6,
-                      color: colors.inkMuted,
+      body: PullToRefresh(
+        onRefresh: context.read<OfferCubit>().fetchRequest,
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            IncomingRequestDetails(
+              request: request,
+              photoUrls: state.photoUrls,
+              now: state.now,
+            ),
+            const SizedBox(height: 14),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.person_outline_rounded,
+                    size: 18,
+                    color: colors.inkMuted,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      l10n.incomingSentTo(request.sentTo, request.offerCount),
+                      style: TextStyle(
+                        fontSize: 14,
+                        height: 1.6,
+                        color: colors.inkMuted,
+                      ),
                     ),
                   ),
-                ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+            if (offer != null) ...[
+              SentOfferCard(request: request, offer: offer, now: state.now),
+              if (standing == IncomingStanding.offerSent) ...[
+                const SizedBox(height: 12),
+                OfferNegotiation(offer: offer),
               ],
-            ),
-          ),
-          const SizedBox(height: 14),
-          if (offer != null) ...[
-            SentOfferCard(request: request, offer: offer, now: state.now),
-            if (standing == IncomingStanding.offerSent) ...[
-              const SizedBox(height: 12),
-              OfferNegotiation(offer: offer),
-            ],
-          ] else if (notice != null)
-            _Notice(
-              text: notice,
-              action: credits == 0 && standing == IncomingStanding.open
-                  ? (
-                      label: l10n.buyUsesTitleTechnician,
-                      onTap: () => context.openBuyUses(UserRole.technician),
-                    )
-                  : null,
-            )
-          else
-            _OfferForm(
-              request: request,
-              services: state.services,
-              price: _price,
-              note: _note,
-              serviceId: _serviceId,
-              onService: _pickService,
-              choices: choices,
-              arriveAt: arriveAt,
-              onArrival: (at) => setState(() => _arriveAt = at),
-              today: state.now,
-            ),
-        ],
+            ] else if (notice != null)
+              _Notice(
+                text: notice,
+                action: credits == 0 && standing == IncomingStanding.open
+                    ? (
+                        label: l10n.buyUsesTitleTechnician,
+                        onTap: () => context.openBuyUses(UserRole.technician),
+                      )
+                    : null,
+              )
+            else
+              _OfferForm(
+                request: request,
+                services: state.services,
+                price: _price,
+                note: _note,
+                serviceId: _serviceId,
+                onService: _pickService,
+                choices: choices,
+                arriveAt: arriveAt,
+                onArrival: (at) => setState(() => _arriveAt = at),
+                today: state.now,
+              ),
+          ],
+        ),
       ),
       bottomNavigationBar: standing == IncomingStanding.open
           ? BottomActionBar(
