@@ -34,6 +34,11 @@ void main() {
       'offer_revised': (NotificationKind.offerRevised, UserRole.consumer),
       'offer_withdrawn': (NotificationKind.offerWithdrawn, UserRole.consumer),
       'counter_accepted': (NotificationKind.counterAccepted, UserRole.consumer),
+      'loyalty_reward': (NotificationKind.loyaltyReward, UserRole.consumer),
+      'maintenance_reminder': (
+        NotificationKind.maintenanceReminder,
+        UserRole.consumer,
+      ),
     };
     for (final MapEntry(key: wire, value: (kind, role)) in kinds.entries) {
       expect(

@@ -119,6 +119,17 @@ void main() {
       ));
     });
 
+    test('the gift and the reminder say what to do next', () {
+      expect(consumerText(of(NotificationKind.loyaltyReward)), (
+        title: 'هدية منّا: طلب مجاني',
+        body: 'خلّصت ٣ شغلانات من التطبيق. ضفنالك طلب مجاني.',
+      ));
+      expect(consumerText(of(NotificationKind.maintenanceReminder)), (
+        title: 'وقت الصيانة الدورية',
+        body: 'عدّى وقت من آخر شغلانة. احجز نفس الفني من التطبيق.',
+      ));
+    });
+
     test('a request the technician cancelled says the use came back', () {
       final cancelled = of(NotificationKind.requestCancelledByTechnician);
 
@@ -393,6 +404,23 @@ void main() {
           UserRole.consumer,
         ),
         AppRoutes.consumerRequests,
+      );
+    });
+
+    test('the gift opens the balance and the reminder the request', () {
+      expect(
+        notificationRoute(
+          of(NotificationKind.loyaltyReward),
+          UserRole.consumer,
+        ),
+        AppRoutes.consumerBalance,
+      );
+      expect(
+        notificationRoute(
+          of(NotificationKind.maintenanceReminder),
+          UserRole.consumer,
+        ),
+        AppRoutes.request('request-1'),
       );
     });
 

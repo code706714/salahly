@@ -17,6 +17,8 @@ enum NotificationKind {
   offerRevised,
   offerWithdrawn,
   counterAccepted,
+  loyaltyReward,
+  maintenanceReminder,
 
   // The technician's.
   newRequest,
@@ -33,6 +35,9 @@ enum NotificationKind {
 
   /// Whether the notification is about a transfer.
   bool get isAboutTopup => this == topupApproved || this == topupRejected;
+
+  /// Whether the notification is about a free request earned.
+  bool get isAboutLoyalty => this == loyaltyReward;
 
   /// Whether the notification is about the technician's documents.
   bool get isAboutVerification =>

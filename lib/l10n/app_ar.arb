@@ -3184,6 +3184,7 @@
   "balanceLedgerOfferPicked": "عميل اختار عرضك",
   "balanceLedgerRefunded": "اترجّع استخدام",
   "balanceLedgerJobFinished": "شغلانة خلصت",
+  "balanceLedgerLoyaltyReward": "هدية صلحلي",
   "balanceLedgerTopup": "شحن رصيد",
   "balanceLedgerAdjustment": "تعديل من صلحلي",
   "balanceLoadFailed": "{honorific, select, ms{مقدرناش نفتح الرصيد. اتأكدي من النت وجرّبي تاني.} other{مقدرناش نفتح الرصيد. اتأكد من النت وجرّب تاني.}}",
@@ -4901,6 +4902,10 @@
       }
     }
   },
+  "notifLoyaltyReward": "هدية منّا: طلب مجاني",
+  "notifLoyaltyRewardBody": "خلّصت ٣ شغلانات من التطبيق. ضفنالك طلب مجاني.",
+  "notifMaintenanceReminder": "وقت الصيانة الدورية",
+  "notifMaintenanceReminderBody": "عدّى وقت من آخر شغلانة. احجز نفس الفني من التطبيق.",
   "notifCounterAccepted": "{name} وافق على سعرك",
   "@notifCounterAccepted": {
     "placeholders": {
