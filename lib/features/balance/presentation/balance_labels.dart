@@ -36,6 +36,7 @@ String ledgerReasonLabel(
   },
   LedgerReason.requestRefunded => l10n.balanceLedgerRefunded,
   LedgerReason.jobFinished => l10n.balanceLedgerJobFinished,
+  LedgerReason.loyaltyReward => l10n.balanceLedgerLoyaltyReward,
   LedgerReason.topup => l10n.balanceLedgerTopup,
   LedgerReason.adminAdjustment => l10n.balanceLedgerAdjustment,
   LedgerReason.freeGrant => l10n.balanceLedgerFreeGrant,

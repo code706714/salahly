@@ -105,6 +105,16 @@ class NotificationTile extends StatelessWidget {
       colors.successSoft,
       colors.success,
     ),
+    NotificationKind.loyaltyReward => (
+      Icons.card_giftcard_rounded,
+      colors.warningSoft,
+      colors.brass,
+    ),
+    NotificationKind.maintenanceReminder => (
+      Icons.event_repeat_rounded,
+      colors.primarySoft,
+      colors.primary,
+    ),
     NotificationKind.technicianArriving => (
       Icons.directions_walk_rounded,
       colors.primarySoft,

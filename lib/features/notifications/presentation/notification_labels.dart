@@ -93,6 +93,14 @@ NotificationText notificationText(
       title: l10n.notifCounterAccepted(technician),
       body: l10n.notifCounterAcceptedBody(honorific),
     ),
+    NotificationKind.loyaltyReward => (
+      title: l10n.notifLoyaltyReward,
+      body: l10n.notifLoyaltyRewardBody,
+    ),
+    NotificationKind.maintenanceReminder => (
+      title: l10n.notifMaintenanceReminder,
+      body: l10n.notifMaintenanceReminderBody,
+    ),
     NotificationKind.offerCountered => (
       title: l10n.notifOfferCountered(gender, consumer),
       body: l10n.notifOfferCounteredBody,
@@ -231,7 +239,9 @@ String notificationKindRoute(
   UserRole role, {
   String? requestId,
 }) {
-  if (kind.isAboutTopup) return AppRoutes.balanceFor(role);
+  if (kind.isAboutTopup || kind.isAboutLoyalty) {
+    return AppRoutes.balanceFor(role);
+  }
   if (kind.isAboutVerification) return AppRoutes.technicianAccount;
   return switch (role) {
     UserRole.consumer =>

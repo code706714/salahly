@@ -5,6 +5,7 @@ enum LedgerReason {
   requestSent,
   requestRefunded,
   jobFinished,
+  loyaltyReward,
   topup,
   adminAdjustment,
   freeGrant,
