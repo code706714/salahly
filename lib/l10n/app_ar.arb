@@ -2337,6 +2337,27 @@
     }
   },
   "myRequestsNoOffersCame": "ماجاش عروض",
+  "warrantyTitle": "ضمان مجاني",
+  "warrantyBody": "لو المشكلة رجعت، {technician} هيجيلك تاني من غير أي فلوس. الضمان شغال لحد {date}.",
+  "@warrantyBody": {
+    "placeholders": {
+      "technician": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "warrantyAsk": "اطلب زيارة ضمان",
+  "consumerWarrantyUnavailable": "{honorific, select, ms{الضمان مبقاش متاح للشغلانة دي. اطلبي زيارة عادية.} other{الضمان مبقاش متاح للشغلانة دي. اطلب زيارة عادية.}}",
+  "@consumerWarrantyUnavailable": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
   "myRequestsAgain": "{honorific, select, ms{اطلبي {name} تاني} other{اطلب {name} تاني}}",
   "@myRequestsAgain": {
     "placeholders": {

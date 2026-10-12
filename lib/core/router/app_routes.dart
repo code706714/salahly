@@ -41,9 +41,18 @@ abstract final class AppRoutes {
   static const terms = '/legal/terms';
   static const privacy = '/legal/privacy';
 
-  /// A new request, optionally for [categoryId] or to [technicianId] first.
-  static String newRequestFor({String? categoryId, String? technicianId}) {
-    final query = {'category': ?categoryId, 'technician': ?technicianId};
+  /// A new request, optionally for [categoryId] or to [technicianId] first;
+  /// [warrantyOf] makes it the free warranty visit for that request's job.
+  static String newRequestFor({
+    String? categoryId,
+    String? technicianId,
+    String? warrantyOf,
+  }) {
+    final query = {
+      'category': ?categoryId,
+      'technician': ?technicianId,
+      'warranty': ?warrantyOf,
+    };
     return query.isEmpty
         ? newRequest
         : Uri(path: newRequest, queryParameters: query).toString();

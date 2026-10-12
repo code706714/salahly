@@ -158,6 +158,37 @@ void main() {
     expect(find.text(l10n.doneSubmit('ms')), findsNothing);
   });
 
+  testConsumerApp('asks for the free warranty visit after the work', (
+    tester,
+    app,
+  ) async {
+    serve(
+      app,
+      testRequestDetails(
+        job: testRequestJob(status: JobStatus.paid),
+        review: SubmittedReview(
+          stars: 5,
+          paidWith: ConsumerPayment.cash,
+          createdAt: DateTime(2026, 10, 3, 15),
+        ),
+        warrantyUntil: DateTime(2026, 10, 17),
+      ),
+    );
+    when(
+      () => app.requests.fetchListedTechnician(any()),
+    ).thenAnswer((_) async => Ok(testTechnicianProfile()));
+    await open(tester, app);
+
+    await reveal(tester, find.text(l10n.warrantyAsk));
+    await tester.tap(find.text(l10n.warrantyAsk));
+    await app.settle(tester);
+    await tester.pumpAndSettle();
+
+    final page = tester.widget<NewRequestPage>(find.byType(NewRequestPage));
+    expect(page.warrantyOf, 'request-1');
+    expect(page.categoryId, 'ac');
+  });
+
   testConsumerApp('reports a problem and comes back to the request', (
     tester,
     app,

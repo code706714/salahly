@@ -101,6 +101,58 @@ void main() {
       });
     });
 
+    test('asks for a warranty visit on the job it covers', () async {
+      server.body = {'id': 'request-2', 'sent_to': 1};
+
+      final result = await server.repository().sendRequest(
+        RequestDraft(
+          categoryId: 'ac',
+          issue: RequestIssue.notCooling,
+          addressId: 'address-1',
+          day: DateTime(2026, 10, 3),
+          window: RequestWindow.noon,
+          technicianId: 'technician-1',
+          warrantyOf: 'request-1',
+        ),
+      );
+
+      expect(result, isA<Ok<SentRequest>>());
+      expect(server.lastPath, '/rest/v1/rpc/request_warranty_visit');
+      expect(server.lastParams, {
+        'p_original': 'request-1',
+        'p_issue': 'not_cooling',
+        'p_description': null,
+        'p_photo_paths': <String>[],
+        'p_address_id': 'address-1',
+        'p_preferred_on': '2026-10-03',
+        'p_window': 'noon',
+      });
+    });
+
+    test('says when the warranty is over', () async {
+      server.fails('warranty_unavailable');
+
+      final result = await server.repository().sendRequest(
+        RequestDraft(
+          categoryId: 'ac',
+          issue: RequestIssue.other,
+          addressId: 'address-1',
+          day: DateTime(2026, 10, 3),
+          window: RequestWindow.evening,
+          warrantyOf: 'request-1',
+        ),
+      );
+
+      expect(
+        result,
+        isA<Err<SentRequest>>().having(
+          (err) => err.failure,
+          'failure',
+          const WarrantyUnavailableFailure(),
+        ),
+      );
+    });
+
     test('says when the consumer has no uses left', () async {
       server.fails('no_credits');
 

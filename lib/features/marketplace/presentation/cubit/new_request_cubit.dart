@@ -28,6 +28,7 @@ class NewRequestCubit extends Cubit<NewRequestState> {
     required this._speech,
     this._categoryId,
     this._technicianId,
+    this._warrantyOf,
     this._clock = DateTime.now,
   }) : super(NewRequestState(now: _clock()));
 
@@ -46,6 +47,9 @@ class NewRequestCubit extends Cubit<NewRequestState> {
 
   /// Someone the consumer hired before, asked first.
   final String? _technicianId;
+
+  /// The request whose job the free warranty visit is for, if it is one.
+  final String? _warrantyOf;
 
   /// Storage paths of photos already uploaded, by their path on the phone.
   final _uploaded = <String, String>{};
@@ -355,6 +359,7 @@ class NewRequestCubit extends Cubit<NewRequestState> {
         day: day,
         window: window,
         technicianId: state.technician?.id,
+        warrantyOf: _warrantyOf,
       ),
     );
     if (isClosed) return;

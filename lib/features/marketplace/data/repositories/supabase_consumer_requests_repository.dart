@@ -73,17 +73,26 @@ class SupabaseConsumerRequestsRepository implements ConsumerRequestsRepository {
   @override
   Future<Result<SentRequest>> sendRequest(RequestDraft draft) =>
       _call(() async {
+        final shared = {
+          'p_issue': toWire(draft.issue),
+          'p_description': draft.description,
+          'p_photo_paths': draft.photoPaths,
+          'p_address_id': draft.addressId,
+          'p_preferred_on': CalendarDate.format(draft.day),
+          'p_window': toWire(draft.window),
+        };
+        final warrantyOf = draft.warrantyOf;
         final json = await _client.rpc<Map<String, dynamic>>(
-          'create_service_request',
+          warrantyOf == null
+              ? 'create_service_request'
+              : 'request_warranty_visit',
           params: {
-            'p_category_id': draft.categoryId,
-            'p_issue': toWire(draft.issue),
-            'p_description': draft.description,
-            'p_photo_paths': draft.photoPaths,
-            'p_address_id': draft.addressId,
-            'p_preferred_on': CalendarDate.format(draft.day),
-            'p_window': toWire(draft.window),
-            'p_technician_id': draft.technicianId,
+            ...shared,
+            if (warrantyOf == null) ...{
+              'p_category_id': draft.categoryId,
+              'p_technician_id': draft.technicianId,
+            } else
+              'p_original': warrantyOf,
           },
         );
         return SentRequest(

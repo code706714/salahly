@@ -163,6 +163,8 @@ final class RequestDetails extends Equatable {
     this.job,
     this.review,
     this.technicianArrivingAt,
+    this.warrantyUntil,
+    this.isWarranty = false,
   });
 
   final String id;
@@ -209,6 +211,13 @@ final class RequestDetails extends Equatable {
   /// When the technician last told the consumer he is almost there.
   final DateTime? technicianArrivingAt;
 
+  /// Until when a free warranty visit can be asked for on this job, or
+  /// null when none can.
+  final DateTime? warrantyUntil;
+
+  /// Whether this request is itself a warranty visit.
+  final bool isWarranty;
+
   RequestOffer? get chosenOffer =>
       offers.where((offer) => offer.id == chosenOfferId).firstOrNull;
 
@@ -251,6 +260,8 @@ final class RequestDetails extends Equatable {
     review,
     hasOpenComplaint,
     technicianArrivingAt,
+    warrantyUntil,
+    isWarranty,
   ];
 }
 

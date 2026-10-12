@@ -28,6 +28,7 @@ Failure? marketplaceFailureFrom(Object error) {
     'negotiation_limit' => const NegotiationLimitFailure(),
     'counter_pending' => const CounterPendingFailure(),
     'no_counter' => const NoCounterFailure(),
+    'warranty_unavailable' => const WarrantyUnavailableFailure(),
     'invalid_price' => const InvalidPriceFailure(),
     _ => null,
   };

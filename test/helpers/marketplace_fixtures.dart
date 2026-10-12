@@ -180,6 +180,7 @@ RequestDetails testRequestDetails({
   int sentTo = 5,
   int seenBy = 3,
   DateTime? technicianArrivingAt,
+  DateTime? warrantyUntil,
 }) {
   final assigned = job != null;
   final shownOffers =
@@ -212,6 +213,7 @@ RequestDetails testRequestDetails({
     review: review,
     hasOpenComplaint: hasOpenComplaint,
     technicianArrivingAt: technicianArrivingAt,
+    warrantyUntil: warrantyUntil,
   );
 }
 
