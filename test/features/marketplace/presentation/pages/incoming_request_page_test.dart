@@ -524,6 +524,21 @@ void main() {
     });
   });
 
+  testWidgets('shows the urgent fee and offers quarter hours from now', (
+    tester,
+  ) async {
+    show(ready(testIncoming(urgentFeePiastres: 10000)));
+    await pumpView(tester);
+
+    expect(find.text(l10n.urgentBadge), findsOneWidget);
+    expect(find.text(l10n.urgentIncomingFee('100')), findsOneWidget);
+    await scrollTo(tester, find.text('النهارده 8:30'));
+    expect(find.text('النهارده 8:15'), findsNothing);
+    expect(find.text('النهارده 8:45'), findsOneWidget);
+    expect(find.text('النهارده 10:45'), findsOneWidget);
+    expect(find.text('النهارده 11:00'), findsNothing);
+  });
+
   testWidgets('any time of the day offers its every half hour', (
     tester,
   ) async {

@@ -225,6 +225,17 @@ void main() {
       },
     );
 
+    test('an urgent request says so, with the area and the distance', () {
+      final text = technicianText(of(NotificationKind.urgentRequest));
+
+      expect(text.title, 'طلب مستعجل في مدينة نصر');
+      expect(
+        text.body,
+        'تكييف مش بيبرّد · 2.4 كم منك · عميل محتاج فني دلوقتي. ابعت عرضك '
+        'بسرعة.',
+      );
+    });
+
     test('a new request without its area is only "new request"', () {
       final text = notificationText(
         l10n,

@@ -67,33 +67,60 @@ class SupabaseConsumerRequestsRepository implements ConsumerRequestsRepository {
   );
 
   @override
+  Future<Result<UrgentInfo>> urgentInfo({
+    required String categoryId,
+    required String areaId,
+  }) => _call(() async {
+    final json = await _client.rpc<Map<String, dynamic>>(
+      'urgent_info',
+      params: {'p_category_id': categoryId, 'p_area_id': areaId},
+    );
+    return UrgentInfo(
+      feePiastres: json['fee_piastres'] as int,
+      availableNow: json['available_now'] as int,
+    );
+  });
+
+  @override
   Future<Result<String>> uploadPhoto(String localPath) =>
       _photos.upload(localPath, bucket: _photoBucket);
 
   @override
   Future<Result<SentRequest>> sendRequest(RequestDraft draft) =>
       _call(() async {
-        final shared = {
+        final problem = {
           'p_issue': toWire(draft.issue),
           'p_description': draft.description,
           'p_photo_paths': draft.photoPaths,
           'p_address_id': draft.addressId,
+        };
+        final timed = {
+          ...problem,
           'p_preferred_on': CalendarDate.format(draft.day),
           'p_window': toWire(draft.window),
         };
         final warrantyOf = draft.warrantyOf;
-        final json = await _client.rpc<Map<String, dynamic>>(
-          warrantyOf == null
-              ? 'create_service_request'
-              : 'request_warranty_visit',
-          params: {
-            ...shared,
-            if (warrantyOf == null) ...{
+        final (function, params) = switch ((draft.urgent, warrantyOf)) {
+          (true, _) => (
+            'create_urgent_request',
+            {...problem, 'p_category_id': draft.categoryId},
+          ),
+          (_, final original?) => (
+            'request_warranty_visit',
+            {...timed, 'p_original': original},
+          ),
+          _ => (
+            'create_service_request',
+            {
+              ...timed,
               'p_category_id': draft.categoryId,
               'p_technician_id': draft.technicianId,
-            } else
-              'p_original': warrantyOf,
-          },
+            },
+          ),
+        };
+        final json = await _client.rpc<Map<String, dynamic>>(
+          function,
+          params: params,
         );
         return SentRequest(
           id: json['id'] as String,

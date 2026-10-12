@@ -4966,5 +4966,104 @@
         "type": "int"
       }
     }
-  }
+  },
+  "urgentHomeTitle": "{honorific, select, ms{محتاجة فني دلوقتي؟} other{محتاج فني دلوقتي؟}}",
+  "@urgentHomeTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "urgentHomeBody": "{honorific, select, ms{ابعتي طلب مستعجل لأقرب فني متاح، بسعر معروف قبل ما تبعتي.} other{ابعت طلب مستعجل لأقرب فني متاح، بسعر معروف قبل ما تبعت.}}",
+  "@urgentHomeBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "urgentTitle": "طلب مستعجل",
+  "urgentAvailable": "{count, plural, =0{مفيش فني متاح دلوقتي في منطقتك} =1{فني واحد متاح دلوقتي في منطقتك} =2{فنيين اتنين متاحين دلوقتي في منطقتك} few{{count} فنيين متاحين دلوقتي في منطقتك} other{{count} فني متاح دلوقتي في منطقتك}}",
+  "@urgentAvailable": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "urgentNobody": "{honorific, select, ms{جرّبي بعد شوية، أو اطلبي بمعاد عادي.} other{جرّب بعد شوية، أو اطلب بمعاد عادي.}}",
+  "@urgentNobody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "urgentFeeLabel": "رسوم الاستعجال",
+  "urgentFeeAmount": "{amount} ج.م",
+  "@urgentFeeAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "urgentFeeNote": "{honorific, select, ms{بتتضاف على سعر الفني اللي هتختاريه. معروفة من دلوقتي ومش هتتغيّر.} other{بتتضاف على سعر الفني اللي هتختاره. معروفة من دلوقتي ومش هتتغيّر.}}",
+  "@urgentFeeNote": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "urgentHowLong": "الطلب بيفضل مفتوح نص ساعة، وبيوصل لأقرب الفنيين المتاحين دلوقتي.",
+  "urgentLoadFailed": "مقدرناش نعرف مين متاح دلوقتي.",
+  "urgentSummary": "مستعجل · دلوقتي",
+  "urgentOfferFee": "+ رسوم استعجال {amount} ج.م",
+  "@urgentOfferFee": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "consumerNoTechnicianAvailable": "{honorific, select, ms{مفيش فني متاح دلوقتي. جرّبي بعد شوية أو اطلبي بمعاد عادي.} other{مفيش فني متاح دلوقتي. جرّب بعد شوية أو اطلب بمعاد عادي.}}",
+  "@consumerNoTechnicianAvailable": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "urgentBadge": "مستعجل",
+  "urgentIncomingFee": "العميل هيدفع {amount} ج.م رسوم استعجال فوق سعرك، وهي ليك.",
+  "@urgentIncomingFee": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "availabilityTitle": "متاح دلوقتي",
+  "availabilityOn": "الطلبات المستعجلة القريبة منك هتوصلك لحد {time}.",
+  "@availabilityOn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "availabilityOff": "شغّلها عشان توصلك الطلبات المستعجلة القريبة منك.",
+  "availabilityFailed": "مقدرناش نغيّر حالتك. جرّب تاني.",
+  "notifUrgentRequest": "طلب مستعجل",
+  "notifUrgentRequestIn": "طلب مستعجل في {area}",
+  "@notifUrgentRequestIn": {
+    "placeholders": {
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "notifUrgentRequestBody": "عميل محتاج فني دلوقتي. ابعت عرضك بسرعة."
 }

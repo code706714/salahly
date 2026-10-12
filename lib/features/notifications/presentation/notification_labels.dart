@@ -117,6 +117,16 @@ NotificationText notificationText(
             : _askedFor(l10n, day, window, today: today)),
       ]),
     ),
+    NotificationKind.urgentRequest => (
+      title: areaName == null
+          ? l10n.notifUrgentRequest
+          : l10n.notifUrgentRequestIn(areaName),
+      body: _join([
+        ?request,
+        ?(distance == null ? null : distanceLabel(l10n, distance)),
+        l10n.notifUrgentRequestBody,
+      ]),
+    ),
     NotificationKind.offerPicked => (
       title: l10n.notifOfferPicked(gender, consumer),
       body: [

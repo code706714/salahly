@@ -86,6 +86,7 @@ abstract final class MarketplaceModels {
       ),
       warrantyUntil: optionalTimeFromWire(json['warranty_until']),
       isWarranty: json['is_warranty'] as bool? ?? false,
+      urgentFeePiastres: _urgentFee(json),
     );
   }
 
@@ -211,6 +212,10 @@ abstract final class MarketplaceModels {
         jobsDone: json['jobs_done'] as int,
       );
 
+  /// The urgent fee, or null when the request isn't urgent.
+  static int? _urgentFee(Map<String, dynamic> json) =>
+      json['urgent'] == true ? json['urgent_fee_piastres'] as int : null;
+
   static IncomingRequest incoming(Map<String, dynamic> json) {
     final offer = json['my_offer'] as Map<String, dynamic>?;
     return IncomingRequest(
@@ -234,6 +239,7 @@ abstract final class MarketplaceModels {
       sentTo: json['sent_to'] as int,
       offerCount: json['offer_count'] as int,
       dismissed: json['dismissed'] as bool,
+      urgentFeePiastres: _urgentFee(json),
       myOffer: offer == null
           ? null
           : MyOffer(

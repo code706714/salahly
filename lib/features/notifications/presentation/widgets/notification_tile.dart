@@ -152,6 +152,11 @@ class NotificationTile extends StatelessWidget {
       colors.primarySoft,
       colors.primary,
     ),
+    NotificationKind.urgentRequest => (
+      Icons.bolt_rounded,
+      colors.warningSoft,
+      colors.brass,
+    ),
     NotificationKind.offerCountered => (
       Icons.sell_outlined,
       colors.primarySoft,

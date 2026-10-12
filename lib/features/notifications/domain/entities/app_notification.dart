@@ -22,6 +22,7 @@ enum NotificationKind {
 
   // The technician's.
   newRequest,
+  urgentRequest,
   offerPicked,
   offerNotPicked,
   requestCancelledByConsumer,

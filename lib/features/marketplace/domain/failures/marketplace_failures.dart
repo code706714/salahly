@@ -28,6 +28,12 @@ final class WarrantyUnavailableFailure extends Failure {
   const WarrantyUnavailableFailure();
 }
 
+/// No technician is free right now in the area, so an urgent request can't
+/// go anywhere.
+final class NoTechnicianAvailableFailure extends Failure {
+  const NoTechnicianAvailableFailure();
+}
+
 /// The time the offer named has passed.
 final class OfferExpiredFailure extends Failure {
   const OfferExpiredFailure();

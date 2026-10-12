@@ -27,6 +27,7 @@ final class IncomingRequest extends Equatable {
     this.description,
     this.photoPaths = const [],
     this.myOffer,
+    this.urgentFeePiastres,
   });
 
   final String id;
@@ -64,6 +65,11 @@ final class IncomingRequest extends Equatable {
   final bool dismissed;
   final MyOffer? myOffer;
 
+  /// The urgent fee the consumer pays on top of the offer, when urgent.
+  final int? urgentFeePiastres;
+
+  bool get isUrgent => urgentFeePiastres != null;
+
   /// A request takes at most five offers.
   static const maxOffers = 5;
 
@@ -91,6 +97,7 @@ final class IncomingRequest extends Equatable {
     offerCount,
     dismissed,
     myOffer,
+    urgentFeePiastres,
   ];
 }
 

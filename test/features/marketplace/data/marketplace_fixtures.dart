@@ -42,6 +42,7 @@ Map<String, dynamic> requestDetailsJson({
   String? arrivingAt,
   String? warrantyUntil,
   bool isWarranty = false,
+  int? urgentFee,
 }) => {
   'id': 'request-1',
   'category_id': 'ac',
@@ -71,6 +72,8 @@ Map<String, dynamic> requestDetailsJson({
   'technician_arriving_at': arrivingAt,
   'warranty_until': warrantyUntil,
   'is_warranty': isWarranty,
+  'urgent': urgentFee != null,
+  'urgent_fee_piastres': urgentFee ?? 0,
 };
 
 Map<String, dynamic> requestJobJson({
@@ -107,6 +110,7 @@ Map<String, dynamic> requestJobJson({
 Map<String, dynamic> incomingRequestJson({
   Map<String, dynamic>? myOffer,
   int offerCount = 2,
+  int? urgentFee,
 }) => {
   'id': 'request-1',
   'category_id': 'ac',
@@ -126,6 +130,8 @@ Map<String, dynamic> incomingRequestJson({
   'offer_count': offerCount,
   'dismissed': false,
   'my_offer': myOffer,
+  'urgent': urgentFee != null,
+  'urgent_fee_piastres': urgentFee ?? 0,
 };
 
 Map<String, dynamic> listingJson({

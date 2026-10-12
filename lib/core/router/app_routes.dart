@@ -42,16 +42,19 @@ abstract final class AppRoutes {
   static const privacy = '/legal/privacy';
 
   /// A new request, optionally for [categoryId] or to [technicianId] first;
-  /// [warrantyOf] makes it the free warranty visit for that request's job.
+  /// [warrantyOf] makes it the free warranty visit for that request's job;
+  /// [urgent] makes it an urgent request for the technicians free now.
   static String newRequestFor({
     String? categoryId,
     String? technicianId,
     String? warrantyOf,
+    bool urgent = false,
   }) {
     final query = {
       'category': ?categoryId,
       'technician': ?technicianId,
       'warranty': ?warrantyOf,
+      if (urgent) 'urgent': 'true',
     };
     return query.isEmpty
         ? newRequest

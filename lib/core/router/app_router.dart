@@ -194,6 +194,7 @@ RouteBase _consumerRoutes() {
           categoryId: state.uri.queryParameters['category'],
           technicianId: state.uri.queryParameters['technician'],
           warrantyOf: state.uri.queryParameters['warranty'],
+          urgent: state.uri.queryParameters['urgent'] == 'true',
         ),
       ),
       GoRoute(

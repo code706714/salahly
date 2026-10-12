@@ -27,6 +27,12 @@ abstract interface class ConsumerRequestsRepository {
     required String areaId,
   });
 
+  /// The urgent fee and how many technicians are free now in [areaId].
+  Future<Result<UrgentInfo>> urgentInfo({
+    required String categoryId,
+    required String areaId,
+  });
+
   /// Uploads a cleaned photo for a request or complaint. Returns its path.
   Future<Result<String>> uploadPhoto(String localPath);
 

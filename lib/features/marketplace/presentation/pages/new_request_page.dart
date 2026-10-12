@@ -9,6 +9,7 @@ import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/upload_failures.dart';
 import 'package:salahly/core/media/photo_picker.dart';
 import 'package:salahly/core/router/app_routes.dart';
+import 'package:salahly/core/text/money.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
 import 'package:salahly/core/theme/app_spacing.dart';
@@ -49,6 +50,7 @@ class NewRequestPage extends StatelessWidget {
     this.categoryId,
     this.technicianId,
     this.warrantyOf,
+    this.urgent = false,
     super.key,
   });
 
@@ -57,6 +59,9 @@ class NewRequestPage extends StatelessWidget {
 
   /// Makes the request a free warranty visit for this request's job.
   final String? warrantyOf;
+
+  /// Sends the request to the technicians free now, for today.
+  final bool urgent;
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +76,7 @@ class NewRequestPage extends StatelessWidget {
           categoryId: categoryId,
           technicianId: technicianId,
           warrantyOf: warrantyOf,
+          urgent: urgent,
         )..useCategories(categories.state.categories);
         unawaited(cubit.start());
         return cubit;
@@ -184,6 +190,9 @@ class _NewRequestViewState extends State<NewRequestView> {
                     description: _description,
                   ),
                   NewRequestStep.address => _AddressStep(state: state),
+                  NewRequestStep.time when state.urgent => _UrgentStep(
+                    state: state,
+                  ),
                   NewRequestStep.time => _TimeStep(state: state),
                 },
           bottomNavigationBar: BottomActionBar(
@@ -888,6 +897,127 @@ class _TimeStep extends StatelessWidget {
   }
 }
 
+/// The last step of an urgent request: how many technicians are free now
+/// and the fee that comes on top of their price.
+class _UrgentStep extends StatelessWidget {
+  const _UrgentStep({required this.state});
+
+  final NewRequestState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final colors = context.appColors;
+    final honorific = context.watchHonorific();
+    final info = state.urgentInfo;
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+      children: [
+        _StepTitle(l10n.urgentTitle),
+        const SizedBox(height: 14),
+        AppCard(
+          radius: AppRadii.lg,
+          padding: const EdgeInsets.all(14),
+          child: state.urgentFailed
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.urgentLoadFailed,
+                      style: TextStyle(fontSize: 15, color: colors.danger),
+                    ),
+                    const SizedBox(height: 8),
+                    OutlinedButton(
+                      onPressed: context.read<NewRequestCubit>().loadUrgentInfo,
+                      child: Text(l10n.retry),
+                    ),
+                  ],
+                )
+              : info == null
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.bolt_rounded,
+                          size: 22,
+                          color: info.availableNow > 0
+                              ? colors.success
+                              : colors.danger,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            l10n.urgentAvailable(info.availableNow),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    if (info.availableNow == 0)
+                      Text(
+                        l10n.urgentNobody(honorific),
+                        style: TextStyle(
+                          fontSize: 14,
+                          height: 1.6,
+                          color: colors.inkMuted,
+                        ),
+                      )
+                    else ...[
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              l10n.urgentFeeLabel,
+                              style: const TextStyle(fontSize: 15),
+                            ),
+                          ),
+                          Text(
+                            l10n.urgentFeeAmount(
+                              formatPounds(info.feePiastres),
+                            ),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        l10n.urgentFeeNote(honorific),
+                        style: TextStyle(
+                          fontSize: 13,
+                          height: 1.6,
+                          color: colors.inkMuted,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        l10n.urgentHowLong,
+                        style: TextStyle(
+                          fontSize: 13,
+                          height: 1.6,
+                          color: colors.inkMuted,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+        ),
+        const SizedBox(height: 14),
+        _Summary(state: state),
+      ],
+    );
+  }
+}
+
 /// "النهارده", "بكره السبت", then the weekday.
 String _dayLabel(AppLocalizations l10n, DateTime day, int daysAhead) =>
     switch (daysAhead) {
@@ -940,7 +1070,10 @@ class _Summary extends StatelessWidget {
               const SizedBox(height: 6),
               Text([address.label, ?area].join('، ')),
             ],
-            if (day != null && window != null) ...[
+            if (state.urgent) ...[
+              const SizedBox(height: 6),
+              Text(l10n.urgentSummary),
+            ] else if (day != null && window != null) ...[
               const SizedBox(height: 6),
               Text(
                 '${_dayLabel(l10n, day, state.days.indexOf(day))}، '

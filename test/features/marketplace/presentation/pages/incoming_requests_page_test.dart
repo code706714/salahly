@@ -4,12 +4,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/failure.dart';
+import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/marketplace/domain/entities/incoming_request.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
+import 'package:salahly/features/marketplace/domain/repositories/technician_requests_repository.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/incoming_requests_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/pages/incoming_requests_page.dart';
 
@@ -22,6 +24,7 @@ void main() {
   late MockIncomingRequestsCubit cubit;
   late MockAreasCubit areas;
   late MockCategoriesCubit categories;
+  late MockTechnicianRequestsRepository technicianRequests;
 
   setUpAll(() async {
     await loadAppFonts();
@@ -32,6 +35,10 @@ void main() {
     cubit = MockIncomingRequestsCubit();
     areas = MockAreasCubit();
     categories = MockCategoriesCubit();
+    technicianRequests = MockTechnicianRequestsRepository();
+    when(
+      technicianRequests.fetchAvailability,
+    ).thenAnswer((_) async => const Ok(null));
     when(() => cubit.fetchNewRequests()).thenAnswer((_) async {});
     when(
       () => areas.state,
@@ -49,6 +56,7 @@ void main() {
     int offerCount = 2,
     Honorific honorific = Honorific.ms,
     String areaId = 'nasr_city',
+    int? urgentFeePiastres,
   }) {
     final now = DateTime.now();
     return testIncoming(
@@ -61,6 +69,7 @@ void main() {
       offerCount: offerCount,
       honorific: honorific,
       areaId: areaId,
+      urgentFeePiastres: urgentFeePiastres,
     );
   }
 
@@ -81,6 +90,11 @@ void main() {
     Widget view = const IncomingRequestsView(),
   }) => tester.pumpApp(
     view,
+    repositories: [
+      RepositoryProvider<TechnicianRequestsRepository>.value(
+        value: technicianRequests,
+      ),
+    ],
     blocs: [
       BlocProvider<IncomingRequestsCubit>.value(value: cubit),
       BlocProvider<AreasCubit>.value(value: areas),
@@ -95,6 +109,54 @@ void main() {
       (widget) => widget is Opacity && widget.opacity < 1,
     ),
   );
+
+  group('available now', () {
+    testWidgets('is off until the technician switches it on', (tester) async {
+      show(ready([recent()]));
+      await pumpView(tester);
+
+      expect(find.text(l10n.availabilityTitle), findsOneWidget);
+      expect(find.text(l10n.availabilityOff), findsOneWidget);
+      expect(tester.widget<Switch>(find.byType(Switch)).value, isFalse);
+    });
+
+    testWidgets('switches on and says until when', (tester) async {
+      final until = DateTime.now().add(const Duration(hours: 4));
+      when(
+        () => technicianRequests.setAvailable(on: true),
+      ).thenAnswer((_) async => Ok(until));
+      show(ready([recent()]));
+      await pumpView(tester);
+
+      await tester.tap(find.byType(Switch));
+      await tester.pumpAndSettle();
+
+      verify(() => technicianRequests.setAvailable(on: true)).called(1);
+      expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
+      expect(find.text(l10n.availabilityOff), findsNothing);
+    });
+
+    testWidgets('says when it could not be switched', (tester) async {
+      when(
+        () => technicianRequests.setAvailable(on: true),
+      ).thenAnswer((_) async => const Err(NetworkFailure()));
+      show(ready([recent()]));
+      await pumpView(tester);
+
+      await tester.tap(find.byType(Switch));
+      await tester.pumpAndSettle();
+
+      expect(find.text(l10n.availabilityFailed), findsOneWidget);
+      expect(tester.widget<Switch>(find.byType(Switch)).value, isFalse);
+    });
+
+    testWidgets('marks an urgent request in the list', (tester) async {
+      show(ready([recent(urgentFeePiastres: 10000)]));
+      await pumpView(tester);
+
+      expect(find.text(l10n.urgentBadge), findsOneWidget);
+    });
+  });
 
   group('states', () {
     testWidgets('waits for the first list', (tester) async {

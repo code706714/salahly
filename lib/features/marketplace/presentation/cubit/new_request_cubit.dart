@@ -29,8 +29,9 @@ class NewRequestCubit extends Cubit<NewRequestState> {
     this._categoryId,
     this._technicianId,
     this._warrantyOf,
+    bool urgent = false,
     this._clock = DateTime.now,
-  }) : super(NewRequestState(now: _clock()));
+  }) : super(NewRequestState(now: _clock(), urgent: urgent));
 
   /// The longest description the server takes.
   static const maxDescriptionLength = 1000;
@@ -286,16 +287,36 @@ class NewRequestCubit extends Cubit<NewRequestState> {
           state.copyWith(step: NewRequestStep.address, showsErrors: false),
         );
       case NewRequestStep.address:
+        if (!state.addressDone) {
+          emit(state.copyWith(showsErrors: true));
+          return;
+        }
         emit(
-          state.addressDone
-              ? _withClock().copyWith(
-                  step: NewRequestStep.time,
-                  showsErrors: false,
-                )
-              : state.copyWith(showsErrors: true),
+          _withClock().copyWith(step: NewRequestStep.time, showsErrors: false),
         );
+        if (state.urgent) await loadUrgentInfo();
       case NewRequestStep.time:
         await send();
+    }
+  }
+
+  /// Fetches the urgent fee and how many technicians are free now at the
+  /// picked address, for an urgent request.
+  Future<void> loadUrgentInfo() async {
+    final category = state.category;
+    final address = state.address;
+    if (category == null || address == null) return;
+    emit(state.copyWith(urgentFailed: false));
+    final result = await _requests.urgentInfo(
+      categoryId: category.id,
+      areaId: address.areaId,
+    );
+    if (isClosed) return;
+    switch (result) {
+      case Ok(:final value):
+        emit(state.copyWith(urgentInfo: value));
+      case Err():
+        emit(state.copyWith(urgentFailed: true));
     }
   }
 
@@ -315,12 +336,16 @@ class NewRequestCubit extends Cubit<NewRequestState> {
   /// Uploads the photos and sends the request.
   Future<void> send() async {
     if (state.isSending || state.status == NewRequestStatus.sent) return;
-    final checked = _withClock();
+    final checked = state.urgent ? state : _withClock();
     final category = checked.category;
     final issue = checked.issue;
     final address = checked.address;
-    final day = checked.day;
-    final window = checked.window;
+    final now = _clock();
+    // An urgent request is for today, any time; the server decides the rest.
+    final day = state.urgent
+        ? DateTime(now.year, now.month, now.day)
+        : checked.day;
+    final window = state.urgent ? RequestWindow.anyTime : checked.window;
     if (!checked.timeDone ||
         category == null ||
         issue == null ||
@@ -360,6 +385,7 @@ class NewRequestCubit extends Cubit<NewRequestState> {
         window: window,
         technicianId: state.technician?.id,
         warrantyOf: _warrantyOf,
+        urgent: state.urgent,
       ),
     );
     if (isClosed) return;

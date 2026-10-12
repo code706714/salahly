@@ -8,6 +8,7 @@ enum NewRequestStatus { editing, uploading, sending, sent, failed }
 final class NewRequestState extends Equatable {
   const NewRequestState({
     required this.now,
+    this.urgent = false,
     this.step = NewRequestStep.problem,
     this.categories = const [],
     this.category,
@@ -27,6 +28,8 @@ final class NewRequestState extends Equatable {
     this.uploaded = 0,
     this.sent,
     this.failure,
+    this.urgentInfo,
+    this.urgentFailed = false,
   });
 
   /// The server takes a time window until an hour before it ends.
@@ -34,6 +37,10 @@ final class NewRequestState extends Equatable {
 
   /// When the time choices were last checked against the clock.
   final DateTime now;
+
+  /// An urgent request: for the technicians free now, today, with the
+  /// urgent fee on top. It has no day or time to pick.
+  final bool urgent;
   final NewRequestStep step;
 
   /// The open trades, in display order; empty until the catalog arrives.
@@ -80,6 +87,12 @@ final class NewRequestState extends Equatable {
 
   /// Why sending failed, while [status] is failed.
   final Failure? failure;
+
+  /// The urgent fee and who is free now, once fetched for an urgent request.
+  final UrgentInfo? urgentInfo;
+
+  /// [urgentInfo] couldn't be fetched.
+  final bool urgentFailed;
 
   bool get isSending =>
       status == NewRequestStatus.uploading ||
@@ -136,6 +149,7 @@ final class NewRequestState extends Equatable {
   bool get addressDone => address != null;
 
   bool get timeDone {
+    if (urgent) return (urgentInfo?.availableNow ?? 0) > 0;
     final day = this.day;
     final window = this.window;
     return day != null && window != null && isOpen(day, window);
@@ -162,9 +176,12 @@ final class NewRequestState extends Equatable {
     int? uploaded,
     SentRequest? sent,
     Failure? Function()? failure,
+    UrgentInfo? urgentInfo,
+    bool? urgentFailed,
   }) {
     return NewRequestState(
       now: now ?? this.now,
+      urgent: urgent,
       step: step ?? this.step,
       categories: categories ?? this.categories,
       category: category ?? this.category,
@@ -184,12 +201,15 @@ final class NewRequestState extends Equatable {
       uploaded: uploaded ?? this.uploaded,
       sent: sent ?? this.sent,
       failure: failure != null ? failure() : this.failure,
+      urgentInfo: urgentInfo ?? this.urgentInfo,
+      urgentFailed: urgentFailed ?? this.urgentFailed,
     );
   }
 
   @override
   List<Object?> get props => [
     now,
+    urgent,
     step,
     categories,
     category,
@@ -209,5 +229,7 @@ final class NewRequestState extends Equatable {
     uploaded,
     sent,
     failure,
+    urgentInfo,
+    urgentFailed,
   ];
 }

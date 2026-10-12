@@ -177,6 +177,21 @@ void main() {
       );
     });
 
+    testWidgets('starts an urgent request from its own card', (tester) async {
+      await pumpView(tester);
+
+      expect(find.text(l10n.urgentHomeTitle('ms')), findsOneWidget);
+      await tester.tap(find.text(l10n.urgentHomeTitle('ms')));
+      await tester.pumpAndSettle();
+
+      final stub = find.text(AppRoutes.newRequest);
+      expect(stub, findsOneWidget);
+      expect(
+        GoRouterState.of(tester.element(stub)).uri.toString(),
+        AppRoutes.newRequestFor(urgent: true),
+      );
+    });
+
     testWidgets('has no request button until a category is open', (
       tester,
     ) async {

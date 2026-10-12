@@ -468,6 +468,64 @@ void main() {
     });
   });
 
+  group('step 3: urgent', () {
+    final urgentTime = NewRequestState(
+      now: now,
+      urgent: true,
+      category: TestCategories.airConditioning,
+      step: NewRequestStep.time,
+      issue: RequestIssue.notCooling,
+      addresses: const [testHome],
+      addressId: 'address-1',
+    );
+
+    testWidgets('shows who is free now and the fee, with no day to pick', (
+      tester,
+    ) async {
+      await pumpView(
+        tester,
+        urgentTime.copyWith(
+          urgentInfo: const UrgentInfo(feePiastres: 10000, availableNow: 3),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(find.text(l10n.urgentTitle), findsOneWidget);
+      expect(find.text(l10n.urgentAvailable(3)), findsOneWidget);
+      expect(find.text(l10n.urgentFeeLabel), findsOneWidget);
+      expect(find.text(l10n.urgentFeeAmount('100')), findsOneWidget);
+      expect(find.text(l10n.urgentSummary), findsOneWidget);
+      expect(find.text(l10n.today), findsNothing);
+      expect(find.text(l10n.newRequestSend('ms')), findsOneWidget);
+    });
+
+    testWidgets('says when nobody is free', (tester) async {
+      await pumpView(
+        tester,
+        urgentTime.copyWith(
+          urgentInfo: const UrgentInfo(feePiastres: 10000, availableNow: 0),
+        ),
+      );
+
+      expect(find.text(l10n.urgentAvailable(0)), findsOneWidget);
+      expect(find.text(l10n.urgentNobody('ms')), findsOneWidget);
+      expect(find.text(l10n.urgentFeeLabel), findsNothing);
+    });
+
+    testWidgets('waits for who is free, and retries when it fails', (
+      tester,
+    ) async {
+      when(() => cubit.loadUrgentInfo()).thenAnswer((_) async {});
+      await pumpView(tester, urgentTime);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      await pumpView(tester, urgentTime.copyWith(urgentFailed: true));
+      expect(find.text(l10n.urgentLoadFailed), findsOneWidget);
+      await tester.tap(find.text(l10n.retry));
+      verify(() => cubit.loadUrgentInfo()).called(1);
+    });
+  });
+
   group('step 3: the time', () {
     testWidgets('offers the days and the windows still open, and sums the '
         'request up', (tester) async {

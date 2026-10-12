@@ -81,6 +81,7 @@ class TechnicianApp {
     when(() => photoPicker.discard(any())).thenAnswer((_) async {});
     when(requests.fetchNewRequests).thenAnswer((_) async => const Ok([]));
     when(requests.fetchMyServices).thenAnswer((_) async => const Ok([]));
+    when(requests.fetchAvailability).thenAnswer((_) async => const Ok(null));
     when(
       () => requests.browseOpenRequests(
         categoryId: any(named: 'categoryId'),

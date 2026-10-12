@@ -734,4 +734,125 @@ void main() {
       expect(cubit.state.status, NewRequestStatus.sending);
     });
   });
+
+  group('urgent', () {
+    NewRequestCubit urgentCubit() => NewRequestCubit(
+      requests: requests,
+      speech: speech,
+      urgent: true,
+      clock: () => now,
+    )..useCategories(TestCategories.all);
+
+    /// An urgent form filled in up to its last step.
+    Future<NewRequestCubit> onLastStep({int availableNow = 3}) async {
+      when(
+        () => requests.urgentInfo(
+          categoryId: 'ac',
+          areaId: 'nasr_city',
+        ),
+      ).thenAnswer(
+        (_) async =>
+            Ok(UrgentInfo(feePiastres: 10000, availableNow: availableNow)),
+      );
+      final cubit = urgentCubit();
+      await cubit.start();
+      cubit.selectIssue(RequestIssue.notCooling);
+      await cubit.next();
+      await cubit.next();
+      return cubit;
+    }
+
+    test(
+      'asks who is free and the fee when it reaches the last step',
+      () async {
+        final cubit = await onLastStep();
+
+        expect(cubit.state.step, NewRequestStep.time);
+        expect(
+          cubit.state.urgentInfo,
+          const UrgentInfo(feePiastres: 10000, availableNow: 3),
+        );
+        expect(cubit.state.timeDone, isTrue);
+        await cubit.close();
+      },
+    );
+
+    test('needs a technician who is free now', () async {
+      final cubit = await onLastStep(availableNow: 0);
+
+      expect(cubit.state.timeDone, isFalse);
+      await cubit.send();
+      expect(cubit.state.showsErrors, isTrue);
+      verifyNever(() => requests.sendRequest(any()));
+      await cubit.close();
+    });
+
+    test(
+      'says when who is free could not be fetched, and tries again',
+      () async {
+        when(
+          () => requests.urgentInfo(
+            categoryId: any(named: 'categoryId'),
+            areaId: any(named: 'areaId'),
+          ),
+        ).thenAnswer((_) async => const Err(NetworkFailure()));
+        final cubit = urgentCubit();
+        await cubit.start();
+        cubit.selectIssue(RequestIssue.notCooling);
+        await cubit.next();
+        await cubit.next();
+
+        expect(cubit.state.urgentFailed, isTrue);
+        expect(cubit.state.timeDone, isFalse);
+
+        when(
+          () => requests.urgentInfo(
+            categoryId: any(named: 'categoryId'),
+            areaId: any(named: 'areaId'),
+          ),
+        ).thenAnswer(
+          (_) async => const Ok(UrgentInfo(feePiastres: 5000, availableNow: 1)),
+        );
+        await cubit.loadUrgentInfo();
+
+        expect(cubit.state.urgentFailed, isFalse);
+        expect(cubit.state.timeDone, isTrue);
+        await cubit.close();
+      },
+    );
+
+    test('sends for today with no time picked', () async {
+      when(() => requests.sendRequest(any())).thenAnswer(
+        (_) async => const Ok(SentRequest(id: 'request-9', sentTo: 3)),
+      );
+      final cubit = await onLastStep();
+
+      await cubit.next();
+
+      final draft =
+          verify(() => requests.sendRequest(captureAny())).captured.single
+              as RequestDraft;
+      expect(draft.urgent, isTrue);
+      expect(draft.day, today);
+      expect(draft.window, RequestWindow.anyTime);
+      expect(draft.technicianId, isNull);
+      expect(cubit.state.status, NewRequestStatus.sent);
+      await cubit.close();
+    });
+
+    test('a normal request is not urgent', () async {
+      when(() => requests.sendRequest(any())).thenAnswer(
+        (_) async => const Ok(SentRequest(id: 'request-9', sentTo: 3)),
+      );
+      final cubit = await filled();
+
+      await cubit.send();
+
+      final draft =
+          verify(() => requests.sendRequest(captureAny())).captured.single
+              as RequestDraft;
+      expect(draft.urgent, isFalse);
+      await cubit.close();
+    });
+  });
 }

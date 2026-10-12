@@ -77,6 +77,7 @@ Deno.test("every kind that is pushed has a text, an unknown one has none", () =>
     "request_cancelled_by_technician",
     "request_expired",
     "new_request",
+    "urgent_request",
     "offer_picked",
     "request_cancelled_by_consumer",
     "verification_approved",

@@ -38,11 +38,30 @@ final class OfferState extends Equatable {
   /// Minutes between two arrival times to pick from.
   static const arrivalStep = 30;
 
+  /// For an urgent request: minutes between arrival times, and how many are
+  /// offered. The first is 15 to 30 minutes away and the last is within the
+  /// three hours the server allows.
+  static const urgentArrivalStep = 15;
+  static const urgentArrivalChoices = 10;
+
   /// The times the technician can offer to come: every half hour of the
   /// request's window on its day, from now on.
   List<DateTime> get arrivalChoices {
     final request = this.request;
     if (request == null) return const [];
+    if (request.isUrgent) {
+      final quarter = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        now.hour,
+        now.minute - now.minute % urgentArrivalStep,
+      );
+      return [
+        for (var step = 2; step <= urgentArrivalChoices + 1; step++)
+          quarter.add(Duration(minutes: step * urgentArrivalStep)),
+      ];
+    }
     final day = request.day;
     final window = request.window;
     return [
