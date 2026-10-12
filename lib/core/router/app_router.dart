@@ -193,6 +193,7 @@ RouteBase _consumerRoutes() {
         builder: (context, state) => NewRequestPage(
           categoryId: state.uri.queryParameters['category'],
           technicianId: state.uri.queryParameters['technician'],
+          warrantyOf: state.uri.queryParameters['warranty'],
         ),
       ),
       GoRoute(

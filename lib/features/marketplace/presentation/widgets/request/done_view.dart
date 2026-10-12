@@ -22,6 +22,7 @@ import 'package:salahly/features/marketplace/presentation/cubit/review_form_cubi
 import 'package:salahly/features/marketplace/presentation/request_follow_up.dart';
 import 'package:salahly/features/marketplace/presentation/widgets/request/complaint_link.dart';
 import 'package:salahly/features/marketplace/presentation/widgets/request/request_unavailable_view.dart';
+import 'package:salahly/features/marketplace/presentation/widgets/request/warranty_card.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
 /// The finished work: the invoice, how it was paid and the rating.
@@ -536,6 +537,10 @@ class _Reviewed extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
+            if (!details.isWarranty) ...[
+              WarrantyCard(details: details),
+              const SizedBox(height: 12),
+            ],
             if (details.hasOpenComplaint)
               const OpenComplaintNote()
             else

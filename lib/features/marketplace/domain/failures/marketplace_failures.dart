@@ -22,6 +22,12 @@ final class TechnicianUnavailableFailure extends Failure {
   const TechnicianUnavailableFailure();
 }
 
+/// The job can't be covered anymore: its fourteen days are over, a visit is
+/// already booked, or it isn't the customer's.
+final class WarrantyUnavailableFailure extends Failure {
+  const WarrantyUnavailableFailure();
+}
+
 /// The time the offer named has passed.
 final class OfferExpiredFailure extends Failure {
   const OfferExpiredFailure();

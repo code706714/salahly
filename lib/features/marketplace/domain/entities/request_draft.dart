@@ -13,6 +13,7 @@ final class RequestDraft extends Equatable {
     this.description,
     this.photoPaths = const [],
     this.technicianId,
+    this.warrantyOf,
   });
 
   final String categoryId;
@@ -31,6 +32,9 @@ final class RequestDraft extends Equatable {
   /// Someone the consumer hired before and asks again first.
   final String? technicianId;
 
+  /// The request whose job this is a free warranty visit for, if it is one.
+  final String? warrantyOf;
+
   @override
   List<Object?> get props => [
     categoryId,
@@ -41,6 +45,7 @@ final class RequestDraft extends Equatable {
     day,
     window,
     technicianId,
+    warrantyOf,
   ];
 }
 

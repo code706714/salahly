@@ -45,10 +45,18 @@ import 'package:salahly/l10n/generated/app_localizations.dart';
 /// Starts on [categoryId] when given; [technicianId] sends the request to
 /// that technician first.
 class NewRequestPage extends StatelessWidget {
-  const NewRequestPage({this.categoryId, this.technicianId, super.key});
+  const NewRequestPage({
+    this.categoryId,
+    this.technicianId,
+    this.warrantyOf,
+    super.key,
+  });
 
   final String? categoryId;
   final String? technicianId;
+
+  /// Makes the request a free warranty visit for this request's job.
+  final String? warrantyOf;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +70,7 @@ class NewRequestPage extends StatelessWidget {
           speech: context.read(),
           categoryId: categoryId,
           technicianId: technicianId,
+          warrantyOf: warrantyOf,
         )..useCategories(categories.state.categories);
         unawaited(cubit.start());
         return cubit;

@@ -40,6 +40,8 @@ Map<String, dynamic> requestDetailsJson({
   Map<String, dynamic>? job,
   Map<String, dynamic>? review,
   String? arrivingAt,
+  String? warrantyUntil,
+  bool isWarranty = false,
 }) => {
   'id': 'request-1',
   'category_id': 'ac',
@@ -67,6 +69,8 @@ Map<String, dynamic> requestDetailsJson({
   'review': review,
   'open_complaint': false,
   'technician_arriving_at': arrivingAt,
+  'warranty_until': warrantyUntil,
+  'is_warranty': isWarranty,
 };
 
 Map<String, dynamic> requestJobJson({

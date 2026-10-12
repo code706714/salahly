@@ -84,6 +84,8 @@ abstract final class MarketplaceModels {
       technicianArrivingAt: optionalTimeFromWire(
         json['technician_arriving_at'],
       ),
+      warrantyUntil: optionalTimeFromWire(json['warranty_until']),
+      isWarranty: json['is_warranty'] as bool? ?? false,
     );
   }
 
