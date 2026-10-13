@@ -59,6 +59,7 @@ IncomingRequest testIncoming({
   int offerCount = 2,
   bool dismissed = false,
   MyOffer? myOffer,
+  int? urgentFeePiastres,
 }) => IncomingRequest(
   id: id,
   categoryId: categoryId,
@@ -78,4 +79,5 @@ IncomingRequest testIncoming({
   offerCount: offerCount,
   dismissed: dismissed,
   myOffer: myOffer,
+  urgentFeePiastres: urgentFeePiastres,
 );

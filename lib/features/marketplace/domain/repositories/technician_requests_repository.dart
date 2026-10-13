@@ -63,6 +63,14 @@ abstract interface class TechnicianRequestsRepository {
   /// again soon sends nothing more. Returns when the consumer was told.
   Future<Result<DateTime>> sendArriving(String requestId);
 
+  /// Until when the technician said they are free for urgent requests, or
+  /// null when they aren't.
+  Future<Result<DateTime?>> fetchAvailability();
+
+  /// Says the technician is free now ([on], for a few hours) or not. Returns
+  /// until when.
+  Future<Result<DateTime?>> setAvailable({required bool on});
+
   /// A short-lived link to show one of a request's photos.
   Future<Result<String>> photoUrl(String path);
 }

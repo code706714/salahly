@@ -165,6 +165,7 @@ final class RequestDetails extends Equatable {
     this.technicianArrivingAt,
     this.warrantyUntil,
     this.isWarranty = false,
+    this.urgentFeePiastres,
   });
 
   final String id;
@@ -218,6 +219,11 @@ final class RequestDetails extends Equatable {
   /// Whether this request is itself a warranty visit.
   final bool isWarranty;
 
+  /// The urgent fee on top of the offer's price, when the request is urgent.
+  final int? urgentFeePiastres;
+
+  bool get isUrgent => urgentFeePiastres != null;
+
   RequestOffer? get chosenOffer =>
       offers.where((offer) => offer.id == chosenOfferId).firstOrNull;
 
@@ -262,6 +268,7 @@ final class RequestDetails extends Equatable {
     technicianArrivingAt,
     warrantyUntil,
     isWarranty,
+    urgentFeePiastres,
   ];
 }
 

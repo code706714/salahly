@@ -76,9 +76,10 @@ class _OffersScreenState extends State<_OffersScreen> {
       (cubit) => cubit.state.busy,
     );
     final headline = requestHeadline(l10n, details.issue, category: category);
-    final when =
-        '${requestDayName(l10n, details.day, today: today)} '
-        '${requestWindowLabel(l10n, details.window)}';
+    final when = details.isUrgent
+        ? l10n.urgentBadge
+        : '${requestDayName(l10n, details.day, today: today)} '
+              '${requestWindowLabel(l10n, details.window)}';
     return Scaffold(
       appBar: DetailHeader(
         title: l10n.offersTitle,
@@ -121,6 +122,7 @@ class _OffersScreenState extends State<_OffersScreen> {
               const SizedBox(height: 14),
               _OfferCard(
                 offer: offer,
+                urgentFeePiastres: details.urgentFeePiastres,
                 today: today,
                 expired: !offer.arriveAt.isAfter(today),
                 picking:
@@ -262,6 +264,7 @@ class _SortChip extends StatelessWidget {
 class _OfferCard extends StatelessWidget {
   const _OfferCard({
     required this.offer,
+    required this.urgentFeePiastres,
     required this.today,
     required this.expired,
     required this.picking,
@@ -272,6 +275,9 @@ class _OfferCard extends StatelessWidget {
   });
 
   final RequestOffer offer;
+
+  /// The urgent fee on top of the price, when the request is urgent.
+  final int? urgentFeePiastres;
   final DateTime today;
 
   /// The arrival time has passed, so the server would refuse this offer.
@@ -378,6 +384,17 @@ class _OfferCard extends StatelessWidget {
                               color: colors.ink,
                             ),
                           ),
+                          if (urgentFeePiastres case final fee?) ...[
+                            const SizedBox(height: 2),
+                            Text(
+                              l10n.urgentOfferFee(formatPounds(fee)),
+                              style: TextStyle(
+                                fontSize: 13,
+                                height: 1.5,
+                                color: colors.inkMuted,
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ),

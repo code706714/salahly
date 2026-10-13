@@ -108,6 +108,30 @@ void main() {
       expect(find.text(l10n.offersPricesNote('ms')), findsOneWidget);
     });
 
+    testWidgets('the urgent fee under every price of an urgent request', (
+      tester,
+    ) async {
+      harness.show(
+        liveRequest(offers: liveOffers(), urgentFeePiastres: 10000),
+      );
+
+      await pumpView(tester, surfaceSize: tall);
+
+      expect(find.textContaining(l10n.urgentBadge), findsOneWidget);
+      expect(
+        find.text(l10n.urgentOfferFee('100')),
+        findsNWidgets(liveOffers().length),
+      );
+    });
+
+    testWidgets('no fee on a normal request', (tester) async {
+      harness.show(liveRequest(offers: liveOffers()));
+
+      await pumpView(tester, surfaceSize: tall);
+
+      expect(find.text(l10n.urgentOfferFee('100')), findsNothing);
+    });
+
     testWidgets('a technician with no ratings yet, and no distance', (
       tester,
     ) async {

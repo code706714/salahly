@@ -18,6 +18,9 @@ String consumerFailureMessage(
       honorific,
     ),
     WarrantyUnavailableFailure() => l10n.consumerWarrantyUnavailable(honorific),
+    NoTechnicianAvailableFailure() => l10n.consumerNoTechnicianAvailable(
+      honorific,
+    ),
     OfferExpiredFailure() => l10n.consumerOfferExpired(honorific),
     TooLateToCancelFailure() => l10n.consumerTooLateToCancel(honorific),
     PriceChangeGoneFailure() => l10n.consumerPriceChangeGone(honorific),

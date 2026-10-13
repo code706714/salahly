@@ -14,6 +14,7 @@ final class RequestDraft extends Equatable {
     this.photoPaths = const [],
     this.technicianId,
     this.warrantyOf,
+    this.urgent = false,
   });
 
   final String categoryId;
@@ -35,6 +36,10 @@ final class RequestDraft extends Equatable {
   /// The request whose job this is a free warranty visit for, if it is one.
   final String? warrantyOf;
 
+  /// Sent to the technicians who are free now, for today, with the urgent
+  /// fee on top.
+  final bool urgent;
+
   @override
   List<Object?> get props => [
     categoryId,
@@ -46,7 +51,19 @@ final class RequestDraft extends Equatable {
     window,
     technicianId,
     warrantyOf,
+    urgent,
   ];
+}
+
+/// The urgent fee and how many technicians are free now in an area.
+final class UrgentInfo extends Equatable {
+  const UrgentInfo({required this.feePiastres, required this.availableNow});
+
+  final int feePiastres;
+  final int availableNow;
+
+  @override
+  List<Object?> get props => [feePiastres, availableNow];
 }
 
 /// A request the server accepted, and how many technicians it reached.

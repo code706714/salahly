@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:salahly/core/text/money.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
@@ -103,15 +104,23 @@ class IncomingRequestDetails extends StatelessWidget {
                 children: [
                   _Fact(icon: Icons.place_outlined, text: place),
                   const SizedBox(height: 8),
-                  _Fact(
-                    icon: Icons.calendar_today_outlined,
-                    text: requestDayLabel(
-                      l10n,
-                      request.day,
-                      request.window,
-                      today: now,
+                  if (request.urgentFeePiastres case final fee?) ...[
+                    _Fact(icon: Icons.bolt_rounded, text: l10n.urgentBadge),
+                    const SizedBox(height: 8),
+                    _Fact(
+                      icon: Icons.payments_outlined,
+                      text: l10n.urgentIncomingFee(formatPounds(fee)),
                     ),
-                  ),
+                  ] else
+                    _Fact(
+                      icon: Icons.calendar_today_outlined,
+                      text: requestDayLabel(
+                        l10n,
+                        request.day,
+                        request.window,
+                        today: now,
+                      ),
+                    ),
                   const SizedBox(height: 8),
                   Text(
                     l10n.incomingPrivacy(honorific),

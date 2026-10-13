@@ -61,6 +61,51 @@ void main() {
     expect(request.acceptsOffers, isTrue);
   });
 
+  test('reads the urgent fee of an urgent request', () async {
+    body = [incomingRequestJson(urgentFee: 10000)];
+
+    final request =
+        (await repository().fetchNewRequests() as Ok<List<IncomingRequest>>)
+            .value
+            .single;
+
+    expect(request.isUrgent, isTrue);
+    expect(request.urgentFeePiastres, 10000);
+  });
+
+  test('reads a request that is not urgent', () async {
+    body = [incomingRequestJson()];
+
+    final request =
+        (await repository().fetchNewRequests() as Ok<List<IncomingRequest>>)
+            .value
+            .single;
+
+    expect(request.isUrgent, isFalse);
+  });
+
+  test(
+    'reads and sets when the technician is free for urgent requests',
+    () async {
+      body = '2026-10-13T12:00:00+00:00';
+
+      final until = await repository().setAvailable(on: true);
+
+      expect(requests.single.url.path, '/rest/v1/rpc/set_available_now');
+      expect(jsonDecode(requests.single.body), {'p_on': true});
+      expect(
+        (until as Ok<DateTime?>).value?.toUtc(),
+        DateTime.utc(2026, 10, 13, 12),
+      );
+
+      body = null;
+      final off = await repository().fetchAvailability();
+
+      expect(requests.last.url.path, '/rest/v1/rpc/my_availability');
+      expect((off as Ok<DateTime?>).value, isNull);
+    },
+  );
+
   test("reads a request with this technician's offer", () async {
     body = incomingRequestJson(
       myOffer: {

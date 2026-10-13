@@ -76,6 +76,7 @@ RequestDetails liveRequest({
   bool widened = false,
   UserRole? cancelledBy,
   String? chosenOfferId,
+  int? urgentFeePiastres,
 }) {
   final requested = day ?? dayFromToday(1);
   return RequestDetails(
@@ -99,5 +100,6 @@ RequestDetails liveRequest({
     offers: offers,
     chosenOfferId: chosenOfferId,
     hasOpenComplaint: false,
+    urgentFeePiastres: urgentFeePiastres,
   );
 }

@@ -43,6 +43,21 @@ class SupabaseTechnicianRequestsRepository
   });
 
   @override
+  Future<Result<DateTime?>> fetchAvailability() => _call(() async {
+    final until = await _client.rpc<String?>('my_availability');
+    return optionalTimeFromWire(until);
+  });
+
+  @override
+  Future<Result<DateTime?>> setAvailable({required bool on}) => _call(() async {
+    final until = await _client.rpc<String?>(
+      'set_available_now',
+      params: {'p_on': on},
+    );
+    return optionalTimeFromWire(until);
+  });
+
+  @override
   Future<Result<IncomingRequest?>> fetchRequest(String id) => _call(() async {
     final json = await _client.rpc<Map<String, dynamic>?>(
       'technician_request',

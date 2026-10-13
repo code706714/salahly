@@ -7,6 +7,7 @@ import 'package:salahly/core/widgets/app_card.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/incoming_requests_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/incoming_labels.dart';
+import 'package:salahly/features/marketplace/presentation/widgets/incoming/availability_switch.dart';
 import 'package:salahly/features/marketplace/presentation/widgets/incoming/incoming_request_card.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
@@ -57,11 +58,12 @@ class IncomingRequestsView extends StatelessWidget {
             // Pull to refresh works on a short list too.
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
-            itemCount: requests.isEmpty ? 1 : requests.length,
+            itemCount: (requests.isEmpty ? 1 : requests.length) + 1,
             separatorBuilder: (context, index) => const SizedBox(height: 10),
             itemBuilder: (context, index) {
+              if (index == 0) return const AvailabilitySwitch();
               if (requests.isEmpty) return const _Empty();
-              final request = requests[index];
+              final request = requests[index - 1];
               return IncomingRequestCard(
                 request: request,
                 standing: standingOf(

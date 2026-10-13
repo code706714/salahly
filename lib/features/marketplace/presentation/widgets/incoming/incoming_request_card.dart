@@ -107,6 +107,11 @@ class IncomingRequestCard extends StatelessWidget {
                   spacing: 6,
                   runSpacing: 6,
                   children: [
+                    if (request.isUrgent)
+                      StatusPill(
+                        label: l10n.urgentBadge,
+                        tone: PillTone.attention,
+                      ),
                     if (standing.isLive)
                       StatusPill(
                         label: l10n.incomingOfferCount(

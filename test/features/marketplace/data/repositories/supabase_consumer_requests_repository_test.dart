@@ -64,6 +64,31 @@ void main() {
 
   setUp(() => server = _Server());
 
+  group('urgentInfo', () {
+    test('reads the fee and who is free now', () async {
+      server.body = {'fee_piastres': 10000, 'available_now': 3};
+
+      final result = await server.repository().urgentInfo(
+        categoryId: 'ac',
+        areaId: 'nasr_city',
+      );
+
+      expect(
+        result,
+        isA<Ok<UrgentInfo>>().having(
+          (ok) => ok.value,
+          'value',
+          const UrgentInfo(feePiastres: 10000, availableNow: 3),
+        ),
+      );
+      expect(server.lastPath, '/rest/v1/rpc/urgent_info');
+      expect(server.lastParams, {
+        'p_category_id': 'ac',
+        'p_area_id': 'nasr_city',
+      });
+    });
+  });
+
   group('sendRequest', () {
     test("sends the draft in the server's terms", () async {
       server.body = {'id': 'request-1', 'sent_to': 5};
@@ -127,6 +152,55 @@ void main() {
         'p_preferred_on': '2026-10-03',
         'p_window': 'noon',
       });
+    });
+
+    test('sends an urgent request with no day or time', () async {
+      server.body = {'id': 'request-3', 'sent_to': 4};
+
+      final result = await server.repository().sendRequest(
+        RequestDraft(
+          categoryId: 'ac',
+          issue: RequestIssue.notCooling,
+          addressId: 'address-1',
+          day: DateTime(2026, 10, 3),
+          window: RequestWindow.anyTime,
+          urgent: true,
+        ),
+      );
+
+      expect(result, isA<Ok<SentRequest>>());
+      expect(server.lastPath, '/rest/v1/rpc/create_urgent_request');
+      expect(server.lastParams, {
+        'p_category_id': 'ac',
+        'p_issue': 'not_cooling',
+        'p_description': null,
+        'p_photo_paths': <String>[],
+        'p_address_id': 'address-1',
+      });
+    });
+
+    test('says when no technician is free for an urgent request', () async {
+      server.fails('no_technician_available');
+
+      final result = await server.repository().sendRequest(
+        RequestDraft(
+          categoryId: 'ac',
+          issue: RequestIssue.notCooling,
+          addressId: 'address-1',
+          day: DateTime(2026, 10, 3),
+          window: RequestWindow.anyTime,
+          urgent: true,
+        ),
+      );
+
+      expect(
+        result,
+        isA<Err<SentRequest>>().having(
+          (err) => err.failure,
+          'failure',
+          const NoTechnicianAvailableFailure(),
+        ),
+      );
     });
 
     test('says when the warranty is over', () async {
@@ -222,6 +296,33 @@ void main() {
         details.technicianArrivingAt?.toUtc(),
         DateTime.utc(2026, 10, 3, 8, 50),
       );
+    });
+
+    test('reads the urgent fee of an urgent request', () async {
+      server.body = requestDetailsJson(
+        job: requestJobJson(),
+        urgentFee: 10000,
+      );
+
+      final details =
+          (await server.repository().fetchRequest('request-1')
+                  as Ok<RequestDetails?>)
+              .value!;
+
+      expect(details.isUrgent, isTrue);
+      expect(details.urgentFeePiastres, 10000);
+    });
+
+    test('reads a request that is not urgent', () async {
+      server.body = requestDetailsJson(job: requestJobJson());
+
+      final details =
+          (await server.repository().fetchRequest('request-1')
+                  as Ok<RequestDetails?>)
+              .value!;
+
+      expect(details.isUrgent, isFalse);
+      expect(details.urgentFeePiastres, isNull);
     });
 
     test('reads a request nobody said that about', () async {

@@ -172,6 +172,29 @@ void main() {
       expect(choices, hasLength(24));
     });
 
+    test('an urgent request offers every quarter hour from soon, within '
+        'three hours', () async {
+      now = DateTime(2026, 10, 2, 20, 7);
+
+      final choices = await choicesFor(
+        testIncoming(urgentFeePiastres: 10000),
+      );
+
+      expect(choices.first, DateTime(2026, 10, 2, 20, 30));
+      expect(choices.last, DateTime(2026, 10, 2, 22, 45));
+      expect(choices, hasLength(OfferState.urgentArrivalChoices));
+      expect(
+        choices.every((at) => at.difference(now) < const Duration(hours: 3)),
+        isTrue,
+      );
+      expect(
+        choices.every(
+          (at) => at.difference(now) >= const Duration(minutes: 15),
+        ),
+        isTrue,
+      );
+    });
+
     test('none before the request is fetched', () {
       expect(OfferState(now: now).arrivalChoices, isEmpty);
     });

@@ -30,6 +30,7 @@ Failure? marketplaceFailureFrom(Object error) {
     'no_counter' => const NoCounterFailure(),
     'warranty_unavailable' => const WarrantyUnavailableFailure(),
     'invalid_price' => const InvalidPriceFailure(),
+    'no_technician_available' => const NoTechnicianAvailableFailure(),
     _ => null,
   };
 }

@@ -68,6 +68,11 @@ function textOf(item: PushItem): Text | null {
       };
     case "new_request":
       return { title: "طلب جديد", body: "افتح الطلب وابعت عرضك." };
+    case "urgent_request":
+      return {
+        title: "طلب مستعجل",
+        body: "عميل محتاج فني دلوقتي. افتح وابعت عرضك.",
+      };
     case "offer_picked":
       return { title: "عرضك اتختار", body: "افتح الشغلانة وشوف التفاصيل." };
     case "request_cancelled_by_consumer":

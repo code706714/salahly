@@ -102,6 +102,10 @@ class ConsumerHomeView extends StatelessWidget {
                     ],
                     if (state.categories.isNotEmpty) ...[
                       const SizedBox(height: 18),
+                      const _UrgentCard(),
+                    ],
+                    if (state.categories.isNotEmpty) ...[
+                      const SizedBox(height: 18),
                       _Categories(state: state),
                     ],
                     const SizedBox(height: 18),
@@ -235,6 +239,54 @@ class _CreditsLeft extends StatelessWidget {
               ),
             ),
           ],
+        ],
+      ),
+    );
+  }
+}
+
+/// "محتاج فني دلوقتي؟": starts an urgent request.
+class _UrgentCard extends StatelessWidget {
+  const _UrgentCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final colors = context.appColors;
+    final honorific = context.watchHonorific();
+    return AppCard(
+      radius: AppRadii.lg,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      borderColor: colors.brass,
+      onTap: () => context.push(AppRoutes.newRequestFor(urgent: true)),
+      child: Row(
+        children: [
+          Icon(Icons.bolt_rounded, size: 28, color: colors.brass),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.urgentHomeTitle(honorific),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    height: 1.5,
+                  ),
+                ),
+                Text(
+                  l10n.urgentHomeBody(honorific),
+                  style: TextStyle(
+                    fontSize: 13,
+                    height: 1.6,
+                    color: colors.inkMuted,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Icon(Icons.chevron_right_rounded, color: colors.brass),
         ],
       ),
     );
