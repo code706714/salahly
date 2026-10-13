@@ -788,14 +788,15 @@ void main() {
       answerWith(guide);
       final cubit =
           NewRequestCubit(
-            requests: requests,
-            speech: speech,
-            clock: () => now,
-          )..useCategories([
-            TestCategories.airConditioning,
-            TestCategories.plumbing,
-          ]);
-      cubit.selectIssue(RequestIssue.other);
+              requests: requests,
+              speech: speech,
+              clock: () => now,
+            )
+            ..useCategories([
+              TestCategories.airConditioning,
+              TestCategories.plumbing,
+            ])
+            ..selectIssue(RequestIssue.other);
       await pumpEventQueue();
       expect(cubit.state.priceGuide, guide);
 
