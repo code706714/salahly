@@ -75,6 +75,8 @@ function textOf(item: PushItem): Text | null {
       };
     case "chat_message":
       return { title: "رسالة جديدة", body: "افتح المحادثة وردّ." };
+    case "incoming_call":
+      return { title: "مكالمة جاية", body: "افتح صلحلي عشان تردّ." };
     case "escrow_held":
       return item.role === "technician"
         ? {

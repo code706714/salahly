@@ -79,6 +79,7 @@ Deno.test("every kind that is pushed has a text, an unknown one has none", () =>
     "new_request",
     "urgent_request",
     "chat_message",
+    "incoming_call",
     "escrow_held",
     "escrow_rejected",
     "escrow_released",

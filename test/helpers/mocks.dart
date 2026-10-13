@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/contacts/contact_picker.dart';
+import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/launch/external_apps.dart';
 import 'package:salahly/core/location/location_service.dart';
 import 'package:salahly/core/media/photo_picker.dart';
@@ -11,6 +12,7 @@ import 'package:salahly/features/account/domain/repositories/account_repository.
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
 import 'package:salahly/features/balance/domain/repositories/balance_repository.dart';
+import 'package:salahly/features/calls/domain/repositories/call_repository.dart';
 import 'package:salahly/features/catalog/domain/repositories/catalog_repository.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/chat/domain/repositories/chat_repository.dart';
@@ -28,6 +30,15 @@ import 'package:salahly/features/onboarding/domain/repositories/onboarding_repos
 class MockAuthRepository extends Mock implements AuthRepository {}
 
 class MockChatRepository extends Mock implements ChatRepository {}
+
+class MockCallRepository extends Mock implements CallRepository {}
+
+/// A call repository nobody calls: nothing is ringing.
+CallRepository quietCalls() {
+  final calls = MockCallRepository();
+  when(calls.pending).thenAnswer((_) async => const Ok(null));
+  return calls;
+}
 
 class MockEscrowRepository extends Mock implements EscrowRepository {}
 

@@ -106,6 +106,27 @@ abstract final class AppRoutes {
   /// The technician's chat with the consumer about a request.
   static String incomingRequestChat(String id) => '${incomingRequest(id)}/chat';
 
+  /// A voice call on [role]'s side of the app: one being made about
+  /// [requestId] with [technicianId], or the ringing call [callId].
+  static String call(
+    UserRole role, {
+    required String requestId,
+    required String technicianId,
+    required String name,
+    String? callId,
+  }) => Uri(
+    path: switch (role) {
+      UserRole.consumer => '$consumerHome/call',
+      UserRole.technician => '$technicianHome/call',
+    },
+    queryParameters: {
+      'request': requestId,
+      'technician': technicianId,
+      'name': name,
+      'call': ?callId,
+    },
+  ).toString();
+
   static String job(String id) => '$technicianJobs/$id';
   static String jobQuote(String id) => '${job(id)}/quote';
   static String jobInvoice(String id) => '${job(id)}/invoice';

@@ -225,6 +225,19 @@ void main() {
       },
     );
 
+    test('a call names the other side, on either side of the app', () {
+      final call = of(NotificationKind.incomingCall);
+
+      expect(consumerText(call), (
+        title: 'مكالمة من أحمد رمضان',
+        body: 'افتح صلحلي وردّ.',
+      ));
+      expect(technicianText(call), (
+        title: 'مكالمة من نورهان م.',
+        body: 'افتح صلحلي وردّ.',
+      ));
+    });
+
     test('a chat message names the other side, on either side of the app', () {
       final message = of(NotificationKind.chatMessage);
 

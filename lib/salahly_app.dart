@@ -9,6 +9,7 @@ import 'package:salahly/core/router/session_refresh.dart';
 import 'package:salahly/core/theme/app_scroll_behavior.dart';
 import 'package:salahly/core/theme/app_theme.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
+import 'package:salahly/features/calls/domain/services/call_engine.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
 class SalahlyApp extends StatefulWidget {
@@ -59,6 +60,10 @@ class _SalahlyAppState extends State<SalahlyApp> {
         ),
         RepositoryProvider.value(value: dependencies.balanceRepository),
         RepositoryProvider.value(value: dependencies.chatRepository),
+        RepositoryProvider.value(value: dependencies.callRepository),
+        RepositoryProvider<CallEngineFactory>.value(
+          value: dependencies.callEngineFactory,
+        ),
         RepositoryProvider.value(value: dependencies.escrowRepository),
         RepositoryProvider.value(value: dependencies.notificationsRepository),
         RepositoryProvider.value(value: dependencies.liveUpdates),

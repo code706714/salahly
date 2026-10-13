@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/widgets/live_refresh.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
+import 'package:salahly/features/calls/presentation/widgets/incoming_call_scope.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/my_requests_cubit.dart';
@@ -87,7 +88,13 @@ class _ConsumerScopeState extends State<ConsumerScope> {
         },
         child: LiveRefresh(
           onChange: _load,
-          child: PushScope(role: UserRole.consumer, child: widget.child),
+          child: PushScope(
+            role: UserRole.consumer,
+            child: IncomingCallScope(
+              role: UserRole.consumer,
+              child: widget.child,
+            ),
+          ),
         ),
       ),
     );

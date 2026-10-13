@@ -32,8 +32,11 @@ void main() {
 
   void show(ChatState state) => when(() => cubit.state).thenReturn(state);
 
-  Future<void> pumpView(WidgetTester tester) => tester.pumpApp(
-    const ChatView(),
+  Future<void> pumpView(
+    WidgetTester tester, {
+    void Function(String name)? onCall,
+  }) => tester.pumpApp(
+    ChatView(onCall: onCall),
     repositories: [RepositoryProvider<LiveUpdates>.value(value: live)],
     blocs: [BlocProvider<ChatCubit>.value(value: cubit)],
   );
@@ -47,6 +50,28 @@ void main() {
     conversation: testConversation(isOpen: isOpen, messages: messages),
     sending: sending,
   );
+
+  testWidgets('calls the other side from the header', (tester) async {
+    show(ready());
+    String? called;
+    await pumpView(tester, onCall: (name) => called = name);
+
+    await tester.tap(find.byIcon(Icons.call_outlined));
+
+    expect(called, 'محمود عبد الله');
+  });
+
+  testWidgets('has no call button in a closed chat or without a handler', (
+    tester,
+  ) async {
+    show(ready(isOpen: false));
+    await pumpView(tester, onCall: (_) {});
+    expect(find.byIcon(Icons.call_outlined), findsNothing);
+
+    show(ready());
+    await pumpView(tester);
+    expect(find.byIcon(Icons.call_outlined), findsNothing);
+  });
 
   testWidgets('waits for the conversation', (tester) async {
     show(const ChatState());

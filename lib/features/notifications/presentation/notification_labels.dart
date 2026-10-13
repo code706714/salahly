@@ -134,6 +134,13 @@ NotificationText notificationText(
       },
       body: l10n.notifChatMessageBody,
     ),
+    NotificationKind.incomingCall => (
+      title: switch (role) {
+        UserRole.consumer => l10n.notifIncomingCall(technician),
+        UserRole.technician => l10n.notifIncomingCall(consumer),
+      },
+      body: l10n.notifIncomingCallBody,
+    ),
     NotificationKind.escrowHeld => switch (role) {
       UserRole.consumer => (
         title: l10n.notifEscrowHeldConsumer,

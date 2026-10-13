@@ -162,6 +162,11 @@ class NotificationTile extends StatelessWidget {
       colors.primarySoft,
       colors.primary,
     ),
+    NotificationKind.incomingCall => (
+      Icons.call_outlined,
+      colors.primarySoft,
+      colors.primary,
+    ),
     NotificationKind.escrowHeld ||
     NotificationKind.escrowReleased ||
     NotificationKind.escrowPaidOut ||
