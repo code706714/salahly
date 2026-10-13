@@ -160,7 +160,7 @@ select throws_ok($$select public.browse_technicians(null, 'atlantis')$$, '22023'
 
 select is(
   (select array_agg(k order by k) from jsonb_object_keys(public.browse_technicians('ac') -> 0) k),
-  array['area_id', 'area_ids', 'avatar_path', 'id', 'jobs_done', 'min_price_piastres', 'name',
+  array['area_id', 'area_ids', 'avatar_path', 'fast_reply', 'id', 'jobs_done', 'min_price_piastres', 'name',
         'rating', 'review_count', 'services', 'years_experience'],
   'a card carries exactly what a consumer needs'
 );
