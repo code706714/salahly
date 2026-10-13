@@ -73,6 +73,8 @@ function textOf(item: PushItem): Text | null {
         title: "طلب مستعجل",
         body: "عميل محتاج فني دلوقتي. افتح وابعت عرضك.",
       };
+    case "chat_message":
+      return { title: "رسالة جديدة", body: "افتح المحادثة وردّ." };
     case "offer_picked":
       return { title: "عرضك اتختار", body: "افتح الشغلانة وشوف التفاصيل." };
     case "request_cancelled_by_consumer":

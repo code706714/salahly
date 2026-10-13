@@ -18,6 +18,7 @@ import 'package:salahly/features/auth/presentation/pages/otp_page.dart';
 import 'package:salahly/features/auth/presentation/pages/phone_page.dart';
 import 'package:salahly/features/balance/presentation/pages/balance_page.dart';
 import 'package:salahly/features/balance/presentation/pages/buy_uses_page.dart';
+import 'package:salahly/features/chat/presentation/pages/chat_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customer_form_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customer_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customers_page.dart';
@@ -205,6 +206,13 @@ RouteBase _consumerRoutes() {
             path: 'complaint',
             builder: (context, state) => ComplaintPage(requestId: id(state)),
           ),
+          GoRoute(
+            path: 'chat/:technicianId',
+            builder: (context, state) => ChatPage(
+              requestId: id(state),
+              technicianId: state.pathParameters['technicianId']!,
+            ),
+          ),
         ],
       ),
       GoRoute(
@@ -307,6 +315,18 @@ RouteBase _technicianRoutes() {
       GoRoute(
         path: '${AppRoutes.incomingRequests}/:id',
         builder: (context, state) => IncomingRequestPage(requestId: id(state)),
+        routes: [
+          GoRoute(
+            path: 'chat',
+            builder: (context, state) => ChatPage(
+              requestId: id(state),
+              technicianId: switch (context.read<SessionCubit>().state) {
+                SessionReady(:final profile) => profile.id,
+                _ => '',
+              },
+            ),
+          ),
+        ],
       ),
       GoRoute(
         path: AppRoutes.technicianCalendar,

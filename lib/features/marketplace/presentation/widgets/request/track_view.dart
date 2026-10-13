@@ -65,6 +65,17 @@ class TrackView extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             _TechnicianCard(details: details, offer: offer),
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              onPressed: () => context.push(
+                AppRoutes.requestChat(details.id, offer.technician.id),
+              ),
+              icon: const Icon(Icons.forum_outlined),
+              label: Text(l10n.chatWithTechnician),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size.fromHeight(48),
+              ),
+            ),
             const SizedBox(height: 16),
             _Steps(details: details, offer: offer),
             const SizedBox(height: 16),

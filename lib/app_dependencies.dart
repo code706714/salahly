@@ -29,6 +29,8 @@ import 'package:salahly/features/balance/data/repositories/supabase_balance_repo
 import 'package:salahly/features/balance/domain/repositories/balance_repository.dart';
 import 'package:salahly/features/catalog/data/repositories/supabase_catalog_repository.dart';
 import 'package:salahly/features/catalog/domain/repositories/catalog_repository.dart';
+import 'package:salahly/features/chat/data/repositories/supabase_chat_repository.dart';
+import 'package:salahly/features/chat/domain/repositories/chat_repository.dart';
 import 'package:salahly/features/customers/data/repositories/drift_customers_repository.dart';
 import 'package:salahly/features/customers/domain/repositories/customers_repository.dart';
 import 'package:salahly/features/jobs/data/repositories/drift_jobs_repository.dart';
@@ -60,6 +62,7 @@ class AppDependencies {
     required this.consumerRequestsRepository,
     required this.technicianRequestsRepository,
     required this.balanceRepository,
+    required this.chatRepository,
     required this.notificationsRepository,
     required this.liveUpdates,
     required this.pushService,
@@ -120,6 +123,7 @@ class AppDependencies {
         client,
       ),
       balanceRepository: SupabaseBalanceRepository(client),
+      chatRepository: SupabaseChatRepository(client),
       notificationsRepository: SupabaseNotificationsRepository(client),
       liveUpdates: SupabaseLiveUpdates(client),
       pushService: MessagingPushService(
@@ -153,6 +157,7 @@ class AppDependencies {
   final ConsumerRequestsRepository consumerRequestsRepository;
   final TechnicianRequestsRepository technicianRequestsRepository;
   final BalanceRepository balanceRepository;
+  final ChatRepository chatRepository;
   final NotificationsRepository notificationsRepository;
   final LiveUpdates liveUpdates;
   final PushService pushService;

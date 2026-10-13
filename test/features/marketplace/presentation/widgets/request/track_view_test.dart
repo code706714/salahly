@@ -183,6 +183,22 @@ void main() {
     expect(find.text(l10n.pounds('650')), findsOneWidget);
   });
 
+  testWidgets('chats with the technician in the app', (tester) async {
+    await pump(
+      tester,
+      at(JobStatus.confirmed),
+      stubRoutes: [AppRoutes.requestChat('request-1', 'tech-1')],
+    );
+
+    await tester.tap(find.text(l10n.chatWithTechnician));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text(AppRoutes.requestChat('request-1', 'tech-1')),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('calls the technician', (tester) async {
     await pump(tester, at(JobStatus.confirmed));
 

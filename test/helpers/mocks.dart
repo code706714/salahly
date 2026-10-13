@@ -13,6 +13,7 @@ import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
 import 'package:salahly/features/balance/domain/repositories/balance_repository.dart';
 import 'package:salahly/features/catalog/domain/repositories/catalog_repository.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
+import 'package:salahly/features/chat/domain/repositories/chat_repository.dart';
 import 'package:salahly/features/customers/domain/repositories/customers_repository.dart';
 import 'package:salahly/features/jobs/domain/repositories/jobs_repository.dart';
 import 'package:salahly/features/marketplace/domain/repositories/consumer_requests_repository.dart';
@@ -24,6 +25,8 @@ import 'package:salahly/features/notifications/domain/repositories/push_transpor
 import 'package:salahly/features/onboarding/domain/repositories/onboarding_repository.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
+
+class MockChatRepository extends Mock implements ChatRepository {}
 
 class MockPushService extends Mock implements PushService {}
 

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -132,6 +133,11 @@ class _OffersScreenState extends State<_OffersScreen> {
                 onCounter: busy == null && offer.counterRange != null
                     ? () => _counter(offer)
                     : null,
+                onChat: () => unawaited(
+                  context.push(
+                    AppRoutes.requestChat(details.id, offer.technician.id),
+                  ),
+                ),
                 onThread: () => _showThread(offer),
               ),
             ],
@@ -271,6 +277,7 @@ class _OfferCard extends StatelessWidget {
     required this.onProfile,
     required this.onPick,
     required this.onCounter,
+    required this.onChat,
     required this.onThread,
   });
 
@@ -290,6 +297,7 @@ class _OfferCard extends StatelessWidget {
 
   /// Null when the consumer can't ask for a price now.
   final VoidCallback? onCounter;
+  final VoidCallback onChat;
   final VoidCallback onThread;
 
   @override
@@ -481,6 +489,23 @@ class _OfferCard extends StatelessWidget {
                       ),
                     ),
                     child: Text(l10n.offersProfile),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.xs),
+                Tooltip(
+                  message: l10n.chatWithTechnician,
+                  child: OutlinedButton(
+                    onPressed: expired ? null : onChat,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: colors.ink,
+                      minimumSize: const Size.square(48),
+                      padding: EdgeInsets.zero,
+                      side: BorderSide(color: colors.fieldBorder, width: 1.5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppRadii.md),
+                      ),
+                    ),
+                    child: const Icon(Icons.forum_outlined),
                   ),
                 ),
                 const SizedBox(width: AppSpacing.xs),

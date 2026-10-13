@@ -124,6 +124,7 @@ class ConsumerApp {
     consumerRequestsRepository: requests,
     technicianRequestsRepository: MockTechnicianRequestsRepository(),
     balanceRepository: balance,
+    chatRepository: MockChatRepository(),
     notificationsRepository: notifications,
     liveUpdates: live,
     pushService: FakePushService(),

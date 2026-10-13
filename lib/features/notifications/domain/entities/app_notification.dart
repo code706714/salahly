@@ -31,6 +31,7 @@ enum NotificationKind {
   verificationRejected,
 
   // Both.
+  chatMessage,
   topupApproved,
   topupRejected;
 

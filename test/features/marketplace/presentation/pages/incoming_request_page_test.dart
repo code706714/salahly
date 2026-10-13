@@ -454,6 +454,42 @@ void main() {
       expect(find.text(l10n.incomingClosedFull), findsNothing);
     });
 
+    testWidgets('opens the chat with the consumer', (tester) async {
+      show(ready(testIncoming(myOffer: testMyOffer())));
+      await pumpView(
+        tester,
+        stubRoutes: [AppRoutes.incomingRequestChat('request-1')],
+      );
+      await scrollTo(tester, find.text(l10n.chatWithConsumer('ms')));
+
+      await tester.tap(find.text(l10n.chatWithConsumer('ms')));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text(AppRoutes.incomingRequestChat('request-1')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('has no chat before an offer or after losing it', (
+      tester,
+    ) async {
+      show(ready(testIncoming()));
+      await pumpView(tester);
+      expect(find.text(l10n.chatWithConsumer('ms')), findsNothing);
+
+      show(
+        ready(
+          testIncoming(
+            status: RequestStatus.assigned,
+            myOffer: testMyOffer(status: OfferStatus.notChosen),
+          ),
+        ),
+      );
+      await pumpView(tester);
+      expect(find.text(l10n.chatWithConsumer('ms')), findsNothing);
+    });
+
     testWidgets('says when the consumer picked it', (tester) async {
       show(
         ready(
