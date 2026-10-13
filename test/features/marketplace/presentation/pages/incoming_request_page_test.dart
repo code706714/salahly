@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/result.dart';
+import 'package:salahly/core/launch/external_apps.dart';
 import 'package:salahly/core/live/live_updates.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
@@ -36,6 +37,7 @@ import '../../../../pump_app.dart';
 
 void main() {
   late MockEscrowRepository escrow;
+  late MockExternalApps apps;
   late MockOfferCubit cubit;
   late MockIncomingRequestsCubit incoming;
   late MockSessionCubit session;
@@ -55,6 +57,7 @@ void main() {
   setUpAll(() async {
     await loadAppFonts();
     await initializeDateFormatting('ar');
+    registerFallbackValue(Uri());
     registerFallbackValue(
       OfferDraft(pricePiastres: 100, arriveAt: DateTime(2026)),
     );
@@ -77,6 +80,7 @@ void main() {
   setUp(() {
     cubit = MockOfferCubit();
     escrow = MockEscrowRepository();
+    apps = MockExternalApps();
     when(
       () => escrow.fetchTechnicianEscrow(any()),
     ).thenAnswer((_) async => const Ok(null));
@@ -123,6 +127,7 @@ void main() {
     stubRoutes: stubRoutes,
     repositories: [
       RepositoryProvider<EscrowRepository>.value(value: escrow),
+      RepositoryProvider<ExternalApps>.value(value: apps),
       RepositoryProvider<LiveUpdates>.value(value: FakeLiveUpdates()),
     ],
     blocs: [
@@ -200,6 +205,44 @@ void main() {
       expect(find.text('من 20 دقيقة · العميل: نورهان م.'), findsOneWidget);
       expect(find.text(l10n.incomingPrivacy('other')), findsOneWidget);
       await scrollTo(tester, find.text(l10n.offerFormNote('other')));
+    });
+
+    testWidgets("plays the video in the phone's own player", (tester) async {
+      show(ready(testIncoming(videoPath: 'consumer-1/fault.mp4')));
+      when(
+        () => cubit.videoLink(),
+      ).thenAnswer((_) async => 'https://videos/fault.mp4');
+      when(() => apps.openLink(any())).thenAnswer((_) async => true);
+      await pumpView(tester);
+
+      await tester.tap(find.text(l10n.incomingVideoWatch));
+      await tester.pumpAndSettle();
+
+      verify(
+        () => apps.openLink(Uri.parse('https://videos/fault.mp4')),
+      ).called(1);
+      expect(find.text(l10n.incomingVideoFailed), findsNothing);
+    });
+
+    testWidgets('says when the video could not be opened', (tester) async {
+      show(ready(testIncoming(videoPath: 'consumer-1/fault.mp4')));
+      when(() => cubit.videoLink()).thenAnswer((_) async => null);
+      await pumpView(tester);
+
+      await tester.tap(find.text(l10n.incomingVideoWatch));
+      await tester.pumpAndSettle();
+
+      expect(find.text(l10n.incomingVideoFailed), findsOneWidget);
+      verifyNever(() => apps.openLink(any()));
+    });
+
+    testWidgets('has no video button for a request without one', (
+      tester,
+    ) async {
+      show(ready(testIncoming()));
+      await pumpView(tester);
+
+      expect(find.text(l10n.incomingVideoWatch), findsNothing);
     });
 
     testWidgets('shows the photos and opens one full screen', (tester) async {

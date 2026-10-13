@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:salahly/core/launch/external_apps.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/text/money.dart';
 import 'package:salahly/core/theme/app_colors.dart';
@@ -222,6 +223,18 @@ class _RequestScreenState extends State<_RequestScreen> {
     );
   }
 
+  Future<void> _watchVideo() async {
+    final l10n = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final apps = context.read<ExternalApps>();
+    final link = await context.read<OfferCubit>().videoLink();
+    final opened = link != null && await apps.openLink(Uri.parse(link));
+    if (opened || !mounted) return;
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(l10n.incomingVideoFailed)));
+  }
+
   Future<void> _dismiss() async {
     final l10n = AppLocalizations.of(context);
     final navigator = Navigator.of(context);
@@ -292,6 +305,7 @@ class _RequestScreenState extends State<_RequestScreen> {
               request: request,
               photoUrls: state.photoUrls,
               now: state.now,
+              onWatchVideo: _watchVideo,
             ),
             const SizedBox(height: 14),
             Padding(

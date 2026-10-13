@@ -783,6 +783,19 @@ void main() {
       expect(find.byType(NewRequestView), findsNothing);
     });
 
+    testWidgets('says when the video was left behind', (tester) async {
+      await pumpView(
+        tester,
+        picked.copyWith(
+          status: NewRequestStatus.sent,
+          sent: const SentRequest(id: 'request-9', sentTo: 5),
+          videoFailed: true,
+        ),
+      );
+
+      expect(find.text(l10n.newRequestVideoNotSent('ms')), findsOneWidget);
+    });
+
     testWidgets('goes back home', (tester) async {
       await pumpView(
         tester,
@@ -800,6 +813,50 @@ void main() {
   });
 
   group('NewRequestPage', () {
+    testConsumerApp('adds a short video, takes it out, and turns a bad one '
+        'away', (tester, app) async {
+      when(
+        app.requests.fetchAddresses,
+      ).thenAnswer((_) async => const Ok([testHome]));
+      when(
+        () => app.videoPicker.pick(source: PhotoSource.gallery),
+      ).thenAnswer((_) async => const Ok('/phone/fault.mp4'));
+      await app.pump(tester);
+      await tester.tap(find.text(l10n.newRequestTitle('ms', 'تكييف')));
+      await app.settle(tester);
+      await tester.tap(find.text(l10n.requestIssueNotCooling));
+      await app.settle(tester);
+
+      Future<void> chooseVideo() async {
+        final button = find
+            .byIcon(Icons.videocam_outlined, skipOffstage: false)
+            .first;
+        await tester.ensureVisible(button);
+        // Past the bar with the next button, which would cover it.
+        await tester.drag(find.byType(TextField), const Offset(0, -150));
+        await tester.pump();
+        await tester.tap(button);
+        await app.settle(tester);
+        await tester.tap(find.text(l10n.newRequestVideoChoose('ms')));
+        await app.settle(tester);
+      }
+
+      await chooseVideo();
+      expect(find.text(l10n.newRequestVideoPicked), findsOneWidget);
+
+      await tester.tap(find.byTooltip(l10n.newRequestRemoveVideo));
+      await app.settle(tester);
+      expect(find.text(l10n.newRequestVideoPicked), findsNothing);
+
+      when(
+        () => app.videoPicker.pick(source: PhotoSource.gallery),
+      ).thenAnswer((_) async => const Err(VideoRejectedFailure()));
+      await chooseVideo();
+
+      expect(find.text(l10n.newRequestVideoRejected('ms')), findsOneWidget);
+      expect(find.text(l10n.newRequestVideoPicked), findsNothing);
+    });
+
     testConsumerApp('asks for a technician from start to end', (
       tester,
       app,

@@ -6,8 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:salahly/core/error/failure.dart';
+import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/error/upload_failures.dart';
 import 'package:salahly/core/media/photo_picker.dart';
+import 'package:salahly/core/media/video_picker.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/text/money.dart';
 import 'package:salahly/core/theme/app_colors.dart';
@@ -181,7 +183,11 @@ class _NewRequestViewState extends State<NewRequestView> {
         child: Scaffold(
           appBar: _Header(state: state),
           body: sent != null
-              ? _SentStep(sent: sent, category: state.category?.name ?? '')
+              ? _SentStep(
+                  sent: sent,
+                  category: state.category?.name ?? '',
+                  videoFailed: state.videoFailed,
+                )
               : state.category == null
               ? const Center(child: CircularProgressIndicator())
               : switch (state.step) {
@@ -445,6 +451,8 @@ class _ProblemStep extends StatelessWidget {
               const _AddPhotoTile(),
           ],
         ),
+        const SizedBox(height: 16),
+        _VideoField(path: state.video),
       ],
     );
   }
@@ -671,6 +679,101 @@ class _PhotoTile extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// The optional short video: a button to record or choose one, or the one
+/// picked with a button to take it out.
+class _VideoField extends StatelessWidget {
+  const _VideoField({required this.path});
+
+  final String? path;
+
+  Future<void> _pick(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final honorific = context.readHonorific();
+    final messenger = ScaffoldMessenger.of(context);
+    final picker = context.read<VideoPicker>();
+    final cubit = context.read<NewRequestCubit>();
+    final source = await showModalBottomSheet<PhotoSource>(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.videocam_outlined),
+              title: Text(l10n.newRequestVideoTake(honorific)),
+              onTap: () => Navigator.of(context).pop(PhotoSource.camera),
+            ),
+            ListTile(
+              leading: const Icon(Icons.video_library_outlined),
+              title: Text(l10n.newRequestVideoChoose(honorific)),
+              onTap: () => Navigator.of(context).pop(PhotoSource.gallery),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (source == null) return;
+    final Result<String?> picked;
+    try {
+      picked = await picker.pick(source: source);
+    } on PlatformException {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(content: Text(l10n.newRequestCameraDenied(honorific))),
+        );
+      return;
+    }
+    switch (picked) {
+      case Ok(value: final path?) when !cubit.isClosed:
+        cubit.setVideo(path);
+      case Err():
+        messenger
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(content: Text(l10n.newRequestVideoRejected(honorific))),
+          );
+      case Ok():
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final colors = context.appColors;
+    final honorific = context.watchHonorific();
+    final picked = path != null;
+    return Row(
+      children: [
+        Expanded(
+          child: OutlinedButton.icon(
+            onPressed: () => _pick(context),
+            icon: Icon(
+              picked ? Icons.check_circle_outline : Icons.videocam_outlined,
+            ),
+            label: Text(
+              picked
+                  ? l10n.newRequestVideoPicked
+                  : l10n.newRequestAddVideo(honorific),
+            ),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: colors.ink,
+              minimumSize: const Size.fromHeight(48),
+            ),
+          ),
+        ),
+        if (picked)
+          IconButton(
+            onPressed: context.read<NewRequestCubit>().removeVideo,
+            tooltip: l10n.newRequestRemoveVideo,
+            icon: const Icon(Icons.close_rounded),
+          ),
+      ],
     );
   }
 }
@@ -1188,10 +1291,15 @@ class _NextButton extends StatelessWidget {
 
 /// "طلبك اتبعت", and how many technicians got it.
 class _SentStep extends StatelessWidget {
-  const _SentStep({required this.sent, required this.category});
+  const _SentStep({
+    required this.sent,
+    required this.category,
+    required this.videoFailed,
+  });
 
   final SentRequest sent;
   final String category;
+  final bool videoFailed;
 
   @override
   Widget build(BuildContext context) {
@@ -1231,6 +1339,14 @@ class _SentStep extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 16, height: 1.7, color: colors.inkMuted),
         ),
+        if (videoFailed) ...[
+          const SizedBox(height: 14),
+          Text(
+            l10n.newRequestVideoNotSent(honorific),
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 14, height: 1.7, color: colors.warning),
+          ),
+        ],
         const SizedBox(height: 14),
         Center(
           child: TextButton(

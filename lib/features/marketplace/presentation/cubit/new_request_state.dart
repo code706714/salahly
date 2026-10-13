@@ -18,6 +18,7 @@ final class NewRequestState extends Equatable {
     this.description = '',
     this.isListening = false,
     this.photos = const [],
+    this.video,
     this.addresses,
     this.addressesFailed = false,
     this.addressId,
@@ -31,6 +32,7 @@ final class NewRequestState extends Equatable {
     this.urgentInfo,
     this.urgentFailed = false,
     this.priceGuide,
+    this.videoFailed = false,
   });
 
   /// The server takes a time window until an hour before it ends.
@@ -63,6 +65,9 @@ final class NewRequestState extends Equatable {
 
   /// Picked photos on the phone, uploaded when the request is sent.
   final List<String> photos;
+
+  /// The picked video on the phone, uploaded when the request is sent.
+  final String? video;
 
   /// The address book, oldest first; null until fetched.
   final List<ConsumerAddress>? addresses;
@@ -97,6 +102,9 @@ final class NewRequestState extends Equatable {
 
   /// What the picked problem usually costs, when known.
   final PriceGuide? priceGuide;
+
+  /// The request was sent but its video could not be attached.
+  final bool videoFailed;
 
   bool get isSending =>
       status == NewRequestStatus.uploading ||
@@ -170,6 +178,7 @@ final class NewRequestState extends Equatable {
     String? description,
     bool? isListening,
     List<String>? photos,
+    String? Function()? video,
     List<ConsumerAddress>? addresses,
     bool? addressesFailed,
     String? addressId,
@@ -183,6 +192,7 @@ final class NewRequestState extends Equatable {
     UrgentInfo? urgentInfo,
     bool? urgentFailed,
     PriceGuide? Function()? priceGuide,
+    bool? videoFailed,
   }) {
     return NewRequestState(
       now: now ?? this.now,
@@ -196,6 +206,7 @@ final class NewRequestState extends Equatable {
       description: description ?? this.description,
       isListening: isListening ?? this.isListening,
       photos: photos ?? this.photos,
+      video: video != null ? video() : this.video,
       addresses: addresses ?? this.addresses,
       addressesFailed: addressesFailed ?? this.addressesFailed,
       addressId: addressId ?? this.addressId,
@@ -209,6 +220,7 @@ final class NewRequestState extends Equatable {
       urgentInfo: urgentInfo ?? this.urgentInfo,
       urgentFailed: urgentFailed ?? this.urgentFailed,
       priceGuide: priceGuide != null ? priceGuide() : this.priceGuide,
+      videoFailed: videoFailed ?? this.videoFailed,
     );
   }
 
@@ -225,6 +237,7 @@ final class NewRequestState extends Equatable {
     description,
     isListening,
     photos,
+    video,
     addresses,
     addressesFailed,
     addressId,
@@ -238,5 +251,6 @@ final class NewRequestState extends Equatable {
     urgentInfo,
     urgentFailed,
     priceGuide,
+    videoFailed,
   ];
 }

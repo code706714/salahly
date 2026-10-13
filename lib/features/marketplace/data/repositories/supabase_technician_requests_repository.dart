@@ -196,6 +196,13 @@ class SupabaseTechnicianRequestsRepository
         .createSignedUrl(path, photoLinkSeconds),
   );
 
+  @override
+  Future<Result<String>> videoUrl(String path) => _call(
+    () => _client.storage
+        .from('request-videos')
+        .createSignedUrl(path, photoLinkSeconds),
+  );
+
   static Future<Result<T>> _call<T>(Future<T> Function() action) async {
     try {
       return Ok(await action());

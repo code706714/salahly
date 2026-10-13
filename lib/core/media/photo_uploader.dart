@@ -6,7 +6,8 @@ import 'package:salahly/core/error/upload_failures.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
-/// Uploads a photo the `PhotoPicker` cleaned into the signed-in user's own
+/// Uploads a photo the `PhotoPicker` cleaned (or a video the `VideoPicker`
+/// checked) into the signed-in user's own
 /// folder of a storage bucket, `<user id>/<random uuid>.<ext>`: the only
 /// place the storage policies accept it.
 class PhotoUploader {
@@ -20,6 +21,9 @@ class PhotoUploader {
     'jpeg': 'image/jpeg',
     'png': 'image/png',
     'webp': 'image/webp',
+    // Request videos, which the `request-videos` bucket takes.
+    'mp4': 'video/mp4',
+    'mov': 'video/quicktime',
   };
 
   /// The stored path.

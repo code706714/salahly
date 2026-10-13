@@ -73,4 +73,7 @@ abstract interface class TechnicianRequestsRepository {
 
   /// A short-lived link to show one of a request's photos.
   Future<Result<String>> photoUrl(String path);
+
+  /// A short-lived link to play a request's video.
+  Future<Result<String>> videoUrl(String path);
 }

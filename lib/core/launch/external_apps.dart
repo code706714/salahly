@@ -2,8 +2,8 @@ import 'package:salahly/core/phone/phone_number.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-/// Other apps the technician hands off to: the dialer, WhatsApp, maps and
-/// the share sheet. Each returns false when nothing could open it.
+/// Other apps the technician hands off to: the dialer, WhatsApp, maps, the
+/// share sheet and a player. Each returns false when nothing could open it.
 abstract interface class ExternalApps {
   Future<bool> dial(PhoneNumber phone);
 
@@ -14,6 +14,9 @@ abstract interface class ExternalApps {
   Future<bool> map(String address);
 
   Future<bool> shareFile(String path, {required String name});
+
+  /// Opens a web link, such as a video, in the phone's own app for it.
+  Future<bool> openLink(Uri link);
 }
 
 class SystemExternalApps implements ExternalApps {
@@ -45,6 +48,9 @@ class SystemExternalApps implements ExternalApps {
     );
     return result.status != ShareResultStatus.unavailable;
   }
+
+  @override
+  Future<bool> openLink(Uri link) => _open(link);
 
   Future<bool> _open(Uri uri) async {
     try {

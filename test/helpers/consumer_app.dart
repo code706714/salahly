@@ -128,6 +128,7 @@ class ConsumerApp {
   final apps = MockExternalApps();
   final speech = MockSpeechInput();
   final photoPicker = MockPhotoPicker();
+  final videoPicker = MockVideoPicker();
   final location = MockLocationService();
   final photos = LocalPhotoStore(Directory.systemTemp.createTempSync());
 
@@ -148,6 +149,7 @@ class ConsumerApp {
     pushService: FakePushService(),
     locationService: location,
     photoPicker: photoPicker,
+    videoPicker: videoPicker,
     userData: userData,
     networkStatus: FakeNetworkStatus(),
     localChanges: LocalChanges(),

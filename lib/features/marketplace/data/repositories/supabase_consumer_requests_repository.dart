@@ -25,6 +25,7 @@ class SupabaseConsumerRequestsRepository implements ConsumerRequestsRepository {
   final PhotoUploader _photos;
 
   static const _photoBucket = 'request-photos';
+  static const _videoBucket = 'request-videos';
 
   @override
   Future<Result<List<ConsumerAddress>>> fetchAddresses() => _call(() async {
@@ -102,6 +103,18 @@ class SupabaseConsumerRequestsRepository implements ConsumerRequestsRepository {
   @override
   Future<Result<String>> uploadPhoto(String localPath) =>
       _photos.upload(localPath, bucket: _photoBucket);
+
+  @override
+  Future<Result<String>> uploadVideo(String localPath) =>
+      _photos.upload(localPath, bucket: _videoBucket);
+
+  @override
+  Future<Result<void>> attachVideo(String requestId, String videoPath) => _call(
+    () => _client.rpc<void>(
+      'attach_request_video',
+      params: {'p_request_id': requestId, 'p_video_path': videoPath},
+    ),
+  );
 
   @override
   Future<Result<SentRequest>> sendRequest(RequestDraft draft) =>

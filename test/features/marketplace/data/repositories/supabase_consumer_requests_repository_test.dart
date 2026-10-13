@@ -155,6 +155,24 @@ void main() {
     });
   });
 
+  group('attachVideo', () {
+    test('attaches the uploaded video to the request', () async {
+      server.body = null;
+
+      final result = await server.repository().attachVideo(
+        'request-1',
+        'consumer-1/fault.mp4',
+      );
+
+      expect(result, isA<Ok<void>>());
+      expect(server.lastPath, '/rest/v1/rpc/attach_request_video');
+      expect(server.lastParams, {
+        'p_request_id': 'request-1',
+        'p_video_path': 'consumer-1/fault.mp4',
+      });
+    });
+  });
+
   group('sendRequest', () {
     test("sends the draft in the server's terms", () async {
       server.body = {'id': 'request-1', 'sent_to': 5};

@@ -44,6 +44,12 @@ abstract interface class ConsumerRequestsRepository {
   /// Uploads a cleaned photo for a request or complaint. Returns its path.
   Future<Result<String>> uploadPhoto(String localPath);
 
+  /// Uploads a request's video. Returns its path.
+  Future<Result<String>> uploadVideo(String localPath);
+
+  /// Attaches an uploaded video to the open request [requestId].
+  Future<Result<void>> attachVideo(String requestId, String videoPath);
+
   /// Sends a request, holding one of the consumer's uses.
   Future<Result<SentRequest>> sendRequest(RequestDraft draft);
 

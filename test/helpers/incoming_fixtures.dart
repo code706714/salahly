@@ -46,6 +46,7 @@ IncomingRequest testIncoming({
   String? description =
       'التكييف شغال بس الهوا اللي طالع مش ساقع، والوحدة اللي بره بتعمل صوت.',
   List<String> photoPaths = const [],
+  String? videoPath,
   String areaId = 'nasr_city',
   double distanceKm = 2.4,
   DateTime? day,
@@ -66,6 +67,7 @@ IncomingRequest testIncoming({
   issue: issue,
   description: description,
   photoPaths: photoPaths,
+  videoPath: videoPath,
   areaId: areaId,
   distanceKm: distanceKm,
   day: day ?? DateTime(2026, 10, 3),

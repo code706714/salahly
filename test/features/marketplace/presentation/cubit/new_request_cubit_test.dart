@@ -683,6 +683,74 @@ void main() {
       await cubit.close();
     });
 
+    test('uploads the video, sends the request and attaches it', () async {
+      when(
+        () => requests.uploadVideo('/p/fault.mp4'),
+      ).thenAnswer((_) async => const Ok('consumer-1/fault.mp4'));
+      when(() => requests.sendRequest(any())).thenAnswer(
+        (_) async => const Ok(SentRequest(id: 'request-9', sentTo: 5)),
+      );
+      when(
+        () => requests.attachVideo(any(), any()),
+      ).thenAnswer((_) async => const Ok(null));
+      final cubit = await filled()
+        ..setVideo('/p/fault.mp4');
+
+      await cubit.send();
+
+      expect(cubit.state.status, NewRequestStatus.sent);
+      expect(cubit.state.videoFailed, isFalse);
+      verify(
+        () => requests.attachVideo('request-9', 'consumer-1/fault.mp4'),
+      ).called(1);
+      await cubit.close();
+    });
+
+    test('a video that could not be attached does not undo the sent '
+        'request', () async {
+      when(
+        () => requests.uploadVideo(any()),
+      ).thenAnswer((_) async => const Ok('consumer-1/fault.mp4'));
+      when(() => requests.sendRequest(any())).thenAnswer(
+        (_) async => const Ok(SentRequest(id: 'request-9', sentTo: 5)),
+      );
+      when(
+        () => requests.attachVideo(any(), any()),
+      ).thenAnswer((_) async => const Err(NetworkFailure()));
+      final cubit = await filled()
+        ..setVideo('/p/fault.mp4');
+
+      await cubit.send();
+
+      expect(cubit.state.status, NewRequestStatus.sent);
+      expect(cubit.state.videoFailed, isTrue);
+      await cubit.close();
+    });
+
+    test('a failed video upload stops the send, and a removed video is '
+        'left out', () async {
+      when(
+        () => requests.uploadVideo(any()),
+      ).thenAnswer((_) async => const Err(NetworkFailure()));
+      final cubit = await filled()
+        ..setVideo('/p/fault.mp4');
+
+      await cubit.send();
+
+      expect(cubit.state.status, NewRequestStatus.failed);
+      verifyNever(() => requests.sendRequest(any()));
+
+      when(() => requests.sendRequest(any())).thenAnswer(
+        (_) async => const Ok(SentRequest(id: 'request-9', sentTo: 5)),
+      );
+      cubit.removeVideo();
+      await cubit.send();
+
+      expect(cubit.state.status, NewRequestStatus.sent);
+      verifyNever(() => requests.attachVideo(any(), any()));
+      await cubit.close();
+    });
+
     test('needs the day and time', () async {
       final cubit = build()..selectIssue(RequestIssue.noisy);
       await cubit.loadAddresses();

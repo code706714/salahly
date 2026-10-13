@@ -2637,6 +2637,48 @@
       }
     }
   },
+  "newRequestAddVideo": "{honorific, select, ms{ضيفي فيديو قصير (اختياري)} other{ضيف فيديو قصير (اختياري)}}",
+  "@newRequestAddVideo": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestVideoPicked": "الفيديو اتضاف. اضغط تغيّره",
+  "newRequestRemoveVideo": "شيل الفيديو",
+  "newRequestVideoTake": "{honorific, select, ms{صوّري فيديو دلوقتي} other{صوّر فيديو دلوقتي}}",
+  "@newRequestVideoTake": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestVideoChoose": "{honorific, select, ms{اختاري فيديو من المعرض} other{اختار فيديو من المعرض}}",
+  "@newRequestVideoChoose": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestVideoRejected": "{honorific, select, ms{الفيديو ده مش مقبول. لازم يكون MP4 أو MOV وأقل من 15 ميجا، جرّبي فيديو أقصر.} other{الفيديو ده مش مقبول. لازم يكون MP4 أو MOV وأقل من 15 ميجا، جرّب فيديو أقصر.}}",
+  "@newRequestVideoRejected": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "newRequestVideoNotSent": "{honorific, select, ms{طلبك اتبعت، بس الفيديو معرفش يترفع.} other{طلبك اتبعت، بس الفيديو معرفش يترفع.}}",
+  "@newRequestVideoNotSent": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
   "newRequestCameraDenied": "{honorific, select, ms{اسمحي للأبلكيشن يفتح الكاميرا من إعدادات الموبايل، أو اختاري صورة من الصور.} other{اسمح للأبلكيشن يفتح الكاميرا من إعدادات الموبايل، أو اختار صورة من الصور.}}",
   "@newRequestCameraDenied": {
     "placeholders": {
@@ -3095,6 +3137,8 @@
     }
   },
   "incomingPhoto": "صورة من الطلب",
+  "incomingVideoWatch": "شوف فيديو العطل",
+  "incomingVideoFailed": "الفيديو مفتحش. جرّب تاني.",
   "offerFormTitle": "عرضك",
   "offerFormPrice": "السعر المبدئي",
   "offerFormServiceChip": "{name} {price}",

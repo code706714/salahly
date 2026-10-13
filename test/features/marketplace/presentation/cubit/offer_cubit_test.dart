@@ -51,6 +51,36 @@ void main() {
     () => requests.fetchRequest('request-1'),
   ).thenAnswer((_) async => result);
 
+  group('video', () {
+    test("links the request's video", () async {
+      serve(Ok(testIncoming(videoPath: 'consumer-1/fault.mp4')));
+      when(
+        () => requests.videoUrl('consumer-1/fault.mp4'),
+      ).thenAnswer((_) async => const Ok('https://videos/fault.mp4'));
+      final cubit = cubitFor();
+      await cubit.start();
+
+      expect(await cubit.videoLink(), 'https://videos/fault.mp4');
+      await cubit.close();
+    });
+
+    test('has no link without a video or when linking fails', () async {
+      serve(Ok(testIncoming()));
+      final cubit = cubitFor();
+      await cubit.start();
+      expect(await cubit.videoLink(), isNull);
+
+      serve(Ok(testIncoming(videoPath: 'consumer-1/fault.mp4')));
+      when(
+        () => requests.videoUrl(any()),
+      ).thenAnswer((_) async => const Err(NetworkFailure()));
+      await cubit.fetchRequest();
+
+      expect(await cubit.videoLink(), isNull);
+      await cubit.close();
+    });
+  });
+
   group('loading', () {
     test('shows the request, its photos and my services', () async {
       final request = testIncoming(photoPaths: ['a.jpg', 'b.jpg']);

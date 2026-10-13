@@ -20,8 +20,8 @@ part 'new_request_state.dart';
 /// Asks for a technician in three steps: the problem (typed or said, with
 /// photos), the address, and the day and time; then sends the request.
 ///
-/// Photos upload only when sending. One that uploaded before a send failed
-/// isn't uploaded again on the next try.
+/// Photos and the video upload only when sending. One that uploaded before a
+/// send failed isn't uploaded again on the next try.
 class NewRequestCubit extends Cubit<NewRequestState> {
   NewRequestCubit({
     required this._requests,
@@ -195,6 +195,11 @@ class NewRequestCubit extends Cubit<NewRequestState> {
     emit(state.copyWith(photos: [...state.photos, path]));
   }
 
+  /// Takes the video picked on the phone, in place of any earlier one.
+  void setVideo(String path) => emit(state.copyWith(video: () => path));
+
+  void removeVideo() => emit(state.copyWith(video: () => null));
+
   void removePhoto(String path) => emit(
     state.copyWith(
       photos: [
@@ -356,7 +361,7 @@ class NewRequestCubit extends Cubit<NewRequestState> {
     return true;
   }
 
-  /// Uploads the photos and sends the request.
+  /// Uploads the photos and video, sends the request and attaches the video.
   Future<void> send() async {
     if (state.isSending || state.status == NewRequestStatus.sent) return;
     final checked = state.urgent ? state : _withClock();
@@ -390,11 +395,17 @@ class NewRequestCubit extends Cubit<NewRequestState> {
     if (isClosed) return;
     final photoPaths = <String>[];
     for (final photo in state.photos) {
-      final path = _uploaded[photo] ?? await _upload(photo);
+      final path =
+          _uploaded[photo] ?? await _upload(photo, _requests.uploadPhoto);
       if (isClosed || path == null) return;
       photoPaths.add(path);
       emit(state.copyWith(uploaded: photoPaths.length));
     }
+    final video = state.video;
+    final videoPath = video == null
+        ? null
+        : _uploaded[video] ?? await _upload(video, _requests.uploadVideo);
+    if (isClosed || video != null && videoPath == null) return;
     emit(state.copyWith(status: NewRequestStatus.sending));
     final description = state.description.trim();
     final result = await _requests.sendRequest(
@@ -414,15 +425,28 @@ class NewRequestCubit extends Cubit<NewRequestState> {
     if (isClosed) return;
     switch (result) {
       case Ok(:final value):
-        emit(state.copyWith(status: NewRequestStatus.sent, sent: value));
+        final attached =
+            videoPath == null ||
+            await _requests.attachVideo(value.id, videoPath) is Ok;
+        if (isClosed) return;
+        emit(
+          state.copyWith(
+            status: NewRequestStatus.sent,
+            sent: value,
+            videoFailed: !attached,
+          ),
+        );
       case Err(:final failure):
         _fail(failure);
     }
   }
 
-  /// The photo's storage path, or null after reporting why it failed.
-  Future<String?> _upload(String photo) async {
-    final result = await _requests.uploadPhoto(photo);
+  /// The file's storage path, or null after reporting why it failed.
+  Future<String?> _upload(
+    String photo,
+    Future<Result<String>> Function(String localPath) upload,
+  ) async {
+    final result = await upload(photo);
     if (isClosed) return null;
     switch (result) {
       case Ok(:final value):

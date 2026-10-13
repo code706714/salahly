@@ -5,6 +5,11 @@ final class UnsupportedPhotoFailure extends Failure {
   const UnsupportedPhotoFailure();
 }
 
+/// The picked video isn't an MP4 or MOV, or is too large to upload.
+final class VideoRejectedFailure extends Failure {
+  const VideoRejectedFailure();
+}
+
 /// The user uploaded too many photos today; the server takes more tomorrow.
 final class UploadLimitFailure extends Failure {
   const UploadLimitFailure();

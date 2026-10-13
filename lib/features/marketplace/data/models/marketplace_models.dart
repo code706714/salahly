@@ -224,6 +224,7 @@ abstract final class MarketplaceModels {
       issue: enumFromWire(RequestIssue.values, json['issue']),
       description: json['description'] as String?,
       photoPaths: _strings(json['photo_paths']),
+      videoPath: json['video_path'] as String?,
       areaId: json['area_id'] as String,
       distanceKm: (json['distance_km'] as num).toDouble(),
       day: dateFromWire(json['preferred_on']),

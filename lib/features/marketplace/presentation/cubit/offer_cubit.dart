@@ -79,6 +79,18 @@ class OfferCubit extends Cubit<OfferState> {
     );
   }
 
+  /// A link to play the request's video, or null when there is none or it
+  /// can't be linked.
+  Future<String?> videoLink() async {
+    final path = state.request?.videoPath;
+    if (path == null) return null;
+    final result = await _requests.videoUrl(path);
+    return switch (result) {
+      Ok(:final value) => value,
+      Err() => null,
+    };
+  }
+
   /// The technician's services with their starting prices, for the price
   /// chips. Without them the price is typed.
   Future<void> fetchMyServices() async {

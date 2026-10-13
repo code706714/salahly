@@ -138,6 +138,7 @@ class TechnicianApp {
   final speech = MockSpeechInput();
   final contacts = MockContactPicker();
   final photoPicker = MockPhotoPicker();
+  final videoPicker = MockVideoPicker();
 
   /// The marketplace: no new requests unless a test stubs some.
   final requests = MockTechnicianRequestsRepository();
@@ -188,6 +189,7 @@ class TechnicianApp {
     pushService: FakePushService(),
     locationService: MockLocationService(),
     photoPicker: photoPicker,
+    videoPicker: videoPicker,
     userData: userData,
     networkStatus: network,
     localChanges: changes,

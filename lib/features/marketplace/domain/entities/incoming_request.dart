@@ -26,6 +26,7 @@ final class IncomingRequest extends Equatable {
     required this.dismissed,
     this.description,
     this.photoPaths = const [],
+    this.videoPath,
     this.myOffer,
     this.urgentFeePiastres,
   });
@@ -37,6 +38,9 @@ final class IncomingRequest extends Equatable {
 
   /// Paths in the private request photos bucket.
   final List<String> photoPaths;
+
+  /// The path in the private request videos bucket, if there is a video.
+  final String? videoPath;
   final String areaId;
 
   /// From the technician's base to the request's area.
@@ -84,6 +88,7 @@ final class IncomingRequest extends Equatable {
     issue,
     description,
     photoPaths,
+    videoPath,
     areaId,
     distanceKm,
     day,

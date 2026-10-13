@@ -19,6 +19,7 @@ class IncomingRequestDetails extends StatelessWidget {
     required this.request,
     required this.photoUrls,
     required this.now,
+    required this.onWatchVideo,
     super.key,
   });
 
@@ -27,6 +28,9 @@ class IncomingRequestDetails extends StatelessWidget {
   /// Links to the photos, by path.
   final Map<String, String> photoUrls;
   final DateTime now;
+
+  /// Plays the request's video; shown only when it has one.
+  final VoidCallback onWatchVideo;
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +95,17 @@ class IncomingRequestDetails extends StatelessWidget {
           if (request.photoPaths.isNotEmpty) ...[
             const SizedBox(height: 12),
             RequestPhotos(paths: request.photoPaths, urls: photoUrls),
+          ],
+          if (request.videoPath != null) ...[
+            const SizedBox(height: 4),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: TextButton.icon(
+                onPressed: onWatchVideo,
+                icon: const Icon(Icons.play_circle_outline_rounded),
+                label: Text(l10n.incomingVideoWatch),
+              ),
+            ),
           ],
           const SizedBox(height: 12),
           DecoratedBox(

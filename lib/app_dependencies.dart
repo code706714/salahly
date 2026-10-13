@@ -10,6 +10,7 @@ import 'package:salahly/core/live/supabase_live_updates.dart';
 import 'package:salahly/core/location/geolocator_location_service.dart';
 import 'package:salahly/core/location/location_service.dart';
 import 'package:salahly/core/media/photo_picker.dart';
+import 'package:salahly/core/media/video_picker.dart';
 import 'package:salahly/core/network/network_status.dart';
 import 'package:salahly/core/speech/speech_input.dart';
 import 'package:salahly/core/storage/json_file_cache.dart';
@@ -71,6 +72,7 @@ class AppDependencies {
     required this.pushService,
     required this.locationService,
     required this.photoPicker,
+    required this.videoPicker,
     required this.userData,
     required this.networkStatus,
     required this.localChanges,
@@ -136,6 +138,7 @@ class AppDependencies {
       ),
       locationService: const GeolocatorLocationService(),
       photoPicker: PhotoPicker(),
+      videoPicker: VideoPicker(),
       userData: LocalUserData(database, photos, sharedFiles),
       networkStatus: ConnectivityNetworkStatus(),
       localChanges: localChanges,
@@ -168,6 +171,7 @@ class AppDependencies {
   final PushService pushService;
   final LocationService locationService;
   final PhotoPicker photoPicker;
+  final VideoPicker videoPicker;
   final UserScopedData userData;
   final NetworkStatus networkStatus;
   final LocalChanges localChanges;

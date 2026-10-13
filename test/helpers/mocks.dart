@@ -4,6 +4,7 @@ import 'package:salahly/core/contacts/contact_picker.dart';
 import 'package:salahly/core/launch/external_apps.dart';
 import 'package:salahly/core/location/location_service.dart';
 import 'package:salahly/core/media/photo_picker.dart';
+import 'package:salahly/core/media/video_picker.dart';
 import 'package:salahly/core/speech/speech_input.dart';
 import 'package:salahly/core/storage/user_scoped_data.dart';
 import 'package:salahly/core/sync/sync_cubit.dart';
@@ -59,6 +60,8 @@ class MockSpeechInput extends Mock implements SpeechInput {}
 class MockContactPicker extends Mock implements ContactPicker {}
 
 class MockPhotoPicker extends Mock implements PhotoPicker {}
+
+class MockVideoPicker extends Mock implements VideoPicker {}
 
 class MockSessionCubit extends MockCubit<SessionState>
     implements SessionCubit {}
