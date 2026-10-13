@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:salahly/core/error/result.dart';
+import 'package:salahly/core/live/live_updates.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
@@ -14,6 +16,7 @@ import 'package:salahly/features/account/domain/entities/verification_status.dar
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
+import 'package:salahly/features/escrow/domain/repositories/escrow_repository.dart';
 import 'package:salahly/features/marketplace/domain/entities/incoming_request.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_window.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
@@ -23,6 +26,7 @@ import 'package:salahly/features/marketplace/presentation/cubit/incoming_request
 import 'package:salahly/features/marketplace/presentation/cubit/offer_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/pages/incoming_request_page.dart';
 
+import '../../../../helpers/fake_live_updates.dart';
 import '../../../../helpers/fixtures.dart';
 import '../../../../helpers/incoming_fixtures.dart';
 import '../../../../helpers/mocks.dart';
@@ -31,6 +35,7 @@ import '../../../../helpers/technician_app.dart';
 import '../../../../pump_app.dart';
 
 void main() {
+  late MockEscrowRepository escrow;
   late MockOfferCubit cubit;
   late MockIncomingRequestsCubit incoming;
   late MockSessionCubit session;
@@ -71,6 +76,10 @@ void main() {
 
   setUp(() {
     cubit = MockOfferCubit();
+    escrow = MockEscrowRepository();
+    when(
+      () => escrow.fetchTechnicianEscrow(any()),
+    ).thenAnswer((_) async => const Ok(null));
     incoming = MockIncomingRequestsCubit();
     when(() => incoming.state).thenReturn(const IncomingRequestsState());
     session = MockSessionCubit();
@@ -112,6 +121,10 @@ void main() {
   }) => tester.pumpApp(
     view,
     stubRoutes: stubRoutes,
+    repositories: [
+      RepositoryProvider<EscrowRepository>.value(value: escrow),
+      RepositoryProvider<LiveUpdates>.value(value: FakeLiveUpdates()),
+    ],
     blocs: [
       BlocProvider<OfferCubit>.value(value: cubit),
       BlocProvider<IncomingRequestsCubit>.value(value: incoming),

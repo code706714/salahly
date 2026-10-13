@@ -73,6 +73,11 @@ class TechnicianAccountPage extends StatelessWidget {
                           onTap: () =>
                               context.push(AppRoutes.technicianBalance),
                         ),
+                        _Row(
+                          label: l10n.payoutAccountTile,
+                          onTap: () =>
+                              context.push(AppRoutes.technicianPayoutAccount),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 16),

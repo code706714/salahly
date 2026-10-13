@@ -30,8 +30,16 @@ enum NotificationKind {
   verificationApproved,
   verificationRejected,
 
+  // The guarantee on a payment, each side told of its own part.
+  escrowRejected,
+  escrowRefunded,
+  escrowReleased,
+  escrowPaidOut,
+  escrowDisputed,
+
   // Both.
   chatMessage,
+  escrowHeld,
   topupApproved,
   topupRejected;
 

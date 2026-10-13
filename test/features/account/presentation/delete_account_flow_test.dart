@@ -81,6 +81,9 @@ void main() {
     await app.pump(tester, location: '/technician/account');
 
     await tester.ensureVisible(find.text('امسح حسابي'));
+    // Past the tab bar, which covers the end of the list.
+    await tester.drag(find.byType(ListView).first, const Offset(0, -150));
+    await tester.pump();
     await tester.tap(find.text('امسح حسابي'));
     await app.settle(tester);
     await _confirmAndDelete(tester);

@@ -238,6 +238,39 @@ void main() {
       ));
     });
 
+    test('the guarantee tells each side its own part', () {
+      final held = of(NotificationKind.escrowHeld);
+
+      expect(consumerText(held), (
+        title: 'فلوسك اتأمّنت',
+        body: 'الفلوس معانا ومش هتوصل للفني غير لما تأكّد الشغل.',
+      ));
+      expect(technicianText(held), (
+        title: 'العميل أمّن فلوس الشغلانة',
+        body: 'الفلوس عند صلحلي وهتوصلك بعد ما العميل يأكّد الشغل.',
+      ));
+      expect(
+        consumerText(of(NotificationKind.escrowRejected)).title,
+        'ما لقيناش التحويل',
+      );
+      expect(
+        consumerText(of(NotificationKind.escrowRefunded)).title,
+        'رجّعنا فلوسك',
+      );
+      expect(
+        technicianText(of(NotificationKind.escrowReleased)).title,
+        'العميل أكّد الشغل',
+      );
+      expect(
+        technicianText(of(NotificationKind.escrowPaidOut)).title,
+        'الفلوس اتحوّلت لك',
+      );
+      expect(
+        technicianText(of(NotificationKind.escrowDisputed)).title,
+        'العميل اعترض على الشغل',
+      );
+    });
+
     test('an urgent request says so, with the area and the distance', () {
       final text = technicianText(of(NotificationKind.urgentRequest));
 

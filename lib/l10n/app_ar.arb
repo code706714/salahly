@@ -5091,5 +5091,190 @@
         "type": "String"
       }
     }
-  }
+  },
+  "notifEscrowHeldConsumer": "فلوسك اتأمّنت",
+  "notifEscrowHeldConsumerBody": "الفلوس معانا ومش هتوصل للفني غير لما تأكّد الشغل.",
+  "notifEscrowHeldTechnician": "العميل أمّن فلوس الشغلانة",
+  "notifEscrowHeldTechnicianBody": "الفلوس عند صلحلي وهتوصلك بعد ما العميل يأكّد الشغل.",
+  "notifEscrowRejected": "ما لقيناش التحويل",
+  "notifEscrowRejectedBody": "{honorific, select, ms{افتحي الطلب وشوفي السبب وابعتي التحويل تاني.} other{افتح الطلب وشوف السبب وابعت التحويل تاني.}}",
+  "@notifEscrowRejectedBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "notifEscrowReleased": "العميل أكّد الشغل",
+  "notifEscrowReleasedBody": "هنحوّل لك الفلوس على حساب الاستلام قريب.",
+  "notifEscrowPaidOut": "الفلوس اتحوّلت لك",
+  "notifEscrowPaidOutBody": "راجع حسابك. لو ماوصلتش كلمنا.",
+  "notifEscrowDisputed": "العميل اعترض على الشغل",
+  "notifEscrowDisputedBody": "الفلوس معانا لحد ما نراجع الموضوع ونكلمك.",
+  "notifEscrowRefunded": "رجّعنا فلوسك",
+  "notifEscrowRefundedBody": "{honorific, select, ms{راجعي حسابك. لو ماوصلتش كلمينا.} other{راجع حسابك. لو ماوصلتش كلمنا.}}",
+  "@notifEscrowRefundedBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "escrowTitle": "ضمان الفلوس",
+  "escrowOfferBody": "{honorific, select, ms{حوّلي {amount} ج.م لصلحلي قبل الشغل. بنحتفظ بيهم لحد ما تأكّدي إن الشغل تمام، والفني بيعرف إن فلوسك مأمّنة.} other{حوّل {amount} ج.م لصلحلي قبل الشغل. بنحتفظ بيهم لحد ما تأكّد إن الشغل تمام، والفني بيعرف إن فلوسك مأمّنة.}}",
+  "@escrowOfferBody": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "escrowSecureAction": "{honorific, select, ms{أمّني فلوسك} other{أمّن فلوسك}}",
+  "@escrowSecureAction": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "escrowPendingBody": "وصلنا طلب التحويل وبنراجعه. هنبلّغك أول ما نتأكد.",
+  "escrowHeldBody": "{amount} ج.م معانا ومأمّنين. مش هيتحوّلوا للفني غير بعد ما الشغل يخلص وتأكّد.",
+  "@escrowHeldBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "escrowHeldAuto": "لو ما رديتش لحد {when} هيتحوّلوا للفني تلقائي.",
+  "@escrowHeldAuto": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "escrowConfirmAction": "الشغل تمام، حوّل للفني",
+  "escrowConfirmQuestion": "تأكّد الشغل؟",
+  "escrowConfirmNote": "هنحوّل {amount} ج.م للفني، ومش هينفع نرجّعهم بعد كده.",
+  "@escrowConfirmNote": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "escrowConfirmYes": "أيوه، حوّل",
+  "escrowDisputeAction": "فيه مشكلة في الشغل",
+  "escrowDisputeTitle": "إيه المشكلة؟",
+  "escrowDisputeHint": "{honorific, select, ms{احكيلنا إيه اللي حصل وإحنا هنراجعه.} other{احكيلنا إيه اللي حصل وإحنا هنراجعه.}}",
+  "@escrowDisputeHint": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "escrowDisputeSend": "ابعت الاعتراض",
+  "escrowReleasedBody": "أكّدت الشغل. الفلوس في طريقها للفني.",
+  "escrowPaidOutBody": "الفلوس وصلت للفني. شكراً.",
+  "escrowDisputedBody": "وصلنا اعتراضك. الفلوس معانا وهنراجع الموضوع ونرد عليك.",
+  "escrowRefundDueBody": "هنرجّع فلوسك على نفس الحساب اللي حوّلت منه.",
+  "escrowRefundedBody": "رجّعنا فلوسك على الحساب اللي حوّلت منه.",
+  "escrowRejectedBody": "ما لقيناش التحويل: {reason}",
+  "@escrowRejectedBody": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "escrowRetryAction": "{honorific, select, ms{ابعتي التحويل تاني} other{ابعت التحويل تاني}}",
+  "@escrowRetryAction": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "escrowSecureTitle": "{honorific, select, ms{أمّني فلوسك} other{أمّن فلوسك}}",
+  "@escrowSecureTitle": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "escrowSecureIntro": "{honorific, select, ms{حوّلي {amount} ج.م لصلحلي وارفعي صورة التحويل. هنراجعه ونبلّغك، وبعدها الفني يبدأ وهو عارف إن فلوسه مضمونة. مش هنحوّل له حاجة غير لما تأكّدي الشغل، أو بعد 3 أيام من ما يخلّص لو ما اعترضتيش.} other{حوّل {amount} ج.م لصلحلي وارفع صورة التحويل. هنراجعه ونبلّغك، وبعدها الفني يبدأ وهو عارف إن فلوسه مضمونة. مش هنحوّل له حاجة غير لما تأكّد الشغل، أو بعد 3 أيام من ما يخلّص لو ما اعترضتش.}}",
+  "@escrowSecureIntro": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "escrowSecureSent": "وصلنا التحويل، هنراجعه ونبلّغك",
+  "escrowSecureUnavailable": "{honorific, select, ms{الضمان مش متاح للطلب ده دلوقتي.} other{الضمان مش متاح للطلب ده دلوقتي.}}",
+  "@escrowSecureUnavailable": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "escrowFailureUnavailable": "الضمان مش متاح للطلب ده دلوقتي. افتح الطلب تاني وشوف حالته.",
+  "escrowFailureAlreadySecured": "فلوس الطلب ده اتبعتت قبل كده وبنراجعها.",
+  "escrowFailureInvalidReason": "اكتب المشكلة في كلمات واضحة (أقل من 300 حرف).",
+  "technicianEscrowPending": "العميل بعت تحويل {amount} ج.م لصلحلي وبنراجعه.",
+  "@technicianEscrowPending": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "technicianEscrowHeld": "العميل أمّن {amount} ج.م عند صلحلي. هيوصلوا لك بعد ما يأكّد الشغل.",
+  "@technicianEscrowHeld": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "technicianEscrowReleased": "الشغل اتأكّد. هنحوّل لك {amount} ج.م على حساب الاستلام.",
+  "@technicianEscrowReleased": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "technicianEscrowPaidOut": "اتحوّل لك {amount} ج.م.",
+  "@technicianEscrowPaidOut": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "technicianEscrowDisputed": "العميل اعترض على الشغل. الفلوس معانا لحد ما نراجع.",
+  "technicianEscrowRefunded": "الفلوس اترجّعت للعميل.",
+  "technicianEscrowNoPayout": "اتأكد إن حساب استلام الفلوس مضاف من حسابك.",
+  "payoutAccountTile": "حساب استلام الفلوس",
+  "payoutAccountTitle": "حساب استلام الفلوس",
+  "payoutAccountIntro": "لما عميل يأمّن فلوس شغلانة ويأكّد الشغل، هنحوّل لك المبلغ على الحساب ده.",
+  "payoutAccountNumber": "رقم المحفظة أو عنوان إنستاباي",
+  "payoutAccountHolder": "الاسم على الحساب",
+  "payoutAccountSave": "احفظ",
+  "payoutAccountSaved": "اتحفظ الحساب",
+  "payoutAccountUnavailable": "مش قادرين نفتح الحساب دلوقتي. جرّب كمان شوية.",
+  "payoutAccountInvalidHolder": "اكتب الاسم زي ما هو على الحساب.",
+  "payoutAccountInvalidAccount": "الرقم أو العنوان مش مظبوط. راجعه وجرّب تاني.",
+  "escrowNotNow": "مش دلوقتي"
 }

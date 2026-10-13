@@ -22,6 +22,8 @@ import 'package:salahly/features/chat/presentation/pages/chat_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customer_form_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customer_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customers_page.dart';
+import 'package:salahly/features/escrow/presentation/pages/payout_account_page.dart';
+import 'package:salahly/features/escrow/presentation/pages/secure_payment_page.dart';
 import 'package:salahly/features/home/presentation/pages/consumer_home_page.dart';
 import 'package:salahly/features/home/presentation/pages/today_page.dart';
 import 'package:salahly/features/home/presentation/widgets/consumer_scope.dart';
@@ -207,6 +209,11 @@ RouteBase _consumerRoutes() {
             builder: (context, state) => ComplaintPage(requestId: id(state)),
           ),
           GoRoute(
+            path: 'secure-payment',
+            builder: (context, state) =>
+                SecurePaymentPage(requestId: id(state)),
+          ),
+          GoRoute(
             path: 'chat/:technicianId',
             builder: (context, state) => ChatPage(
               requestId: id(state),
@@ -297,6 +304,10 @@ RouteBase _technicianRoutes() {
         path: AppRoutes.technicianBuyUses,
         builder: (context, state) =>
             const BuyUsesPage(role: UserRole.technician),
+      ),
+      GoRoute(
+        path: AppRoutes.technicianPayoutAccount,
+        builder: (context, state) => const PayoutAccountPage(),
       ),
       GoRoute(
         path: AppRoutes.technicianDeleteAccount,

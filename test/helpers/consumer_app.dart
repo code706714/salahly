@@ -59,6 +59,10 @@ class ConsumerApp {
       catalog.fetchCategories,
     ).thenAnswer((_) async => const Ok(TestCategories.all));
     stubBalance(balance);
+    when(() => escrow.fetchInfo(any())).thenAnswer((_) async => const Ok(null));
+    when(
+      () => escrow.fetchTechnicianEscrow(any()),
+    ).thenAnswer((_) async => const Ok(null));
     stubNotifications(notifications);
     when(() => photoPicker.discard(any())).thenAnswer((_) async {});
     when(requests.fetchRequests).thenAnswer((_) async => const Ok([]));
@@ -105,6 +109,9 @@ class ConsumerApp {
   /// The balance: no transfers or movements unless a test stubs some.
   final balance = MockBalanceRepository();
 
+  /// The money guarantee: none on any request unless a test stubs one.
+  final escrow = MockEscrowRepository();
+
   /// The notifications: none, all read, unless a test stubs some.
   final notifications = MockNotificationsRepository();
   final live = FakeLiveUpdates();
@@ -125,6 +132,7 @@ class ConsumerApp {
     technicianRequestsRepository: MockTechnicianRequestsRepository(),
     balanceRepository: balance,
     chatRepository: MockChatRepository(),
+    escrowRepository: escrow,
     notificationsRepository: notifications,
     liveUpdates: live,
     pushService: FakePushService(),
