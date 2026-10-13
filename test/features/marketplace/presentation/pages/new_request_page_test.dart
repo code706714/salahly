@@ -101,6 +101,52 @@ void main() {
   }
 
   group('step 1: the problem', () {
+    testWidgets('shows what the job usually costs once it is known', (
+      tester,
+    ) async {
+      await pumpView(
+        tester,
+        problem.copyWith(
+          issue: () => RequestIssue.notCooling,
+          priceGuide: () => const PriceGuide(
+            lowPiastres: 22000,
+            highPiastres: 38000,
+            fromOffers: true,
+          ),
+        ),
+      );
+
+      expect(find.text(l10n.priceGuideTitle), findsOneWidget);
+      expect(find.text(l10n.priceGuideRange('220', '380')), findsOneWidget);
+      expect(find.text(l10n.priceGuideFromOffers), findsOneWidget);
+      expect(find.text(l10n.priceGuideFromCatalog), findsNothing);
+    });
+
+    testWidgets('says the guide is a suggestion when it has no history', (
+      tester,
+    ) async {
+      await pumpView(
+        tester,
+        problem.copyWith(
+          issue: () => RequestIssue.notCooling,
+          priceGuide: () => const PriceGuide(
+            lowPiastres: 15000,
+            highPiastres: 60000,
+            fromOffers: false,
+          ),
+        ),
+      );
+
+      expect(find.text(l10n.priceGuideFromCatalog), findsOneWidget);
+      expect(find.text(l10n.priceGuideFromOffers), findsNothing);
+    });
+
+    testWidgets('shows no guide until there is one', (tester) async {
+      await pumpView(tester, problem);
+
+      expect(find.text(l10n.priceGuideTitle), findsNothing);
+    });
+
     testWidgets('shows the issues, the description, dictation and photos on '
         'a small phone', (tester) async {
       await pumpView(tester, problem);

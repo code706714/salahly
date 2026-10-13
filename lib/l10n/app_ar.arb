@@ -5425,5 +5425,19 @@
   "adminAuditRejectEscrow": "رفض تحويل ضمان",
   "adminAuditPayEscrow": "دفع فني من الضمان",
   "adminAuditResolveEscrow": "قرار اعتراض ضمان",
-  "adminAuditRefundEscrow": "رد فلوس ضمان"
+  "adminAuditRefundEscrow": "رد فلوس ضمان",
+  "priceGuideTitle": "السعر المعتاد لشغل زي ده",
+  "priceGuideRange": "من {low} لـ {high} ج.م",
+  "@priceGuideRange": {
+    "placeholders": {
+      "low": {
+        "type": "String"
+      },
+      "high": {
+        "type": "String"
+      }
+    }
+  },
+  "priceGuideFromOffers": "ده المدى اللي وقعت فيه أغلب العروض اللي اتقبلت. الفني هو اللي بيحدد سعره.",
+  "priceGuideFromCatalog": "ده تقدير من الأسعار اللي الفنيين بيبدأوا بيها. الفني هو اللي بيحدد سعره."
 }

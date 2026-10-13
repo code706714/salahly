@@ -35,6 +35,12 @@ void main() {
       requests.fetchAddresses,
     ).thenAnswer((_) async => const Ok([testHome, testMomsHome]));
     when(() => speech.stop()).thenAnswer((_) async {});
+    when(
+      () => requests.priceGuide(
+        categoryId: any(named: 'categoryId'),
+        issue: any(named: 'issue'),
+      ),
+    ).thenAnswer((_) async => const Ok(null));
   });
 
   NewRequestCubit build({String? categoryId, String? technicianId}) =>
@@ -732,6 +738,106 @@ void main() {
       await sending;
 
       expect(cubit.state.status, NewRequestStatus.sending);
+    });
+  });
+
+  group('price guide', () {
+    const guide = PriceGuide(
+      lowPiastres: 22000,
+      highPiastres: 38000,
+      fromOffers: true,
+    );
+
+    void answerWith(PriceGuide? value) => when(
+      () => requests.priceGuide(
+        categoryId: any(named: 'categoryId'),
+        issue: any(named: 'issue'),
+      ),
+    ).thenAnswer((_) async => Ok(value));
+
+    test('is fetched for the problem picked', () async {
+      answerWith(guide);
+      final cubit = build()..selectIssue(RequestIssue.notCooling);
+      await pumpEventQueue();
+
+      expect(cubit.state.priceGuide, guide);
+      verify(
+        () => requests.priceGuide(
+          categoryId: TestCategories.airConditioning.id,
+          issue: RequestIssue.notCooling,
+        ),
+      ).called(1);
+      await cubit.close();
+    });
+
+    test('is dropped while the problem changes, and fetched again', () async {
+      answerWith(guide);
+      final cubit = build()..selectIssue(RequestIssue.notCooling);
+      await pumpEventQueue();
+
+      answerWith(null);
+      cubit.selectIssue(RequestIssue.noisy);
+      expect(cubit.state.priceGuide, isNull);
+      await pumpEventQueue();
+
+      expect(cubit.state.priceGuide, isNull);
+      await cubit.close();
+    });
+
+    test('is dropped when the trade changes', () async {
+      answerWith(guide);
+      final cubit =
+          NewRequestCubit(
+            requests: requests,
+            speech: speech,
+            clock: () => now,
+          )..useCategories([
+            TestCategories.airConditioning,
+            TestCategories.plumbing,
+          ]);
+      cubit.selectIssue(RequestIssue.other);
+      await pumpEventQueue();
+      expect(cubit.state.priceGuide, guide);
+
+      answerWith(null);
+      cubit.selectCategory(TestCategories.plumbing);
+      await pumpEventQueue();
+
+      expect(cubit.state.priceGuide, isNull);
+      await cubit.close();
+    });
+
+    test('is left out when it cannot be fetched', () async {
+      when(
+        () => requests.priceGuide(
+          categoryId: any(named: 'categoryId'),
+          issue: any(named: 'issue'),
+        ),
+      ).thenAnswer((_) async => const Err(NetworkFailure()));
+      final cubit = build()..selectIssue(RequestIssue.notCooling);
+      await pumpEventQueue();
+
+      expect(cubit.state.priceGuide, isNull);
+      expect(cubit.state.status, NewRequestStatus.editing);
+      await cubit.close();
+    });
+
+    test('ignores an answer for a problem no longer picked', () async {
+      final slow = Completer<Result<PriceGuide?>>();
+      when(
+        () => requests.priceGuide(
+          categoryId: any(named: 'categoryId'),
+          issue: RequestIssue.notCooling,
+        ),
+      ).thenAnswer((_) => slow.future);
+      final cubit = build()..selectIssue(RequestIssue.notCooling);
+      answerWith(null);
+      cubit.selectIssue(RequestIssue.noisy);
+      slow.complete(const Ok(guide));
+      await pumpEventQueue();
+
+      expect(cubit.state.priceGuide, isNull);
+      await cubit.close();
     });
   });
 

@@ -16,6 +16,7 @@ import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
+import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
 import 'package:salahly/salahly_app.dart';
 
 import 'balance_fixtures.dart';
@@ -76,6 +77,12 @@ class ConsumerApp {
       ),
     ).thenAnswer((_) async => const Ok([]));
     when(
+      () => requests.priceGuide(
+        categoryId: any(named: 'categoryId'),
+        issue: any(named: 'issue'),
+      ),
+    ).thenAnswer((_) async => const Ok(null));
+    when(
       () => requests.availableTechnicianCount(
         categoryId: any(named: 'categoryId'),
         areaId: any(named: 'areaId'),
@@ -97,7 +104,10 @@ class ConsumerApp {
   final UserProfile profile;
 
   /// Call once from `setUpAll` before using [ConsumerApp].
-  static void registerFallbacks() => TechnicianApp.registerFallbacks();
+  static void registerFallbacks() {
+    TechnicianApp.registerFallbacks();
+    registerFallbackValue(RequestIssue.other);
+  }
 
   final database = AppDatabase(NativeDatabase.memory());
   final auth = MockAuthRepository();

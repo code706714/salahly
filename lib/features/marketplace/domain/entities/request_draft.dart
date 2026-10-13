@@ -66,6 +66,25 @@ final class UrgentInfo extends Equatable {
   List<Object?> get props => [feePiastres, availableNow];
 }
 
+/// What a job like the one asked for usually costs.
+final class PriceGuide extends Equatable {
+  const PriceGuide({
+    required this.lowPiastres,
+    required this.highPiastres,
+    required this.fromOffers,
+  });
+
+  final int lowPiastres;
+  final int highPiastres;
+
+  /// Whether the range comes from offers consumers accepted, rather than
+  /// from the technicians' suggested prices.
+  final bool fromOffers;
+
+  @override
+  List<Object?> get props => [lowPiastres, highPiastres, fromOffers];
+}
+
 /// A request the server accepted, and how many technicians it reached.
 final class SentRequest extends Equatable {
   const SentRequest({required this.id, required this.sentTo});

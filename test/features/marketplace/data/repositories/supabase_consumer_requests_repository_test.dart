@@ -89,6 +89,72 @@ void main() {
     });
   });
 
+  group('priceGuide', () {
+    test('reads the range and where it comes from', () async {
+      server.body = {
+        'low_piastres': 22000,
+        'high_piastres': 38000,
+        'source': 'offers',
+      };
+
+      final result = await server.repository().priceGuide(
+        categoryId: 'ac',
+        issue: RequestIssue.notCooling,
+      );
+
+      expect(
+        result,
+        isA<Ok<PriceGuide?>>().having(
+          (ok) => ok.value,
+          'value',
+          const PriceGuide(
+            lowPiastres: 22000,
+            highPiastres: 38000,
+            fromOffers: true,
+          ),
+        ),
+      );
+      expect(server.lastPath, '/rest/v1/rpc/price_guide');
+      expect(server.lastParams, {
+        'p_category_id': 'ac',
+        'p_issue': 'not_cooling',
+      });
+    });
+
+    test('reads the catalog as not from offers', () async {
+      server.body = {
+        'low_piastres': 15000,
+        'high_piastres': 60000,
+        'source': 'catalog',
+      };
+
+      final result = await server.repository().priceGuide(
+        categoryId: 'ac',
+        issue: RequestIssue.noisy,
+      );
+
+      expect(
+        (result as Ok<PriceGuide?>).value,
+        const PriceGuide(
+          lowPiastres: 15000,
+          highPiastres: 60000,
+          fromOffers: false,
+        ),
+      );
+    });
+
+    test('has no guide when the server knows nothing', () async {
+      server.body = null;
+
+      final result = await server.repository().priceGuide(
+        categoryId: 'ac',
+        issue: RequestIssue.noisy,
+      );
+
+      expect((result as Ok<PriceGuide?>).value, isNull);
+    });
+  });
+
   group('sendRequest', () {
     test("sends the draft in the server's terms", () async {
       server.body = {'id': 'request-1', 'sent_to': 5};

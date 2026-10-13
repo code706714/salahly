@@ -3,6 +3,7 @@ import 'package:salahly/features/marketplace/domain/entities/complaint.dart';
 import 'package:salahly/features/marketplace/domain/entities/consumer_address.dart';
 import 'package:salahly/features/marketplace/domain/entities/offer_thread.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_draft.dart';
+import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
 import 'package:salahly/features/marketplace/domain/entities/review.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
 import 'package:salahly/features/marketplace/domain/entities/technician_card.dart';
@@ -31,6 +32,13 @@ abstract interface class ConsumerRequestsRepository {
   Future<Result<UrgentInfo>> urgentInfo({
     required String categoryId,
     required String areaId,
+  });
+
+  /// What [issue] in [categoryId] usually costs, or null when nothing is
+  /// known.
+  Future<Result<PriceGuide?>> priceGuide({
+    required String categoryId,
+    required RequestIssue issue,
   });
 
   /// Uploads a cleaned photo for a request or complaint. Returns its path.
