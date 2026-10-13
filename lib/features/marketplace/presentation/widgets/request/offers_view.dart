@@ -349,6 +349,15 @@ class _OfferCard extends StatelessWidget {
                               semanticLabel: l10n.offersVerified,
                             ),
                           ],
+                          if (technician.fastReply) ...[
+                            const SizedBox(width: 4),
+                            Icon(
+                              Icons.bolt_rounded,
+                              size: 18,
+                              color: colors.warning,
+                              semanticLabel: l10n.offersFastReply,
+                            ),
+                          ],
                         ],
                       ),
                       const SizedBox(height: 2),

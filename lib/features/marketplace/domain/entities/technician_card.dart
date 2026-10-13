@@ -14,6 +14,7 @@ final class TechnicianCard extends Equatable {
     required this.jobsDone,
     this.shopName,
     this.rating,
+    this.fastReply = false,
   });
 
   final String id;
@@ -34,6 +35,9 @@ final class TechnicianCard extends Equatable {
   /// Platform jobs they finished.
   final int jobsDone;
 
+  /// They usually answer a request within half an hour.
+  final bool fastReply;
+
   @override
   List<Object?> get props => [
     id,
@@ -45,6 +49,7 @@ final class TechnicianCard extends Equatable {
     rating,
     reviewCount,
     jobsDone,
+    fastReply,
   ];
 }
 

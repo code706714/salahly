@@ -32,6 +32,7 @@ TechnicianCard testTechnicianCard({
   int reviewCount = 126,
   int jobsDone = 214,
   bool verified = true,
+  bool fastReply = false,
 }) => TechnicianCard(
   id: id,
   name: name,
@@ -41,6 +42,7 @@ TechnicianCard testTechnicianCard({
   rating: rating,
   reviewCount: reviewCount,
   jobsDone: jobsDone,
+  fastReply: fastReply,
 );
 
 RequestOffer testOffer({

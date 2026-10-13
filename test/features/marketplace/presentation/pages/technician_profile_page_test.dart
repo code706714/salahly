@@ -142,6 +142,20 @@ void main() {
     expect(find.text(l10n.techProfileNoReviews), findsOneWidget);
   });
 
+  testWidgets('shows the fast-reply badge only for who earned it', (
+    tester,
+  ) async {
+    showProfile(
+      testTechnicianProfile(card: testTechnicianCard(fastReply: true)),
+    );
+    await pumpView(tester);
+    expect(find.text(l10n.offersFastReply), findsOneWidget);
+
+    showProfile(testTechnicianProfile());
+    await pumpView(tester);
+    expect(find.text(l10n.offersFastReply), findsNothing);
+  });
+
   testWidgets('shows no badge for an unverified technician', (tester) async {
     showProfile(
       testTechnicianProfile(card: testTechnicianCard(verified: false)),

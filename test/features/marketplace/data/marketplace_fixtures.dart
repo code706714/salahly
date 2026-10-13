@@ -137,9 +137,11 @@ Map<String, dynamic> incomingRequestJson({
 Map<String, dynamic> listingJson({
   String id = 'tech-1',
   String name = 'محمود السيد',
+  bool fastReply = false,
 }) => {
   'id': id,
   'name': name,
+  'fast_reply': fastReply,
   'avatar_path': '$id/avatar.jpg',
   'rating': 4.8,
   'review_count': 126,

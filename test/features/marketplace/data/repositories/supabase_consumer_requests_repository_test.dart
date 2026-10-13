@@ -672,6 +672,18 @@ void main() {
   });
 
   group('browseTechnicians', () {
+    test('reads who answers fast', () async {
+      server.body = [
+        listingJson(fastReply: true),
+        listingJson(id: 'tech-2'),
+      ];
+
+      final result = await server.repository().browseTechnicians();
+
+      final listings = (result as Ok<List<TechnicianListing>>).value;
+      expect(listings.map((listing) => listing.card.fastReply), [true, false]);
+    });
+
     test('asks for a page of the directory and reads the listings', () async {
       server.body = [listingJson()];
 

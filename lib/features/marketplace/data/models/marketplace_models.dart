@@ -155,6 +155,7 @@ abstract final class MarketplaceModels {
         rating: (json['rating'] as num?)?.toDouble(),
         reviewCount: json['review_count'] as int,
         jobsDone: json['jobs_done'] as int,
+        fastReply: json['fast_reply'] == true,
       );
 
   static List<ServicePrice> _servicePrices(Object? wire) => [
@@ -210,6 +211,7 @@ abstract final class MarketplaceModels {
         rating: (json['rating'] as num?)?.toDouble(),
         reviewCount: json['review_count'] as int,
         jobsDone: json['jobs_done'] as int,
+        fastReply: json['fast_reply'] == true,
       );
 
   /// The urgent fee, or null when the request isn't urgent.

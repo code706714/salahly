@@ -256,7 +256,17 @@ class _Header extends StatelessWidget {
                           ),
                           if (card.verified) ...[
                             const SizedBox(height: 4),
-                            _VerifiedPill(label: l10n.techProfileVerified),
+                            _BadgePill(
+                              icon: Icons.verified_user_outlined,
+                              label: l10n.techProfileVerified,
+                            ),
+                          ],
+                          if (card.fastReply) ...[
+                            const SizedBox(height: 4),
+                            _BadgePill(
+                              icon: Icons.bolt_rounded,
+                              label: l10n.offersFastReply,
+                            ),
                           ],
                         ],
                       ),
@@ -272,9 +282,10 @@ class _Header extends StatelessWidget {
   }
 }
 
-class _VerifiedPill extends StatelessWidget {
-  const _VerifiedPill({required this.label});
+class _BadgePill extends StatelessWidget {
+  const _BadgePill({required this.icon, required this.label});
 
+  final IconData icon;
   final String label;
 
   @override
@@ -290,7 +301,7 @@ class _VerifiedPill extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.verified_user_outlined, size: 15, color: colors.ink),
+            Icon(icon, size: 15, color: colors.ink),
             const SizedBox(width: 4),
             Text(
               label,
