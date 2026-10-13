@@ -174,6 +174,7 @@ class TechnicianApp {
     consumerRequestsRepository: MockConsumerRequestsRepository(),
     technicianRequestsRepository: requests,
     balanceRepository: balance,
+    chatRepository: MockChatRepository(),
     notificationsRepository: notifications,
     liveUpdates: live,
     pushService: FakePushService(),

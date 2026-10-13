@@ -225,6 +225,19 @@ void main() {
       },
     );
 
+    test('a chat message names the other side, on either side of the app', () {
+      final message = of(NotificationKind.chatMessage);
+
+      expect(consumerText(message), (
+        title: 'رسالة جديدة من أحمد رمضان',
+        body: 'افتح الطلب وكمّل الكلام.',
+      ));
+      expect(technicianText(message), (
+        title: 'رسالة جديدة من نورهان م.',
+        body: 'افتح الطلب وكمّل الكلام.',
+      ));
+    });
+
     test('an urgent request says so, with the area and the distance', () {
       final text = technicianText(of(NotificationKind.urgentRequest));
 

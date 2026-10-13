@@ -5065,5 +5065,31 @@
       }
     }
   },
-  "notifUrgentRequestBody": "عميل محتاج فني دلوقتي. ابعت عرضك بسرعة."
+  "notifUrgentRequestBody": "عميل محتاج فني دلوقتي. ابعت عرضك بسرعة.",
+  "notifChatMessage": "رسالة جديدة من {name}",
+  "@notifChatMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifChatMessageBody": "افتح الطلب وكمّل الكلام.",
+  "chatTitle": "المحادثة",
+  "chatSafetyNote": "الكلام هنا جوه التطبيق بس. أرقام التليفون واللينكات بتتمنع، وده بيحمي الاتنين.",
+  "chatEmpty": "اكتب أول رسالة. اسأل عن أي تفصيلة في الشغلانة.",
+  "chatHint": "اكتب رسالتك",
+  "chatSend": "ابعت",
+  "chatClosed": "المحادثة دي اتقفلت.",
+  "chatContactBlocked": "مينفعش تبعت رقم تليفون أو لينك أو اسم تطبيق تاني هنا. اتفقوا على التفاصيل في المحادثة.",
+  "chatLoadFailed": "مقدرناش نفتح المحادثة دلوقتي.",
+  "chatWithTechnician": "كلّم الفني",
+  "chatWithConsumer": "{honorific, select, ms{كلّم العميلة} other{كلّم العميل}}",
+  "@chatWithConsumer": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  }
 }

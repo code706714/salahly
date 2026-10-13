@@ -127,6 +127,13 @@ NotificationText notificationText(
         l10n.notifUrgentRequestBody,
       ]),
     ),
+    NotificationKind.chatMessage => (
+      title: switch (role) {
+        UserRole.consumer => l10n.notifChatMessage(technician),
+        UserRole.technician => l10n.notifChatMessage(consumer),
+      },
+      body: l10n.notifChatMessageBody,
+    ),
     NotificationKind.offerPicked => (
       title: l10n.notifOfferPicked(gender, consumer),
       body: [

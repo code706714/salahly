@@ -93,9 +93,16 @@ abstract final class AppRoutes {
 
   static String request(String id) => '$consumerRequests/$id';
   static String requestComplaint(String id) => '${request(id)}/complaint';
+
+  /// The consumer's chat with [technicianId] about a request.
+  static String requestChat(String id, String technicianId) =>
+      '${request(id)}/chat/$technicianId';
   static String technicianProfile(String id) => '$consumerTechnicians/$id';
 
   static String incomingRequest(String id) => '$incomingRequests/$id';
+
+  /// The technician's chat with the consumer about a request.
+  static String incomingRequestChat(String id) => '${incomingRequest(id)}/chat';
 
   static String job(String id) => '$technicianJobs/$id';
   static String jobQuote(String id) => '${job(id)}/quote';

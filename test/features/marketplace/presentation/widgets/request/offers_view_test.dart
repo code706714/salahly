@@ -45,6 +45,8 @@ void main() {
         stubRoutes: [
           for (final id in ['tech-1', 'tech-2', 'tech-3'])
             AppRoutes.technicianProfile(id),
+          for (final id in ['tech-1', 'tech-2', 'tech-3'])
+            AppRoutes.requestChat('request-1', id),
         ],
       );
 
@@ -341,6 +343,42 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.text('اختاري محمود'), findsOneWidget);
+    });
+  });
+
+  group('the chat', () {
+    testWidgets('opens with the technician of that offer', (tester) async {
+      harness.show(liveRequest(offers: liveOffers()));
+      await pumpView(tester);
+
+      await tapAndSettle(tester, find.byTooltip(l10n.chatWithTechnician).first);
+
+      expect(
+        find.text(AppRoutes.requestChat('request-1', 'tech-2')),
+        findsOneWidget,
+      );
+      verifyNever(() => harness.request.acceptOffer(any()));
+    });
+
+    testWidgets('is shut for an offer whose time has passed', (tester) async {
+      harness.show(
+        liveRequest(
+          offers: [
+            testOffer(
+              arriveAt: DateTime.now().subtract(const Duration(hours: 1)),
+            ),
+          ],
+        ),
+      );
+      await pumpView(tester);
+
+      final button = tester.widget<OutlinedButton>(
+        find.descendant(
+          of: find.byTooltip(l10n.chatWithTechnician),
+          matching: find.byType(OutlinedButton),
+        ),
+      );
+      expect(button.onPressed, isNull);
     });
   });
 

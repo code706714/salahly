@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/text/money.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
@@ -317,6 +319,22 @@ class _RequestScreenState extends State<_RequestScreen> {
             const SizedBox(height: 14),
             if (offer != null) ...[
               SentOfferCard(request: request, offer: offer, now: state.now),
+              if (standing == IncomingStanding.offerSent ||
+                  standing == IncomingStanding.chosen) ...[
+                const SizedBox(height: 12),
+                OutlinedButton.icon(
+                  onPressed: () => unawaited(
+                    context.push(AppRoutes.incomingRequestChat(request.id)),
+                  ),
+                  icon: const Icon(Icons.forum_outlined),
+                  label: Text(
+                    l10n.chatWithConsumer(request.consumerHonorific.name),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(48),
+                  ),
+                ),
+              ],
               if (standing == IncomingStanding.offerSent) ...[
                 const SizedBox(height: 12),
                 OfferNegotiation(offer: offer),
