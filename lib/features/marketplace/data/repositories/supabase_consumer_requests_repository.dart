@@ -10,6 +10,7 @@ import 'package:salahly/features/marketplace/domain/entities/complaint.dart';
 import 'package:salahly/features/marketplace/domain/entities/consumer_address.dart';
 import 'package:salahly/features/marketplace/domain/entities/offer_thread.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_draft.dart';
+import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
 import 'package:salahly/features/marketplace/domain/entities/review.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
 import 'package:salahly/features/marketplace/domain/entities/technician_card.dart';
@@ -78,6 +79,23 @@ class SupabaseConsumerRequestsRepository implements ConsumerRequestsRepository {
     return UrgentInfo(
       feePiastres: json['fee_piastres'] as int,
       availableNow: json['available_now'] as int,
+    );
+  });
+
+  @override
+  Future<Result<PriceGuide?>> priceGuide({
+    required String categoryId,
+    required RequestIssue issue,
+  }) => _call(() async {
+    final json = await _client.rpc<Map<String, dynamic>?>(
+      'price_guide',
+      params: {'p_category_id': categoryId, 'p_issue': toWire(issue)},
+    );
+    if (json == null) return null;
+    return PriceGuide(
+      lowPiastres: json['low_piastres'] as int,
+      highPiastres: json['high_piastres'] as int,
+      fromOffers: json['source'] == 'offers',
     );
   });
 

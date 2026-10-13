@@ -392,6 +392,10 @@ class _ProblemStep extends StatelessWidget {
           const SizedBox(height: 8),
           _Missing(l10n.newRequestIssueRequired(honorific)),
         ],
+        if (state.priceGuide case final guide?) ...[
+          const SizedBox(height: 16),
+          _PriceGuideCard(guide: guide),
+        ],
         const SizedBox(height: 16),
         Text(
           l10n.newRequestDescription,
@@ -442,6 +446,47 @@ class _ProblemStep extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+/// What a job like this usually costs, shown once the problem is picked.
+class _PriceGuideCard extends StatelessWidget {
+  const _PriceGuideCard({required this.guide});
+
+  final PriceGuide guide;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final colors = context.appColors;
+    return AppCard(
+      radius: AppRadii.lg,
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.priceGuideTitle,
+            style: TextStyle(fontSize: 13, color: colors.inkMuted),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            l10n.priceGuideRange(
+              formatPounds(guide.lowPiastres),
+              formatPounds(guide.highPiastres),
+            ),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            guide.fromOffers
+                ? l10n.priceGuideFromOffers
+                : l10n.priceGuideFromCatalog,
+            style: TextStyle(fontSize: 13, height: 1.6, color: colors.inkMuted),
+          ),
+        ],
+      ),
     );
   }
 }

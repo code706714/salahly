@@ -30,6 +30,7 @@ final class NewRequestState extends Equatable {
     this.failure,
     this.urgentInfo,
     this.urgentFailed = false,
+    this.priceGuide,
   });
 
   /// The server takes a time window until an hour before it ends.
@@ -93,6 +94,9 @@ final class NewRequestState extends Equatable {
 
   /// [urgentInfo] couldn't be fetched.
   final bool urgentFailed;
+
+  /// What the picked problem usually costs, when known.
+  final PriceGuide? priceGuide;
 
   bool get isSending =>
       status == NewRequestStatus.uploading ||
@@ -178,6 +182,7 @@ final class NewRequestState extends Equatable {
     Failure? Function()? failure,
     UrgentInfo? urgentInfo,
     bool? urgentFailed,
+    PriceGuide? Function()? priceGuide,
   }) {
     return NewRequestState(
       now: now ?? this.now,
@@ -203,6 +208,7 @@ final class NewRequestState extends Equatable {
       failure: failure != null ? failure() : this.failure,
       urgentInfo: urgentInfo ?? this.urgentInfo,
       urgentFailed: urgentFailed ?? this.urgentFailed,
+      priceGuide: priceGuide != null ? priceGuide() : this.priceGuide,
     );
   }
 
@@ -231,5 +237,6 @@ final class NewRequestState extends Equatable {
     failure,
     urgentInfo,
     urgentFailed,
+    priceGuide,
   ];
 }

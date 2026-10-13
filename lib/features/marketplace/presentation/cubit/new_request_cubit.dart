@@ -81,12 +81,14 @@ class NewRequestCubit extends Cubit<NewRequestState> {
             .firstOrNull ??
         choices.firstOrNull;
     emit(category == null ? next : _withCategory(next, category));
+    if (state.priceGuide == null) unawaited(_loadPriceGuide());
   }
 
   /// Picks the trade; the problem picked for another trade is dropped.
   void selectCategory(ServiceCategory category) {
     if (state.categoryChoices.contains(category)) {
       emit(_withCategory(state, category));
+      if (state.priceGuide == null) unawaited(_loadPriceGuide());
     }
   }
 
@@ -94,7 +96,10 @@ class NewRequestCubit extends Cubit<NewRequestState> {
     NewRequestState state,
     ServiceCategory category,
   ) {
-    final next = state.copyWith(category: category);
+    final next = state.copyWith(
+      category: category,
+      priceGuide: () => category == state.category ? state.priceGuide : null,
+    );
     return next.issue != null &&
             !next.issueChoices.any(
               (choice) => choice.issue == next.issue,
@@ -122,8 +127,26 @@ class NewRequestCubit extends Cubit<NewRequestState> {
     }
   }
 
-  void selectIssue(RequestIssue issue) =>
-      emit(state.copyWith(issue: () => issue));
+  void selectIssue(RequestIssue issue) {
+    emit(state.copyWith(issue: () => issue, priceGuide: () => null));
+    unawaited(_loadPriceGuide());
+  }
+
+  /// Fetches what the picked problem usually costs. The guide is a help:
+  /// when it can't be fetched the form simply goes without it.
+  Future<void> _loadPriceGuide() async {
+    final category = state.category;
+    final issue = state.issue;
+    if (category == null || issue == null) return;
+    final result = await _requests.priceGuide(
+      categoryId: category.id,
+      issue: issue,
+    );
+    if (isClosed || state.category != category || state.issue != issue) return;
+    if (result case Ok(:final value)) {
+      emit(state.copyWith(priceGuide: () => value));
+    }
+  }
 
   /// The description as typed. Typing takes over from dictation.
   void editDescription(String text) {
