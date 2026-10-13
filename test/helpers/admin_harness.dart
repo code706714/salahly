@@ -17,6 +17,7 @@ import 'package:salahly/features/admin/domain/entities/admin_user.dart';
 import 'package:salahly/features/admin/domain/entities/audit_entry.dart';
 import 'package:salahly/features/admin/domain/repositories/admin_files_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/audit_repository.dart';
+import 'package:salahly/features/admin/domain/repositories/escrow_review_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/overview_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/requests_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/settings_repository.dart';
@@ -98,6 +99,7 @@ class AdminHarness {
   final overview = MockOverviewRepository();
   final verification = MockVerificationRepository();
   final topups = MockTopupReviewRepository();
+  final escrows = MockEscrowReviewRepository();
   final requests = MockRequestsRepository();
   final users = MockUsersRepository();
   final settings = MockSettingsRepository();
@@ -115,6 +117,7 @@ class AdminHarness {
     RepositoryProvider<OverviewRepository>.value(value: overview),
     RepositoryProvider<VerificationRepository>.value(value: verification),
     RepositoryProvider<TopupReviewRepository>.value(value: topups),
+    RepositoryProvider<EscrowReviewRepository>.value(value: escrows),
     RepositoryProvider<RequestsRepository>.value(value: requests),
     RepositoryProvider<UsersRepository>.value(value: users),
     RepositoryProvider<SettingsRepository>.value(value: settings),

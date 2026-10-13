@@ -9,6 +9,7 @@ class AdminTabs<T> extends StatelessWidget {
     required this.selected,
     required this.labelOf,
     required this.onSelected,
+    this.tabPadding = 14,
     super.key,
   });
 
@@ -16,6 +17,9 @@ class AdminTabs<T> extends StatelessWidget {
   final T selected;
   final String Function(T value) labelOf;
   final ValueChanged<T> onSelected;
+
+  /// The space on each side of a label; tighter for more choices.
+  final double tabPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +49,7 @@ class AdminTabs<T> extends StatelessWidget {
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(minHeight: 40),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 14),
+                        padding: EdgeInsets.symmetric(horizontal: tabPadding),
                         child: Center(
                           child: Text(
                             labelOf(value),

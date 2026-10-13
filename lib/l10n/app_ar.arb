@@ -5276,5 +5276,154 @@
   "payoutAccountUnavailable": "مش قادرين نفتح الحساب دلوقتي. جرّب كمان شوية.",
   "payoutAccountInvalidHolder": "اكتب الاسم زي ما هو على الحساب.",
   "payoutAccountInvalidAccount": "الرقم أو العنوان مش مظبوط. راجعه وجرّب تاني.",
-  "escrowNotNow": "مش دلوقتي"
+  "escrowNotNow": "مش دلوقتي",
+  "adminNavEscrow": "ضمان الفلوس",
+  "adminEscrowTitle": "ضمان الفلوس",
+  "adminEscrowSubtitle": "فلوس العملاء عندنا لحد ما يأكدوا الشغل. كل خطوة بتتسجل باسمك.",
+  "adminEscrowTabPending": "للمراجعة",
+  "adminEscrowTabReleased": "للدفع",
+  "adminEscrowTabDisputed": "اعتراضات",
+  "adminEscrowTabRefundDue": "للرد",
+  "adminEscrowTabAll": "الكل",
+  "adminEscrowEmpty": "مفيش حاجة هنا. كله اتراجع.",
+  "adminEscrowPickOne": "اختار عملية من القايمة.",
+  "adminEscrowRowLine": "طلب {code} · {amount} ج.م · {age}",
+  "@adminEscrowRowLine": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "age": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEscrowStatusPending": "مستني مراجعة التحويل",
+  "adminEscrowStatusHeld": "الفلوس عندنا",
+  "adminEscrowStatusReleased": "مستني دفع للفني",
+  "adminEscrowStatusPaidOut": "اتدفع للفني",
+  "adminEscrowStatusDisputed": "اعتراض",
+  "adminEscrowStatusRefundDue": "مستني رد للعميل",
+  "adminEscrowStatusRefunded": "اترجّع للعميل",
+  "adminEscrowStatusRejected": "التحويل اترفض",
+  "adminEscrowRequest": "الطلب",
+  "adminEscrowAmount": "المبلغ",
+  "adminEscrowConsumer": "العميل",
+  "adminEscrowTechnician": "الفني",
+  "adminEscrowFrom": "حوّل من",
+  "adminEscrowPayTo": "ندفع للفني على",
+  "adminEscrowPayoutHolder": "اسم صاحب الحساب",
+  "adminEscrowPayoutMissing": "الفني لسه ما ضافش حساب استلام. كلمه الأول.",
+  "adminEscrowScreenshot": "سكرين شوت التحويل",
+  "adminEscrowApprove": "أكّد إن الفلوس وصلت",
+  "adminEscrowApproveTitle": "تأكيد تحويل {name}",
+  "@adminEscrowApproveTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEscrowApproveBody": "هنحجز {amount} ج.م لحد ما العميل يأكّد الشغل، والفني هيتبلّغ إن الفلوس مضمونة.",
+  "@adminEscrowApproveBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEscrowApproveConfirm": "أكّد",
+  "adminEscrowPayAction": "دفعت للفني",
+  "adminEscrowPayTitle": "دفع {name}",
+  "@adminEscrowPayTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEscrowPayBody": "حوّل {amount} ج.م على الحساب المكتوب، وبعدين اكتب رقم العملية.",
+  "@adminEscrowPayBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEscrowPayConfirm": "سجّل الدفع",
+  "adminEscrowReferenceLabel": "رقم العملية",
+  "adminEscrowDisputeReason": "اعتراض العميل: {reason}",
+  "@adminEscrowDisputeReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEscrowResolveTechnician": "ادفع للفني",
+  "adminEscrowResolveConsumer": "رجّع للعميل",
+  "adminEscrowResolveTitle": "قرار الاعتراض",
+  "adminEscrowResolveTechnicianBody": "الفلوس هتتدفع للفني. اكتب سبب القرار.",
+  "adminEscrowResolveConsumerBody": "الفلوس هترجع للعميل. اكتب سبب القرار.",
+  "adminEscrowResolveTechnicianConfirm": "ادفع للفني",
+  "adminEscrowResolveConsumerConfirm": "رجّع للعميل",
+  "adminEscrowNoteLabel": "سبب القرار",
+  "adminEscrowRefundAction": "رجّعت الفلوس",
+  "adminEscrowRefundTitle": "رد فلوس {name}",
+  "@adminEscrowRefundTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEscrowRefundBody": "رجّع {amount} ج.م على {from}، وبعدين اكتب رقم العملية.",
+  "@adminEscrowRefundBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEscrowRefundConfirm": "سجّل الرد",
+  "adminEscrowPaidReference": "اتدفع · رقم العملية: {reference}",
+  "@adminEscrowPaidReference": {
+    "placeholders": {
+      "reference": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEscrowRefundedReference": "اترجّع · رقم العملية: {reference}",
+  "@adminEscrowRefundedReference": {
+    "placeholders": {
+      "reference": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEscrowResolution": "القرار: {note}",
+  "@adminEscrowResolution": {
+    "placeholders": {
+      "note": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEscrowApproved": "الفلوس اتحجزت والفني اتبلّغ",
+  "adminEscrowRejected": "التحويل اترفض والعميل اتبلّغ",
+  "adminEscrowPaid": "اتسجّل دفع الفني",
+  "adminEscrowResolved": "اتسجّل قرار الاعتراض",
+  "adminEscrowRefunded": "اتسجّل رد الفلوس للعميل",
+  "adminAuditApproveEscrow": "تأكيد تحويل ضمان",
+  "adminAuditRejectEscrow": "رفض تحويل ضمان",
+  "adminAuditPayEscrow": "دفع فني من الضمان",
+  "adminAuditResolveEscrow": "قرار اعتراض ضمان",
+  "adminAuditRefundEscrow": "رد فلوس ضمان"
 }

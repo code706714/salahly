@@ -56,6 +56,7 @@ void main() {
           overviewRepository: h.overview,
           verificationRepository: h.verification,
           topupReviewRepository: h.topups,
+          escrowReviewRepository: h.escrows,
           requestsRepository: h.requests,
           usersRepository: h.users,
           settingsRepository: h.settings,

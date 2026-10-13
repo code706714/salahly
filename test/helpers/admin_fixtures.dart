@@ -7,10 +7,12 @@ import 'package:salahly/features/admin/domain/entities/admin_settings.dart';
 import 'package:salahly/features/admin/domain/entities/admin_user.dart';
 import 'package:salahly/features/admin/domain/entities/area_coverage.dart';
 import 'package:salahly/features/admin/domain/entities/audit_entry.dart';
+import 'package:salahly/features/admin/domain/entities/escrow_review.dart';
 import 'package:salahly/features/admin/domain/entities/topup_review.dart';
 import 'package:salahly/features/admin/domain/entities/verification.dart';
 import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
+import 'package:salahly/features/escrow/domain/entities/escrow.dart';
 import 'package:salahly/features/marketplace/domain/entities/complaint.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
 
@@ -190,6 +192,39 @@ TopupReview testTopupReview({
     status: status,
     rejectReason: rejectReason,
     createdAt: adminNow.subtract(const Duration(hours: 2)),
+  );
+}
+
+EscrowReview testEscrowReview({
+  String id = 'escrow-1',
+  EscrowStatus status = EscrowStatus.pending,
+  String? consumerName = 'نورهان محمد',
+  String? payoutAccount = '01005551234',
+  String? disputeReason,
+  String? rejectReason,
+  String? payoutReference,
+  String? resolutionNote,
+}) {
+  return EscrowReview(
+    id: id,
+    requestCode: 'R-1048',
+    status: status,
+    amountPiastres: 35000,
+    method: TopupMethod.instapay,
+    senderAccount: 'norhan@instapay',
+    screenshotPath: 'consumer/proof.jpg',
+    createdAt: adminNow.subtract(const Duration(hours: 3)),
+    consumerName: consumerName,
+    consumerPhone: '01114567720',
+    technicianName: 'محمود سعيد',
+    technicianPhone: '01005550000',
+    payoutMethod: payoutAccount == null ? null : TopupMethod.wallet,
+    payoutAccount: payoutAccount,
+    payoutHolder: payoutAccount == null ? null : 'محمود سعيد',
+    payoutReference: payoutReference,
+    rejectReason: rejectReason,
+    disputeReason: disputeReason,
+    resolutionNote: resolutionNote,
   );
 }
 

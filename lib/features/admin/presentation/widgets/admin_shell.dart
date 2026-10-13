@@ -90,6 +90,12 @@ class _Menu extends StatelessWidget {
         overview?.pendingTopups.count ?? 0,
       ),
       (
+        AdminRoutes.escrow,
+        Icons.verified_user_outlined,
+        l10n.adminNavEscrow,
+        0,
+      ),
+      (
         AdminRoutes.users,
         Icons.groups_outlined,
         l10n.adminNavUsers,

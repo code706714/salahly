@@ -1,5 +1,6 @@
 import 'package:salahly/features/admin/data/repositories/supabase_admin_files_repository.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_audit_repository.dart';
+import 'package:salahly/features/admin/data/repositories/supabase_escrow_review_repository.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_overview_repository.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_requests_repository.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_settings_repository.dart';
@@ -8,6 +9,7 @@ import 'package:salahly/features/admin/data/repositories/supabase_users_reposito
 import 'package:salahly/features/admin/data/repositories/supabase_verification_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/admin_files_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/audit_repository.dart';
+import 'package:salahly/features/admin/domain/repositories/escrow_review_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/overview_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/requests_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/settings_repository.dart';
@@ -26,6 +28,7 @@ class AdminDependencies {
     required this.overviewRepository,
     required this.verificationRepository,
     required this.topupReviewRepository,
+    required this.escrowReviewRepository,
     required this.requestsRepository,
     required this.usersRepository,
     required this.settingsRepository,
@@ -41,6 +44,7 @@ class AdminDependencies {
       overviewRepository: SupabaseOverviewRepository(client),
       verificationRepository: SupabaseVerificationRepository(client),
       topupReviewRepository: SupabaseTopupReviewRepository(client),
+      escrowReviewRepository: SupabaseEscrowReviewRepository(client),
       requestsRepository: SupabaseRequestsRepository(client),
       usersRepository: SupabaseUsersRepository(client),
       settingsRepository: SupabaseSettingsRepository(client),
@@ -53,6 +57,7 @@ class AdminDependencies {
   final OverviewRepository overviewRepository;
   final VerificationRepository verificationRepository;
   final TopupReviewRepository topupReviewRepository;
+  final EscrowReviewRepository escrowReviewRepository;
   final RequestsRepository requestsRepository;
   final UsersRepository usersRepository;
   final SettingsRepository settingsRepository;

@@ -11,6 +11,7 @@ import 'package:salahly/features/admin/domain/entities/admin_request.dart';
 import 'package:salahly/features/admin/domain/entities/admin_user.dart';
 import 'package:salahly/features/admin/domain/failures/admin_failures.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
+import 'package:salahly/features/escrow/domain/entities/escrow.dart';
 import 'package:salahly/features/marketplace/domain/entities/complaint.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
@@ -86,6 +87,28 @@ String adminTopupStatusLabel(AppLocalizations l10n, TopupStatus status) =>
       TopupStatus.rejected => l10n.adminTopupsStatusRejected,
     };
 
+String adminEscrowStatusLabel(AppLocalizations l10n, EscrowStatus status) =>
+    switch (status) {
+      EscrowStatus.pending => l10n.adminEscrowStatusPending,
+      EscrowStatus.held => l10n.adminEscrowStatusHeld,
+      EscrowStatus.released => l10n.adminEscrowStatusReleased,
+      EscrowStatus.paidOut => l10n.adminEscrowStatusPaidOut,
+      EscrowStatus.disputed => l10n.adminEscrowStatusDisputed,
+      EscrowStatus.refundDue => l10n.adminEscrowStatusRefundDue,
+      EscrowStatus.refunded => l10n.adminEscrowStatusRefunded,
+      EscrowStatus.rejected => l10n.adminEscrowStatusRejected,
+    };
+
+PillTone adminEscrowStatusTone(EscrowStatus status) => switch (status) {
+  EscrowStatus.pending ||
+  EscrowStatus.released ||
+  EscrowStatus.refundDue => PillTone.waiting,
+  EscrowStatus.held ||
+  EscrowStatus.paidOut ||
+  EscrowStatus.refunded => PillTone.success,
+  EscrowStatus.disputed || EscrowStatus.rejected => PillTone.danger,
+};
+
 String roleLabel(AppLocalizations l10n, UserRole role) => switch (role) {
   UserRole.technician => l10n.adminRolePillTechnician,
   UserRole.consumer => l10n.adminRolePillConsumer,
@@ -159,6 +182,11 @@ String auditActionLabel(AppLocalizations l10n, String action) =>
       'reject_verification' => l10n.adminAuditRejectVerification,
       'approve_topup' => l10n.adminAuditApproveTopup,
       'reject_topup' => l10n.adminAuditRejectTopup,
+      'approve_escrow' => l10n.adminAuditApproveEscrow,
+      'reject_escrow' => l10n.adminAuditRejectEscrow,
+      'pay_escrow' => l10n.adminAuditPayEscrow,
+      'resolve_escrow' => l10n.adminAuditResolveEscrow,
+      'refund_escrow' => l10n.adminAuditRefundEscrow,
       'resolve_complaint' => l10n.adminAuditResolveComplaint,
       'suspend_user' => l10n.adminAuditSuspendUser,
       'restore_user' => l10n.adminAuditRestoreUser,
