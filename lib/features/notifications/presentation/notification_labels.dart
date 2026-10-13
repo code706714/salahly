@@ -134,6 +134,36 @@ NotificationText notificationText(
       },
       body: l10n.notifChatMessageBody,
     ),
+    NotificationKind.escrowHeld => switch (role) {
+      UserRole.consumer => (
+        title: l10n.notifEscrowHeldConsumer,
+        body: l10n.notifEscrowHeldConsumerBody,
+      ),
+      UserRole.technician => (
+        title: l10n.notifEscrowHeldTechnician,
+        body: l10n.notifEscrowHeldTechnicianBody,
+      ),
+    },
+    NotificationKind.escrowRejected => (
+      title: l10n.notifEscrowRejected,
+      body: l10n.notifEscrowRejectedBody(honorific),
+    ),
+    NotificationKind.escrowReleased => (
+      title: l10n.notifEscrowReleased,
+      body: l10n.notifEscrowReleasedBody,
+    ),
+    NotificationKind.escrowPaidOut => (
+      title: l10n.notifEscrowPaidOut,
+      body: l10n.notifEscrowPaidOutBody,
+    ),
+    NotificationKind.escrowDisputed => (
+      title: l10n.notifEscrowDisputed,
+      body: l10n.notifEscrowDisputedBody,
+    ),
+    NotificationKind.escrowRefunded => (
+      title: l10n.notifEscrowRefunded,
+      body: l10n.notifEscrowRefundedBody(honorific),
+    ),
     NotificationKind.offerPicked => (
       title: l10n.notifOfferPicked(gender, consumer),
       body: [

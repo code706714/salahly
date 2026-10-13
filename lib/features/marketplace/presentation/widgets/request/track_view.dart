@@ -16,6 +16,7 @@ import 'package:salahly/core/widgets/square_icon_button.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
+import 'package:salahly/features/escrow/presentation/widgets/escrow_card.dart';
 import 'package:salahly/features/jobs/domain/entities/job.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/request_cubit.dart';
@@ -77,6 +78,7 @@ class TrackView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+            EscrowCard(requestId: details.id),
             _Steps(details: details, offer: offer),
             const SizedBox(height: 16),
             _Summary(details: details, offer: offer),

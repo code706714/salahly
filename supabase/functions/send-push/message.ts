@@ -75,6 +75,45 @@ function textOf(item: PushItem): Text | null {
       };
     case "chat_message":
       return { title: "رسالة جديدة", body: "افتح المحادثة وردّ." };
+    case "escrow_held":
+      return item.role === "technician"
+        ? {
+          title: "العميل أمّن فلوس الشغلانة",
+          body: "الفلوس عند صلحلي وهتوصلك بعد ما العميل يأكّد الشغل.",
+        }
+        : {
+          title: "فلوسك اتأمّنت",
+          body: "الفلوس معانا ومش هتوصل للفني غير لما تأكّد الشغل.",
+        };
+    case "escrow_rejected":
+      return {
+        title: "ما لقيناش التحويل",
+        body: she
+          ? "افتحي الطلب وشوفي السبب وابعتي التحويل تاني."
+          : "افتح الطلب وشوف السبب وابعت التحويل تاني.",
+      };
+    case "escrow_released":
+      return {
+        title: "العميل أكّد الشغل",
+        body: "هنحوّل لك الفلوس على حساب الاستلام قريب.",
+      };
+    case "escrow_paid_out":
+      return {
+        title: "الفلوس اتحوّلت لك",
+        body: "راجع حسابك. لو ماوصلتش كلمنا.",
+      };
+    case "escrow_disputed":
+      return {
+        title: "العميل اعترض على الشغل",
+        body: "الفلوس معانا لحد ما نراجع الموضوع ونكلمك.",
+      };
+    case "escrow_refunded":
+      return {
+        title: "رجّعنا فلوسك",
+        body: she
+          ? "راجعي حسابك. لو ماوصلتش كلمينا."
+          : "راجع حسابك. لو ماوصلتش كلمنا.",
+      };
     case "offer_picked":
       return { title: "عرضك اتختار", body: "افتح الشغلانة وشوف التفاصيل." };
     case "request_cancelled_by_consumer":

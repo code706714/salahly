@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/launch/external_apps.dart';
+import 'package:salahly/core/live/live_updates.dart';
 import 'package:salahly/core/media/photo_picker.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
@@ -11,11 +13,13 @@ import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
+import 'package:salahly/features/escrow/domain/repositories/escrow_repository.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/complaint_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/my_requests_cubit.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/request_cubit.dart';
 
 import '../pump_app.dart';
+import 'fake_live_updates.dart';
 import 'fixtures.dart';
 import 'mocks.dart';
 import 'technician_app.dart';
@@ -68,6 +72,7 @@ class FollowUpHarness {
       ),
     ).thenAnswer((_) async => true);
     when(() => apps.dial(any())).thenAnswer((_) async => true);
+    when(() => escrow.fetchInfo(any())).thenAnswer((_) async => const Ok(null));
     when(request.refresh).thenAnswer((_) async {});
     when(requests.load).thenAnswer((_) async {});
   }
@@ -83,6 +88,10 @@ class FollowUpHarness {
   final apps = MockExternalApps();
   final photoPicker = MockPhotoPicker();
 
+  /// The money guarantee: none unless a test stubs one.
+  final escrow = MockEscrowRepository();
+  final live = FakeLiveUpdates();
+
   /// Pumps [view] on a small phone under every cubit a follow-up screen
   /// reads.
   Future<void> pump(
@@ -97,6 +106,8 @@ class FollowUpHarness {
       repositories: [
         RepositoryProvider<ExternalApps>.value(value: apps),
         RepositoryProvider<PhotoPicker>.value(value: photoPicker),
+        RepositoryProvider<EscrowRepository>.value(value: escrow),
+        RepositoryProvider<LiveUpdates>.value(value: live),
       ],
       blocs: [
         BlocProvider<SessionCubit>.value(value: session),

@@ -9,6 +9,7 @@ import 'package:salahly/features/admin/presentation/pages/admin_checking_page.da
 import 'package:salahly/features/admin/presentation/pages/admin_login_page.dart';
 import 'package:salahly/features/admin/presentation/pages/admin_unavailable_page.dart';
 import 'package:salahly/features/admin/presentation/pages/audit_page.dart';
+import 'package:salahly/features/admin/presentation/pages/escrow_page.dart';
 import 'package:salahly/features/admin/presentation/pages/no_access_page.dart';
 import 'package:salahly/features/admin/presentation/pages/overview_page.dart';
 import 'package:salahly/features/admin/presentation/pages/requests_page.dart';
@@ -93,6 +94,10 @@ GoRouter createAdminRouter(
           GoRoute(
             path: AdminRoutes.transfers,
             pageBuilder: (context, state) => page(const TopupsPage()),
+          ),
+          GoRoute(
+            path: AdminRoutes.escrow,
+            pageBuilder: (context, state) => page(const EscrowPage()),
           ),
           GoRoute(
             path: AdminRoutes.requests,

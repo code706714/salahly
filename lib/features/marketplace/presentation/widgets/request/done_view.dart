@@ -14,6 +14,7 @@ import 'package:salahly/core/widgets/choice_chip_button.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
 import 'package:salahly/core/widgets/pull_to_refresh.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
+import 'package:salahly/features/escrow/presentation/widgets/escrow_card.dart';
 import 'package:salahly/features/jobs/domain/entities/job.dart';
 import 'package:salahly/features/marketplace/domain/entities/review.dart';
 import 'package:salahly/features/marketplace/domain/entities/service_request.dart';
@@ -37,7 +38,13 @@ class DoneView extends StatelessWidget {
     if (offer == null) return const RequestUnavailableView(missing: false);
     final technician = offer.technician.name;
     final review = details.review;
-    final invoice = _Invoice(details: details, technician: technician);
+    final invoice = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        EscrowCard(requestId: details.id),
+        _Invoice(details: details, technician: technician),
+      ],
+    );
     if (review != null) {
       return _Reviewed(
         details: details,

@@ -144,7 +144,13 @@ declare
     $q$select public.admin_update_payment_account('wallet', '01011112222', 'اسم الشركة', true)$q$,
     $q$select public.admin_save_service_area('test_area', 'منطقة تجريبية', 'القاهرة', 30.0, 31.0, true, null)$q$,
     $q$select public.admin_set_area_open('nasr_city', false)$q$,
-    $q$select public.admin_list_audit_log(null, null, 10, 0)$q$
+    $q$select public.admin_list_audit_log(null, null, 10, 0)$q$,
+    $q$select public.admin_list_escrows('pending', 10, 0)$q$,
+    $q$select public.admin_approve_escrow(gen_random_uuid())$q$,
+    $q$select public.admin_reject_escrow(gen_random_uuid(), 'مالقيناش التحويل')$q$,
+    $q$select public.admin_mark_escrow_paid(gen_random_uuid(), 'IP-123')$q$,
+    $q$select public.admin_resolve_escrow(gen_random_uuid(), true, 'اتحلت')$q$,
+    $q$select public.admin_mark_escrow_refunded(gen_random_uuid(), 'RF-123')$q$
   ];
 begin
   if p_hostile then
@@ -181,8 +187,8 @@ select is_empty(
 );
 select is(
   (select count(*)::int from pg_proc where pronamespace = 'public'::regnamespace and proname like 'admin\_%'),
-  22,
-  'there are 22 admin functions (update the lists in this file when adding one)'
+  28,
+  'there are 28 admin functions (update the lists in this file when adding one)'
 );
 select ok(
   not has_table_privilege('authenticated', 'private.admins', 'select')

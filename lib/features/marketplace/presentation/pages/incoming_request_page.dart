@@ -20,6 +20,7 @@ import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/balance/presentation/balance_navigation.dart';
 import 'package:salahly/features/catalog/domain/entities/service_category.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
+import 'package:salahly/features/escrow/presentation/widgets/technician_escrow_notice.dart';
 import 'package:salahly/features/jobs/presentation/widgets/pounds_field.dart';
 import 'package:salahly/features/marketplace/domain/entities/incoming_request.dart';
 import 'package:salahly/features/marketplace/domain/entities/technician_card.dart';
@@ -319,6 +320,8 @@ class _RequestScreenState extends State<_RequestScreen> {
             const SizedBox(height: 14),
             if (offer != null) ...[
               SentOfferCard(request: request, offer: offer, now: state.now),
+              if (standing == IncomingStanding.chosen)
+                TechnicianEscrowNotice(requestId: request.id),
               if (standing == IncomingStanding.offerSent ||
                   standing == IncomingStanding.chosen) ...[
                 const SizedBox(height: 12),

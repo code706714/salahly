@@ -32,6 +32,7 @@ abstract final class AppRoutes {
   static const technicianOffering = '/technician/account/offering';
   static const technicianBalance = '/technician/account/balance';
   static const technicianBuyUses = '/technician/account/balance/buy';
+  static const technicianPayoutAccount = '/technician/account/payout';
   static const incomingRequests = '/technician/requests';
   static const technicianNotifications = '/technician/notifications';
   static const technicianDeleteAccount = '/technician/account/delete';
@@ -93,6 +94,7 @@ abstract final class AppRoutes {
 
   static String request(String id) => '$consumerRequests/$id';
   static String requestComplaint(String id) => '${request(id)}/complaint';
+  static String securePayment(String id) => '${request(id)}/secure-payment';
 
   /// The consumer's chat with [technicianId] about a request.
   static String requestChat(String id, String technicianId) =>
