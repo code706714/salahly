@@ -1,7 +1,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(24);
+select plan(25);
 
 -- Consumer c1 with a request; technicians a1 (offered, then picked), a2
 -- (offered) and a3 (no offer). Consumer c2 is a stranger.
@@ -190,6 +190,19 @@ select is(
   1,
   'two messages to a technician, one unread notice'
 );
+
+-- A suspended account can not write ---------------------------------------------------
+
+reset role;
+update public.profiles set suspended_at = now() where id = pg_temp.u('a1');
+select pg_temp.sign_in_as(pg_temp.u('a1'));
+set local role authenticated;
+select throws_ok(
+  $$select public.send_chat_message((select id from pg_temp.ids where name = 'request'), pg_temp.u('a1'), 'مرحبا')$$,
+  '42501', 'account_suspended', 'a suspended technician can''t write'
+);
+reset role;
+update public.profiles set suspended_at = null where id = pg_temp.u('a1');
 
 -- Closing -----------------------------------------------------------------------------
 

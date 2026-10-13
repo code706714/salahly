@@ -81,6 +81,7 @@ declare
   v_to_role public.user_role;
   v_message public.request_messages;
 begin
+  perform private.assert_active();
   if v_access is null then
     raise exception 'chat_unavailable' using errcode = 'P0001';
   end if;
