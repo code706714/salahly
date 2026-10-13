@@ -20,6 +20,7 @@ import 'package:salahly/features/marketplace/domain/entities/request_issue.dart'
 import 'package:salahly/salahly_app.dart';
 
 import 'balance_fixtures.dart';
+import 'fake_call_engine.dart';
 import 'fake_live_updates.dart';
 import 'fake_push_service.dart';
 import 'fake_sync_remote.dart';
@@ -142,6 +143,8 @@ class ConsumerApp {
     technicianRequestsRepository: MockTechnicianRequestsRepository(),
     balanceRepository: balance,
     chatRepository: MockChatRepository(),
+    callRepository: quietCalls(),
+    callEngineFactory: FakeCallEngine.new,
     escrowRepository: escrow,
     notificationsRepository: notifications,
     liveUpdates: live,

@@ -39,6 +39,7 @@ enum NotificationKind {
 
   // Both.
   chatMessage,
+  incomingCall,
   escrowHeld,
   topupApproved,
   topupRejected;

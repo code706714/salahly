@@ -2,8 +2,11 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Coarse only: the app needs the area, never the exact address. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <!-- Dictating a job's problem instead of typing it. -->
+    <!-- Dictating a job's problem instead of typing it, and voice calls. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <!-- Voice calls: the loudspeaker and the network the call runs on. -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <!-- Push notifications (a runtime permission from Android 13). -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 

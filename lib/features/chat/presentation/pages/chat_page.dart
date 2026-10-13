@@ -2,11 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/failure_message.dart';
+import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
 import 'package:salahly/core/widgets/live_refresh.dart';
+import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/chat/domain/failures/chat_failures.dart';
 import 'package:salahly/features/chat/presentation/cubit/chat_cubit.dart';
 import 'package:salahly/features/chat/presentation/widgets/chat_composer.dart';
@@ -17,11 +20,14 @@ import 'package:salahly/l10n/generated/app_localizations.dart';
 /// screen on both sides.
 class ChatPage extends StatelessWidget {
   const ChatPage({
+    required this.role,
     required this.requestId,
     required this.technicianId,
     super.key,
   });
 
+  /// Which side of the app the chat is on.
+  final UserRole role;
   final String requestId;
   final String technicianId;
 
@@ -37,13 +43,28 @@ class ChatPage extends StatelessWidget {
         unawaited(cubit.start());
         return cubit;
       },
-      child: const ChatView(),
+      child: ChatView(
+        onCall: (name) => unawaited(
+          context.push(
+            AppRoutes.call(
+              role,
+              requestId: requestId,
+              technicianId: technicianId,
+              name: name,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
 
 class ChatView extends StatelessWidget {
-  const ChatView({super.key});
+  const ChatView({this.onCall, super.key});
+
+  /// Starts a voice call with the person called `name`; no call button
+  /// without it.
+  final void Function(String name)? onCall;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +86,15 @@ class ChatView extends StatelessWidget {
           appBar: DetailHeader(
             title: l10n.chatTitle,
             subtitle: conversation?.otherName,
+            trailing: switch ((onCall, conversation)) {
+              (final onCall?, final conversation?) when conversation.isOpen =>
+                IconButton(
+                  tooltip: l10n.callButton,
+                  icon: const Icon(Icons.call_outlined),
+                  onPressed: () => onCall(conversation.otherName),
+                ),
+              _ => null,
+            },
           ),
           body: switch (state.status) {
             ChatLoadStatus.loading => const Center(

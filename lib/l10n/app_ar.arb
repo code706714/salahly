@@ -5075,6 +5075,37 @@
     }
   },
   "notifChatMessageBody": "افتح الطلب وكمّل الكلام.",
+  "notifIncomingCall": "مكالمة من {name}",
+  "@notifIncomingCall": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifIncomingCallBody": "افتح صلحلي وردّ.",
+  "callButton": "كلّمه صوت",
+  "callStarting": "بنجهّز المكالمة…",
+  "callRinging": "بيرنّ…",
+  "callIncoming": "مكالمة جاية",
+  "callConnecting": "بيتوصّل…",
+  "callAccept": "ردّ",
+  "callDecline": "ارفض",
+  "callHangUp": "إنهاء",
+  "callMute": "كتم",
+  "callUnmute": "فتح المايك",
+  "callSpeaker": "السماعة",
+  "callDone": "تمام",
+  "callEndedHungUp": "المكالمة خلصت.",
+  "callEndedRemote": "المكالمة خلصت.",
+  "callEndedDeclined": "المكالمة اترفضت. كلّمه في الشات.",
+  "callEndedMissed": "محدش ردّ. كلّمه في الشات.",
+  "callEndedBusy": "الطرف التاني على مكالمة تانية. جرّب كمان شوية أو كلّمه في الشات.",
+  "callEndedAlreadyCalling": "إنت على مكالمة دلوقتي.",
+  "callEndedUnavailable": "المكالمة دي مش متاحة دلوقتي.",
+  "callEndedMicrophone": "اسمح للتطبيق يستخدم المايك من إعدادات الموبايل عشان المكالمة تشتغل.",
+  "callEndedFailed": "المكالمة ماتوصّلتش. كلّمه في الشات.",
+  "callSafetyNote": "المكالمة جوه التطبيق ومجانية، ومحدش بيشوف رقم التاني.",
   "chatTitle": "المحادثة",
   "chatSafetyNote": "الكلام هنا جوه التطبيق بس. أرقام التليفون واللينكات بتتمنع، وده بيحمي الاتنين.",
   "chatEmpty": "اكتب أول رسالة. اسأل عن أي تفصيلة في الشغلانة.",

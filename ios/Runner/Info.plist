@@ -35,7 +35,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>صلحلي بيعرف منطقتك التقريبية بس عشان يوصّلك بالفنيين القريبين منك.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>صلحلي بيسمعك بس لما تدوس على المايك عشان يكتب المشكلة بدالك.</string>
+	<string>صلحلي بيسمعك بس لما تدوس على المايك عشان يكتب المشكلة بدالك، أو لما تكلّم الفني أو العميل مكالمة صوت جوه التطبيق.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>صلحلي بيفتح الصور عشان تختار صورتك أو صورة بطاقتك أو صور الشغل.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
