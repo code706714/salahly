@@ -170,6 +170,19 @@ begin
 end;
 $$;
 
+-- The handshake of a call that is over is no use to anyone.
+create function private.drop_ended_signals(p_call_id uuid)
+returns void
+language sql
+set search_path = ''
+as $$
+  delete from public.call_signals s
+   using public.request_calls c
+   where s.call_id = p_call_id
+     and c.id = s.call_id
+     and c.status not in ('ringing', 'answered');
+$$;
+
 -- Hangs up, declines or cancels, whichever the moment is. Ending a call
 -- that is over already does nothing.
 create function public.end_call(p_call_id uuid)
@@ -189,11 +202,7 @@ begin
    where id = p_call_id
      and auth.uid() in (caller_id, callee_id)
      and status in ('ringing', 'answered');
-  delete from public.call_signals where call_id = p_call_id
-     and exists (
-       select 1 from public.request_calls c
-        where c.id = p_call_id and c.status not in ('ringing', 'answered')
-     );
+  perform private.drop_ended_signals(p_call_id);
 end;
 $$;
 
@@ -293,13 +302,27 @@ grant execute on function
   to authenticated;
 
 -- Hand-shake messages and old calls are not kept.
-create function private.purge_calls()
+create function private.purge_old_signals()
 returns void
 language sql
 set search_path = ''
 as $$
   delete from public.call_signals where created_at < now() - interval '1 day';
+$$;
+create function private.purge_old_calls()
+returns void
+language sql
+set search_path = ''
+as $$
   delete from public.request_calls where created_at < now() - interval '90 days';
+$$;
+create function private.purge_calls()
+returns void
+language sql
+set search_path = ''
+as $$
+  select private.purge_old_signals();
+  select private.purge_old_calls();
 $$;
 select cron.schedule('purge-calls', '30 3 * * *', 'select private.purge_calls()');
 
