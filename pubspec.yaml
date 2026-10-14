@@ -21,6 +21,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_native_contact_picker: ^0.0.12
+  flutter_ringtone_player: ^4.0.0+4
   flutter_secure_storage: ^11.2.0
   flutter_webrtc: ^1.6.2+hotfix.4
   geolocator: ^14.1.1

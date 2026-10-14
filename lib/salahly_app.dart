@@ -61,6 +61,7 @@ class _SalahlyAppState extends State<SalahlyApp> {
         RepositoryProvider.value(value: dependencies.balanceRepository),
         RepositoryProvider.value(value: dependencies.chatRepository),
         RepositoryProvider.value(value: dependencies.callRepository),
+        RepositoryProvider.value(value: dependencies.callRinger),
         RepositoryProvider<CallEngineFactory>.value(
           value: dependencies.callEngineFactory,
         ),

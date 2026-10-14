@@ -41,6 +41,7 @@ class CallPage extends StatelessWidget {
         final cubit = CallCubit(
           calls: context.read(),
           engine: context.read<CallEngineFactory>()(),
+          ringer: context.read(),
           requestId: requestId,
           technicianId: technicianId,
           incomingCallId: callId,

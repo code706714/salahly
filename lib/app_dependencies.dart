@@ -28,9 +28,11 @@ import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
 import 'package:salahly/features/balance/data/repositories/supabase_balance_repository.dart';
 import 'package:salahly/features/balance/domain/repositories/balance_repository.dart';
 import 'package:salahly/features/calls/data/repositories/supabase_call_repository.dart';
+import 'package:salahly/features/calls/data/services/device_call_ringer.dart';
 import 'package:salahly/features/calls/data/services/webrtc_call_engine.dart';
 import 'package:salahly/features/calls/domain/repositories/call_repository.dart';
 import 'package:salahly/features/calls/domain/services/call_engine.dart';
+import 'package:salahly/features/calls/domain/services/call_ringer.dart';
 import 'package:salahly/features/catalog/data/repositories/supabase_catalog_repository.dart';
 import 'package:salahly/features/catalog/domain/repositories/catalog_repository.dart';
 import 'package:salahly/features/chat/data/repositories/supabase_chat_repository.dart';
@@ -71,6 +73,7 @@ class AppDependencies {
     required this.chatRepository,
     required this.callRepository,
     required this.callEngineFactory,
+    required this.callRinger,
     required this.escrowRepository,
     required this.notificationsRepository,
     required this.liveUpdates,
@@ -135,6 +138,7 @@ class AppDependencies {
       chatRepository: SupabaseChatRepository(client),
       callRepository: SupabaseCallRepository(client),
       callEngineFactory: WebRtcCallEngine.new,
+      callRinger: DeviceCallRinger(),
       escrowRepository: SupabaseEscrowRepository(client),
       notificationsRepository: SupabaseNotificationsRepository(client),
       liveUpdates: SupabaseLiveUpdates(client),
@@ -172,6 +176,7 @@ class AppDependencies {
   final ChatRepository chatRepository;
   final CallRepository callRepository;
   final CallEngineFactory callEngineFactory;
+  final CallRinger callRinger;
   final EscrowRepository escrowRepository;
   final NotificationsRepository notificationsRepository;
   final LiveUpdates liveUpdates;

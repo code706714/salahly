@@ -51,6 +51,21 @@ class WebRtcCallEngine implements CallEngine {
           }),
         );
       }
+      ..onIceConnectionState = (state) {
+        switch (state) {
+          case RTCIceConnectionState.RTCIceConnectionStateConnected:
+          case RTCIceConnectionState.RTCIceConnectionStateCompleted:
+            _link.add(CallLink.connected);
+          case RTCIceConnectionState.RTCIceConnectionStateFailed:
+            _link.add(CallLink.failed);
+          case RTCIceConnectionState.RTCIceConnectionStateNew:
+          case RTCIceConnectionState.RTCIceConnectionStateChecking:
+          case RTCIceConnectionState.RTCIceConnectionStateDisconnected:
+          case RTCIceConnectionState.RTCIceConnectionStateClosed:
+          case RTCIceConnectionState.RTCIceConnectionStateCount:
+            break;
+        }
+      }
       ..onConnectionState = (state) {
         switch (state) {
           case RTCPeerConnectionState.RTCPeerConnectionStateConnected:

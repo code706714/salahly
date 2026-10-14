@@ -11,11 +11,13 @@ import 'package:salahly/features/calls/domain/services/call_engine.dart';
 import 'package:salahly/features/calls/presentation/cubit/call_cubit.dart';
 
 import '../../../../helpers/fake_call_engine.dart';
+import '../../../../helpers/fake_call_ringer.dart';
 import '../../../../helpers/mocks.dart';
 
 void main() {
   late MockCallRepository calls;
   late FakeCallEngine engine;
+  late FakeCallRinger ringer;
   late StreamController<CallSignal> signals;
   late StreamController<CallStatus> statuses;
 
@@ -26,6 +28,7 @@ void main() {
   setUp(() {
     calls = MockCallRepository();
     engine = FakeCallEngine();
+    ringer = FakeCallRinger();
     signals = StreamController<CallSignal>.broadcast();
     statuses = StreamController<CallStatus>.broadcast();
     when(
@@ -44,15 +47,26 @@ void main() {
       CallCubit(
         calls: calls,
         engine: engine,
+        ringer: ringer,
         requestId: 'r1',
         technicianId: 't1',
         ringFor: ringFor,
       );
 
+  CallCubit makingWithConnectTimeout() => CallCubit(
+    calls: calls,
+    engine: engine,
+    ringer: ringer,
+    requestId: 'r1',
+    technicianId: 't1',
+    connectFor: const Duration(milliseconds: 20),
+  );
+
   CallCubit taking({Duration ringFor = const Duration(seconds: 45)}) =>
       CallCubit(
         calls: calls,
         engine: engine,
+        ringer: ringer,
         requestId: 'r1',
         technicianId: 't1',
         incomingCallId: 'c1',
@@ -181,6 +195,31 @@ void main() {
       verify(() => calls.end('c1')).called(1);
     });
 
+    test('fails when answered but the voice link never comes up', () async {
+      final cubit = makingWithConnectTimeout();
+      await cubit.start();
+      statuses.add(CallStatus.answered);
+      await pump();
+
+      await Future<void>.delayed(const Duration(milliseconds: 60));
+
+      expect(cubit.state.end, CallEnd.failed);
+      verify(() => calls.end('c1')).called(1);
+    });
+
+    test('does not fail a link that came up in time', () async {
+      final cubit = makingWithConnectTimeout();
+      await cubit.start();
+      statuses.add(CallStatus.answered);
+      await pump();
+      engine.linkController.add(CallLink.connected);
+
+      await Future<void>.delayed(const Duration(milliseconds: 60));
+
+      expect(cubit.state.phase, CallPhase.connected);
+      await cubit.close();
+    });
+
     test('ends when the link fails', () async {
       final cubit = making();
       await cubit.start();
@@ -197,6 +236,7 @@ void main() {
       final cubit = CallCubit(
         calls: calls,
         engine: failing,
+        ringer: ringer,
         requestId: 'r1',
         technicianId: 't1',
       );
@@ -333,6 +373,59 @@ void main() {
       await cubit.accept();
 
       expect(cubit.state.end, CallEnd.unavailable);
+    });
+  });
+
+  group('the ring', () {
+    test('a call made rings softly until answered', () async {
+      final cubit = making();
+      await cubit.start();
+      expect(ringer.ringingIncoming, isFalse);
+
+      statuses.add(CallStatus.answered);
+      await pump();
+
+      expect(ringer.ringingIncoming, isNull);
+      await cubit.close();
+    });
+
+    test('a call coming in rings loudly until answered', () async {
+      final cubit = taking();
+      await cubit.start();
+      expect(ringer.ringingIncoming, isTrue);
+
+      await cubit.accept();
+
+      expect(ringer.ringingIncoming, isNull);
+      await cubit.close();
+    });
+
+    test('stops when the caller gives up', () async {
+      final cubit = taking();
+      await cubit.start();
+
+      statuses.add(CallStatus.ended);
+      await pump();
+
+      expect(ringer.ringingIncoming, isNull);
+    });
+
+    test('stops when the call is turned down', () async {
+      final cubit = taking();
+      await cubit.start();
+
+      await cubit.decline();
+
+      expect(ringer.ringingIncoming, isNull);
+    });
+
+    test('stops when the screen closes', () async {
+      final cubit = taking();
+      await cubit.start();
+
+      await cubit.close();
+
+      expect(ringer.ringingIncoming, isNull);
     });
   });
 

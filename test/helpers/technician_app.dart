@@ -28,6 +28,7 @@ import 'package:salahly/salahly_app.dart';
 
 import 'balance_fixtures.dart';
 import 'fake_call_engine.dart';
+import 'fake_call_ringer.dart';
 import 'fake_live_updates.dart';
 import 'fake_push_service.dart';
 import 'fake_sync_remote.dart';
@@ -185,6 +186,7 @@ class TechnicianApp {
     chatRepository: MockChatRepository(),
     callRepository: quietCalls(),
     callEngineFactory: FakeCallEngine.new,
+    callRinger: FakeCallRinger(),
     escrowRepository: escrow,
     notificationsRepository: notifications,
     liveUpdates: live,
