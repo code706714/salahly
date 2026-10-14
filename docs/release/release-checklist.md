@@ -38,17 +38,14 @@ GitHub: Settings > Environments > `production`, add required reviewers, then add
 5. Closed testing: upload the AAB, add 12+ testers by Google group, run 14 days.
 6. Production: staged rollout 10%, then 50%, then 100%.
 
-## Twilio (sign-in codes)
-1. Create a Verify service with the WhatsApp channel enabled (SMS as fallback); note the Service SID, Account SID and Auth Token.
-2. Verify > Settings: code length 6, expiry 10 minutes or less.
-3. Messaging > Settings > Geo permissions: allow Egypt only.
-4. Enable Fraud Guard (SMS pumping protection); set a daily spend alert and a hard usage cap.
-5. WhatsApp sender needs Meta business verification and an approved template; until then expect SMS only.
-6. In Supabase, Auth > Providers > Phone: Twilio Verify, paste the three values. Rate limits: Auth > Rate Limits, keep SMS per hour low (for example 5 per number) and the 60 s resend gap.
+## WhatsApp sign-in (no Twilio)
+Sign-in is a WhatsApp message the person sends us, so nothing is sent or billed. Setup (Meta app, webhook, three secrets) is in `docs/release/whatsapp-login.md`. Until the secrets are set the sign-in button says it is unavailable.
+
+The admin console still signs in with a Twilio OTP, so it needs a provider until it moves to this flow.
 
 ## Supabase hosted project
 1. Create the project in the region nearest Egypt (eu-central or similar); enable PITR or take a manual backup before each push.
-2. `supabase link`, then `supabase db push`. Do not push `config.toml` auth settings: the local test OTP numbers and placeholder Twilio values must never reach hosted. Set Auth by hand as in Twilio step 6; turn off sign-ups by email.
+2. `supabase link`, then `supabase db push`. Do not push `config.toml` auth settings: the local test OTP numbers and placeholder Twilio values must never reach hosted. In Auth > Providers keep Phone enabled (sign-in uses a one-time password the `whatsapp-login` function sets); turn off sign-ups by email.
 3. Extensions: `pg_cron` and `pg_net` enabled (Database > Extensions) before the migrations run.
 4. Purge of deleted accounts' files (account deletion queues them; without this step files stay):
    - `supabase functions deploy purge-storage --no-verify-jwt`

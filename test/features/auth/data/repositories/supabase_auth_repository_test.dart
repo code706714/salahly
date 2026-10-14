@@ -6,14 +6,18 @@ import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/features/auth/data/repositories/supabase_auth_repository.dart';
 import 'package:salahly/features/auth/domain/entities/otp_channel.dart';
+import 'package:salahly/features/auth/domain/entities/whatsapp_login.dart';
 import 'package:salahly/features/auth/domain/failures/auth_failures.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 class _MockGoTrueClient extends Mock implements supabase.GoTrueClient {}
 
+class _MockFunctionsClient extends Mock implements supabase.FunctionsClient {}
+
 void main() {
   final phone = PhoneNumber.tryParse('1002345678')!;
   late supabase.GoTrueClient auth;
+  late supabase.FunctionsClient functions;
   late SupabaseAuthRepository repository;
 
   setUpAll(() {
@@ -23,7 +27,8 @@ void main() {
 
   setUp(() {
     auth = _MockGoTrueClient();
-    repository = SupabaseAuthRepository(auth);
+    functions = _MockFunctionsClient();
+    repository = SupabaseAuthRepository(auth, functions);
   });
 
   Future<void> anySignInWithOtp() => auth.signInWithOtp(
@@ -172,6 +177,171 @@ void main() {
         expect(result, isErrWith(failure));
       });
     }
+  });
+
+  group('WhatsApp sign in', () {
+    final challenge = WhatsappLoginChallenge(
+      id: '11111111-2222-4333-8444-555555555555',
+      code: 'AB3D5FGH',
+      pollSecret: 'a' * 64,
+      expiresAt: DateTime.utc(2026, 10, 14, 12),
+      whatsappNumber: PhoneNumber.tryParse('1000000000')!,
+    );
+
+    Future<supabase.FunctionResponse> anyInvoke() => functions.invoke(
+      'whatsapp-login',
+      body: any(named: 'body'),
+    );
+
+    void answers(Object? data, {int status = 200}) {
+      when(anyInvoke).thenAnswer(
+        (_) async => supabase.FunctionResponse(data: data, status: status),
+      );
+    }
+
+    Map<String, Object> sentBody() =>
+        verify(
+              () => functions.invoke(
+                'whatsapp-login',
+                body: captureAny(named: 'body'),
+              ),
+            ).captured.single
+            as Map<String, Object>;
+
+    test('start gives the code and the number to send it to', () async {
+      answers({
+        'id': challenge.id,
+        'code': challenge.code,
+        'pollSecret': challenge.pollSecret,
+        'expiresAt': '2026-10-14T12:00:00Z',
+        'whatsappNumber': '201000000000',
+      });
+
+      final result = await repository.startWhatsappLogin();
+
+      expect(result, isA<Ok<WhatsappLoginChallenge>>());
+      expect((result as Ok<WhatsappLoginChallenge>).value, challenge);
+      expect(sentBody(), {'action': 'start'});
+    });
+
+    test('start without a usable WhatsApp number is unavailable', () async {
+      answers({
+        'id': challenge.id,
+        'code': challenge.code,
+        'pollSecret': challenge.pollSecret,
+        'expiresAt': '2026-10-14T12:00:00Z',
+        'whatsappNumber': '',
+      });
+
+      final result = await repository.startWhatsappLogin();
+
+      expect(
+        result,
+        isA<Err<WhatsappLoginChallenge>>().having(
+          (err) => err.failure,
+          'failure',
+          const WhatsappLoginUnavailableFailure(),
+        ),
+      );
+    });
+
+    final failures = <String, (Object, Failure)>{
+      'a server that is not set up': (
+        const supabase.FunctionException(status: 503),
+        const WhatsappLoginUnavailableFailure(),
+      ),
+      'a sign in that ran out': (
+        const supabase.FunctionException(status: 409),
+        const WhatsappLoginExpiredFailure(),
+      ),
+      ...commonErrors,
+    };
+    for (final MapEntry(key: name, value: (error, failure))
+        in failures.entries) {
+      test('maps $name to ${failure.runtimeType}', () async {
+        when(anyInvoke).thenThrow(error);
+
+        expect(
+          await repository.startWhatsappLogin(),
+          isA<Err<WhatsappLoginChallenge>>().having(
+            (err) => err.failure,
+            'failure',
+            failure,
+          ),
+        );
+        expect(
+          await repository.completeWhatsappLogin(challenge),
+          isErrWith(failure),
+        );
+      });
+    }
+
+    test('a status of pending, ready or anything else', () async {
+      for (final (status, progress) in [
+        ('pending', WhatsappLoginProgress.pending),
+        ('ready', WhatsappLoginProgress.ready),
+        ('expired', WhatsappLoginProgress.expired),
+        ('unknown', WhatsappLoginProgress.expired),
+      ]) {
+        answers({'status': status});
+
+        final result = await repository.whatsappLoginProgress(challenge);
+
+        expect(
+          (result as Ok<WhatsappLoginProgress>).value,
+          progress,
+          reason: status,
+        );
+      }
+    });
+
+    test(
+      'complete signs in with the number and its one-time password',
+      () async {
+        answers({'phone': '+201002345678', 'password': 'one-time'});
+        when(
+          () => auth.signInWithPassword(
+            phone: any(named: 'phone'),
+            password: any(named: 'password'),
+          ),
+        ).thenAnswer((_) async => supabase.AuthResponse());
+
+        final result = await repository.completeWhatsappLogin(challenge);
+
+        expect(result, isA<Ok<void>>());
+        expect(sentBody(), {
+          'action': 'complete',
+          'id': challenge.id,
+          'pollSecret': challenge.pollSecret,
+        });
+        verify(
+          () => auth.signInWithPassword(
+            phone: '+201002345678',
+            password: 'one-time',
+          ),
+        ).called(1);
+      },
+    );
+
+    test('complete fails when the password sign in is refused', () async {
+      answers({'phone': '+201002345678', 'password': 'one-time'});
+      const error = supabase.AuthApiException(
+        'Invalid login credentials',
+        statusCode: '400',
+        code: 'invalid_credentials',
+      );
+      when(
+        () => auth.signInWithPassword(
+          phone: any(named: 'phone'),
+          password: any(named: 'password'),
+        ),
+      ).thenThrow(error);
+
+      expect(
+        await repository.completeWhatsappLogin(challenge),
+        isErrWith(const UnexpectedFailure(error)),
+      );
+    });
   });
 
   group('signOut', () {

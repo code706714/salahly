@@ -431,3 +431,11 @@ verify_jwt = false
 # signed-in user.
 [functions.send-push]
 verify_jwt = false
+
+# Meta calls the webhook with a signature, and the phone calls the login
+# function before it has a session; neither carries a user's token.
+[functions.whatsapp-webhook]
+verify_jwt = false
+
+[functions.whatsapp-login]
+verify_jwt = false

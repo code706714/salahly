@@ -17,21 +17,41 @@
   "legalConsentPrivacy": "سياسة الخصوصية",
   "legalTermsTitle": "الشروط والأحكام",
   "legalPrivacyTitle": "سياسة الخصوصية",
-  "phoneTitle": "ادخل برقم موبايلك",
-  "phoneSubtitle": "من غير باسورد. هنبعتلك كود على الواتساب. لو عندك حساب هتدخل عليه، ولو جديد هنعملك حساب.",
+  "whatsappLoginTitle": "ادخل بالواتساب",
+  "whatsappLoginSubtitle": "من غير باسورد ومن غير ما نبعتلك كود. بتبعتلنا رسالة واحدة بس. لو عندك حساب هتدخل عليه، ولو جديد هنعملك حساب.",
+  "whatsappLoginStepOpen": "هنفتحلك الواتساب والرسالة جاهزة.",
+  "whatsappLoginStepSend": "دوس إرسال من غير ما تغيّر فيها حاجة.",
+  "whatsappLoginStepBack": "ارجع هنا وهتدخل لوحدك.",
+  "whatsappLoginStart": "افتح الواتساب وابعت الرسالة",
+  "whatsappLoginMessage": "عايز أدخل صلحلي. كود الدخول: {code}",
+  "@whatsappLoginMessage": {
+    "placeholders": {
+      "code": {
+        "type": "String",
+        "example": "AB3D5FGH"
+      }
+    }
+  },
+  "whatsappLoginWaitingTitle": "ابعت الرسالة وارجع هنا",
+  "whatsappLoginWaitingBody": "بنستنى رسالتك على الواتساب. أول ما توصل هتدخل لوحدك.",
+  "whatsappLoginCodeLabel": "كود الدخول",
+  "whatsappLoginReopen": "افتح الواتساب تاني",
+  "whatsappLoginCancel": "إلغاء",
+  "whatsappLoginSigningIn": "بندخلك...",
+  "whatsappLoginExpired": "الكود خلص وقته. جرّب تاني.",
+  "whatsappLoginRetry": "جرّب تاني",
+  "whatsappLoginOpenFailed": "مقدرناش نفتح الواتساب. اتأكد إنه متثبّت على موبايلك وجرّب تاني.",
+  "whatsappLoginUnavailable": "الدخول بالواتساب مش شغال دلوقتي. جرّب تاني بعد شوية.",
   "phoneLabel": "رقم الموبايل",
-  "phoneHint": "لازم يكون نفس الرقم اللي عليه الواتساب",
   "phoneInvalid": "اكتب رقم موبايل مصري صح، زي 100 234 5678",
   "phoneSendWhatsapp": "ابعتلي الكود على الواتساب",
   "phoneSendSms": "معنديش واتساب، ابعتوه رسالة SMS",
   "otpTooSoon": "استنى دقيقة قبل ما تطلب كود تاني.",
   "otpDeliveryFailedWhatsapp": "مقدرناش نبعت الكود على الواتساب. اتأكد إن الرقم عليه واتساب، أو ابعته رسالة SMS.",
   "otpDeliveryFailedSms": "مقدرناش نبعت الرسالة. اتأكد من الرقم وجرّب تاني بعد شوية.",
-  "otpTitle": "اكتب الكود",
   "otpSentWhatsapp": "بعتنالك كود من 6 أرقام على الواتساب على رقم ",
   "otpSentSms": "بعتنالك كود من 6 أرقام في رسالة على رقم ",
   "otpChangeNumber": "غيّر الرقم",
-  "otpOpenWhatsapp": "افتح الواتساب",
   "otpResendIn": "ابعت الكود تاني بعد {time}",
   "@otpResendIn": {
     "placeholders": {
@@ -42,10 +62,7 @@
     }
   },
   "otpResend": "ابعت الكود تاني",
-  "otpResent": "بعتنالك كود جديد",
-  "otpSubmit": "ادخل",
   "otpInvalid": "الكود غلط أو خلص وقته. اتأكد منه أو اطلب كود جديد.",
-  "otpDeleteDigit": "امسح",
   "welcomeTitle": "أهلاً بيك\nهتستخدم الأبلكيشن إزاي؟",
   "welcomeSubtitle": "اختار اللي يناسبك دلوقتي، وتقدر تغيّره بعدين من حسابك.",
   "roleConsumerTitle": "محتاج فني",

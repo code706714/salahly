@@ -12,10 +12,8 @@ import 'package:salahly/features/account/presentation/pages/consumer_account_pag
 import 'package:salahly/features/account/presentation/pages/delete_account_page.dart';
 import 'package:salahly/features/account/presentation/pages/session_unavailable_page.dart';
 import 'package:salahly/features/account/presentation/pages/technician_account_page.dart';
-import 'package:salahly/features/auth/presentation/cubit/otp_cubit.dart';
-import 'package:salahly/features/auth/presentation/cubit/phone_cubit.dart';
-import 'package:salahly/features/auth/presentation/pages/otp_page.dart';
-import 'package:salahly/features/auth/presentation/pages/phone_page.dart';
+import 'package:salahly/features/auth/presentation/cubit/whatsapp_login_cubit.dart';
+import 'package:salahly/features/auth/presentation/pages/whatsapp_login_page.dart';
 import 'package:salahly/features/balance/presentation/pages/balance_page.dart';
 import 'package:salahly/features/balance/presentation/pages/buy_uses_page.dart';
 import 'package:salahly/features/calls/presentation/pages/call_page.dart';
@@ -89,27 +87,12 @@ GoRouter createRouter(SessionCubit session, {required Listenable refresh}) {
       GoRoute(
         path: AppRoutes.login,
         builder: (context, state) => BlocProvider(
-          create: (context) => PhoneCubit(context.read()),
-          child: const PhonePage(),
-        ),
-        routes: [
-          GoRoute(
-            path: 'otp',
-            redirect: (context, state) =>
-                state.extra is OtpPageArgs ? null : AppRoutes.login,
-            builder: (context, state) {
-              final args = state.extra! as OtpPageArgs;
-              return BlocProvider(
-                create: (context) => OtpCubit(
-                  authRepository: context.read(),
-                  phone: args.phone,
-                  channel: args.channel,
-                ),
-                child: const OtpPage(),
-              );
-            },
+          create: (context) => WhatsappLoginCubit(
+            authRepository: context.read(),
+            externalApps: context.read(),
           ),
-        ],
+          child: const WhatsappLoginPage(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.welcome,

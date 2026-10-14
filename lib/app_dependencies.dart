@@ -98,7 +98,10 @@ class AppDependencies {
     required Directory cacheDirectory,
     required PushTransport pushTransport,
   }) {
-    final authRepository = SupabaseAuthRepository(client.auth);
+    final authRepository = SupabaseAuthRepository(
+      client.auth,
+      client.functions,
+    );
     final database = AppDatabase.open();
     final photos = LocalPhotoStore(
       Directory('${supportDirectory.path}/job_photos'),

@@ -22,7 +22,6 @@ void main() {
   const screens = [
     AppRoutes.splash,
     AppRoutes.login,
-    AppRoutes.otp,
     AppRoutes.welcome,
     AppRoutes.consumerOnboarding,
     AppRoutes.technicianOnboarding,
@@ -43,7 +42,7 @@ void main() {
       name: 'signed out',
       session: const SessionSignedOut(),
       entry: AppRoutes.login,
-      allowed: {AppRoutes.login, AppRoutes.otp},
+      allowed: {AppRoutes.login},
     ),
     (
       name: 'needs onboarding',
