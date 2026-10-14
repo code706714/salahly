@@ -14,3 +14,14 @@ final class OtpDeliveryFailure extends Failure {
 final class InvalidOtpFailure extends Failure {
   const InvalidOtpFailure();
 }
+
+/// Signing in with WhatsApp is not available now: not set up yet, or too
+/// many people are signing in at once.
+final class WhatsappLoginUnavailableFailure extends Failure {
+  const WhatsappLoginUnavailableFailure();
+}
+
+/// The sign-in ran out of time or was already used.
+final class WhatsappLoginExpiredFailure extends Failure {
+  const WhatsappLoginExpiredFailure();
+}

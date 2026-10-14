@@ -40,7 +40,7 @@ class AdminDependencies {
   /// is the only credential: no service key is ever present in the console.
   factory AdminDependencies.live(SupabaseClient client) {
     return AdminDependencies(
-      authRepository: SupabaseAuthRepository(client.auth),
+      authRepository: SupabaseAuthRepository(client.auth, client.functions),
       overviewRepository: SupabaseOverviewRepository(client),
       verificationRepository: SupabaseVerificationRepository(client),
       topupReviewRepository: SupabaseTopupReviewRepository(client),

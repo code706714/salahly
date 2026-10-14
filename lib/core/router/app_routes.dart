@@ -4,7 +4,6 @@ import 'package:salahly/features/account/domain/entities/user_role.dart';
 abstract final class AppRoutes {
   static const splash = '/';
   static const login = '/login';
-  static const otp = '/login/otp';
   static const welcome = '/welcome';
   static const onboarding = '/onboarding';
   static const consumerOnboarding = '/onboarding/consumer';
