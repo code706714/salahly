@@ -56,6 +56,7 @@ class _AdminAppState extends State<AdminApp> {
         RepositoryProvider.value(value: dependencies.usersRepository),
         RepositoryProvider.value(value: dependencies.settingsRepository),
         RepositoryProvider.value(value: dependencies.auditRepository),
+        RepositoryProvider.value(value: dependencies.activityRepository),
         RepositoryProvider.value(value: dependencies.filesRepository),
       ],
       child: MultiBlocProvider(

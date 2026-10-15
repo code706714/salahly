@@ -37,6 +37,7 @@ abstract final class NotificationModel {
       ),
       distanceKm: (json['distance_km'] as num?)?.toDouble(),
       topupUses: json['topup_uses'] as int?,
+      resolutionNote: json['resolution_note'] as String?,
     );
   }
 

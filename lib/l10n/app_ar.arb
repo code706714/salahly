@@ -5052,6 +5052,8 @@
   "notifEscrowReleaseScheduledBody": "لو محصلش اعتراض من أي طرف خلال 3 أيام، المبلغ هيتودع في محفظتك. آسفين على الانتظار، ده لحماية الجميع.",
   "notifWithdrawalPaid": "اتحوّلت لك فلوس السحب",
   "notifWithdrawalPaidBody": "راجع فودافون كاش أو إنستاباي. لو ماوصلتش كلمنا.",
+  "notifComplaintResolved": "رد فريق صلحلي على شكواك",
+  "notifComplaintResolvedBody": "افتح الطلب وشوف الرد.",
   "notifWithdrawalRejected": "ما قدرناش نحوّل فلوس السحب",
   "notifWithdrawalRejectedBody": "الفلوس رجعت لمحفظتك. راجع الرقم واطلب السحب تاني.",
   "notifEscrowRefunded": "رجّعنا فلوسك",
@@ -5337,6 +5339,119 @@
   "withdrawInvalidAccount": "الرقم أو العنوان مش مظبوط. راجعه وجرّب تاني.",
   "technicianEscrowRefunded": "الفلوس اترجّعت للعميل.",
   "escrowNotNow": "مش دلوقتي",
+  "adminNavActivity": "الحركة والأرباح",
+  "adminActivityTitle": "الحركة والأرباح",
+  "adminActivitySubtitle": "الفلوس اللي دخلت وخرجت، واللي اشتغله كل فني في الفترة دي",
+  "adminActivityMoneyTitle": "الفلوس",
+  "adminActivityEarned": "كسبنا",
+  "adminActivityEarnedNote": "من باقات الاستخدامات اللي الفنيين اشتروها",
+  "adminActivityPaidIn": "اتدفع أونلاين",
+  "adminActivityPaidInNote": "{count} عملية، منها {escrow} ضمان شغل",
+  "@adminActivityPaidInNote": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "escrow": {
+        "type": "String"
+      }
+    }
+  },
+  "adminActivityReleased": "نزل في محافظ الفنيين",
+  "adminActivityReleasedNote": "بعد ما العميل والفني أكدوا الشغل",
+  "adminActivityWithdrawals": "سحب الفنيين",
+  "adminActivityWithdrawalsRequested": "اتطلب: {amount} ({count})",
+  "@adminActivityWithdrawalsRequested": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminActivityWithdrawalsPaid": "اتحوّل: {amount} ({count})",
+  "@adminActivityWithdrawalsPaid": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminActivityWithdrawalsWaiting": "مستني تحويلك: {amount} ({count})",
+  "@adminActivityWithdrawalsWaiting": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminActivityTransactionsTitle": "العمليات",
+  "adminActivityTransactionsEmpty": "مفيش عمليات فلوس في الفترة دي",
+  "adminActivityColWhen": "الوقت",
+  "adminActivityColKind": "العملية",
+  "adminActivityColPerson": "مين",
+  "adminActivityColAmount": "المبلغ",
+  "adminActivityKindPack": "شراء باقة استخدامات",
+  "adminActivityKindEscrow": "دفع عميل لشغلانة",
+  "adminActivityKindWithdrawalRequested": "طلب سحب",
+  "adminActivityKindWithdrawalPaid": "سحب اتحوّل",
+  "adminActivityKindWithdrawalRejected": "سحب اترفض",
+  "adminActivityTechniciansTitle": "الفنيين اللي اشتغلوا",
+  "adminActivityTechniciansSummary": "{technicians} فني اشتغلوا، {jobs} شغلانة ({finished} خلصت)، فواتير الشغل اللي خلص: {billed}",
+  "@adminActivityTechniciansSummary": {
+    "placeholders": {
+      "technicians": {
+        "type": "int"
+      },
+      "jobs": {
+        "type": "int"
+      },
+      "finished": {
+        "type": "int"
+      },
+      "billed": {
+        "type": "String"
+      }
+    }
+  },
+  "adminActivityTechniciansEmpty": "مفيش فني اشتغل في الفترة دي",
+  "adminActivityTechnicianStats": "{jobs} شغلانة · {finished} خلصت · {customers} عميل · فواتير {billed} · اتدفع {paid}",
+  "@adminActivityTechnicianStats": {
+    "placeholders": {
+      "jobs": {
+        "type": "int"
+      },
+      "finished": {
+        "type": "int"
+      },
+      "customers": {
+        "type": "int"
+      },
+      "billed": {
+        "type": "String"
+      },
+      "paid": {
+        "type": "String"
+      }
+    }
+  },
+  "adminActivityJobFromApp": "من التطبيق",
+  "adminActivityJobOwn": "عميل الفني",
+  "adminActivityColCustomer": "العميل",
+  "adminActivityColStatus": "الحالة",
+  "adminActivityColSource": "النوع",
+  "adminActivityColBilled": "الفاتورة",
+  "adminActivityColPaid": "اتدفع",
+  "adminActivityUnknownCustomer": "عميل ممسوح",
+  "adminActivityUnknownPerson": "حساب ممسوح",
   "adminNavEscrow": "ضمان الفلوس",
   "adminEscrowTitle": "ضمان الفلوس",
   "adminEscrowSubtitle": "فلوس العملاء عندنا لحد ما الشغل يتأكد من الطرفين وتعدّي 3 أيام من غير اعتراض، وبعدها بتنزل في محفظة الفني لوحدها. كل خطوة بتتسجل باسمك.",

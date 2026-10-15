@@ -146,6 +146,26 @@ void main() {
       );
     });
 
+    test('carries the reply the team wrote to a complaint', () async {
+      server.body = [
+        {
+          'id': 'n3',
+          'kind': 'complaint_resolved',
+          'request_id': 'r1',
+          'created_at': '2026-10-06T11:00:00Z',
+          'resolution_note': 'رجّعنالك الفلوس',
+        },
+      ];
+
+      final result = await server.repository().fetchNotifications(
+        UserRole.consumer,
+      );
+
+      final note = (result as Ok<List<AppNotification>>).value.single;
+      expect(note.kind, NotificationKind.complaintResolved);
+      expect(note.resolutionNote, 'رجّعنالك الفلوس');
+    });
+
     test('fails with a network failure offline', () async {
       server.offline = true;
 

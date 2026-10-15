@@ -1,4 +1,5 @@
 import 'package:mocktail/mocktail.dart';
+import 'package:salahly/features/admin/domain/repositories/activity_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/admin_files_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/audit_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/escrow_review_repository.dart';
@@ -30,5 +31,7 @@ class MockUsersRepository extends Mock implements UsersRepository {}
 class MockSettingsRepository extends Mock implements SettingsRepository {}
 
 class MockAuditRepository extends Mock implements AuditRepository {}
+
+class MockActivityRepository extends Mock implements ActivityRepository {}
 
 class MockAdminFilesRepository extends Mock implements AdminFilesRepository {}

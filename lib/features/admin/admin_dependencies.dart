@@ -1,3 +1,4 @@
+import 'package:salahly/features/admin/data/repositories/supabase_activity_repository.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_admin_files_repository.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_audit_repository.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_escrow_review_repository.dart';
@@ -8,6 +9,7 @@ import 'package:salahly/features/admin/data/repositories/supabase_topup_review_r
 import 'package:salahly/features/admin/data/repositories/supabase_users_repository.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_verification_repository.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_withdrawal_review_repository.dart';
+import 'package:salahly/features/admin/domain/repositories/activity_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/admin_files_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/audit_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/escrow_review_repository.dart';
@@ -28,6 +30,7 @@ class AdminDependencies {
   const AdminDependencies({
     required this.authRepository,
     required this.overviewRepository,
+    required this.activityRepository,
     required this.verificationRepository,
     required this.topupReviewRepository,
     required this.escrowReviewRepository,
@@ -45,6 +48,7 @@ class AdminDependencies {
     return AdminDependencies(
       authRepository: SupabaseAuthRepository(client.auth, client.functions),
       overviewRepository: SupabaseOverviewRepository(client),
+      activityRepository: SupabaseActivityRepository(client),
       verificationRepository: SupabaseVerificationRepository(client),
       topupReviewRepository: SupabaseTopupReviewRepository(client),
       escrowReviewRepository: SupabaseEscrowReviewRepository(client),
@@ -59,6 +63,7 @@ class AdminDependencies {
 
   final AuthRepository authRepository;
   final OverviewRepository overviewRepository;
+  final ActivityRepository activityRepository;
   final VerificationRepository verificationRepository;
   final TopupReviewRepository topupReviewRepository;
   final EscrowReviewRepository escrowReviewRepository;

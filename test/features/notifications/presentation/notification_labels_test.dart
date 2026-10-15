@@ -119,6 +119,24 @@ void main() {
       ));
     });
 
+    test('a complaint answer carries the written reply', () {
+      final answered = AppNotification(
+        id: 'n1',
+        kind: NotificationKind.complaintResolved,
+        createdAt: DateTime(2026, 10, 15),
+        resolutionNote: 'اتواصلنا مع الفني ورجّعنالك الفلوس',
+      );
+
+      expect(consumerText(answered), (
+        title: 'رد فريق صلحلي على شكواك',
+        body: 'اتواصلنا مع الفني ورجّعنالك الفلوس',
+      ));
+      expect(
+        consumerText(of(NotificationKind.complaintResolved)).body,
+        'افتح الطلب وشوف الرد.',
+      );
+    });
+
     test('the gift and the reminder say what to do next', () {
       expect(consumerText(of(NotificationKind.loyaltyReward)), (
         title: 'هدية منّا: طلب مجاني',

@@ -78,6 +78,12 @@ class _Menu extends StatelessWidget {
         overview?.pendingVerifications.count ?? 0,
       ),
       (
+        AdminRoutes.activity,
+        Icons.insights_rounded,
+        l10n.adminNavActivity,
+        0,
+      ),
+      (
         AdminRoutes.requests,
         Icons.format_list_bulleted_rounded,
         l10n.adminNavRequests,

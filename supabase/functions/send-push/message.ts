@@ -123,6 +123,11 @@ function textOf(item: PushItem): Text | null {
         body:
           "لو محصلش اعتراض من أي طرف خلال 3 أيام، المبلغ هيتودع في محفظتك. آسفين على الانتظار، ده لحماية الجميع.",
       };
+    case "complaint_resolved":
+      return {
+        title: "رد فريق صلحلي على شكواك",
+        body: "افتح الإشعارات وشوف الرد.",
+      };
     case "withdrawal_paid":
       return {
         title: "اتحوّلت لك فلوس السحب",

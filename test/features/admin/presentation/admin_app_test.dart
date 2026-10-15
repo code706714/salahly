@@ -62,6 +62,7 @@ void main() {
           usersRepository: h.users,
           settingsRepository: h.settings,
           auditRepository: h.audit,
+          activityRepository: h.activity,
           filesRepository: h.files,
         ),
       ),

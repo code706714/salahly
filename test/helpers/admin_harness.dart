@@ -15,6 +15,7 @@ import 'package:salahly/features/admin/domain/entities/admin_request.dart';
 import 'package:salahly/features/admin/domain/entities/admin_settings.dart';
 import 'package:salahly/features/admin/domain/entities/admin_user.dart';
 import 'package:salahly/features/admin/domain/entities/audit_entry.dart';
+import 'package:salahly/features/admin/domain/repositories/activity_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/admin_files_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/audit_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/escrow_review_repository.dart';
@@ -106,6 +107,7 @@ class AdminHarness {
   final users = MockUsersRepository();
   final settings = MockSettingsRepository();
   final audit = MockAuditRepository();
+  final activity = MockActivityRepository();
   final files = MockAdminFilesRepository();
 
   /// The signed-in admin's session, as the console's gate holds it.
@@ -125,6 +127,7 @@ class AdminHarness {
     RepositoryProvider<UsersRepository>.value(value: users),
     RepositoryProvider<SettingsRepository>.value(value: settings),
     RepositoryProvider<AuditRepository>.value(value: audit),
+    RepositoryProvider<ActivityRepository>.value(value: activity),
     RepositoryProvider<AdminFilesRepository>.value(value: files),
   ];
 

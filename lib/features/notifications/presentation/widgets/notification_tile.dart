@@ -167,6 +167,7 @@ class NotificationTile extends StatelessWidget {
       colors.primarySoft,
       colors.primary,
     ),
+    NotificationKind.complaintResolved ||
     NotificationKind.escrowHeld ||
     NotificationKind.escrowWorkConfirmed ||
     NotificationKind.escrowReleaseScheduled ||
