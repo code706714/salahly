@@ -84,7 +84,7 @@ select is(
   'the consumer is told how many are free in the area: only a1'
 );
 select is(
-  public.urgent_info('ac', 'nasr_city') -> 'fee_piastres', '10000'::jsonb,
+  public.urgent_info('ac', 'nasr_city') -> 'fee_piastres', '2000'::jsonb,
   'and the fee, known before sending'
 );
 
@@ -102,7 +102,7 @@ select is(
   (select (urgent, urgent_fee_piastres, expires_at <= now() + interval '30 minutes',
            expires_at > now() + interval '25 minutes', credit_held)::text
      from public.service_requests where id = (select (r ->> 'id')::uuid from sent)),
-  '(t,10000,t,t,t)',
+  '(t,2000,t,t,t)',
   'it is urgent, carries the fee, lives half an hour and holds a use'
 );
 select is(
@@ -169,7 +169,7 @@ select is(
      from public.service_requests r
      join public.job_items i on i.job_id = r.job_id
     where r.id = (select (r ->> 'id')::uuid from sent)),
-  array['رسوم استعجال:10000', 'السعر المبدئي:30000'],
+  array['رسوم استعجال:2000', 'السعر المبدئي:30000'],
   'the job carries the price and the urgent fee as its own line'
 );
 
