@@ -51,13 +51,8 @@ void main() {
   Future<Result<void>> Function() call(String name) => switch (name) {
     'confirm' => () => repository().confirmWork('request-1'),
     'dispute' => () => repository().dispute('request-1', 'ماجاش'),
-    _ => () => repository().savePayoutAccount(
-      const PayoutAccount(
-        method: TopupMethod.wallet,
-        account: '01114567720',
-        holderName: 'محمود سعيد',
-      ),
-    ),
+    'technician_confirm' => () => repository().technicianConfirmWork('r1'),
+    _ => () => repository().technicianDispute('request-1', 'العميل رفض'),
   };
 
   group('reading the consumer view', () {
@@ -75,7 +70,9 @@ void main() {
           'reject_reason': null,
           'created_at': '2026-10-13T10:00:00+00:00',
           'held_at': '2026-10-13T11:00:00+00:00',
-          'auto_release_at': '2026-10-16T10:00:00+00:00',
+          'consumer_confirmed': true,
+          'technician_confirmed': false,
+          'release_at': '2026-10-16T10:00:00+00:00',
         },
       };
 
@@ -92,8 +89,10 @@ void main() {
       expect(info.paymentInProgress, isFalse);
       expect(info.escrow!.status, EscrowStatus.held);
       expect(info.escrow!.method, TopupMethod.instapay);
+      expect(info.escrow!.consumerConfirmed, isTrue);
+      expect(info.escrow!.technicianConfirmed, isFalse);
       expect(
-        info.escrow!.autoReleaseAt,
+        info.escrow!.releaseAt,
         DateTime.utc(2026, 10, 16, 10).toLocal(),
       );
     });
@@ -130,7 +129,9 @@ void main() {
           'reject_reason': 'المبلغ ناقص',
           'created_at': '2026-10-13T10:00:00+00:00',
           'held_at': null,
-          'auto_release_at': null,
+          'consumer_confirmed': false,
+          'technician_confirmed': false,
+          'release_at': null,
         },
       };
 
@@ -166,14 +167,27 @@ void main() {
 
   group('the technician', () {
     test('reads the payment of his request', () async {
-      body = {'status': 'paid_out', 'amount_piastres': 35000};
+      body = {
+        'status': 'held',
+        'amount_piastres': 35000,
+        'can_confirm': true,
+        'can_dispute': true,
+        'consumer_confirmed': true,
+        'technician_confirmed': false,
+        'release_at': null,
+      };
 
       final result = await repository().fetchTechnicianEscrow('request-1');
 
       expect(requests.single.url.path, '/rest/v1/rpc/technician_escrow');
       final escrow = (result as Ok<TechnicianEscrow?>).value!;
-      expect(escrow.status, EscrowStatus.paidOut);
+      expect(escrow.status, EscrowStatus.held);
       expect(escrow.amountPiastres, 35000);
+      expect(escrow.canConfirm, isTrue);
+      expect(escrow.canDispute, isTrue);
+      expect(escrow.consumerConfirmed, isTrue);
+      expect(escrow.technicianConfirmed, isFalse);
+      expect(escrow.releaseAt, isNull);
     });
 
     test('reads that there is no payment', () async {
@@ -186,52 +200,30 @@ void main() {
         isNull,
       );
     });
-
-    test('reads the payout account, or none', () async {
-      body = {
-        'method': 'wallet',
-        'account': '01114567720',
-        'holder_name': 'محمود سعيد',
-      };
-
-      final account =
-          ((await repository().fetchPayoutAccount()) as Ok<PayoutAccount?>)
-              .value!;
-
-      expect(requests.single.url.path, '/rest/v1/rpc/my_payout_account');
-      expect(account.method, TopupMethod.wallet);
-      expect(account.account, '01114567720');
-      expect(account.holderName, 'محمود سعيد');
-
-      body = null;
-      expect(
-        ((await repository().fetchPayoutAccount()) as Ok<PayoutAccount?>).value,
-        isNull,
-      );
-    });
   });
 
   group('writing', () {
-    test('confirms the work, disputes it and saves the account', () async {
+    test('confirms the work and disputes it, from either side', () async {
       status = 204;
 
       await call('confirm')();
       await call('dispute')();
-      await call('save')();
+      await call('technician_confirm')();
+      await call('technician_dispute')();
 
       expect(requests.map((r) => r.url.path), [
         '/rest/v1/rpc/confirm_work_done',
         '/rest/v1/rpc/dispute_payment',
-        '/rest/v1/rpc/save_payout_account',
+        '/rest/v1/rpc/technician_confirm_work_done',
+        '/rest/v1/rpc/technician_dispute_payment',
       ]);
       expect(jsonDecode(requests[1].body), {
         'p_request_id': 'request-1',
         'p_reason': 'ماجاش',
       });
-      expect(jsonDecode(requests[2].body), {
-        'p_method': 'wallet',
-        'p_account': '01114567720',
-        'p_holder_name': 'محمود سعيد',
+      expect(jsonDecode(requests[3].body), {
+        'p_request_id': 'request-1',
+        'p_reason': 'العميل رفض',
       });
     });
 
@@ -244,14 +236,18 @@ void main() {
             const EscrowUnavailableFailure(),
           ),
           ('dispute', 'invalid_reason', '22023', const InvalidReasonFailure()),
-          ('save', 'invalid_holder', '22023', const InvalidHolderFailure()),
           (
-            'save',
-            'invalid_account',
-            '22023',
-            const InvalidPayoutAccountFailure(),
+            'technician_confirm',
+            'escrow_unavailable',
+            'P0001',
+            const EscrowUnavailableFailure(),
           ),
-          ('save', 'rate_limited', '54000', const RateLimitedFailure()),
+          (
+            'technician_dispute',
+            'invalid_reason',
+            '22023',
+            const InvalidReasonFailure(),
+          ),
         ]) {
       test('$action says why it was refused: $message', () async {
         refuse(message, code: code);

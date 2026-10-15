@@ -21,13 +21,8 @@ class EscrowReviewCubit extends ActionCubit {
     outcome: AdminOutcome.escrowRejected,
   );
 
-  /// The technician was paid by the transfer named [reference].
-  Future<void> markPaid(String escrowId, String reference) => perform(
-    () => _repository.markPaid(escrowId, reference),
-    outcome: AdminOutcome.escrowPaid,
-  );
-
-  /// Settles a dispute for the technician or for the consumer.
+  /// Settles a dispute for the technician (his wallet gets the money) or for
+  /// the consumer.
   Future<void> resolve(
     String escrowId, {
     required bool payTechnician,

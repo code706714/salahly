@@ -13,6 +13,7 @@ import 'package:salahly/features/admin/domain/failures/admin_failures.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
 import 'package:salahly/features/escrow/domain/entities/escrow.dart';
 import 'package:salahly/features/marketplace/domain/entities/complaint.dart';
+import 'package:salahly/features/wallet/domain/entities/wallet.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
 /// What an admin screen says about [failure].
@@ -92,7 +93,6 @@ String adminEscrowStatusLabel(AppLocalizations l10n, EscrowStatus status) =>
     switch (status) {
       EscrowStatus.pending => l10n.adminEscrowStatusPending,
       EscrowStatus.held => l10n.adminEscrowStatusHeld,
-      EscrowStatus.released => l10n.adminEscrowStatusReleased,
       EscrowStatus.paidOut => l10n.adminEscrowStatusPaidOut,
       EscrowStatus.disputed => l10n.adminEscrowStatusDisputed,
       EscrowStatus.refundDue => l10n.adminEscrowStatusRefundDue,
@@ -100,10 +100,23 @@ String adminEscrowStatusLabel(AppLocalizations l10n, EscrowStatus status) =>
       EscrowStatus.rejected => l10n.adminEscrowStatusRejected,
     };
 
+String adminWithdrawalStatusLabel(
+  AppLocalizations l10n,
+  WithdrawalStatus status,
+) => switch (status) {
+  WithdrawalStatus.requested => l10n.adminWithdrawalStatusRequested,
+  WithdrawalStatus.paid => l10n.adminWithdrawalStatusPaid,
+  WithdrawalStatus.rejected => l10n.adminWithdrawalStatusRejected,
+};
+
+PillTone adminWithdrawalStatusTone(WithdrawalStatus status) => switch (status) {
+  WithdrawalStatus.requested => PillTone.waiting,
+  WithdrawalStatus.paid => PillTone.success,
+  WithdrawalStatus.rejected => PillTone.danger,
+};
+
 PillTone adminEscrowStatusTone(EscrowStatus status) => switch (status) {
-  EscrowStatus.pending ||
-  EscrowStatus.released ||
-  EscrowStatus.refundDue => PillTone.waiting,
+  EscrowStatus.pending || EscrowStatus.refundDue => PillTone.waiting,
   EscrowStatus.held ||
   EscrowStatus.paidOut ||
   EscrowStatus.refunded => PillTone.success,
@@ -186,6 +199,8 @@ String auditActionLabel(AppLocalizations l10n, String action) =>
       'approve_escrow' => l10n.adminAuditApproveEscrow,
       'reject_escrow' => l10n.adminAuditRejectEscrow,
       'pay_escrow' => l10n.adminAuditPayEscrow,
+      'pay_withdrawal' => l10n.adminAuditPayWithdrawal,
+      'reject_withdrawal' => l10n.adminAuditRejectWithdrawal,
       'resolve_escrow' => l10n.adminAuditResolveEscrow,
       'refund_escrow' => l10n.adminAuditRefundEscrow,
       'resolve_complaint' => l10n.adminAuditResolveComplaint,

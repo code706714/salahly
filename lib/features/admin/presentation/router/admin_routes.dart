@@ -8,6 +8,7 @@ abstract final class AdminRoutes {
   static const verification = '/verification';
   static const transfers = '/transfers';
   static const escrow = '/escrow';
+  static const withdrawals = '/withdrawals';
   static const requests = '/requests';
   static const users = '/users';
   static const settings = '/settings';
@@ -19,6 +20,7 @@ abstract final class AdminRoutes {
     verification,
     transfers,
     escrow,
+    withdrawals,
     requests,
     users,
     settings,

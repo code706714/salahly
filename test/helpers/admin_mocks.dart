@@ -8,6 +8,7 @@ import 'package:salahly/features/admin/domain/repositories/settings_repository.d
 import 'package:salahly/features/admin/domain/repositories/topup_review_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/users_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/verification_repository.dart';
+import 'package:salahly/features/admin/domain/repositories/withdrawal_review_repository.dart';
 
 class MockOverviewRepository extends Mock implements OverviewRepository {}
 
@@ -18,6 +19,9 @@ class MockTopupReviewRepository extends Mock implements TopupReviewRepository {}
 
 class MockEscrowReviewRepository extends Mock
     implements EscrowReviewRepository {}
+
+class MockWithdrawalReviewRepository extends Mock
+    implements WithdrawalReviewRepository {}
 
 class MockRequestsRepository extends Mock implements RequestsRepository {}
 

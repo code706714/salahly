@@ -6,7 +6,7 @@ abstract interface class EscrowRepository {
   /// The consumer's view; null when the request isn't hers.
   Future<Result<EscrowInfo?>> fetchInfo(String requestId);
 
-  /// The work is right: the money goes to the technician.
+  /// The consumer says the work is right.
   Future<Result<void>> confirmWork(String requestId);
 
   /// Something is wrong: the money stays with Salahly until it decides.
@@ -15,8 +15,9 @@ abstract interface class EscrowRepository {
   /// The technician's view; null when there is no live payment.
   Future<Result<TechnicianEscrow?>> fetchTechnicianEscrow(String requestId);
 
-  /// Where Salahly pays the signed-in technician; null before he sets it.
-  Future<Result<PayoutAccount?>> fetchPayoutAccount();
+  /// The technician says the work is done and right.
+  Future<Result<void>> technicianConfirmWork(String requestId);
 
-  Future<Result<void>> savePayoutAccount(PayoutAccount account);
+  /// The technician objects: the money stays with Salahly until it decides.
+  Future<Result<void>> technicianDispute(String requestId, String reason);
 }

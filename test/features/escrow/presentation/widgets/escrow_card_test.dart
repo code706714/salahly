@@ -113,7 +113,6 @@ void main() {
     for (final (status, text) in <(EscrowStatus, String)>[
       (EscrowStatus.pending, l10n.escrowPendingBody),
       (EscrowStatus.held, l10n.escrowHeldBody('350')),
-      (EscrowStatus.released, l10n.escrowReleasedBody),
       (EscrowStatus.paidOut, l10n.escrowPaidOutBody),
       (EscrowStatus.disputed, l10n.escrowDisputedBody),
       (EscrowStatus.refundDue, l10n.escrowRefundDueBody),
@@ -203,27 +202,46 @@ void main() {
       );
     });
 
-    testWidgets('says when held money goes to the technician by itself', (
-      tester,
-    ) async {
-      shows(
-        testEscrowInfo(
-          escrow: testEscrow(
-            EscrowStatus.held,
-            autoReleaseAt: DateTime(2026, 10, 16, 20),
+    final release = DateTime(2026, 10, 16, 20);
+
+    for (final (name, escrow, text)
+        in <(String, Escrow, String Function(String))>[
+          (
+            'the technician confirmed first',
+            testEscrow(
+              EscrowStatus.held,
+              technicianConfirmed: true,
+              releaseAt: release,
+            ),
+            (moment) => l10n.escrowHeldTechnicianConfirmedBody('ms', moment),
           ),
-        ),
-      );
+          (
+            'she confirmed first',
+            testEscrow(EscrowStatus.held, consumerConfirmed: true),
+            (_) => l10n.escrowHeldYouConfirmedBody('ms'),
+          ),
+          (
+            'both confirmed',
+            testEscrow(
+              EscrowStatus.held,
+              consumerConfirmed: true,
+              technicianConfirmed: true,
+              releaseAt: release,
+            ),
+            l10n.escrowHeldBothConfirmedBody,
+          ),
+        ]) {
+      testWidgets('says where the money stands when $name', (tester) async {
+        shows(testEscrowInfo(escrow: escrow));
 
-      await pump(tester);
+        await pump(tester);
 
-      expect(
-        find.text(
-          l10n.escrowHeldAuto(momentLabel(l10n, DateTime(2026, 10, 16, 20))),
-        ),
-        findsOneWidget,
-      );
-    });
+        expect(
+          find.text(text(momentLabel(l10n, release))),
+          findsOneWidget,
+        );
+      });
+    }
   });
 
   group('paying in', () {

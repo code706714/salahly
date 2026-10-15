@@ -74,20 +74,6 @@ class _EscrowReviewPanelState extends State<EscrowReviewPanel> {
     if (reason != null) await cubit.reject(_escrow.id, reason);
   }
 
-  Future<void> _markPaid(AppLocalizations l10n) async {
-    final cubit = context.read<EscrowReviewCubit>();
-    final reference = await showReasonDialog(
-      context,
-      title: l10n.adminEscrowPayTitle(_technician(l10n)),
-      body: l10n.adminEscrowPayBody(formatPounds(_escrow.amountPiastres)),
-      confirmLabel: l10n.adminEscrowPayConfirm,
-      fieldLabel: l10n.adminEscrowReferenceLabel,
-      maxLength: _referenceMaxLength,
-      destructive: false,
-    );
-    if (reference != null) await cubit.markPaid(_escrow.id, reference);
-  }
-
   Future<void> _markRefunded(AppLocalizations l10n) async {
     final cubit = context.read<EscrowReviewCubit>();
     final reference = await showReasonDialog(
@@ -267,19 +253,6 @@ class _EscrowReviewPanelState extends State<EscrowReviewPanel> {
                             escrow.technicianPhone,
                           ),
                         ),
-                        if (escrow.payoutAccount case final account?)
-                          AdminFact(
-                            label: l10n.adminEscrowPayTo,
-                            value: _ltr(
-                              '$account · '
-                              '${topupMethodLabel(l10n, escrow.payoutMethod!)}',
-                            ),
-                          ),
-                        if (escrow.payoutHolder case final holder?)
-                          AdminFact(
-                            label: l10n.adminEscrowPayoutHolder,
-                            value: Text(holder),
-                          ),
                       ],
                     ),
                     const SizedBox(height: 20),
@@ -327,21 +300,14 @@ class _EscrowReviewPanelState extends State<EscrowReviewPanel> {
           isBusy ? null : () => _reject(l10n),
         ),
       ],
-      EscrowStatus.released => [
-        if (escrow.payoutAccount == null)
-          _warning(colors, l10n.adminEscrowPayoutMissing),
-        if (escrow.payoutAccount == null) const SizedBox(height: 16),
-        BusyFilledButton(
-          label: l10n.adminEscrowPayAction,
-          isBusy: isBusy,
-          onPressed: escrow.payoutAccount == null
-              ? null
-              : () => _markPaid(l10n),
-        ),
-      ],
       EscrowStatus.disputed => [
         if (escrow.disputeReason case final reason?) ...[
-          _warning(colors, l10n.adminEscrowDisputeReason(reason)),
+          _warning(
+            colors,
+            escrow.disputedBy == EscrowDisputer.technician
+                ? l10n.adminEscrowDisputeByTechnician(reason)
+                : l10n.adminEscrowDisputeByConsumer(reason),
+          ),
           const SizedBox(height: 16),
         ],
         BusyFilledButton(
@@ -378,8 +344,6 @@ class _EscrowReviewPanelState extends State<EscrowReviewPanel> {
       EscrowStatus.refunded ||
       EscrowStatus.held ||
       EscrowStatus.rejected => [
-        if (escrow.payoutReference case final reference?)
-          Text(l10n.adminEscrowPaidReference(reference)),
         if (escrow.refundReference case final reference?)
           Text(l10n.adminEscrowRefundedReference(reference)),
         if (escrow.resolutionNote case final note?)

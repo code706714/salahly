@@ -130,7 +130,6 @@ void main() {
     });
 
     for (final (label, status) in <(String, EscrowStatus?)>[
-      ('adminEscrowTabReleased', EscrowStatus.released),
       ('adminEscrowTabDisputed', EscrowStatus.disputed),
       ('adminEscrowTabRefundDue', EscrowStatus.refundDue),
       ('adminEscrowTabAll', null),
@@ -138,7 +137,6 @@ void main() {
       testWidgets('narrows the list by the $label tab', (tester) async {
         await pump(tester);
         final text = switch (label) {
-          'adminEscrowTabReleased' => l10n.adminEscrowTabReleased,
           'adminEscrowTabDisputed' => l10n.adminEscrowTabDisputed,
           'adminEscrowTabRefundDue' => l10n.adminEscrowTabRefundDue,
           _ => l10n.adminEscrowTabAll,
@@ -267,71 +265,11 @@ void main() {
     });
   });
 
-  group('paying the technician', () {
-    testWidgets('records the reference of the transfer', (tester) async {
-      stubOne(testEscrowReview(status: EscrowStatus.released));
-      when(
-        () => h.escrows.markPaid(any(), any()),
-      ).thenAnswer((_) async => const Ok(null));
-      await pump(tester);
-      await open(tester);
-
-      expect(
-        find.text('01005551234 · ${l10n.buyUsesMethodWallet}'),
-        findsOneWidget,
-      );
-      await tester.tap(find.text(l10n.adminEscrowPayAction));
-      await tester.pumpAndSettle();
-      await writeInDialog(tester, 'IP-123');
-      await tester.tap(inDialog(l10n.adminEscrowPayConfirm));
-      await tester.pumpAndSettle();
-
-      verify(() => h.escrows.markPaid('escrow-1', 'IP-123')).called(1);
-      expect(find.text(l10n.adminEscrowPaid), findsOneWidget);
-    });
-
-    testWidgets('waits for the technician to add an account', (tester) async {
-      stubOne(
-        testEscrowReview(status: EscrowStatus.released, payoutAccount: null),
-      );
-      await pump(tester);
-
-      await open(tester);
-
-      expect(find.text(l10n.adminEscrowPayoutMissing), findsOneWidget);
-      expect(
-        tester
-            .widget<FilledButton>(
-              find.widgetWithText(FilledButton, l10n.adminEscrowPayAction),
-            )
-            .onPressed,
-        isNull,
-      );
-    });
-
-    testWidgets('shows the reference once paid', (tester) async {
-      stubOne(
-        testEscrowReview(
-          status: EscrowStatus.paidOut,
-          payoutReference: 'IP-123',
-        ),
-      );
-      await pump(tester);
-
-      await open(tester);
-
-      expect(
-        find.text(l10n.adminEscrowPaidReference('IP-123')),
-        findsOneWidget,
-      );
-      expect(find.text(l10n.adminEscrowPayAction), findsNothing);
-    });
-  });
-
   group('settling a dispute', () {
     EscrowReview disputed() => testEscrowReview(
       status: EscrowStatus.disputed,
       disputeReason: 'الفني ماجاش',
+      disputedBy: EscrowDisputer.consumer,
     );
 
     setUp(
@@ -351,7 +289,25 @@ void main() {
       await open(tester);
 
       expect(
-        find.text(l10n.adminEscrowDisputeReason('الفني ماجاش')),
+        find.text(l10n.adminEscrowDisputeByConsumer('الفني ماجاش')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets("shows the technician's complaint", (tester) async {
+      stubOne(
+        testEscrowReview(
+          status: EscrowStatus.disputed,
+          disputeReason: 'العميل مش بيرد',
+          disputedBy: EscrowDisputer.technician,
+        ),
+      );
+      await pump(tester);
+
+      await open(tester);
+
+      expect(
+        find.text(l10n.adminEscrowDisputeByTechnician('العميل مش بيرد')),
         findsOneWidget,
       );
     });

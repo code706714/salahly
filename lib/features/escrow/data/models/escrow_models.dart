@@ -28,19 +28,19 @@ abstract final class EscrowModels {
         : enumFromWire(TopupMethod.values, json['method']),
     rejectReason: json['reject_reason'] as String?,
     createdAt: timeFromWire(json['created_at']),
-    autoReleaseAt: optionalTimeFromWire(json['auto_release_at']),
+    consumerConfirmed: json['consumer_confirmed'] as bool,
+    technicianConfirmed: json['technician_confirmed'] as bool,
+    releaseAt: optionalTimeFromWire(json['release_at']),
   );
 
   static TechnicianEscrow technicianEscrow(Map<String, dynamic> json) =>
       TechnicianEscrow(
         status: enumFromWire(EscrowStatus.values, json['status']),
         amountPiastres: json['amount_piastres'] as int,
-      );
-
-  static PayoutAccount payoutAccount(Map<String, dynamic> json) =>
-      PayoutAccount(
-        method: enumFromWire(TopupMethod.values, json['method']),
-        account: json['account'] as String,
-        holderName: json['holder_name'] as String,
+        canConfirm: json['can_confirm'] as bool,
+        canDispute: json['can_dispute'] as bool,
+        consumerConfirmed: json['consumer_confirmed'] as bool,
+        technicianConfirmed: json['technician_confirmed'] as bool,
+        releaseAt: optionalTimeFromWire(json['release_at']),
       );
 }

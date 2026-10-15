@@ -30,17 +30,21 @@ enum NotificationKind {
   verificationApproved,
   verificationRejected,
 
-  // The guarantee on a payment, each side told of its own part.
+  // The guarantee on a payment and the wallet, each side told of its own
+  // part.
   escrowRejected,
   escrowRefunded,
-  escrowReleased,
   escrowPaidOut,
   escrowDisputed,
+  escrowReleaseScheduled,
+  withdrawalPaid,
+  withdrawalRejected,
 
   // Both.
   chatMessage,
   incomingCall,
   escrowHeld,
+  escrowWorkConfirmed,
   topupApproved,
   topupRejected;
 
@@ -49,6 +53,10 @@ enum NotificationKind {
 
   /// Whether the notification is about a free request earned.
   bool get isAboutLoyalty => this == loyaltyReward;
+
+  /// Whether the notification is about a withdrawal from the wallet.
+  bool get isAboutWithdrawal =>
+      this == withdrawalPaid || this == withdrawalRejected;
 
   /// Whether the notification is about the technician's documents.
   bool get isAboutVerification =>

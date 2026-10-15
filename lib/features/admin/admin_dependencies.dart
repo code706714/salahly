@@ -7,6 +7,7 @@ import 'package:salahly/features/admin/data/repositories/supabase_settings_repos
 import 'package:salahly/features/admin/data/repositories/supabase_topup_review_repository.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_users_repository.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_verification_repository.dart';
+import 'package:salahly/features/admin/data/repositories/supabase_withdrawal_review_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/admin_files_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/audit_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/escrow_review_repository.dart';
@@ -16,6 +17,7 @@ import 'package:salahly/features/admin/domain/repositories/settings_repository.d
 import 'package:salahly/features/admin/domain/repositories/topup_review_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/users_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/verification_repository.dart';
+import 'package:salahly/features/admin/domain/repositories/withdrawal_review_repository.dart';
 import 'package:salahly/features/auth/data/repositories/supabase_auth_repository.dart';
 import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -29,6 +31,7 @@ class AdminDependencies {
     required this.verificationRepository,
     required this.topupReviewRepository,
     required this.escrowReviewRepository,
+    required this.withdrawalReviewRepository,
     required this.requestsRepository,
     required this.usersRepository,
     required this.settingsRepository,
@@ -45,6 +48,7 @@ class AdminDependencies {
       verificationRepository: SupabaseVerificationRepository(client),
       topupReviewRepository: SupabaseTopupReviewRepository(client),
       escrowReviewRepository: SupabaseEscrowReviewRepository(client),
+      withdrawalReviewRepository: SupabaseWithdrawalReviewRepository(client),
       requestsRepository: SupabaseRequestsRepository(client),
       usersRepository: SupabaseUsersRepository(client),
       settingsRepository: SupabaseSettingsRepository(client),
@@ -58,6 +62,7 @@ class AdminDependencies {
   final VerificationRepository verificationRepository;
   final TopupReviewRepository topupReviewRepository;
   final EscrowReviewRepository escrowReviewRepository;
+  final WithdrawalReviewRepository withdrawalReviewRepository;
   final RequestsRepository requestsRepository;
   final UsersRepository usersRepository;
   final SettingsRepository settingsRepository;

@@ -29,15 +29,12 @@ abstract final class AdminEscrowModels {
     consumerPhone: json['consumer_phone'] as String?,
     technicianName: json['technician_name'] as String?,
     technicianPhone: json['technician_phone'] as String?,
-    payoutMethod: json['payout_method'] == null
-        ? null
-        : enumFromWire(TopupMethod.values, json['payout_method']),
-    payoutAccount: json['payout_account'] as String?,
-    payoutHolder: json['payout_holder'] as String?,
-    payoutReference: json['payout_reference'] as String?,
     refundReference: json['refund_reference'] as String?,
     rejectReason: json['reject_reason'] as String?,
     disputeReason: json['dispute_reason'] as String?,
+    disputedBy: json['disputed_by'] == null
+        ? null
+        : enumFromWire(EscrowDisputer.values, json['disputed_by']),
     resolutionNote: json['resolution_note'] as String?,
   );
 }

@@ -96,19 +96,6 @@ void main() {
     );
 
     blocTest<EscrowReviewCubit, ActionState>(
-      'records a payout',
-      setUp: () => when(
-        () => repository.markPaid('escrow-1', 'IP-1'),
-      ).thenAnswer((_) async => const Ok(null)),
-      build: () => EscrowReviewCubit(repository),
-      act: (cubit) => cubit.markPaid('escrow-1', 'IP-1'),
-      expect: () => const [
-        ActionState(isBusy: true),
-        ActionState(completed: 1, outcome: AdminOutcome.escrowPaid),
-      ],
-    );
-
-    blocTest<EscrowReviewCubit, ActionState>(
       'settles a dispute',
       setUp: () => when(
         () => repository.resolve(

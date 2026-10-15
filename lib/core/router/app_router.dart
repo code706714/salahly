@@ -21,7 +21,6 @@ import 'package:salahly/features/chat/presentation/pages/chat_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customer_form_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customer_page.dart';
 import 'package:salahly/features/customers/presentation/pages/customers_page.dart';
-import 'package:salahly/features/escrow/presentation/pages/payout_account_page.dart';
 import 'package:salahly/features/escrow/presentation/pages/secure_payment_page.dart';
 import 'package:salahly/features/home/presentation/pages/consumer_home_page.dart';
 import 'package:salahly/features/home/presentation/pages/today_page.dart';
@@ -58,6 +57,8 @@ import 'package:salahly/features/onboarding/presentation/pages/consumer_onboardi
 import 'package:salahly/features/onboarding/presentation/pages/role_choice_page.dart';
 import 'package:salahly/features/onboarding/presentation/pages/technician_onboarding_page.dart';
 import 'package:salahly/features/splash/presentation/pages/splash_page.dart';
+import 'package:salahly/features/wallet/presentation/pages/wallet_page.dart';
+import 'package:salahly/features/wallet/presentation/pages/withdraw_page.dart';
 
 /// The app's routes. [refresh] must notify whenever [session] changes, so
 /// redirects re-run; see `SessionRefresh`.
@@ -295,8 +296,12 @@ RouteBase _technicianRoutes() {
             const BuyUsesPage(role: UserRole.technician),
       ),
       GoRoute(
-        path: AppRoutes.technicianPayoutAccount,
-        builder: (context, state) => const PayoutAccountPage(),
+        path: AppRoutes.technicianWallet,
+        builder: (context, state) => const WalletPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.technicianWithdraw,
+        builder: (context, state) => const WithdrawPage(),
       ),
       GoRoute(
         path: AppRoutes.technicianDeleteAccount,

@@ -12,13 +12,10 @@ enum EscrowStatus {
   /// Salahly until the work is confirmed.
   held,
 
-  /// The work is confirmed; the technician is owed the money.
-  released,
-
-  /// Salahly paid the technician.
+  /// The money is in the technician's wallet.
   paidOut,
 
-  /// The consumer objected; Salahly decides.
+  /// Either side objected; Salahly decides.
   disputed,
 
   /// The money goes back to the consumer.
@@ -36,7 +33,9 @@ final class Escrow extends Equatable {
     required this.createdAt,
     this.method,
     this.rejectReason,
-    this.autoReleaseAt,
+    this.consumerConfirmed = false,
+    this.technicianConfirmed = false,
+    this.releaseAt,
   });
 
   final EscrowStatus status;
@@ -46,8 +45,13 @@ final class Escrow extends Equatable {
   final String? rejectReason;
   final DateTime createdAt;
 
-  /// When held money goes to the technician if the consumer says nothing.
-  final DateTime? autoReleaseAt;
+  /// Each side has said the work is done and right.
+  final bool consumerConfirmed;
+  final bool technicianConfirmed;
+
+  /// When held money reaches the technician's wallet unless someone
+  /// objects; null while a confirmation is still missing.
+  final DateTime? releaseAt;
 
   @override
   List<Object?> get props => [
@@ -55,7 +59,9 @@ final class Escrow extends Equatable {
     method,
     rejectReason,
     createdAt,
-    autoReleaseAt,
+    consumerConfirmed,
+    technicianConfirmed,
+    releaseAt,
   ];
 }
 
@@ -98,29 +104,37 @@ final class EscrowInfo extends Equatable {
   ];
 }
 
-/// The technician's view of the consumer's guaranteed payment.
+/// The technician's view of the consumer's guaranteed payment: where it
+/// stands and what he can do now.
 final class TechnicianEscrow extends Equatable {
-  const TechnicianEscrow({required this.status, required this.amountPiastres});
+  const TechnicianEscrow({
+    required this.status,
+    required this.amountPiastres,
+    required this.canConfirm,
+    required this.canDispute,
+    required this.consumerConfirmed,
+    required this.technicianConfirmed,
+    this.releaseAt,
+  });
 
   final EscrowStatus status;
   final int amountPiastres;
+  final bool canConfirm;
+  final bool canDispute;
+  final bool consumerConfirmed;
+  final bool technicianConfirmed;
+
+  /// When the money reaches his wallet unless someone objects.
+  final DateTime? releaseAt;
 
   @override
-  List<Object?> get props => [status, amountPiastres];
-}
-
-/// Where Salahly pays a technician.
-final class PayoutAccount extends Equatable {
-  const PayoutAccount({
-    required this.method,
-    required this.account,
-    required this.holderName,
-  });
-
-  final TopupMethod method;
-  final String account;
-  final String holderName;
-
-  @override
-  List<Object?> get props => [method, account, holderName];
+  List<Object?> get props => [
+    status,
+    amountPiastres,
+    canConfirm,
+    canDispute,
+    consumerConfirmed,
+    technicianConfirmed,
+    releaseAt,
+  ];
 }
