@@ -195,7 +195,6 @@ declare
   v_request public.service_requests;
   v_job public.jobs;
   v_status public.escrow_status;
-  v_id uuid;
 begin
   select * into v_request from public.service_requests where id = p_order.request_id;
   if not found then
@@ -205,8 +204,8 @@ begin
   v_status := case
     when v_request.status = 'assigned'
          and v_job.id is not null
-         and v_job.status not in ('cancelled') then 'held'
-    else 'refund_due'
+         and v_job.status not in ('cancelled') then 'held'::public.escrow_status
+    else 'refund_due'::public.escrow_status
   end;
   begin
     insert into public.job_escrows (
@@ -217,8 +216,7 @@ begin
       p_order.request_id, private.request_code(p_order.request_id), p_order.user_id,
       v_job.technician_id, p_order.amount_piastres, v_status,
       case when v_status = 'held' then now() end, p_order.id
-    )
-    returning id into v_id;
+    );
   exception when unique_violation then
     return false;
   end;
@@ -390,7 +388,6 @@ set search_path = ''
 as $$
 declare
   v_order public.payment_orders;
-  v_outcome text;
   v_event_id bigint;
   v_ok boolean;
   v_new public.payment_status;
