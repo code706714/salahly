@@ -123,6 +123,8 @@ begin
 end;
 $$;
 
+revoke execute on function private.calendar_since(text) from public, anon, authenticated;
+
 -- Money in a period (today | week | month): what people paid, what the app
 -- earned, what went to technicians' wallets and out of them, and the
 -- movements themselves, newest first.
