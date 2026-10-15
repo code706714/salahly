@@ -205,7 +205,9 @@ class SyncEngine {
       await _database.transaction(() async {
         _checkNotWiped();
         final unpushed = {
-          for (final entry in await _database.select(_database.outbox).get())
+          for (final entry in await (_database.select(
+            _database.outbox,
+          )..where((entry) => entry.rejectedCode.isNull())).get())
             (entry.entity, entry.rowId),
         };
         for (final pulled in page.rows) {

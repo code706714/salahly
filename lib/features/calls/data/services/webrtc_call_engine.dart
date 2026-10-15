@@ -30,15 +30,21 @@ class WebRtcCallEngine implements CallEngine {
     } on Object {
       return false;
     }
-    final peer = await createPeerConnection({'iceServers': iceServers});
-    _peer = peer;
-    for (final track in _microphone!.getAudioTracks()) {
-      await peer.addTrack(track, _microphone!);
+    final RTCPeerConnection peer;
+    try {
+      peer = await createPeerConnection({'iceServers': iceServers});
+      _peer = peer;
+      for (final track in _microphone!.getAudioTracks()) {
+        await peer.addTrack(track, _microphone!);
+      }
+    } on Object {
+      return false;
     }
     peer
       ..onIceCandidate = (candidate) {
         final text = candidate.candidate;
         if (text == null || text.isEmpty) return;
+        if (_outgoing.isClosed) return;
         _outgoing.add(
           CallSignalDraft(CallSignalKind.candidate, {
             'candidate': text,
@@ -51,9 +57,9 @@ class WebRtcCallEngine implements CallEngine {
         switch (state) {
           case RTCIceConnectionState.RTCIceConnectionStateConnected:
           case RTCIceConnectionState.RTCIceConnectionStateCompleted:
-            _link.add(CallLink.connected);
+            _emit(CallLink.connected);
           case RTCIceConnectionState.RTCIceConnectionStateFailed:
-            _link.add(CallLink.failed);
+            _emit(CallLink.failed);
           case RTCIceConnectionState.RTCIceConnectionStateNew:
           case RTCIceConnectionState.RTCIceConnectionStateChecking:
           case RTCIceConnectionState.RTCIceConnectionStateDisconnected:
@@ -65,9 +71,9 @@ class WebRtcCallEngine implements CallEngine {
       ..onConnectionState = (state) {
         switch (state) {
           case RTCPeerConnectionState.RTCPeerConnectionStateConnected:
-            _link.add(CallLink.connected);
+            _emit(CallLink.connected);
           case RTCPeerConnectionState.RTCPeerConnectionStateFailed:
-            _link.add(CallLink.failed);
+            _emit(CallLink.failed);
           case RTCPeerConnectionState.RTCPeerConnectionStateDisconnected:
           case RTCPeerConnectionState.RTCPeerConnectionStateClosed:
           case RTCPeerConnectionState.RTCPeerConnectionStateNew:
@@ -150,16 +156,23 @@ class WebRtcCallEngine implements CallEngine {
   @override
   Future<void> setSpeaker({required bool on}) => Helper.setSpeakerphoneOn(on);
 
+  void _emit(CallLink link) {
+    if (!_link.isClosed) _link.add(link);
+  }
+
   @override
   Future<void> close() async {
+    // The peer goes first: its callbacks must not reach a closed stream.
+    final peer = _peer;
+    _peer = null;
+    await peer?.close();
+    await peer?.dispose();
     await _outgoing.close();
     await _link.close();
     for (final track in _microphone?.getTracks() ?? <MediaStreamTrack>[]) {
       await track.stop();
     }
     await _microphone?.dispose();
-    await _peer?.close();
-    await _peer?.dispose();
     _peer = null;
     _microphone = null;
   }

@@ -82,6 +82,23 @@ void main() {
     }
 
     blocTest<PaymentCubit, PaymentState>(
+      'sees a success that follows a declined try',
+      setUp: () => answer(PaymentStatus.succeeded),
+      build: build,
+      seed: () => const PaymentState(
+        progress: PaymentProgress.notPaid,
+        status: PaymentStatus.failed,
+      ),
+      act: (cubit) => cubit.refresh(),
+      expect: () => [
+        const PaymentState(
+          progress: PaymentProgress.paid,
+          status: PaymentStatus.succeeded,
+        ),
+      ],
+    );
+
+    blocTest<PaymentCubit, PaymentState>(
       'keeps waiting while the server says pending',
       setUp: () => answer(PaymentStatus.pending),
       build: build,

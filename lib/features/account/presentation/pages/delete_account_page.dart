@@ -140,6 +140,7 @@ class _DeleteAccountViewState extends State<DeleteAccountView> {
     String honorific,
   ) => switch (failure) {
     PendingTransferFailure() => l10n.acctDeleteTopupPending(honorific),
+    MoneyOpenFailure() => l10n.acctDeleteMoneyOpen(honorific),
     final cause? when _isConsumer => consumerFailureMessage(
       l10n,
       cause,

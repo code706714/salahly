@@ -5,14 +5,19 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Listens to the person's own rows in `notifications` over Supabase
 /// Realtime. Row level security keeps every other person's rows out of the
-/// stream; the channel closes with the last listener.
+/// stream. One channel is shared by every listener (two joins of the same
+/// topic would close each other) and closes with the last of them.
 class SupabaseLiveUpdates implements LiveUpdates {
   SupabaseLiveUpdates(this._client);
 
   final SupabaseClient _client;
 
+  late final Stream<void> _shared = _open();
+
   @override
-  Stream<void> get changes {
+  Stream<void> get changes => _shared;
+
+  Stream<void> _open() {
     RealtimeChannel? channel;
     late final StreamController<void> controller;
     controller = StreamController<void>.broadcast(

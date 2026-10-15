@@ -6,10 +6,10 @@ import 'package:salahly/features/payments/domain/entities/payment.dart';
 /// Maps the escrow functions' JSON to domain entities.
 abstract final class EscrowModels {
   static EscrowInfo info(Map<String, dynamic> json) => EscrowInfo(
-    amountPiastres: json['amount_piastres'] as int,
-    canSecure: json['can_secure'] as bool,
-    canConfirm: json['can_confirm'] as bool,
-    canDispute: json['can_dispute'] as bool,
+    amountPiastres: json['amount_piastres'] as int? ?? 0,
+    canSecure: json['can_secure'] as bool? ?? false,
+    canConfirm: json['can_confirm'] as bool? ?? false,
+    canDispute: json['can_dispute'] as bool? ?? false,
     paymentStatus: json['payment'] == null
         ? null
         : enumFromWire(
@@ -37,9 +37,9 @@ abstract final class EscrowModels {
       TechnicianEscrow(
         status: enumFromWire(EscrowStatus.values, json['status']),
         amountPiastres: json['amount_piastres'] as int,
-        canConfirm: json['can_confirm'] as bool,
-        canDispute: json['can_dispute'] as bool,
-        consumerConfirmed: json['consumer_confirmed'] as bool,
+        canConfirm: json['can_confirm'] as bool? ?? false,
+        canDispute: json['can_dispute'] as bool? ?? false,
+        consumerConfirmed: json['consumer_confirmed'] as bool? ?? false,
         technicianConfirmed: json['technician_confirmed'] as bool,
         releaseAt: optionalTimeFromWire(json['release_at']),
       );
