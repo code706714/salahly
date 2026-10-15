@@ -36,6 +36,7 @@ void main() {
 
     await cubit.load();
     expect(cubit.state.categories, isEmpty);
+    expect(cubit.state.failed, isTrue, reason: 'a screen can offer a retry');
 
     when(
       catalog.fetchCategories,
@@ -44,6 +45,7 @@ void main() {
     await cubit.load();
 
     expect(cubit.state.categories, TestCategories.all);
+    expect(cubit.state.failed, isFalse);
     verify(catalog.fetchCategories).called(2);
     await cubit.close();
   });

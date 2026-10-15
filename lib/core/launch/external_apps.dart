@@ -1,3 +1,4 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:salahly/core/phone/phone_number.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,6 +15,10 @@ abstract interface class ExternalApps {
   Future<bool> map(String address);
 
   Future<bool> shareFile(String path, {required String name});
+
+  /// Opens this app's page in the phone's settings, where permissions can
+  /// be turned on again.
+  Future<bool> openSettings();
 }
 
 class SystemExternalApps implements ExternalApps {
@@ -44,6 +49,15 @@ class SystemExternalApps implements ExternalApps {
       ShareParams(files: [XFile(path, name: name)]),
     );
     return result.status != ShareResultStatus.unavailable;
+  }
+
+  @override
+  Future<bool> openSettings() async {
+    try {
+      return await Geolocator.openAppSettings();
+    } on Object {
+      return false;
+    }
   }
 
   Future<bool> _open(Uri uri) async {

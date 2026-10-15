@@ -7,6 +7,9 @@
   "errorNetwork": "مفيش نت. اتأكد من النت وجرّب تاني.",
   "errorAccountSuspended": "حسابك موقوف دلوقتي. كلمنا من الأبلكيشن عشان نساعدك.",
   "errorAreaClosed": "الخدمة لسه مش متاحة في المنطقة دي. جرّب منطقة تانية.",
+  "pushOffBanner": "الإشعارات مقفولة. من غيرها مش هيوصلك عرض ولا مكالمة ولا خبر غير والأبلكيشن مفتوح.",
+  "pushOffOpenSettings": "افتح الإعدادات",
+  "pushOffTurnOn": "فعّل الإشعارات",
   "errorRateLimited": "طلبات كتير ورا بعض. استنى شوية وجرّب تاني.",
   "errorUnexpected": "حصلت مشكلة عندنا. جرّب تاني.",
   "retry": "جرّب تاني",
@@ -1532,6 +1535,7 @@
   "waitingCancelFree": "الإلغاء ببلاش ورصيدك بيرجعلك",
   "waitingCancelConfirmTitle": "تلغي الطلب؟",
   "waitingCancelConfirmBody": "الفنيين مش هيقدروا يبعتوا عروض عليه، ورصيدك هيرجعلك.",
+  "offersCancelConfirmBody": "العروض اللي وصلتك هتتلغي، ورصيدك هيرجعلك.",
   "waitingCancelKeep": "{honorific, select, ms{لأ، سيبيه} other{لأ، سيبه}}",
   "@waitingCancelKeep": {
     "placeholders": {

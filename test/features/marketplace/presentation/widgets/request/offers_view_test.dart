@@ -73,6 +73,21 @@ void main() {
   Finder cardOf(String name) =>
       find.ancestor(of: find.text(name), matching: find.byType(AppCard));
 
+  group('cancelling', () {
+    testWidgets('lets her drop the request when no offer suits', (
+      tester,
+    ) async {
+      harness.show(liveRequest(offers: liveOffers()));
+      await pumpView(tester, surfaceSize: tall);
+
+      await tapAndSettle(tester, find.text(l10n.waitingCancel));
+      expect(find.text(l10n.offersCancelConfirmBody), findsOneWidget);
+      await tapAndSettle(tester, find.text(l10n.waitingCancel).last);
+
+      verify(() => harness.request.cancel()).called(1);
+    });
+  });
+
   group('shows', () {
     testWidgets('the offers, nearest first', (tester) async {
       harness.show(liveRequest(offers: liveOffers()));

@@ -130,10 +130,24 @@ class _SecurePaymentViewState extends State<SecurePaymentView> {
               SecurePaymentStatus.failed => Center(
                 child: Padding(
                   padding: const EdgeInsets.all(24),
-                  child: Text(
-                    l10n.escrowSecureUnavailable(honorific),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 16, height: 1.6),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        l10n.escrowSecureUnavailable(honorific),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 16, height: 1.6),
+                      ),
+                      // A failed fetch (offline) is worth another try; a
+                      // request that can't be secured is not.
+                      if (state.failure != null) ...[
+                        const SizedBox(height: 12),
+                        OutlinedButton(
+                          onPressed: () => unawaited(cubit.load()),
+                          child: Text(l10n.retry),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
               ),

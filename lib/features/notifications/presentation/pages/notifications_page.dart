@@ -17,6 +17,7 @@ import 'package:salahly/features/notifications/domain/entities/app_notification.
 import 'package:salahly/features/notifications/presentation/cubit/notifications_cubit.dart';
 import 'package:salahly/features/notifications/presentation/notification_labels.dart';
 import 'package:salahly/features/notifications/presentation/widgets/notification_tile.dart';
+import 'package:salahly/features/notifications/presentation/widgets/push_off_banner.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
 /// What happened on [role]'s side of the app, newest first. The list is
@@ -75,34 +76,49 @@ class NotificationsView extends StatelessWidget {
               )
             : null,
       ),
-      body: switch (state.status) {
-        NotificationsStatus.loading when state.notifications.isEmpty =>
-          const Center(child: CircularProgressIndicator()),
-        NotificationsStatus.failed when state.notifications.isEmpty =>
-          _LoadFailed(
-            message: _failureMessage(
-              l10n,
-              state.failure,
-              role: role,
-              honorific: honorific,
-            ),
-            retry: role == UserRole.consumer
-                ? l10n.consumerRetry(honorific)
-                : l10n.retry,
-            onRetry: cubit.load,
-          ),
-        _ => RefreshIndicator(
-          onRefresh: cubit.load,
-          child: state.notifications.isEmpty
-              ? _Empty(honorific: honorific)
-              : _List(
-                  role: role,
-                  honorific: honorific,
-                  notifications: state.notifications,
-                ),
-        ),
-      },
+      body: Column(
+        children: [
+          const PushOffBanner(),
+          Expanded(child: _body(context, state, l10n, honorific)),
+        ],
+      ),
     );
+  }
+
+  Widget _body(
+    BuildContext context,
+    NotificationsState state,
+    AppLocalizations l10n,
+    String honorific,
+  ) {
+    final cubit = context.read<NotificationsCubit>();
+    return switch (state.status) {
+      NotificationsStatus.loading when state.notifications.isEmpty =>
+        const Center(child: CircularProgressIndicator()),
+      NotificationsStatus.failed when state.notifications.isEmpty =>
+        _LoadFailed(
+          message: _failureMessage(
+            l10n,
+            state.failure,
+            role: role,
+            honorific: honorific,
+          ),
+          retry: role == UserRole.consumer
+              ? l10n.consumerRetry(honorific)
+              : l10n.retry,
+          onRetry: cubit.load,
+        ),
+      _ => RefreshIndicator(
+        onRefresh: cubit.load,
+        child: state.notifications.isEmpty
+            ? _Empty(honorific: honorific)
+            : _List(
+                role: role,
+                honorific: honorific,
+                notifications: state.notifications,
+              ),
+      ),
+    };
   }
 }
 

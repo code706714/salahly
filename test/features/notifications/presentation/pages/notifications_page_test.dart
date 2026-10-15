@@ -1,23 +1,32 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/failure.dart';
+import 'package:salahly/core/launch/external_apps.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/notifications/domain/entities/app_notification.dart';
 import 'package:salahly/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:salahly/features/notifications/presentation/cubit/push_cubit.dart';
 import 'package:salahly/features/notifications/presentation/pages/notifications_page.dart';
 import 'package:salahly/features/notifications/presentation/widgets/notifications_bell.dart';
 
 import '../../../../helpers/consumer_app.dart';
 import '../../../../helpers/consumer_screens.dart';
+import '../../../../helpers/mocks.dart';
 import '../../../../helpers/notification_fixtures.dart';
 import '../../../../pump_app.dart';
 
+class _MockPushCubit extends MockCubit<PushState> implements PushCubit {}
+
 void main() {
   late ConsumerScreenBlocs blocs;
+  late _MockPushCubit push;
+  late MockExternalApps apps;
   late MockNotificationsCubit cubit;
 
   setUpAll(() async {
@@ -29,14 +38,24 @@ void main() {
   setUp(() {
     blocs = ConsumerScreenBlocs();
     cubit = blocs.notifications;
+    push = _MockPushCubit();
+    apps = MockExternalApps();
+    when(() => push.state).thenReturn(const PushState());
+    when(apps.openSettings).thenAnswer((_) async => true);
   });
+
+  List<BlocProvider<StateStreamableSource<Object?>>> pageBlocs() => [
+    ...blocs.providers,
+    BlocProvider<PushCubit>.value(value: push),
+  ];
 
   void show(NotificationsState state) =>
       when(() => cubit.state).thenReturn(state);
 
   Future<void> pumpPage(WidgetTester tester, UserRole role) => tester.pumpApp(
     NotificationsView(role: role),
-    blocs: blocs.providers,
+    blocs: pageBlocs(),
+    repositories: [RepositoryProvider<ExternalApps>.value(value: apps)],
     stubRoutes: [
       AppRoutes.request('request-1'),
       AppRoutes.incomingRequest('request-1'),
@@ -161,7 +180,8 @@ void main() {
 
       await tester.pumpApp(
         const NotificationsView(role: UserRole.consumer),
-        blocs: blocs.providers,
+        blocs: pageBlocs(),
+        repositories: [RepositoryProvider<ExternalApps>.value(value: apps)],
       );
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
@@ -235,12 +255,53 @@ void main() {
     });
   });
 
+  group('push turned off', () {
+    testWidgets('sends someone who refused to the phone settings', (
+      tester,
+    ) async {
+      show(const NotificationsState());
+      when(
+        () => push.state,
+      ).thenReturn(const PushState(status: PushStatus.denied));
+      await pumpPage(tester, UserRole.consumer);
+
+      expect(find.text(l10n.pushOffBanner), findsOneWidget);
+      await tester.tap(find.text(l10n.pushOffOpenSettings));
+
+      verify(apps.openSettings).called(1);
+    });
+
+    testWidgets('asks again of someone who said not now', (tester) async {
+      show(const NotificationsState());
+      when(
+        () => push.state,
+      ).thenReturn(const PushState(status: PushStatus.deferred));
+      when(push.allow).thenAnswer((_) async {});
+      await pumpPage(tester, UserRole.consumer);
+
+      await tester.tap(find.text(l10n.pushOffTurnOn));
+
+      verify(push.allow).called(1);
+    });
+
+    testWidgets('says nothing when push is on', (tester) async {
+      show(const NotificationsState());
+      when(
+        () => push.state,
+      ).thenReturn(const PushState(status: PushStatus.active));
+      await pumpPage(tester, UserRole.consumer);
+
+      expect(find.text(l10n.pushOffBanner), findsNothing);
+    });
+  });
+
   group('the bell', () {
     Future<void> pumpBell(WidgetTester tester, int unread) async {
       show(NotificationsState(unread: unread));
       await tester.pumpApp(
         const Scaffold(body: NotificationsBell(role: UserRole.consumer)),
-        blocs: blocs.providers,
+        blocs: pageBlocs(),
+        repositories: [RepositoryProvider<ExternalApps>.value(value: apps)],
         stubRoutes: [AppRoutes.consumerNotifications],
       );
     }

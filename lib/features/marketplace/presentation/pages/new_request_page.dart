@@ -183,7 +183,7 @@ class _NewRequestViewState extends State<NewRequestView> {
           body: sent != null
               ? _SentStep(sent: sent, category: state.category?.name ?? '')
               : state.category == null
-              ? const Center(child: CircularProgressIndicator())
+              ? const _CategoryLoading()
               : switch (state.step) {
                   NewRequestStep.problem => _ProblemStep(
                     state: state,
@@ -201,6 +201,34 @@ class _NewRequestViewState extends State<NewRequestView> {
                 : _NextButton(state: state),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Waits for the service categories, or offers to fetch them again when
+/// the phone was offline.
+class _CategoryLoading extends StatelessWidget {
+  const _CategoryLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final failed = context.select<CategoriesCubit, bool>(
+      (cubit) => cubit.state.failed,
+    );
+    if (!failed) return const Center(child: CircularProgressIndicator());
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(l10n.errorNetwork, textAlign: TextAlign.center),
+          const SizedBox(height: 12),
+          OutlinedButton(
+            onPressed: () => unawaited(context.read<CategoriesCubit>().load()),
+            child: Text(l10n.retry),
+          ),
+        ],
       ),
     );
   }
@@ -1177,7 +1205,13 @@ class _NextButton extends StatelessWidget {
               ? l10n.newRequestSend(honorific)
               : l10n.newRequestNext,
           isBusy: state.isSending,
-          onPressed: state.category == null
+          // An urgent request nobody can take would only fail on send: the
+          // step already says why, and back leads to a normal request.
+          onPressed:
+              state.category == null ||
+                  (state.urgent &&
+                      state.step == NewRequestStep.time &&
+                      !state.timeDone)
               ? null
               : context.read<NewRequestCubit>().next,
         ),
