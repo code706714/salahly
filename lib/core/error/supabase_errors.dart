@@ -20,5 +20,15 @@ Failure commonFailureFrom(Object error) {
   if (error is AuthException && error.statusCode == '429') {
     return const RateLimitedFailure();
   }
+  if (error is PostgrestException) {
+    switch (error.message) {
+      case 'rate_limited':
+        return const RateLimitedFailure();
+      case 'account_suspended':
+        return const AccountSuspendedFailure();
+      case 'area_closed':
+        return const AreaClosedFailure();
+    }
+  }
   return UnexpectedFailure(error);
 }

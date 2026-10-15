@@ -32,6 +32,8 @@ String consumerFailureMessage(
     AddressLimitFailure() => l10n.consumerAddressLimit(honorific),
     NetworkFailure() => l10n.consumerErrorNetwork(honorific),
     RateLimitedFailure() => l10n.consumerErrorRateLimited(honorific),
+    AccountSuspendedFailure() ||
+    AreaClosedFailure() => commonFailureMessage(l10n, failure),
     _ => l10n.consumerErrorUnexpected(honorific),
   };
 }

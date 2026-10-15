@@ -57,6 +57,19 @@ void main() {
       expect(commonFailureFrom(error), const RateLimitedFailure());
     });
 
+    for (final (name, failure) in [
+      ('rate_limited', const RateLimitedFailure()),
+      ('account_suspended', const AccountSuspendedFailure()),
+      ('area_closed', const AreaClosedFailure()),
+    ]) {
+      test('maps the server error $name', () {
+        expect(
+          commonFailureFrom(PostgrestException(message: name)),
+          failure,
+        );
+      });
+    }
+
     test('maps any other AuthException to UnexpectedFailure', () {
       const error = AuthApiException('Bad request', statusCode: '400');
 

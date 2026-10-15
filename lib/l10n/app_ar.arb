@@ -5,6 +5,8 @@
     "description": "The brand name of the app."
   },
   "errorNetwork": "مفيش نت. اتأكد من النت وجرّب تاني.",
+  "errorAccountSuspended": "حسابك موقوف دلوقتي. كلمنا من الأبلكيشن عشان نساعدك.",
+  "errorAreaClosed": "الخدمة لسه مش متاحة في المنطقة دي. جرّب منطقة تانية.",
   "errorRateLimited": "طلبات كتير ورا بعض. استنى شوية وجرّب تاني.",
   "errorUnexpected": "حصلت مشكلة عندنا. جرّب تاني.",
   "retry": "جرّب تاني",
@@ -3777,6 +3779,14 @@
   "acctDeleteDoneButton": "تمام",
   "acctDeleteTopupPending": "{honorific, select, ms{عندك تحويل لسه بنراجعه. استني لحد ما يتراجع وبعدين امسحي الحساب.} other{عندك تحويل لسه بنراجعه. استنى لحد ما يتراجع وبعدين امسح الحساب.}}",
   "@acctDeleteTopupPending": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "acctDeleteEscrowActive": "{honorific, select, ms{فيه فلوس شغلانة لسه معانا في الدفع المضمون. استني لحد ما تتسوّى وبعدين امسحي الحساب.} other{فيه فلوس شغلانة لسه معانا في الدفع المضمون. استنى لحد ما تتسوّى وبعدين امسح الحساب.}}",
+  "@acctDeleteEscrowActive": {
     "placeholders": {
       "honorific": {
         "type": "String"

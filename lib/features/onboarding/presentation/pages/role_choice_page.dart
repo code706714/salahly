@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/core/theme/app_colors.dart';
@@ -6,6 +7,7 @@ import 'package:salahly/core/theme/app_radii.dart';
 import 'package:salahly/core/theme/app_spacing.dart';
 import 'package:salahly/core/widgets/brand_header.dart';
 import 'package:salahly/core/widgets/legal_consent.dart';
+import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
 /// "How will you use the app?": the first screen after signing in.
@@ -94,6 +96,11 @@ class RoleChoicePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       const LegalConsent(),
+                      // A wrong number would otherwise be a dead end.
+                      TextButton(
+                        onPressed: context.read<SessionCubit>().signOut,
+                        child: Text(l10n.signOut),
+                      ),
                     ],
                   ),
                 ),

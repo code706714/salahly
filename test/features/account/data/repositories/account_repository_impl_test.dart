@@ -124,6 +124,18 @@ void main() {
         );
       });
 
+      test('says money held for a job is not settled', () async {
+        when(() => remote.deleteAccount()).thenAnswer(
+          (_) =>
+              Future.error(const PostgrestException(message: 'escrow_active')),
+        );
+
+        expect(
+          await repository.deleteAccount(),
+          isErr(const ActiveEscrowFailure()),
+        );
+      });
+
       test('says when the sign-in is too old', () async {
         when(() => remote.deleteAccount()).thenAnswer(
           (_) => Future.error(

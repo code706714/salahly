@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/launch/external_apps.dart';
 import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/core/router/app_routes.dart';
@@ -20,6 +21,7 @@ import 'package:salahly/features/home/presentation/pages/today_page.dart';
 import 'package:salahly/features/jobs/domain/entities/job.dart';
 import 'package:salahly/features/jobs/domain/entities/job_summary.dart';
 import 'package:salahly/features/marketplace/domain/entities/incoming_request.dart';
+import 'package:salahly/features/marketplace/domain/repositories/technician_requests_repository.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/incoming_requests_cubit.dart';
 import 'package:salahly/features/notifications/presentation/cubit/notifications_cubit.dart';
 
@@ -52,6 +54,7 @@ void main() {
   late MockAreasCubit areas;
   late MockExternalApps apps;
   late MockIncomingRequestsCubit incoming;
+  late MockTechnicianRequestsRepository requests;
   late MockCategoriesCubit categories;
   final morning = DateTime(2026, 10, 2, 11);
 
@@ -69,6 +72,8 @@ void main() {
     areas = MockAreasCubit();
     apps = MockExternalApps();
     incoming = MockIncomingRequestsCubit();
+    requests = MockTechnicianRequestsRepository();
+    when(requests.fetchAvailability).thenAnswer((_) async => const Ok(null));
     categories = MockCategoriesCubit();
     when(() => incoming.state).thenReturn(const IncomingRequestsState());
     when(() => categories.state).thenReturn(
@@ -85,7 +90,10 @@ void main() {
 
   Future<void> pumpPage(WidgetTester tester) => tester.pumpApp(
     const TodayView(),
-    repositories: [RepositoryProvider<ExternalApps>.value(value: apps)],
+    repositories: [
+      RepositoryProvider<ExternalApps>.value(value: apps),
+      RepositoryProvider<TechnicianRequestsRepository>.value(value: requests),
+    ],
     blocs: [
       BlocProvider<SessionCubit>.value(value: session),
       BlocProvider<TodayCubit>.value(value: today),

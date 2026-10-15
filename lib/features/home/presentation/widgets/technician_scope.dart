@@ -69,6 +69,15 @@ class _TechnicianScopeState extends State<TechnicianScope> {
     unawaited(_notifications.refreshUnread());
   }
 
+  /// Something changed on the server while the app is open: an approval, a
+  /// pick, a new request. The profile and the synced jobs follow it too, so
+  /// a pending banner or a locked tab doesn't outlive it.
+  void _onLiveChange() {
+    unawaited(context.read<SessionCubit>().refreshProfile());
+    unawaited(_sync.syncNow());
+    _load();
+  }
+
   @override
   void dispose() {
     _lifecycle.dispose();
@@ -97,7 +106,7 @@ class _TechnicianScopeState extends State<TechnicianScope> {
             previous.lastSyncedAt != current.lastSyncedAt,
         listener: (context, state) => _load(),
         child: LiveRefresh(
-          onChange: _load,
+          onChange: _onLiveChange,
           child: PushScope(
             role: UserRole.technician,
             child: IncomingCallScope(
