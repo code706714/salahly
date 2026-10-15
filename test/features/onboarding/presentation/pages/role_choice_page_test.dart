@@ -1,7 +1,11 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/core/router/app_routes.dart';
 import 'package:salahly/features/onboarding/presentation/pages/role_choice_page.dart';
 
+import '../../../../helpers/mocks.dart';
 import '../../../../pump_app.dart';
 
 void main() {
@@ -24,6 +28,22 @@ void main() {
       expect(find.text(l10n.roleConsumerTitle), findsOneWidget);
       expect(find.text(l10n.roleTechnicianTitle), findsOneWidget);
       expect(find.text(l10n.trustBadge), findsOneWidget);
+    });
+
+    testWidgets('signs out for someone who came in with the wrong number', (
+      tester,
+    ) async {
+      final session = MockSessionCubit();
+      when(session.signOut).thenAnswer((_) async {});
+      await tester.pumpApp(
+        const RoleChoicePage(),
+        blocs: [BlocProvider<SessionCubit>.value(value: session)],
+      );
+
+      await tester.ensureVisible(find.text(l10n.roleUseAnotherNumber));
+      await tester.tap(find.text(l10n.roleUseAnotherNumber));
+
+      verify(session.signOut).called(1);
     });
 
     testWidgets('opens consumer onboarding from the consumer card', (
