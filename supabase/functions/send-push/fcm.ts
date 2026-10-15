@@ -165,7 +165,7 @@ export class FcmClient {
               token,
               notification: { title: message.title, body: message.body },
               data: message.data,
-              android: { priority: "HIGH" },
+              android: androidOptions(message.data.kind),
               apns: { payload: { aps: { sound: "default" } } },
             },
           }),
@@ -176,6 +176,24 @@ export class FcmClient {
       return "retry";
     }
   }
+}
+
+/**
+ * How Android shows and keeps a push. A call rings on its own channel (made
+ * by the app at start-up) and is worth nothing a minute later, so it is
+ * dropped if the phone can't be reached at once; an urgent request is
+ * dropped after the half hour it lives for.
+ */
+export function androidOptions(kind: string | undefined) {
+  const isCall = kind === "incoming_call";
+  const ttl = isCall ? "45s" : kind === "urgent_request" ? "1800s" : undefined;
+  return {
+    priority: "HIGH",
+    ...(ttl ? { ttl } : {}),
+    notification: {
+      channel_id: isCall ? "salahly_calls" : "salahly_general",
+    },
+  };
 }
 
 async function outcomeOf(response: Response): Promise<SendOutcome> {

@@ -12,6 +12,7 @@ import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/categories_cubit.dart';
 import 'package:salahly/features/marketplace/domain/entities/incoming_request.dart';
 import 'package:salahly/features/marketplace/presentation/cubit/incoming_requests_cubit.dart';
+import 'package:salahly/features/marketplace/presentation/widgets/incoming/availability_switch.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
 /// The platform on "النهارده": new requests waiting for an offer, when
@@ -28,6 +29,10 @@ class TodayRequests extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        // Urgent requests reach only technicians who said they are free, so
+        // the switch can't wait behind a request that may never come.
+        const AvailabilitySwitch(),
+        const SizedBox(height: 16),
         if (requests.isNotEmpty) ...[
           _NewRequestsCard(requests: requests, credits: credits),
           const SizedBox(height: 16),

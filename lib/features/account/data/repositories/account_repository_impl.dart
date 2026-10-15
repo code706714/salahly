@@ -53,6 +53,7 @@ class AccountRepositoryImpl implements AccountRepository {
     } on PostgrestException catch (error) {
       return Err(switch (error.message) {
         'topup_pending' => const PendingTransferFailure(),
+        'escrow_active' => const ActiveEscrowFailure(),
         'recent_login_required' => const RecentLoginRequiredFailure(),
         _ => commonFailureFrom(error),
       });

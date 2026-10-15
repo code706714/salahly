@@ -21,6 +21,16 @@ final class RateLimitedFailure extends Failure {
   const RateLimitedFailure();
 }
 
+/// The team suspended this account, so the server refuses everything.
+final class AccountSuspendedFailure extends Failure {
+  const AccountSuspendedFailure();
+}
+
+/// The chosen area is closed for now.
+final class AreaClosedFailure extends Failure {
+  const AreaClosedFailure();
+}
+
 /// Anything the app did not anticipate. [cause] is kept for logging only.
 final class UnexpectedFailure extends Failure {
   const UnexpectedFailure([this.cause]);

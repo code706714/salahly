@@ -1,7 +1,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(69);
+select plan(70);
 
 -- Consumers C1 and C2; technicians T1 and T2. T1 is also a consumer (one
 -- person on both sides of the app).
@@ -346,6 +346,23 @@ select throws_ok(
 );
 reset role;
 delete from public.credit_topups where id = '00000000-0000-4000-8000-0000000000f9';
+
+-- Money held for a job must be settled by the team before the person goes.
+insert into public.job_escrows (
+  id, consumer_id, request_code, amount_piastres, method, sender_account,
+  screenshot_path, status
+) values (
+  '00000000-0000-4000-8000-0000000000f8', '00000000-0000-4000-8000-0000000000c1',
+  'REQ-1', 50000, 'wallet', '01011112222', 'c1/escrow.jpg', 'held'
+);
+select pg_temp.sign_in_as('00000000-0000-4000-8000-0000000000c1');
+set local role authenticated;
+select throws_ok(
+  $$select public.delete_my_account('DELETE')$$,
+  'P0001', 'escrow_active', 'money held for a job holds the deletion back'
+);
+reset role;
+delete from public.job_escrows where id = '00000000-0000-4000-8000-0000000000f8';
 
 -- Deleting needs a recent sign-in.
 select pg_temp.sign_in_stale('00000000-0000-4000-8000-0000000000c1', 1000);

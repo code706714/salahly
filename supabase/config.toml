@@ -260,7 +260,7 @@ otp_expiry = 3600
 # Allow/disallow new user signups via SMS to your project.
 enable_signup = true
 # If enabled, users need to confirm their phone number before signing in.
-enable_confirmations = false
+enable_confirmations = true
 # Template for sending OTP to users
 template = "كود صلحلي: {{ .Code }}"
 # Controls the minimum amount of time that must pass before sending another sms otp.
@@ -293,9 +293,9 @@ max_frequency = "60s"
 # uri = "pg-functions://<database>/<schema>/<hook_name>"
 
 # Configure one of the supported SMS providers: `twilio`, `twilio_verify`, `messagebird`, `textlocal`, `vonage`.
-# Production sends the code over WhatsApp (SMS as fallback) through Twilio Verify.
-# Locally the provider is enabled with placeholder credentials so the WhatsApp
-# channel is accepted; only the test numbers above can sign in.
+# Production sends no code at all: people sign in with a WhatsApp message
+# (see supabase/functions/whatsapp-login). The placeholder below only keeps
+# the local stack's phone settings valid.
 [auth.sms.twilio_verify]
 enabled = true
 account_sid = "AC00000000000000000000000000000000"

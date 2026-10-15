@@ -1,7 +1,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(68);
+select plan(71);
 
 -- Consumers C and D; technicians: A and B cover Nasr City (B has no uses
 -- left), F covers Maadi only, P covers Nasr City but isn't verified yet.
@@ -520,6 +520,28 @@ select is(
   (select count(*)::int from public.credit_ledger where reason = 'job_finished'),
   1,
   'and writes it in the technician''s ledger'
+);
+
+select is(
+  pg_temp.push_job(
+    (select id from pg_temp.ids where name = 'job1'),
+    jsonb_build_object('status', 'started', 'finished_at', null)
+  ) -> 'rejected',
+  '[]'::jsonb,
+  'the technician undoes the finish'
+);
+select is(
+  pg_temp.push_job(
+    (select id from pg_temp.ids where name = 'job1'),
+    jsonb_build_object('status', 'finished', 'finished_at', now())
+  ) -> 'rejected',
+  '[]'::jsonb,
+  'and finishes it again'
+);
+select is(
+  (select job_credits from public.technician_profiles),
+  1,
+  'finishing again takes no second use'
 );
 
 select pg_temp.sign_in_as('00000000-0000-4000-8000-0000000000c1');

@@ -41,7 +41,7 @@ GitHub: Settings > Environments > `production`, add required reviewers, then add
 ## WhatsApp sign-in (no Twilio)
 Sign-in is a WhatsApp message the person sends us, so nothing is sent or billed. Setup (Meta app, webhook, three secrets) is in `docs/release/whatsapp-login.md`. Until the secrets are set the sign-in button says it is unavailable.
 
-The admin console still signs in with a Twilio OTP, so it needs a provider until it moves to this flow.
+The admin console signs in with the same flow, so no SMS or Twilio provider is needed anywhere.
 
 ## Supabase hosted project
 1. Create the project in the region nearest Egypt (eu-central or similar); enable PITR or take a manual backup before each push.

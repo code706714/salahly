@@ -7,6 +7,8 @@ String commonFailureMessage(AppLocalizations l10n, Failure failure) {
   return switch (failure) {
     NetworkFailure() => l10n.errorNetwork,
     RateLimitedFailure() => l10n.errorRateLimited,
+    AccountSuspendedFailure() => l10n.errorAccountSuspended,
+    AreaClosedFailure() => l10n.errorAreaClosed,
     _ => l10n.errorUnexpected,
   };
 }

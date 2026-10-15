@@ -4,6 +4,7 @@ import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/launch/external_apps.dart';
 import 'package:salahly/core/phone/phone_number.dart';
+import 'package:salahly/features/auth/domain/entities/auth_user.dart';
 import 'package:salahly/features/auth/domain/entities/whatsapp_login.dart';
 import 'package:salahly/features/auth/domain/failures/auth_failures.dart';
 import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
@@ -156,7 +157,7 @@ void main() {
     await cubit.start(messageFor);
     await waitForPolls();
 
-    expect(cubit.state.phase, WhatsappLoginPhase.signingIn);
+    expect(cubit.state.phase, WhatsappLoginPhase.signedIn);
     verify(() => authRepository.completeWhatsappLogin(challenge)).called(1);
     final askedWhenReady = asked;
     await waitForPolls();
@@ -177,7 +178,7 @@ void main() {
     await cubit.start(messageFor);
     await waitForPolls();
 
-    expect(cubit.state.phase, WhatsappLoginPhase.signingIn);
+    expect(cubit.state.phase, WhatsappLoginPhase.signedIn);
   });
 
   test('a code nobody sent in time expires', () async {
@@ -276,5 +277,52 @@ void main() {
     clearInteractions(authRepository);
     await waitForPolls();
     verifyNever(() => authRepository.whatsappLoginProgress(any()));
+  });
+
+  group('for one number only', () {
+    WhatsappLoginCubit cubitFor(String phone) => WhatsappLoginCubit(
+      authRepository: authRepository,
+      externalApps: externalApps,
+      onlyFor: PhoneNumber.tryParse(phone),
+      pollInterval: tick,
+    );
+
+    setUp(() {
+      when(
+        () => authRepository.whatsappLoginProgress(any()),
+      ).thenAnswer((_) async => const Ok(WhatsappLoginProgress.ready));
+      when(() => authRepository.signOut()).thenAnswer((_) async {});
+    });
+
+    test('signs in when the message came from that number', () async {
+      when(
+        () => authRepository.currentUser,
+      ).thenReturn(const AuthUser(id: 'u', phone: '201001234567'));
+      final onlyCubit = cubitFor('1001234567');
+      addTearDown(onlyCubit.close);
+
+      await onlyCubit.start(messageFor);
+      await waitForPolls();
+
+      expect(onlyCubit.state.phase, WhatsappLoginPhase.signedIn);
+      verifyNever(() => authRepository.signOut());
+    });
+
+    test('signs out again when another number sent it', () async {
+      when(
+        () => authRepository.currentUser,
+      ).thenReturn(const AuthUser(id: 'u', phone: '201009999999'));
+      final onlyCubit = cubitFor('1001234567');
+      addTearDown(onlyCubit.close);
+
+      await onlyCubit.start(messageFor);
+      await waitForPolls();
+
+      expect(
+        onlyCubit.state,
+        const WhatsappLoginState(failure: WhatsappLoginWrongNumberFailure()),
+      );
+      verify(() => authRepository.signOut()).called(1);
+    });
   });
 }

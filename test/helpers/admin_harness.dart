@@ -6,6 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/result.dart';
+import 'package:salahly/core/launch/external_apps.dart';
+import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/core/time/clock_cubit.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/domain/entities/verification_status.dart';
@@ -30,6 +32,7 @@ import 'package:salahly/features/admin/presentation/cubit/overview_cubit.dart';
 import 'package:salahly/features/admin/presentation/router/admin_routes.dart';
 import 'package:salahly/features/admin/presentation/widgets/admin_shell.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
+import 'package:salahly/features/auth/domain/entities/whatsapp_login.dart';
 import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
 import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
@@ -63,6 +66,16 @@ class AdminHarness {
   /// from `setUpAll`.
   static void registerFallbacks() {
     registerFallbackValue(OverviewPeriod.today);
+    registerFallbackValue(
+      WhatsappLoginChallenge(
+        id: 'id',
+        code: 'AB3D5FGH',
+        pollSecret: 'a' * 64,
+        expiresAt: DateTime.utc(2026),
+        whatsappNumber: PhoneNumber.tryParse('1000000000')!,
+      ),
+    );
+    registerFallbackValue(PhoneNumber.tryParse('1000000000'));
     registerFallbackValue(VerificationStatus.pending);
     registerFallbackValue(const RequestFilter());
     registerFallbackValue(ComplaintFilter.open);
@@ -105,6 +118,36 @@ class AdminHarness {
   final settings = MockSettingsRepository();
   final audit = MockAuditRepository();
   final files = MockAdminFilesRepository();
+  final apps = MockExternalApps();
+
+  /// A WhatsApp sign in whose message arrives at once; [onSignedIn] runs when
+  /// the phone trades its secret for the session.
+  void stubWhatsappLogin({void Function()? onSignedIn}) {
+    when(auth.startWhatsappLogin).thenAnswer(
+      (_) async => Ok(
+        WhatsappLoginChallenge(
+          id: '11111111-2222-4333-8444-555555555555',
+          code: 'AB3D5FGH',
+          pollSecret: 'a' * 64,
+          expiresAt: DateTime.now().add(const Duration(minutes: 5)),
+          whatsappNumber: PhoneNumber.tryParse('1000000000')!,
+        ),
+      ),
+    );
+    when(
+      () => auth.whatsappLoginProgress(any()),
+    ).thenAnswer((_) async => const Ok(WhatsappLoginProgress.ready));
+    when(() => auth.completeWhatsappLogin(any())).thenAnswer((_) async {
+      onSignedIn?.call();
+      return const Ok(null);
+    });
+    when(
+      () => apps.whatsApp(
+        text: any(named: 'text'),
+        to: any(named: 'to'),
+      ),
+    ).thenAnswer((_) async => true);
+  }
 
   /// The signed-in admin's session, as the console's gate holds it.
   AdminSessionCubit session() => AdminSessionCubit(
@@ -123,6 +166,7 @@ class AdminHarness {
     RepositoryProvider<SettingsRepository>.value(value: settings),
     RepositoryProvider<AuditRepository>.value(value: audit),
     RepositoryProvider<AdminFilesRepository>.value(value: files),
+    RepositoryProvider<ExternalApps>.value(value: apps),
   ];
 
   /// Pumps [page] at [path] inside the console's frame on a desktop screen.

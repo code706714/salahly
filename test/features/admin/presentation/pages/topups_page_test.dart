@@ -6,13 +6,11 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
-import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/features/account/domain/failures/account_failures.dart';
 import 'package:salahly/features/admin/domain/entities/paged_result.dart';
 import 'package:salahly/features/admin/domain/entities/topup_review.dart';
 import 'package:salahly/features/admin/presentation/pages/topups_page.dart';
 import 'package:salahly/features/admin/presentation/router/admin_routes.dart';
-import 'package:salahly/features/auth/domain/entities/otp_channel.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
 
 import '../../../../helpers/admin_fixtures.dart';
@@ -26,8 +24,6 @@ void main() {
     await loadAppFonts();
     await initializeDateFormatting('ar');
     AdminHarness.registerFallbacks();
-    registerFallbackValue(PhoneNumber.tryParse('1002345678'));
-    registerFallbackValue(OtpChannel.whatsapp);
   });
 
   setUp(() {
@@ -235,21 +231,7 @@ void main() {
           ? const Ok(null)
           : const Err(RecentLoginRequiredFailure()),
     );
-    when(
-      () => h.auth.requestOtp(
-        phone: any(named: 'phone'),
-        channel: any(named: 'channel'),
-      ),
-    ).thenAnswer((_) async => const Ok(null));
-    when(
-      () => h.auth.verifyOtp(
-        phone: any(named: 'phone'),
-        code: any(named: 'code'),
-      ),
-    ).thenAnswer((_) async {
-      signedInAgain = true;
-      return const Ok(null);
-    });
+    h.stubWhatsappLogin(onSignedIn: () => signedInAgain = true);
     await pump(tester);
     await open(tester);
     await tickAll(tester);
@@ -258,20 +240,11 @@ void main() {
     await tester.tap(find.text(l10n.adminTopupsApproveConfirm));
     await tester.pumpAndSettle();
 
-    // The code goes to the number of the signed-in admin, not to one typed.
-    await tester.tap(find.text(l10n.phoneSendWhatsapp));
-    await tester.pumpAndSettle();
-    final sentTo =
-        verify(
-              () => h.auth.requestOtp(
-                phone: captureAny(named: 'phone'),
-                channel: OtpChannel.whatsapp,
-              ),
-            ).captured.single
-            as PhoneNumber;
-    expect(sentTo.e164, '+201001234567');
-
-    await tester.enterText(find.byType(TextField).last, '123456');
+    // The message is sent from WhatsApp; nothing is typed here.
+    await tester.tap(find.text(l10n.whatsappLoginStart));
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pump();
     await tester.pumpAndSettle();
 
     verify(() => h.topups.approve('topup-1')).called(2);

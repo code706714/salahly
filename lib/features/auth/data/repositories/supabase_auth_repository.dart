@@ -3,7 +3,6 @@ import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/error/supabase_errors.dart';
 import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
-import 'package:salahly/features/auth/domain/entities/otp_channel.dart';
 import 'package:salahly/features/auth/domain/entities/whatsapp_login.dart';
 import 'package:salahly/features/auth/domain/failures/auth_failures.dart';
 import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
@@ -24,42 +23,6 @@ class SupabaseAuthRepository implements AuthRepository {
 
   @override
   AuthUser? get currentUser => _toAuthUser(_auth.currentUser);
-
-  @override
-  Future<Result<void>> requestOtp({
-    required PhoneNumber phone,
-    required OtpChannel channel,
-  }) async {
-    try {
-      await _auth.signInWithOtp(
-        phone: phone.e164,
-        channel: switch (channel) {
-          OtpChannel.whatsapp => supabase.OtpChannel.whatsapp,
-          OtpChannel.sms => supabase.OtpChannel.sms,
-        },
-      );
-      return const Ok(null);
-    } on Object catch (error) {
-      return Err(_failureFrom(error));
-    }
-  }
-
-  @override
-  Future<Result<void>> verifyOtp({
-    required PhoneNumber phone,
-    required String code,
-  }) async {
-    try {
-      await _auth.verifyOTP(
-        phone: phone.e164,
-        token: code,
-        type: supabase.OtpType.sms,
-      );
-      return const Ok(null);
-    } on Object catch (error) {
-      return Err(_failureFrom(error));
-    }
-  }
 
   @override
   Future<Result<WhatsappLoginChallenge>> startWhatsappLogin() async {
@@ -147,21 +110,6 @@ class SupabaseAuthRepository implements AuthRepository {
         503 => const WhatsappLoginUnavailableFailure(),
         _ => UnexpectedFailure(error),
       };
-    }
-    return commonFailureFrom(error);
-  }
-
-  // Codes: https://supabase.com/docs/guides/auth/debugging/error-codes
-  static Failure _failureFrom(Object error) {
-    if (error is supabase.AuthApiException) {
-      switch (error.code) {
-        case 'over_sms_send_rate_limit':
-          return const OtpTooSoonFailure();
-        case 'sms_send_failed':
-          return const OtpDeliveryFailure();
-        case 'otp_expired':
-          return const InvalidOtpFailure();
-      }
     }
     return commonFailureFrom(error);
   }

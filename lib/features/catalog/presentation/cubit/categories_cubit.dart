@@ -15,20 +15,28 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   Future<void> load() async {
     if (state.categories.isNotEmpty || _loading) return;
     _loading = true;
+    if (state.failed) emit(const CategoriesState());
     final result = await _catalog.fetchCategories();
     _loading = false;
     if (isClosed) return;
-    if (result case Ok(:final value)) {
-      emit(CategoriesState(categories: value));
+    switch (result) {
+      case Ok(:final value):
+        emit(CategoriesState(categories: value));
+      case Err():
+        emit(const CategoriesState(failed: true));
     }
   }
 }
 
 final class CategoriesState extends Equatable {
-  const CategoriesState({this.categories = const []});
+  const CategoriesState({this.categories = const [], this.failed = false});
 
   /// In display order; empty until fetched.
   final List<ServiceCategory> categories;
+
+  /// The last fetch failed, so a screen that needs the list can say so and
+  /// offer to try again.
+  final bool failed;
 
   ServiceCategory? category(String? id) =>
       categories.where((category) => category.id == id).firstOrNull;
@@ -43,5 +51,5 @@ final class CategoriesState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [categories];
+  List<Object?> get props => [categories, failed];
 }

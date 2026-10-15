@@ -24,7 +24,7 @@ Answers match the code at this commit. If a collection or SDK changes, change th
 | Device or other IDs | FCM device push token (no advertising ID). Stored with the user id; deleted on sign-out, on account deletion, and after 60 days unseen | Yes | No (Google delivers the push as our service provider) | App functionality (notifications) | Yes (a person can refuse the notification permission; no token is stored then) |
 | Audio | not collected: dictation uses the phone's speech recognizer and nothing is recorded or uploaded by the app | No | No | n/a | n/a |
 
-"Shared" in the form means sent to a third party. Other users of the app and our hosting and SMS/WhatsApp providers acting for us (service providers) are not "sharing" under Play's definition, so the Shared column in the form is **No** for all rows. Say so in the policy (done).
+"Shared" in the form means sent to a third party. Other users of the app and our hosting provider and WhatsApp (Meta), which tells us which number sent the sign-in message, acting for us (service providers) are not "sharing" under Play's definition, so the Shared column in the form is **No** for all rows. Say so in the policy (done).
 
 ## Security practices
 - Encrypted in transit: yes.

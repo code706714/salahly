@@ -1,14 +1,26 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/router/app_routes.dart';
+import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/onboarding/presentation/pages/role_choice_page.dart';
 
+import '../../../../helpers/mocks.dart';
 import '../../../../pump_app.dart';
 
 void main() {
   setUpAll(loadAppFonts);
 
+  late MockSessionCubit session;
+
+  setUp(() {
+    session = MockSessionCubit();
+    when(session.signOut).thenAnswer((_) async {});
+  });
+
   Future<void> pumpPage(WidgetTester tester) => tester.pumpApp(
     const RoleChoicePage(),
+    blocs: [BlocProvider<SessionCubit>.value(value: session)],
     stubRoutes: [
       AppRoutes.consumerOnboarding,
       AppRoutes.technicianOnboarding,
@@ -24,6 +36,16 @@ void main() {
       expect(find.text(l10n.roleConsumerTitle), findsOneWidget);
       expect(find.text(l10n.roleTechnicianTitle), findsOneWidget);
       expect(find.text(l10n.trustBadge), findsOneWidget);
+    });
+
+    testWidgets('lets a wrong number sign out', (tester) async {
+      await pumpPage(tester);
+
+      await tester.ensureVisible(find.text(l10n.signOut));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.signOut));
+
+      verify(session.signOut).called(1);
     });
 
     testWidgets('opens consumer onboarding from the consumer card', (

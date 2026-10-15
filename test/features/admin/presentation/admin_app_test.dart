@@ -6,7 +6,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
-import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/features/admin/admin_app.dart';
 import 'package:salahly/features/admin/admin_dependencies.dart';
 import 'package:salahly/features/admin/domain/entities/admin_overview.dart';
@@ -17,7 +16,6 @@ import 'package:salahly/features/admin/presentation/cubit/admin_session_cubit.da
 import 'package:salahly/features/admin/presentation/router/admin_router.dart';
 import 'package:salahly/features/admin/presentation/router/admin_routes.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
-import 'package:salahly/features/auth/domain/entities/otp_channel.dart';
 
 import '../../../helpers/admin_fixtures.dart';
 import '../../../helpers/admin_harness.dart';
@@ -33,8 +31,6 @@ void main() {
     await loadAppFonts();
     await initializeDateFormatting('ar');
     AdminHarness.registerFallbacks();
-    registerFallbackValue(PhoneNumber.tryParse('1002345678'));
-    registerFallbackValue(OtpChannel.whatsapp);
   });
 
   setUp(() {
@@ -62,6 +58,7 @@ void main() {
           settingsRepository: h.settings,
           auditRepository: h.audit,
           filesRepository: h.files,
+          externalApps: h.apps,
         ),
       ),
     );
@@ -95,33 +92,27 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('sends a code to the number typed', (tester) async {
-      when(
-        () => h.auth.requestOtp(
-          phone: any(named: 'phone'),
-          channel: any(named: 'channel'),
-        ),
-      ).thenAnswer((_) async => const Ok(null));
+    testWidgets('opens WhatsApp with the code, asking for no number', (
+      tester,
+    ) async {
+      h.stubWhatsappLogin();
       await pumpApp(tester);
       users.add(null);
       await tester.pumpAndSettle();
 
-      await tester.enterText(find.byType(TextField), '1001234567');
-      await tester.tap(find.text(l10n.phoneSendWhatsapp));
-      await tester.pumpAndSettle();
+      expect(find.byType(TextField), findsNothing);
+      await tester.tap(find.text(l10n.whatsappLoginStart));
+      await tester.pump(const Duration(milliseconds: 50));
 
-      final sent =
-          verify(
-                () => h.auth.requestOtp(
-                  phone: captureAny(named: 'phone'),
-                  channel: OtpChannel.whatsapp,
-                ),
-              ).captured.single
-              as PhoneNumber;
-      expect(sent.e164, '+201001234567');
-      expect(find.text(l10n.adminCodeLabel), findsOneWidget);
+      verify(
+        () => h.apps.whatsApp(
+          text: l10n.whatsappLoginMessage('AB3D5FGH'),
+          to: any(named: 'to'),
+        ),
+      ).called(1);
+      expect(find.text('AB3D5FGH'), findsOneWidget);
 
-      // Close the code step so its resend timer stops.
+      // Close the waiting step so its polling stops.
       await tester.pumpWidget(const SizedBox());
     });
   });

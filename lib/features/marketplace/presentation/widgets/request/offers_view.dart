@@ -143,10 +143,40 @@ class _OffersScreenState extends State<_OffersScreen> {
             ],
             const SizedBox(height: 14),
             const _PricesNote(),
+            const SizedBox(height: 6),
+            // None of the offers suits, or they all expired: waiting is not
+            // the only way out.
+            TextButton(
+              onPressed: busy == null ? _cancel : null,
+              style: TextButton.styleFrom(
+                foregroundColor: colors.danger,
+                minimumSize: const Size(120, 48),
+                textStyle: const TextStyle(
+                  fontFamily: AppTheme.fontFamily,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              child: Text(l10n.waitingCancel),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _cancel() async {
+    final l10n = AppLocalizations.of(context);
+    final cubit = context.read<RequestCubit>();
+    final confirmed = await showConfirmChoiceDialog(
+      context,
+      title: l10n.waitingCancelConfirmTitle,
+      body: l10n.offersCancelConfirmBody,
+      keep: l10n.waitingCancelKeep(context.readHonorific()),
+      confirm: l10n.waitingCancel,
+      destructive: true,
+    );
+    if (confirmed) await cubit.cancel();
   }
 
   Future<void> _openProfile(RequestOffer offer) async {

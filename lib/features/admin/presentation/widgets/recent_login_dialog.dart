@@ -6,12 +6,12 @@ import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
 import 'package:salahly/features/admin/presentation/cubit/admin_session_cubit.dart';
-import 'package:salahly/features/admin/presentation/widgets/admin_otp_flow.dart';
+import 'package:salahly/features/admin/presentation/widgets/admin_whatsapp_login.dart';
 import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
-/// Asks the admin to sign in again with a code, which money and price
-/// changes need (the server wants a sign in from the last 15 minutes).
+/// Asks the admin to sign in again with a WhatsApp message, which money and
+/// price changes need (the server wants a sign in from the last 15 minutes).
 /// Resolves to true once they did, so the change can be repeated.
 Future<bool> showRecentLoginDialog(BuildContext context) async {
   final signedInAgain = await showDialog<bool>(
@@ -61,7 +61,7 @@ class _RecentLoginDialog extends StatelessWidget {
               ),
               if (phone != null) ...[
                 const SizedBox(height: 16),
-                AdminOtpFlow(
+                AdminWhatsappLogin(
                   fixedPhone: phone,
                   onVerified: () => Navigator.of(context).pop(true),
                 ),

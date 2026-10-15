@@ -57,12 +57,18 @@ class CallCubit extends Cubit<CallState> {
       _ringTimer = Timer(_ringFor, () => _finish(CallEnd.missed));
       return;
     }
-    if (!await _engine.open(await _calls.iceServers())) {
-      return _finish(CallEnd.microphone);
-    }
+    final opened = await _engine.open(await _calls.iceServers());
+    // The person left while the microphone was being set up.
+    if (isClosed) return unawaited(_engine.close());
+    if (!opened) return _finish(CallEnd.microphone);
     final result = await _calls.start(_requestId, _technicianId);
-    if (isClosed) return;
     switch (result) {
+      case Ok(:final value) when isClosed:
+        // Left while the call was being made: don't leave it ringing.
+        unawaited(_calls.end(value));
+        return unawaited(_engine.close());
+      case _ when isClosed:
+        return unawaited(_engine.close());
       case Ok(:final value):
         _callId = value;
       case Err(:final failure):

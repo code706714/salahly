@@ -55,7 +55,11 @@ class DoneView extends StatelessWidget {
     }
     return BlocProvider(
       create: (_) => ReviewFormCubit(),
-      child: _ReviewForm(technician: technician, invoice: invoice),
+      child: _ReviewForm(
+        details: details,
+        technician: technician,
+        invoice: invoice,
+      ),
     );
   }
 }
@@ -198,8 +202,13 @@ class _Invoice extends StatelessWidget {
 
 /// How it was paid, the stars, the chips and a comment, then sending.
 class _ReviewForm extends StatelessWidget {
-  const _ReviewForm({required this.technician, required this.invoice});
+  const _ReviewForm({
+    required this.details,
+    required this.technician,
+    required this.invoice,
+  });
 
+  final RequestDetails details;
   final String technician;
   final Widget invoice;
 
@@ -316,6 +325,12 @@ class _ReviewForm extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(height: 12),
+            // Someone unhappy with the work shouldn't have to rate it first.
+            if (details.hasOpenComplaint)
+              const OpenComplaintNote()
+            else
+              Center(child: ComplaintButton(requestId: details.id)),
           ],
         ),
       ),

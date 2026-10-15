@@ -97,8 +97,9 @@ block at the auth layer is ever wanted, also set `auth.users.banned_until`.
 
 - Turn on MFA for the admin accounts if the dashboard login allows it, and
   keep the admin list short.
-- Keep the Twilio Verify geo permissions and rate limits from the backend
-  security rules: admins sign in by the same OTP.
+- Admins sign in by the same WhatsApp message as everyone else (setup in
+  `docs/release/whatsapp-login.md`); the console only lets in the number
+  that is on the admin list.
 - Never put a service-role key in the console. It talks to the API with the
   admin's own session only.
 

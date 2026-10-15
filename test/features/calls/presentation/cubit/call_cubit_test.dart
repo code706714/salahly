@@ -91,6 +91,20 @@ void main() {
       await cubit.close();
     });
 
+    test('ends a call that was made as the person left', () async {
+      final started = Completer<Result<String>>();
+      when(() => calls.start(any(), any())).thenAnswer((_) => started.future);
+      final cubit = making();
+      final starting = cubit.start();
+      await pump();
+
+      await cubit.close();
+      started.complete(const Ok('c1'));
+      await starting;
+
+      verify(() => calls.end('c1')).called(1);
+    });
+
     test('opens the engine with the servers the repository gives', () async {
       final cubit = making();
       await cubit.start();
