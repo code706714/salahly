@@ -142,13 +142,21 @@ class _Body extends StatelessWidget {
     final escrow = info.escrow;
     final status = escrow?.status;
     final amount = formatPounds(info.amountPiastres);
-    final autoRelease = escrow?.autoReleaseAt;
+    final releaseAt = escrow?.releaseAt;
+    final releaseMoment = releaseAt == null ? '' : momentLabel(l10n, releaseAt);
+    final consumerConfirmed = escrow?.consumerConfirmed ?? false;
+    final technicianConfirmed = escrow?.technicianConfirmed ?? false;
     final body = switch (status) {
       null when info.paymentInProgress => l10n.escrowPaymentCheckingBody,
       null => l10n.escrowOfferBody(honorific, amount),
       EscrowStatus.pending => l10n.escrowPendingBody,
+      EscrowStatus.held when consumerConfirmed && technicianConfirmed =>
+        l10n.escrowHeldBothConfirmedBody(releaseMoment),
+      EscrowStatus.held when consumerConfirmed =>
+        l10n.escrowHeldYouConfirmedBody(honorific),
+      EscrowStatus.held when technicianConfirmed =>
+        l10n.escrowHeldTechnicianConfirmedBody(honorific, releaseMoment),
       EscrowStatus.held => l10n.escrowHeldBody(amount),
-      EscrowStatus.released => l10n.escrowReleasedBody,
       EscrowStatus.paidOut => l10n.escrowPaidOutBody,
       EscrowStatus.disputed => l10n.escrowDisputedBody,
       EscrowStatus.refundDue => l10n.escrowRefundDueBody,
@@ -182,17 +190,6 @@ class _Body extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(body, style: const TextStyle(fontSize: 15, height: 1.6)),
-          if (status == EscrowStatus.held && autoRelease != null) ...[
-            const SizedBox(height: 4),
-            Text(
-              l10n.escrowHeldAuto(momentLabel(l10n, autoRelease)),
-              style: TextStyle(
-                fontSize: 13,
-                height: 1.5,
-                color: colors.inkMuted,
-              ),
-            ),
-          ],
           if (info.canSecure) ...[
             const SizedBox(height: 12),
             FilledButton(

@@ -24,6 +24,7 @@ import 'package:salahly/features/admin/domain/repositories/settings_repository.d
 import 'package:salahly/features/admin/domain/repositories/topup_review_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/users_repository.dart';
 import 'package:salahly/features/admin/domain/repositories/verification_repository.dart';
+import 'package:salahly/features/admin/domain/repositories/withdrawal_review_repository.dart';
 import 'package:salahly/features/admin/presentation/admin_theme.dart';
 import 'package:salahly/features/admin/presentation/cubit/admin_session_cubit.dart';
 import 'package:salahly/features/admin/presentation/cubit/overview_cubit.dart';
@@ -100,6 +101,7 @@ class AdminHarness {
   final verification = MockVerificationRepository();
   final topups = MockTopupReviewRepository();
   final escrows = MockEscrowReviewRepository();
+  final withdrawals = MockWithdrawalReviewRepository();
   final requests = MockRequestsRepository();
   final users = MockUsersRepository();
   final settings = MockSettingsRepository();
@@ -118,6 +120,7 @@ class AdminHarness {
     RepositoryProvider<VerificationRepository>.value(value: verification),
     RepositoryProvider<TopupReviewRepository>.value(value: topups),
     RepositoryProvider<EscrowReviewRepository>.value(value: escrows),
+    RepositoryProvider<WithdrawalReviewRepository>.value(value: withdrawals),
     RepositoryProvider<RequestsRepository>.value(value: requests),
     RepositoryProvider<UsersRepository>.value(value: users),
     RepositoryProvider<SettingsRepository>.value(value: settings),

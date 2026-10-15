@@ -10,11 +10,13 @@ import 'package:salahly/features/admin/domain/entities/audit_entry.dart';
 import 'package:salahly/features/admin/domain/entities/escrow_review.dart';
 import 'package:salahly/features/admin/domain/entities/topup_review.dart';
 import 'package:salahly/features/admin/domain/entities/verification.dart';
+import 'package:salahly/features/admin/domain/entities/withdrawal_review.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
 import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 import 'package:salahly/features/escrow/domain/entities/escrow.dart';
 import 'package:salahly/features/marketplace/domain/entities/complaint.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
+import 'package:salahly/features/wallet/domain/entities/wallet.dart';
 
 /// The time the fixtures are "now" for: ages in the pages count from it.
 final adminNow = DateTime(2026, 10, 7, 12);
@@ -199,10 +201,10 @@ EscrowReview testEscrowReview({
   String id = 'escrow-1',
   EscrowStatus status = EscrowStatus.pending,
   String? consumerName = 'نورهان محمد',
-  String? payoutAccount = '01005551234',
   String? disputeReason,
+  EscrowDisputer? disputedBy,
   String? rejectReason,
-  String? payoutReference,
+  String? refundReference,
   String? resolutionNote,
   bool online = false,
 }) {
@@ -220,12 +222,10 @@ EscrowReview testEscrowReview({
     consumerPhone: '01114567720',
     technicianName: 'محمود سعيد',
     technicianPhone: '01005550000',
-    payoutMethod: payoutAccount == null ? null : TopupMethod.wallet,
-    payoutAccount: payoutAccount,
-    payoutHolder: payoutAccount == null ? null : 'محمود سعيد',
-    payoutReference: payoutReference,
+    refundReference: refundReference,
     rejectReason: rejectReason,
     disputeReason: disputeReason,
+    disputedBy: disputedBy,
     resolutionNote: resolutionNote,
   );
 }
@@ -390,5 +390,27 @@ AdminSettings testSettings() {
         isActive: false,
       ),
     ],
+  );
+}
+
+WithdrawalReview testWithdrawalReview({
+  String id = 'withdrawal-1',
+  WithdrawalStatus status = WithdrawalStatus.requested,
+  String? technicianName = 'محمود سعيد',
+  String? reference,
+  String? rejectReason,
+}) {
+  return WithdrawalReview(
+    id: id,
+    status: status,
+    amountPiastres: 20000,
+    method: TopupMethod.wallet,
+    account: '01005551234',
+    holderName: 'محمود سعيد',
+    createdAt: adminNow.subtract(const Duration(hours: 2)),
+    technicianName: technicianName,
+    technicianPhone: '01005550000',
+    reference: reference,
+    rejectReason: rejectReason,
   );
 }

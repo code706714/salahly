@@ -9,7 +9,7 @@ grant execute on function
   public.secure_payment(uuid, public.topup_method, text, text)
 to authenticated;
 
-select plan(60);
+select plan(105);
 
 -- Admin ad; consumers c1 (pays) and c2 (a stranger); technicians a1 (picked,
 -- has a payout account) and a2 (not picked).
@@ -266,7 +266,7 @@ select is(
   'both are told'
 );
 
--- Confirming ------------------------------------------------------------------------------
+-- Confirming: both sides, then three days ----------------------------------------------------
 
 select pg_temp.sign_in_as(pg_temp.u('c1'));
 set local role authenticated;
@@ -278,19 +278,25 @@ select throws_ok(
   $$select public.confirm_work_done((select id from pg_temp.ids where name = 'request'))$$,
   'P0001', 'escrow_unavailable', 'and is refused if she tries'
 );
+select pg_temp.sign_in_as(pg_temp.u('a1'));
+select throws_ok(
+  $$select public.technician_confirm_work_done((select id from pg_temp.ids where name = 'request'))$$,
+  'P0001', 'escrow_unavailable', 'nor can he before it is finished'
+);
 
 reset role;
 update public.jobs set status = 'finished', finished_at = now()
  where id = (select id from pg_temp.ids where name = 'job');
 set local role authenticated;
 
+select pg_temp.sign_in_as(pg_temp.u('c1'));
 select is(
   (public.escrow_info((select id from pg_temp.ids where name = 'request')) ->> 'can_confirm')::boolean,
   true, 'once it is finished she can'
 );
-select ok(
-  (public.escrow_info((select id from pg_temp.ids where name = 'request')) -> 'escrow' ->> 'auto_release_at') is not null,
-  'and is told when it releases by itself'
+select is(
+  public.escrow_info((select id from pg_temp.ids where name = 'request')) -> 'escrow' -> 'release_at',
+  'null'::jsonb, 'and nothing is scheduled until both confirm'
 );
 
 select pg_temp.sign_in_as(pg_temp.u('c2'));
@@ -298,79 +304,210 @@ select throws_ok(
   $$select public.confirm_work_done((select id from pg_temp.ids where name = 'request'))$$,
   'P0001', 'escrow_unavailable', 'a stranger can''t confirm'
 );
+select pg_temp.sign_in_as(pg_temp.u('a2'));
+select throws_ok(
+  $$select public.technician_confirm_work_done((select id from pg_temp.ids where name = 'request'))$$,
+  'P0001', 'escrow_unavailable', 'nor another technician'
+);
 
--- The technician has no payout account: the release copies nothing, the admin is told.
 select pg_temp.sign_in_as(pg_temp.u('c1'));
 select lives_ok(
   $$select public.confirm_work_done((select id from pg_temp.ids where name = 'request'))$$,
   'she confirms the work'
 );
-select throws_ok(
+select lives_ok(
   $$select public.confirm_work_done((select id from pg_temp.ids where name = 'request'))$$,
-  'P0001', 'escrow_unavailable', 'once'
+  'twice changes nothing'
 );
-select throws_ok(
-  $$select public.dispute_payment((select id from pg_temp.ids where name = 'request'), 'الشغل مش تمام')$$,
-  'P0001', 'escrow_unavailable', 'and can''t dispute after'
+select is(
+  (public.escrow_info((select id from pg_temp.ids where name = 'request')) ->> 'can_confirm')::boolean,
+  false, 'she has answered'
+);
+select is(
+  (public.escrow_info((select id from pg_temp.ids where name = 'request')) -> 'escrow' ->> 'consumer_confirmed')::boolean,
+  true, 'and it shows'
+);
+select is(
+  public.escrow_info((select id from pg_temp.ids where name = 'request')) -> 'escrow' -> 'release_at',
+  'null'::jsonb, 'the three days wait for the technician too'
 );
 
 reset role;
 select is(
   (select status::text from public.job_escrows where id = (select id from pg_temp.ids where name = 'escrow')),
-  'released', 'the money is the technician''s'
+  'held', 'the money is still ours'
 );
 select is(
   (select count(*)::int from public.notifications
-    where user_id = pg_temp.u('a1') and kind = 'escrow_released'),
-  1, 'he is told'
+    where user_id = pg_temp.u('a1') and kind = 'escrow_work_confirmed'),
+  1, 'the technician is told she confirmed (once)'
 );
 
--- Paying him ---------------------------------------------------------------------------------
-
-select pg_temp.sign_in_as(pg_temp.u('ad'));
+select pg_temp.sign_in_as(pg_temp.u('a1'));
 set local role authenticated;
-select throws_ok(
-  $$select public.admin_mark_escrow_paid((select id from pg_temp.ids where name = 'escrow'), 'x')$$,
-  '22023', 'invalid_reason', 'a payout needs a reference'
+select is(
+  (public.technician_escrow((select id from pg_temp.ids where name = 'request')) ->> 'can_confirm')::boolean,
+  true, 'he can confirm now'
+);
+select lives_ok(
+  $$select public.technician_confirm_work_done((select id from pg_temp.ids where name = 'request'))$$,
+  'he confirms the work'
 );
 select is(
-  public.admin_mark_escrow_paid((select id from pg_temp.ids where name = 'escrow'), 'IP-12345') ->> 'status',
-  'paid_out', 'the admin marks it paid'
+  (public.technician_escrow((select id from pg_temp.ids where name = 'request')) ->> 'consumer_confirmed')::boolean
+  and (public.technician_escrow((select id from pg_temp.ids where name = 'request')) ->> 'technician_confirmed')::boolean,
+  true, 'both confirmed'
 );
-select is(
-  public.admin_mark_escrow_paid((select id from pg_temp.ids where name = 'escrow'), 'IP-12345') ->> 'already_reviewed',
-  'true', 'twice changes nothing'
+select ok(
+  (public.technician_escrow((select id from pg_temp.ids where name = 'request')) ->> 'release_at')::timestamptz
+    between now() + interval '71 hours' and now() + interval '73 hours',
+  'the money is scheduled three days out'
 );
+
 reset role;
 select is(
-  (select count(*)::int from private.admin_audit_log
-    where target_id = (select id::text from pg_temp.ids where name = 'escrow')
-      and action in ('approve_escrow', 'pay_escrow')),
-  2, 'the admin''s two steps are logged'
+  (select count(*)::int from public.notifications
+    where user_id = pg_temp.u('a1') and kind = 'escrow_release_scheduled'),
+  1, 'and he is told when it comes'
+);
+select is(private.release_due_escrows(), 0, 'before then nothing moves');
+select is(
+  (select balance_piastres from public.technician_wallets where technician_id = pg_temp.u('a1')),
+  null::bigint, 'the wallet is empty'
+);
+
+update public.job_escrows set release_at = now() - interval '1 minute'
+ where id = (select id from pg_temp.ids where name = 'escrow');
+select is(private.release_due_escrows(), 1, 'when the three days end the money moves');
+select is(private.release_due_escrows(), 0, 'once');
+select is(
+  (select status::text from public.job_escrows where id = (select id from pg_temp.ids where name = 'escrow')),
+  'paid_out', 'it is the technician''s'
+);
+select is(
+  (select balance_piastres from public.technician_wallets where technician_id = pg_temp.u('a1')),
+  45000::bigint, 'the whole amount is in his wallet'
 );
 select is(
   (select count(*)::int from public.notifications
     where user_id = pg_temp.u('a1') and kind = 'escrow_paid_out'),
-  1, 'and the technician is told he was paid'
+  1, 'he is told it arrived'
+);
+select is(
+  (select count(*)::int from private.admin_audit_log
+    where target_id = (select id::text from pg_temp.ids where name = 'escrow')
+      and action = 'approve_escrow'),
+  1, 'the admin''s check is logged'
 );
 
--- A payout account, as the technician saves it --------------------------------------------------
+-- The wallet and withdrawals ------------------------------------------------------------------
 
 select pg_temp.sign_in_as(pg_temp.u('a1'));
 set local role authenticated;
+select is(public.my_wallet() ->> 'balance_piastres', '45000', 'he sees his balance');
+select is(public.my_wallet() -> 'entries' -> 0 ->> 'kind', 'escrow', 'and where it came from');
+select is(public.my_wallet() -> 'last_destination', 'null'::jsonb, 'with no number remembered yet');
 select throws_ok(
-  $$select public.save_payout_account('wallet', '123', 'محمود السيد')$$,
+  $$select public.request_withdrawal(4000, 'wallet', '01023456789', 'محمود السيد')$$,
+  '22023', 'amount_too_small', 'below the minimum is refused'
+);
+select throws_ok(
+  $$select public.request_withdrawal(5000, 'wallet', '123', 'محمود السيد')$$,
   '22023', 'invalid_account', 'a wallet number must be a mobile number'
 );
-select lives_ok(
-  $$select public.save_payout_account('wallet', '٠١٠٢٣٤٥٦٧٨٩', 'محمود السيد')$$,
-  'he saves where to be paid, Arabic digits and all'
+select throws_ok(
+  $$select public.request_withdrawal(5000, 'wallet', '01023456789', 'م')$$,
+  '22023', 'invalid_holder', 'the name has to be real'
+);
+select throws_ok(
+  $$select public.request_withdrawal(45001, 'wallet', '01023456789', 'محمود السيد')$$,
+  'P0001', 'insufficient_balance', 'more than the balance is refused'
+);
+insert into pg_temp.ids
+select 'withdrawal', public.request_withdrawal(20000, 'wallet', '٠١٠٢٣٤٥٦٧٨٩', 'محمود السيد');
+select is(public.my_wallet() ->> 'balance_piastres', '25000', 'the amount leaves the wallet at once');
+select is(
+  public.my_wallet() -> 'withdrawals' -> 0 ->> 'account', '01023456789',
+  'the number is kept in Western digits'
 );
 select is(
-  public.my_payout_account() ->> 'account', '01023456789', 'it is kept in Western digits'
+  public.my_wallet() -> 'last_destination' ->> 'account', '01023456789',
+  'and offered next time'
 );
+insert into pg_temp.ids
+select 'withdrawal2', public.request_withdrawal(10000, 'instapay', 'mahmoud@instapay', 'محمود السيد');
+
 select pg_temp.sign_in_as(pg_temp.u('a2'));
-select is(public.my_payout_account(), null::jsonb, 'another technician has none');
+select throws_ok(
+  $$select public.request_withdrawal(5000, 'wallet', '01023456789', 'محمود السيد')$$,
+  'P0001', 'insufficient_balance', 'a technician with no money gets nothing'
+);
+select pg_temp.sign_in_as(pg_temp.u('c1'));
+select throws_ok(
+  $$select public.my_wallet()$$, 'P0002', 'not_found', 'a consumer has no wallet'
+);
+select throws_ok(
+  $$select * from public.wallet_ledger$$, '42501', null, 'the ledger can''t be read directly'
+);
+
+select pg_temp.sign_in_as(pg_temp.u('ad'));
+select is(
+  (select array_agg(i ->> 'account' order by i ->> 'account')
+     from jsonb_array_elements(public.admin_list_withdrawals('requested', 10, 0) -> 'items') i),
+  array['01023456789', 'mahmoud@instapay'], 'the admin sees the numbers to send to'
+);
+select is(
+  (public.admin_list_withdrawals('requested', 10, 0) -> 'counts' ->> 'requested')::int,
+  2, 'and how many wait'
+);
+select pg_temp.sign_in_stale(pg_temp.u('ad'));
+select throws_ok(
+  $$select public.admin_mark_withdrawal_paid((select id from pg_temp.ids where name = 'withdrawal'), 'VC-1234')$$,
+  'P0001', 'recent_login_required', 'paying needs a recent login'
+);
+select pg_temp.sign_in_as(pg_temp.u('ad'));
+select throws_ok(
+  $$select public.admin_mark_withdrawal_paid((select id from pg_temp.ids where name = 'withdrawal'), 'x')$$,
+  '22023', 'invalid_reason', 'a payment needs a reference'
+);
+select is(
+  public.admin_mark_withdrawal_paid((select id from pg_temp.ids where name = 'withdrawal'), 'VC-1234') ->> 'status',
+  'paid', 'the admin marks it paid'
+);
+select is(
+  public.admin_mark_withdrawal_paid((select id from pg_temp.ids where name = 'withdrawal'), 'VC-1234') ->> 'already_reviewed',
+  'true', 'twice changes nothing'
+);
+select is(
+  public.admin_reject_withdrawal((select id from pg_temp.ids where name = 'withdrawal2'), 'الحساب مش شغال') ->> 'status',
+  'rejected', 'a transfer that can''t be made is refused'
+);
+select throws_ok(
+  $$select public.admin_mark_withdrawal_paid((select id from pg_temp.ids where name = 'withdrawal2'), 'VC-9999')$$,
+  'P0001', 'not_requested', 'and can''t be paid after'
+);
+select is(
+  public.admin_reject_withdrawal((select id from pg_temp.ids where name = 'withdrawal2'), 'الحساب مش شغال') ->> 'already_reviewed',
+  'true', 'refusing twice returns the money once'
+);
+reset role;
+select is(
+  (select balance_piastres from public.technician_wallets where technician_id = pg_temp.u('a1')),
+  25000::bigint, 'the refused amount is back in the wallet'
+);
+select is(
+  (select sum(amount_piastres)::bigint from public.wallet_ledger where technician_id = pg_temp.u('a1')),
+  25000::bigint, 'and the ledger adds up to the balance'
+);
+select is(
+  (select array_agg(kind::text order by kind::text) from public.notifications
+    where user_id = pg_temp.u('a1') and kind in ('withdrawal_paid', 'withdrawal_rejected')),
+  array['withdrawal_paid', 'withdrawal_rejected'], 'he is told both ways'
+);
+select is(
+  (select count(*)::int from private.admin_audit_log where action in ('pay_withdrawal', 'reject_withdrawal')),
+  2, 'the admin''s decisions are logged'
+);
 
 -- Another job: a dispute settled for the technician, then for the consumer ----------------
 
@@ -488,7 +625,7 @@ select is(
   'refund_due', 'a cancelled job leaves the money to be returned, even before it was checked'
 );
 
--- Nobody answers: the money goes to the technician 72 hours after the work.
+-- Nobody answers: the consumer is silent for 72 hours after the technician confirmed.
 select pg_temp.assigned_request('fourth');
 insert into storage.objects (bucket_id, name, owner_id)
 values ('transfer-proofs', pg_temp.u('c1') || '/70000005-0000-4000-8000-000000000001.jpg', pg_temp.u('c1')::text);
@@ -498,16 +635,81 @@ insert into pg_temp.ids
 select 'escrow4', public.secure_payment((select id from pg_temp.ids where name = 'fourth'), 'instapay', 'nourhan@instapay', pg_temp.proof(5));
 reset role;
 update public.job_escrows set status = 'held', held_at = now() where id = (select id from pg_temp.ids where name = 'escrow4');
-update public.jobs set status = 'finished', finished_at = now() - interval '71 hours'
+update public.jobs set status = 'finished', finished_at = now() - interval '80 hours'
  where id = (select id from pg_temp.ids where name = 'fourth_job');
-select is(private.release_due_escrows(), 0, 'seventy-one hours is too early');
-update public.jobs set finished_at = now() - interval '73 hours'
- where id = (select id from pg_temp.ids where name = 'fourth_job');
+select is(private.release_due_escrows(), 0, 'a technician who never confirmed does not release it');
+update public.job_escrows set technician_confirmed_at = now() - interval '71 hours'
+ where id = (select id from pg_temp.ids where name = 'escrow4');
+select is(private.release_due_escrows(), 0, 'seventy-one hours of her silence is too early');
+update public.job_escrows set technician_confirmed_at = now() - interval '73 hours'
+ where id = (select id from pg_temp.ids where name = 'escrow4');
 select is(private.release_due_escrows(), 1, 'seventy-three hours is not');
 select is(
-  (select (status, payout_account is null)::text from public.job_escrows
-    where id = (select id from pg_temp.ids where name = 'escrow4')),
-  '(released,f)', 'and the payout account is copied for the admin'
+  (select balance_piastres from public.technician_wallets where technician_id = pg_temp.u('a1')),
+  45000::bigint, 'and the wallet gets the 200 pounds'
+);
+
+-- The technician complains: the consumer is told, the money waits for an admin.
+select pg_temp.assigned_request('fifth');
+insert into storage.objects (bucket_id, name, owner_id)
+values ('transfer-proofs', pg_temp.u('c1') || '/70000006-0000-4000-8000-000000000001.jpg', pg_temp.u('c1')::text);
+select pg_temp.sign_in_as(pg_temp.u('c1'));
+set local role authenticated;
+insert into pg_temp.ids
+select 'escrow5', public.secure_payment((select id from pg_temp.ids where name = 'fifth'), 'instapay', 'nourhan@instapay', pg_temp.proof(6));
+reset role;
+update public.job_escrows set status = 'held', held_at = now() where id = (select id from pg_temp.ids where name = 'escrow5');
+update public.jobs set status = 'finished', finished_at = now() where id = (select id from pg_temp.ids where name = 'fifth_job');
+
+select pg_temp.sign_in_as(pg_temp.u('a2'));
+set local role authenticated;
+select throws_ok(
+  $$select public.technician_dispute_payment((select id from pg_temp.ids where name = 'fifth'), 'العميل رفض يدفع')$$,
+  'P0001', 'escrow_unavailable', 'another technician can''t complain'
+);
+select pg_temp.sign_in_as(pg_temp.u('a1'));
+select throws_ok(
+  $$select public.technician_dispute_payment((select id from pg_temp.ids where name = 'fifth'), 'ab')$$,
+  '22023', 'invalid_reason', 'a complaint needs words'
+);
+select lives_ok(
+  $$select public.technician_dispute_payment((select id from pg_temp.ids where name = 'fifth'), 'العميل غيّر الطلب بعد الشغل')$$,
+  'the technician complains'
+);
+select pg_temp.sign_in_as(pg_temp.u('c1'));
+select is(
+  (public.escrow_info((select id from pg_temp.ids where name = 'fifth')) -> 'escrow' ->> 'status'),
+  'disputed', 'she sees it stopped'
+);
+select throws_ok(
+  $$select public.confirm_work_done((select id from pg_temp.ids where name = 'fifth'))$$,
+  'P0001', 'escrow_unavailable', 'and can''t confirm over it'
+);
+reset role;
+select is(
+  (select count(*)::int from public.notifications
+    where user_id = pg_temp.u('c1') and kind = 'escrow_disputed'),
+  1, 'she is told'
+);
+select pg_temp.sign_in_as(pg_temp.u('ad'));
+set local role authenticated;
+select is(
+  public.admin_list_escrows('disputed', 10, 0) -> 'items' -> 0 ->> 'disputed_by',
+  'technician', 'the admin sees who complained'
+);
+select is(
+  public.admin_resolve_escrow((select id from pg_temp.ids where name = 'escrow5'), true, 'الفني على حق') ->> 'status',
+  'paid_out', 'the admin sides with him'
+);
+reset role;
+select is(
+  (select (status, paid_out_at is not null)::text from public.job_escrows
+    where id = (select id from pg_temp.ids where name = 'escrow5')),
+  '(paid_out,t)', 'and the money goes to his wallet'
+);
+select is(
+  (select balance_piastres from public.technician_wallets where technician_id = pg_temp.u('a1')),
+  65000::bigint, 'which now holds 650 pounds'
 );
 
 select * from finish();

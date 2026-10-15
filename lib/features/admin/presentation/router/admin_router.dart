@@ -17,6 +17,7 @@ import 'package:salahly/features/admin/presentation/pages/settings_page.dart';
 import 'package:salahly/features/admin/presentation/pages/topups_page.dart';
 import 'package:salahly/features/admin/presentation/pages/users_page.dart';
 import 'package:salahly/features/admin/presentation/pages/verification_page.dart';
+import 'package:salahly/features/admin/presentation/pages/withdrawals_page.dart';
 import 'package:salahly/features/admin/presentation/router/admin_routes.dart';
 import 'package:salahly/features/admin/presentation/widgets/admin_shell.dart';
 
@@ -98,6 +99,10 @@ GoRouter createAdminRouter(
           GoRoute(
             path: AdminRoutes.escrow,
             pageBuilder: (context, state) => page(const EscrowPage()),
+          ),
+          GoRoute(
+            path: AdminRoutes.withdrawals,
+            pageBuilder: (context, state) => page(const WithdrawalsPage()),
           ),
           GoRoute(
             path: AdminRoutes.requests,

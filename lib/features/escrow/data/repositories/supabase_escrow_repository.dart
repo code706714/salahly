@@ -1,7 +1,6 @@
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/error/supabase_errors.dart';
-import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/escrow/data/models/escrow_models.dart';
 import 'package:salahly/features/escrow/domain/entities/escrow.dart';
 import 'package:salahly/features/escrow/domain/failures/escrow_failures.dart';
@@ -49,22 +48,21 @@ class SupabaseEscrowRepository implements EscrowRepository {
       });
 
   @override
-  Future<Result<PayoutAccount?>> fetchPayoutAccount() => _call(() async {
-    final json = await _client.rpc<Map<String, dynamic>?>('my_payout_account');
-    return json == null ? null : EscrowModels.payoutAccount(json);
-  });
-
-  @override
-  Future<Result<void>> savePayoutAccount(PayoutAccount account) => _call(
+  Future<Result<void>> technicianConfirmWork(String requestId) => _call(
     () => _client.rpc<void>(
-      'save_payout_account',
-      params: {
-        'p_method': toWire(account.method),
-        'p_account': account.account,
-        'p_holder_name': account.holderName,
-      },
+      'technician_confirm_work_done',
+      params: {'p_request_id': requestId},
     ),
   );
+
+  @override
+  Future<Result<void>> technicianDispute(String requestId, String reason) =>
+      _call(
+        () => _client.rpc<void>(
+          'technician_dispute_payment',
+          params: {'p_request_id': requestId, 'p_reason': reason},
+        ),
+      );
 
   static Future<Result<T>> _call<T>(Future<T> Function() action) async {
     try {
@@ -81,10 +79,6 @@ class SupabaseEscrowRepository implements EscrowRepository {
           return const EscrowUnavailableFailure();
         case 'already_secured':
           return const AlreadySecuredFailure();
-        case 'invalid_holder':
-          return const InvalidHolderFailure();
-        case 'invalid_account':
-          return const InvalidPayoutAccountFailure();
         case 'invalid_reason':
           return const InvalidReasonFailure();
         case 'rate_limited':

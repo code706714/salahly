@@ -49,6 +49,9 @@ class _AdminAppState extends State<AdminApp> {
         RepositoryProvider.value(value: dependencies.verificationRepository),
         RepositoryProvider.value(value: dependencies.topupReviewRepository),
         RepositoryProvider.value(value: dependencies.escrowReviewRepository),
+        RepositoryProvider.value(
+          value: dependencies.withdrawalReviewRepository,
+        ),
         RepositoryProvider.value(value: dependencies.requestsRepository),
         RepositoryProvider.value(value: dependencies.usersRepository),
         RepositoryProvider.value(value: dependencies.settingsRepository),

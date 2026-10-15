@@ -96,6 +96,12 @@ class _Menu extends StatelessWidget {
         0,
       ),
       (
+        AdminRoutes.withdrawals,
+        Icons.payments_outlined,
+        l10n.adminNavWithdrawals,
+        0,
+      ),
+      (
         AdminRoutes.users,
         Icons.groups_outlined,
         l10n.adminNavUsers,

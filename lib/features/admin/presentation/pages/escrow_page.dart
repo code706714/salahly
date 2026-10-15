@@ -86,7 +86,6 @@ class _EscrowViewState extends State<_EscrowView> {
                 tabPadding: 8,
                 values: const [
                   EscrowStatus.pending,
-                  EscrowStatus.released,
                   EscrowStatus.disputed,
                   EscrowStatus.refundDue,
                   null,
@@ -94,7 +93,6 @@ class _EscrowViewState extends State<_EscrowView> {
                 selected: state.filter.status,
                 labelOf: (status) => switch (status) {
                   EscrowStatus.pending => l10n.adminEscrowTabPending,
-                  EscrowStatus.released => l10n.adminEscrowTabReleased,
                   EscrowStatus.disputed => l10n.adminEscrowTabDisputed,
                   EscrowStatus.refundDue => l10n.adminEscrowTabRefundDue,
                   _ => l10n.adminEscrowTabAll,

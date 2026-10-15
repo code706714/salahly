@@ -11,16 +11,6 @@ final class AlreadySecuredFailure extends Failure {
   const AlreadySecuredFailure();
 }
 
-/// The name on the payout account isn't usable.
-final class InvalidHolderFailure extends Failure {
-  const InvalidHolderFailure();
-}
-
-/// The payout account isn't a valid number or address.
-final class InvalidPayoutAccountFailure extends Failure {
-  const InvalidPayoutAccountFailure();
-}
-
 /// The reason for the objection is empty or too long.
 final class InvalidReasonFailure extends Failure {
   const InvalidReasonFailure();

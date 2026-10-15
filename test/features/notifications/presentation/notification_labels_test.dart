@@ -271,16 +271,28 @@ void main() {
         'رجّعنا فلوسك',
       );
       expect(
-        technicianText(of(NotificationKind.escrowReleased)).title,
-        'العميل أكّد الشغل',
+        technicianText(of(NotificationKind.escrowWorkConfirmed)).title,
+        isNotEmpty,
+      );
+      expect(
+        technicianText(of(NotificationKind.escrowReleaseScheduled)).title,
+        isNotEmpty,
+      );
+      expect(
+        technicianText(of(NotificationKind.withdrawalPaid)).title,
+        isNotEmpty,
+      );
+      expect(
+        technicianText(of(NotificationKind.withdrawalRejected)).title,
+        isNotEmpty,
       );
       expect(
         technicianText(of(NotificationKind.escrowPaidOut)).title,
-        'الفلوس اتحوّلت لك',
+        'الفلوس نزلت في محفظتك',
       );
       expect(
         technicianText(of(NotificationKind.escrowDisputed)).title,
-        'العميل اعترض على الشغل',
+        'فيه اعتراض على الشغل',
       );
     });
 

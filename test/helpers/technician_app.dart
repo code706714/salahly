@@ -151,6 +151,9 @@ class TechnicianApp {
   /// The money guarantee: none on any request unless a test stubs one.
   final escrow = MockEscrowRepository();
 
+  /// The wallet: nothing in it unless a test stubs some.
+  final wallet = MockWalletRepository();
+
   /// The notifications: none, all read, unless a test stubs some.
   final notifications = MockNotificationsRepository();
   final live = FakeLiveUpdates();
@@ -189,6 +192,7 @@ class TechnicianApp {
     callEngineFactory: FakeCallEngine.new,
     callRinger: FakeCallRinger(),
     escrowRepository: escrow,
+    walletRepository: wallet,
     paymentRepository: payments,
     notificationsRepository: notifications,
     liveUpdates: live,

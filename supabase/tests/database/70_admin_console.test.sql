@@ -156,11 +156,13 @@ declare
     $q$select public.admin_list_escrows('pending', 10, 0)$q$,
     $q$select public.admin_approve_escrow(gen_random_uuid())$q$,
     $q$select public.admin_reject_escrow(gen_random_uuid(), 'مالقيناش التحويل')$q$,
-    $q$select public.admin_mark_escrow_paid(gen_random_uuid(), 'IP-123')$q$,
     $q$select public.admin_resolve_escrow(gen_random_uuid(), true, 'اتحلت')$q$,
     $q$select public.admin_mark_escrow_refunded(gen_random_uuid(), 'RF-123')$q$,
     $q$select public.admin_payment_refund_target(gen_random_uuid())$q$,
-    $q$select public.admin_list_payments(null, 10, 0)$q$
+    $q$select public.admin_list_payments(null, 10, 0)$q$,
+    $q$select public.admin_list_withdrawals('requested', 10, 0)$q$,
+    $q$select public.admin_mark_withdrawal_paid(gen_random_uuid(), 'VC-123')$q$,
+    $q$select public.admin_reject_withdrawal(gen_random_uuid(), 'الرقم غلط')$q$
   ];
 begin
   if p_hostile then
@@ -197,8 +199,8 @@ select is_empty(
 );
 select is(
   (select count(*)::int from pg_proc where pronamespace = 'public'::regnamespace and proname like 'admin\_%'),
-  30,
-  'there are 30 admin functions (update the lists in this file when adding one)'
+  32,
+  'there are 32 admin functions (update the lists in this file when adding one)'
 );
 select ok(
   not has_table_privilege('authenticated', 'private.admins', 'select')

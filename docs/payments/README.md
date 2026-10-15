@@ -137,9 +137,21 @@ it on a condition. What Salahly does today:
 - The consumer's money is **paid to Salahly's own merchant account**, and
   only after the provider confirmed it does the app show the payment as
   recorded ("held" in our books).
-- When the consumer confirms the work (or the auto release time passes), the
-  technician becomes owed the money. **Paying the technician is still a
-  manual transfer** by the Salahly team, recorded in the admin console.
+- The work is confirmed on **both sides** in "follow your request": the
+  customer (`confirm_work_done`) and the technician
+  (`technician_confirm_work_done`, once the job is finished). Either side can
+  press a complaint instead, which puts the payment in `disputed`.
+- When both confirmed, the money is scheduled to reach the technician's
+  **in-app wallet 3 days later** (`job_escrows.release_at`) if nobody
+  disputed. A technician confirmation with a silent customer also releases
+  after 3 days. `private.release_due_escrows` (pg_cron) credits the wallet
+  and the status becomes `paid_out`. Both sides are told what happens next.
+- The technician **withdraws from the wallet** to a Vodafone Cash number or
+  an InstaPay address he types (`request_withdrawal`, minimum 50 EGP, no
+  fee, 5 requests per day). The amount leaves the wallet at once. **Sending
+  the money is still a manual transfer** by the Salahly team from the admin
+  console (Withdrawals): paid (with the transfer reference) or rejected
+  (the amount returns to the wallet).
 - A dispute is settled by the team; a refund goes back through the provider.
 
 This is **not** a regulated escrow or a segregated client-money account. Do
@@ -176,7 +188,8 @@ Rollback: to reopen the manual flow, run
 - Paymob merchant account approved for live (commercial register, tax card,
   bank account verification as Paymob asks), wallet integration enabled.
 - Live keys, integration ids, HMAC and callbacks set as above.
-- Test a small card and a wallet payment end to end, plus a refund.
+- Test a small card and a wallet payment end to end, plus a refund and a
+  withdrawal (request, mark paid, reject).
 - Legal review of the escrow wording, the terms and the privacy policy
   (payment data is handled by the provider; we keep order status, amount and
   provider references only).

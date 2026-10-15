@@ -22,11 +22,33 @@ Escrow testEscrow(
   EscrowStatus status, {
   TopupMethod? method = TopupMethod.instapay,
   String? rejectReason,
-  DateTime? autoReleaseAt,
+  bool consumerConfirmed = false,
+  bool technicianConfirmed = false,
+  DateTime? releaseAt,
 }) => Escrow(
   status: status,
   method: method,
   createdAt: DateTime(2026, 10, 13, 10),
   rejectReason: rejectReason,
-  autoReleaseAt: autoReleaseAt,
+  consumerConfirmed: consumerConfirmed,
+  technicianConfirmed: technicianConfirmed,
+  releaseAt: releaseAt,
+);
+
+/// The technician's view of a 350 EGP guarantee.
+TechnicianEscrow testTechnicianEscrow(
+  EscrowStatus status, {
+  bool canConfirm = false,
+  bool canDispute = false,
+  bool consumerConfirmed = false,
+  bool technicianConfirmed = false,
+  DateTime? releaseAt,
+}) => TechnicianEscrow(
+  status: status,
+  amountPiastres: 35000,
+  canConfirm: canConfirm,
+  canDispute: canDispute,
+  consumerConfirmed: consumerConfirmed,
+  technicianConfirmed: technicianConfirmed,
+  releaseAt: releaseAt,
 );

@@ -155,10 +155,6 @@ NotificationText notificationText(
       title: l10n.notifEscrowRejected,
       body: l10n.notifEscrowRejectedBody(honorific),
     ),
-    NotificationKind.escrowReleased => (
-      title: l10n.notifEscrowReleased,
-      body: l10n.notifEscrowReleasedBody,
-    ),
     NotificationKind.escrowPaidOut => (
       title: l10n.notifEscrowPaidOut,
       body: l10n.notifEscrowPaidOutBody,
@@ -170,6 +166,28 @@ NotificationText notificationText(
     NotificationKind.escrowRefunded => (
       title: l10n.notifEscrowRefunded,
       body: l10n.notifEscrowRefundedBody(honorific),
+    ),
+    NotificationKind.escrowWorkConfirmed => switch (role) {
+      UserRole.consumer => (
+        title: l10n.notifEscrowWorkConfirmedConsumer,
+        body: l10n.notifEscrowWorkConfirmedConsumerBody(honorific),
+      ),
+      UserRole.technician => (
+        title: l10n.notifEscrowWorkConfirmedTechnician,
+        body: l10n.notifEscrowWorkConfirmedTechnicianBody,
+      ),
+    },
+    NotificationKind.escrowReleaseScheduled => (
+      title: l10n.notifEscrowReleaseScheduled,
+      body: l10n.notifEscrowReleaseScheduledBody,
+    ),
+    NotificationKind.withdrawalPaid => (
+      title: l10n.notifWithdrawalPaid,
+      body: l10n.notifWithdrawalPaidBody,
+    ),
+    NotificationKind.withdrawalRejected => (
+      title: l10n.notifWithdrawalRejected,
+      body: l10n.notifWithdrawalRejectedBody,
     ),
     NotificationKind.offerPicked => (
       title: l10n.notifOfferPicked(gender, consumer),
@@ -286,8 +304,8 @@ String notificationRoute(AppNotification notification, UserRole role) =>
       requestId: notification.requestId,
     );
 
-/// The screen a notification of [kind] opens: the transfer, the documents,
-/// the request it is about, or the list of requests.
+/// The screen a notification of [kind] opens: the transfer, the wallet, the
+/// documents, the request it is about, or the list of requests.
 String notificationKindRoute(
   NotificationKind kind,
   UserRole role, {
@@ -296,6 +314,7 @@ String notificationKindRoute(
   if (kind.isAboutTopup || kind.isAboutLoyalty) {
     return AppRoutes.balanceFor(role);
   }
+  if (kind.isAboutWithdrawal) return AppRoutes.technicianWallet;
   if (kind.isAboutVerification) return AppRoutes.technicianAccount;
   return switch (role) {
     UserRole.consumer =>

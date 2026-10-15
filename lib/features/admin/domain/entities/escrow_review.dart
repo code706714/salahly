@@ -2,9 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 import 'package:salahly/features/escrow/domain/entities/escrow.dart';
 
+/// Who stopped a guaranteed payment by objecting to the work.
+enum EscrowDisputer { consumer, technician }
+
 /// A guaranteed payment as the team works through it: checking the
-/// transfer, paying the technician, settling a dispute or returning the
-/// money.
+/// transfer, settling a dispute or returning the money. The technician's
+/// share goes to his wallet by itself.
 final class EscrowReview extends Equatable {
   const EscrowReview({
     required this.id,
@@ -20,13 +23,10 @@ final class EscrowReview extends Equatable {
     this.consumerPhone,
     this.technicianName,
     this.technicianPhone,
-    this.payoutMethod,
-    this.payoutAccount,
-    this.payoutHolder,
-    this.payoutReference,
     this.refundReference,
     this.rejectReason,
     this.disputeReason,
+    this.disputedBy,
     this.resolutionNote,
   });
 
@@ -59,18 +59,13 @@ final class EscrowReview extends Equatable {
   final String? technicianName;
   final String? technicianPhone;
 
-  /// Where the technician is paid; null until he sets an account.
-  final TopupMethod? payoutMethod;
-  final String? payoutAccount;
-  final String? payoutHolder;
-
-  /// The reference of the transfer to the technician, once paid.
-  final String? payoutReference;
-
   /// The reference of the transfer back to the consumer, once refunded.
   final String? refundReference;
   final String? rejectReason;
   final String? disputeReason;
+
+  /// Which side objected, for a disputed payment.
+  final EscrowDisputer? disputedBy;
   final String? resolutionNote;
 
   @override
@@ -88,13 +83,10 @@ final class EscrowReview extends Equatable {
     consumerPhone,
     technicianName,
     technicianPhone,
-    payoutMethod,
-    payoutAccount,
-    payoutHolder,
-    payoutReference,
     refundReference,
     rejectReason,
     disputeReason,
+    disputedBy,
     resolutionNote,
   ];
 }

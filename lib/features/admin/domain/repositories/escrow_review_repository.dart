@@ -17,11 +17,8 @@ abstract interface class EscrowReviewRepository {
   /// The transfer was not found; [reason] is what the consumer reads.
   Future<Result<void>> reject(String escrowId, String reason);
 
-  /// The technician was paid; [reference] is the transfer's reference.
-  Future<Result<void>> markPaid(String escrowId, String reference);
-
-  /// Settles a dispute: the technician is paid, or the consumer gets the
-  /// money back. [note] says why.
+  /// Settles a dispute: the money goes to the technician's wallet, or the
+  /// consumer gets it back. [note] says why.
   Future<Result<void>> resolve(
     String escrowId, {
     required bool payTechnician,

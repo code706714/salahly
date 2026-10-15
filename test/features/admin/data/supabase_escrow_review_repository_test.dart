@@ -3,8 +3,8 @@ import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/features/account/domain/failures/account_failures.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_escrow_review_repository.dart';
+import 'package:salahly/features/admin/domain/entities/escrow_review.dart';
 import 'package:salahly/features/admin/domain/failures/admin_failures.dart';
-import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 import 'package:salahly/features/escrow/domain/entities/escrow.dart';
 
 import '../../../helpers/admin_server.dart';
@@ -22,12 +22,12 @@ void main() {
     test('reads what the team needs to check or pay', () async {
       server.body = {
         'total': 2,
-        'counts': {'pending': 1, 'released': 1},
+        'counts': {'pending': 1, 'paid_out': 1},
         'items': [
           {
             'id': 'escrow-1',
             'request_code': 'R-1048',
-            'status': 'released',
+            'status': 'disputed',
             'amount_piastres': 35000,
             'method': 'instapay',
             'sender_account': 'norhan@instapay',
@@ -36,13 +36,10 @@ void main() {
             'consumer_phone': '01114567720',
             'technician_name': 'محمود',
             'technician_phone': '01005550000',
-            'payout_method': 'wallet',
-            'payout_account': '01005551234',
-            'payout_holder': 'محمود سعيد',
-            'payout_reference': null,
             'refund_reference': null,
             'reject_reason': null,
-            'dispute_reason': null,
+            'dispute_reason': 'الفني ماجاش',
+            'disputed_by': 'technician',
             'resolution_note': 'الفني كان على حق',
             'created_at': '2026-10-13T10:00:00Z',
           },
@@ -58,9 +55,6 @@ void main() {
             'consumer_phone': null,
             'technician_name': null,
             'technician_phone': null,
-            'payout_method': null,
-            'payout_account': null,
-            'payout_holder': null,
             'created_at': '2026-10-13T11:00:00Z',
           },
         ],
@@ -68,7 +62,7 @@ void main() {
 
       final page = valueOf(
         await repository.fetchEscrows(
-          status: EscrowStatus.released,
+          status: EscrowStatus.disputed,
           limit: 25,
           offset: 0,
         ),
@@ -76,18 +70,17 @@ void main() {
 
       expect(server.lastFunction, 'admin_list_escrows');
       expect(server.lastParams, {
-        'p_status': 'released',
+        'p_status': 'disputed',
         'p_limit': 25,
         'p_offset': 0,
       });
       expect(page.total, 2);
       final paid = page.items.first;
-      expect(paid.status, EscrowStatus.released);
-      expect(paid.payoutMethod, TopupMethod.wallet);
-      expect(paid.payoutAccount, '01005551234');
+      expect(paid.status, EscrowStatus.disputed);
+      expect(paid.disputedBy, EscrowDisputer.technician);
       expect(paid.resolutionNote, 'الفني كان على حق');
       expect(page.items.last.consumerName, isNull);
-      expect(page.items.last.payoutMethod, isNull);
+      expect(page.items.last.disputedBy, isNull);
     });
 
     test('sends no status as null, not left out', () async {
@@ -129,16 +122,6 @@ void main() {
       expect(server.lastParams, {
         'p_escrow_id': 'escrow-1',
         'p_reason': 'المبلغ ناقص',
-      });
-    });
-
-    test('records that the technician was paid', () async {
-      await repository.markPaid('escrow-1', 'IP-123');
-
-      expect(server.lastFunction, 'admin_mark_escrow_paid');
-      expect(server.lastParams, {
-        'p_escrow_id': 'escrow-1',
-        'p_reference': 'IP-123',
       });
     });
 
@@ -223,7 +206,6 @@ void main() {
   group('refusals', () {
     for (final (message, failure) in <(String, Failure)>[
       ('not_pending', const NotPendingFailure()),
-      ('not_released', const NotPendingFailure()),
       ('not_disputed', const NotPendingFailure()),
       ('not_refund_due', const NotPendingFailure()),
       ('escrow_not_found', const AdminNotFoundFailure()),

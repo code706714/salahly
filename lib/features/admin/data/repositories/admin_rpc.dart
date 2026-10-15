@@ -48,13 +48,14 @@ Failure adminFailureFrom(Object error) {
       case 'recent_login_required':
         return const RecentLoginRequiredFailure();
       case 'not_pending' ||
-          'not_released' ||
+          'not_requested' ||
           'not_disputed' ||
           'not_refund_due':
         return const NotPendingFailure();
       case 'verification_not_found' ||
           'topup_not_found' ||
           'escrow_not_found' ||
+          'withdrawal_not_found' ||
           'complaint_not_found' ||
           'user_not_found' ||
           'pack_not_found' ||

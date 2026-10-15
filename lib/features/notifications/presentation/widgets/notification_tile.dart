@@ -168,14 +168,18 @@ class NotificationTile extends StatelessWidget {
       colors.primary,
     ),
     NotificationKind.escrowHeld ||
-    NotificationKind.escrowReleased ||
+    NotificationKind.escrowWorkConfirmed ||
+    NotificationKind.escrowReleaseScheduled ||
     NotificationKind.escrowPaidOut ||
+    NotificationKind.withdrawalPaid ||
     NotificationKind.escrowRefunded => (
       Icons.verified_user_outlined,
       colors.successSoft,
       colors.success,
     ),
-    NotificationKind.escrowRejected || NotificationKind.escrowDisputed => (
+    NotificationKind.escrowRejected ||
+    NotificationKind.escrowDisputed ||
+    NotificationKind.withdrawalRejected => (
       Icons.error_outline_rounded,
       colors.dangerSoft,
       colors.dangerDeep,

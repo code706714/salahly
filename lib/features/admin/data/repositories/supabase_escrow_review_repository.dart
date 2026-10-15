@@ -40,13 +40,6 @@ class SupabaseEscrowReviewRepository implements EscrowReviewRepository {
   );
 
   @override
-  Future<Result<void>> markPaid(String escrowId, String reference) =>
-      _rpc.run('admin_mark_escrow_paid', {
-        'p_escrow_id': escrowId,
-        'p_reference': reference,
-      });
-
-  @override
   Future<Result<void>> resolve(
     String escrowId, {
     required bool payTechnician,
