@@ -11,9 +11,9 @@ abstract interface class CallEngine {
 
   Stream<CallLink> get link;
 
-  /// Takes the microphone and readies the link; false when the microphone
-  /// is not allowed.
-  Future<bool> open();
+  /// Takes the microphone and readies the link through [iceServers]; false
+  /// when the microphone is not allowed.
+  Future<bool> open(List<Map<String, dynamic>> iceServers);
 
   /// The caller's first step: makes the offer.
   Future<void> offer();

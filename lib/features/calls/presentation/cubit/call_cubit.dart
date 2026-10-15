@@ -57,7 +57,9 @@ class CallCubit extends Cubit<CallState> {
       _ringTimer = Timer(_ringFor, () => _finish(CallEnd.missed));
       return;
     }
-    if (!await _engine.open()) return _finish(CallEnd.microphone);
+    if (!await _engine.open(await _calls.iceServers())) {
+      return _finish(CallEnd.microphone);
+    }
     final result = await _calls.start(_requestId, _technicianId);
     if (isClosed) return;
     switch (result) {
@@ -83,7 +85,9 @@ class CallCubit extends Cubit<CallState> {
     if (id == null || state.phase != CallPhase.incoming) return;
     emit(state.copyWith(phase: CallPhase.connecting));
     _ringTimer?.cancel();
-    if (!await _engine.open()) return _finish(CallEnd.microphone);
+    if (!await _engine.open(await _calls.iceServers())) {
+      return _finish(CallEnd.microphone);
+    }
     final result = await _calls.answer(id);
     if (isClosed || state.phase == CallPhase.ended) return;
     if (result is Err) {

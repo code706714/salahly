@@ -49,6 +49,54 @@ void main() {
   Map<String, dynamic> sent() =>
       jsonDecode(requests.single.body) as Map<String, dynamic>;
 
+  group('the servers for the voice link', () {
+    test('are the ones the function gives', () async {
+      body = {
+        'iceServers': [
+          {
+            'urls': ['turn:relay.example:3478'],
+            'username': 'u',
+            'credential': 'c',
+          },
+        ],
+      };
+
+      final servers = await repository().iceServers();
+
+      expect(requests.single.url.path, '/functions/v1/call-ice-servers');
+      expect(servers, [
+        {
+          'urls': ['turn:relay.example:3478'],
+          'username': 'u',
+          'credential': 'c',
+        },
+      ]);
+    });
+
+    test('are a public STUN server when the function fails', () async {
+      status = 500;
+      body = {'error': 'down'};
+
+      final servers = await repository().iceServers();
+
+      expect(servers, [
+        {'urls': 'stun:stun.l.google.com:19302'},
+      ]);
+    });
+
+    test('are a public STUN server offline', () async {
+      offline = true;
+
+      expect(await repository().iceServers(), hasLength(1));
+    });
+
+    test('are a public STUN server when the answer has none', () async {
+      body = {'iceServers': []};
+
+      expect(await repository().iceServers(), hasLength(1));
+    });
+  });
+
   group('starting a call', () {
     test('names the request and the technician, and reads the id', () async {
       body = {'id': 'call-1'};
