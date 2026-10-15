@@ -40,9 +40,11 @@ class PaymentCubit extends Cubit<PaymentState> {
     emit(state.copyWith(pageOpened: opened));
   }
 
-  /// Asks the server how the order stands. A failed ask keeps waiting.
+  /// Asks the server how the order stands. A failed ask keeps waiting, and so
+  /// does a declined try: the checkout lets the person try another card, and
+  /// a later success must still be seen (or they would pay twice).
   Future<void> refresh() async {
-    if (_asking || state.progress != PaymentProgress.waiting) return;
+    if (_asking || state.progress == PaymentProgress.paid) return;
     _asking = true;
     final result = await _payments.fetchOrder(_checkout.orderId);
     _asking = false;
@@ -55,7 +57,11 @@ class PaymentCubit extends Cubit<PaymentState> {
         _ => PaymentProgress.notPaid,
       };
       emit(state.copyWith(progress: progress, status: value.status));
-      if (progress != PaymentProgress.waiting) _timer?.cancel();
+      final settled =
+          progress == PaymentProgress.paid ||
+          (progress == PaymentProgress.notPaid &&
+              value.status != PaymentStatus.failed);
+      if (settled) _timer?.cancel();
     }
   }
 

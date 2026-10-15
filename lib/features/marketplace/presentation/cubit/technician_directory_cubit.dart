@@ -26,6 +26,8 @@ class TechnicianDirectoryCubit extends Cubit<TechnicianDirectoryState> {
         status: state.technicians.isEmpty
             ? TechnicianDirectoryStatus.loading
             : state.status,
+        // A page still being fetched belongs to the list this replaces.
+        loadingMore: false,
         failure: () => null,
       ),
     );

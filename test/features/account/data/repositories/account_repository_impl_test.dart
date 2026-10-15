@@ -124,6 +124,17 @@ void main() {
         );
       });
 
+      test('says when money is still open', () async {
+        when(() => remote.deleteAccount()).thenAnswer(
+          (_) => Future.error(const PostgrestException(message: 'money_open')),
+        );
+
+        expect(
+          await repository.deleteAccount(),
+          isErr(const MoneyOpenFailure()),
+        );
+      });
+
       test('says when the sign-in is too old', () async {
         when(() => remote.deleteAccount()).thenAnswer(
           (_) => Future.error(

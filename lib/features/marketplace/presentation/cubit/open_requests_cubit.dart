@@ -26,6 +26,8 @@ class OpenRequestsCubit extends Cubit<OpenRequestsState> {
         status: state.requests.isEmpty
             ? OpenRequestsStatus.loading
             : state.status,
+        // A page still being fetched belongs to the list this replaces.
+        loadingMore: false,
         failure: () => null,
       ),
     );

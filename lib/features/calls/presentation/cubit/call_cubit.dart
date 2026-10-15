@@ -57,11 +57,19 @@ class CallCubit extends Cubit<CallState> {
       _ringTimer = Timer(_ringFor, () => _finish(CallEnd.missed));
       return;
     }
-    if (!await _engine.open(await _calls.iceServers())) {
+    final iceServers = await _calls.iceServers();
+    if (_over) return;
+    if (!await _engine.open(iceServers)) {
       return _finish(CallEnd.microphone);
     }
+    if (_over) return;
     final result = await _calls.start(_requestId, _technicianId);
-    if (isClosed) return;
+    if (_over) {
+      // Hung up (or left the page) while the call was being placed: do not
+      // leave the other phone ringing for a call nobody is waiting on.
+      if (result case Ok(:final value)) unawaited(_calls.end(value));
+      return;
+    }
     switch (result) {
       case Ok(:final value):
         _callId = value;
@@ -78,6 +86,8 @@ class CallCubit extends Cubit<CallState> {
     emit(state.copyWith(phase: CallPhase.ringing));
     await _guarded(_engine.offer);
   }
+
+  bool get _over => isClosed || state.phase == CallPhase.ended;
 
   /// Takes the ringing call.
   Future<void> accept() async {

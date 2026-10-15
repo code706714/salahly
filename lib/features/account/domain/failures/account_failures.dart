@@ -10,3 +10,9 @@ final class PendingTransferFailure extends Failure {
 final class RecentLoginRequiredFailure extends Failure {
   const RecentLoginRequiredFailure();
 }
+
+/// Money is still on its way (a wallet balance, a withdrawal, a payment held
+/// for a job), so deleting the account would strand it.
+final class MoneyOpenFailure extends Failure {
+  const MoneyOpenFailure();
+}
