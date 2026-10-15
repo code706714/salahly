@@ -53,7 +53,7 @@ A redirect, a success page or any client call is never proof of payment.
 
 ## Code map
 
-- Database: `supabase/migrations/20261015090000_payments.sql`
+- Database: `supabase/migrations/20261015100000_payments.sql`
   (`payment_orders`, `payment_attempts`, `payment_events`, the RPCs above,
   `admin_list_payments`, `payments_record_refund`).
 - Edge functions: `payment-create`, `payment-webhook`, `payment-reconcile`,
