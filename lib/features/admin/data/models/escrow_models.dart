@@ -2,7 +2,7 @@ import 'package:salahly/core/serialization/wire.dart';
 import 'package:salahly/features/admin/data/models/json_values.dart';
 import 'package:salahly/features/admin/domain/entities/escrow_review.dart';
 import 'package:salahly/features/admin/domain/entities/paged_result.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 import 'package:salahly/features/escrow/domain/entities/escrow.dart';
 
 /// Maps what `admin_list_escrows` returns.
@@ -18,9 +18,12 @@ abstract final class AdminEscrowModels {
     requestCode: json['request_code'] as String,
     status: enumFromWire(EscrowStatus.values, json['status']),
     amountPiastres: intOf(json['amount_piastres']),
-    method: enumFromWire(TopupMethod.values, json['method']),
-    senderAccount: json['sender_account'] as String,
-    screenshotPath: json['screenshot_path'] as String,
+    method: json['method'] == null
+        ? null
+        : enumFromWire(TopupMethod.values, json['method']),
+    senderAccount: json['sender_account'] as String?,
+    screenshotPath: json['screenshot_path'] as String?,
+    onlineMethod: json['online_method'] as String?,
     createdAt: timeFromWire(json['created_at']),
     consumerName: json['consumer_name'] as String?,
     consumerPhone: json['consumer_phone'] as String?,

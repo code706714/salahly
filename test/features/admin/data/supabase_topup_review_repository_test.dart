@@ -3,8 +3,8 @@ import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_topup_review_repository.dart';
 import 'package:salahly/features/admin/domain/failures/admin_failures.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 
 import '../../../helpers/admin_server.dart';
 

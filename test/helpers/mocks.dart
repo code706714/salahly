@@ -26,6 +26,7 @@ import 'package:salahly/features/notifications/domain/repositories/notifications
 import 'package:salahly/features/notifications/domain/repositories/push_service.dart';
 import 'package:salahly/features/notifications/domain/repositories/push_transport.dart';
 import 'package:salahly/features/onboarding/domain/repositories/onboarding_repository.dart';
+import 'package:salahly/features/payments/domain/repositories/payment_repository.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 
@@ -41,6 +42,8 @@ CallRepository quietCalls() {
 }
 
 class MockEscrowRepository extends Mock implements EscrowRepository {}
+
+class MockPaymentRepository extends Mock implements PaymentRepository {}
 
 class MockPushService extends Mock implements PushService {}
 

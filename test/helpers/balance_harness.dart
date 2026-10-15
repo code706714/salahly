@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:salahly/core/media/photo_picker.dart';
+import 'package:salahly/core/launch/external_apps.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/account/domain/entities/user_profile.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
@@ -12,6 +12,7 @@ import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
 import 'package:salahly/features/balance/presentation/cubit/balance_cubit.dart';
 import 'package:salahly/features/balance/presentation/cubit/buy_uses_cubit.dart';
+import 'package:salahly/features/payments/domain/repositories/payment_repository.dart';
 
 import '../pump_app.dart';
 import 'follow_up_harness.dart';
@@ -67,27 +68,20 @@ class BalanceHarness {
     when(() => this.session.state).thenReturn(session);
     when(() => this.session.refreshProfile()).thenAnswer((_) async {});
     when(buyUses.load).thenAnswer((_) async {});
-    when(buyUses.submit).thenAnswer((_) async {});
+    when(buyUses.pay).thenAnswer((_) async {});
     when(balance.load).thenAnswer((_) async {});
-    when(
-      () => photoPicker.pick(
-        source: any(named: 'source'),
-        purpose: any(named: 'purpose'),
-      ),
-    ).thenAnswer((_) async => '/tmp/proof.jpg');
   }
 
   /// Call once from `setUpAll` before using [BalanceHarness].
   static void registerFallbacks() {
     FollowUpHarness.registerFallbacks();
-    registerFallbackValue(PhotoSource.camera);
-    registerFallbackValue(PhotoPurpose.transfer);
   }
 
   final session = MockSessionCubit();
   final buyUses = MockBuyUsesCubit();
   final balance = MockBalanceCubit();
-  final photoPicker = MockPhotoPicker();
+  final payments = MockPaymentRepository();
+  final apps = MockExternalApps();
 
   /// Pumps [view] on a small phone under the cubits a balance screen
   /// reads.
@@ -101,7 +95,10 @@ class BalanceHarness {
     when(() => balance.isClosed).thenReturn(false);
     await tester.pumpApp(
       view,
-      repositories: [RepositoryProvider<PhotoPicker>.value(value: photoPicker)],
+      repositories: [
+        RepositoryProvider<PaymentRepository>.value(value: payments),
+        RepositoryProvider<ExternalApps>.value(value: apps),
+      ],
       blocs: [
         BlocProvider<SessionCubit>.value(value: session),
         BlocProvider<BuyUsesCubit>.value(value: buyUses),

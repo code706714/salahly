@@ -3283,33 +3283,6 @@
       }
     }
   },
-  "buyUsesStepTransfer": "{honorific, select, ms{حوّلي {amount} ج.م على} other{حوّل {amount} ج.م على}}",
-  "@buyUsesStepTransfer": {
-    "placeholders": {
-      "honorific": {
-        "type": "String"
-      },
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "buyUsesStepSender": "{honorific, select, ms{رقم الموبايل أو الحساب اللي حوّلتي منه} other{رقم الموبايل أو الحساب اللي حوّلت منه}}",
-  "@buyUsesStepSender": {
-    "placeholders": {
-      "honorific": {
-        "type": "String"
-      }
-    }
-  },
-  "buyUsesStepScreenshot": "{honorific, select, ms{ارفعي صورة التحويل} other{ارفع صورة التحويل}}",
-  "@buyUsesStepScreenshot": {
-    "placeholders": {
-      "honorific": {
-        "type": "String"
-      }
-    }
-  },
   "buyUsesPackConsumer": "{count, plural, =1{طلب واحد} =2{طلبين} few{{count} طلبات} other{{count} طلب}}",
   "@buyUsesPackConsumer": {
     "placeholders": {
@@ -3371,61 +3344,6 @@
   },
   "buyUsesMethodInstapay": "إنستاباي",
   "buyUsesMethodWallet": "فودافون كاش",
-  "buyUsesAccountInstapay": "عنوان إنستاباي",
-  "buyUsesAccountWallet": "رقم فودافون كاش",
-  "buyUsesHolder": "باسم: {name}",
-  "@buyUsesHolder": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "buyUsesCopy": "{honorific, select, ms{انسخي} other{انسخ}}",
-  "@buyUsesCopy": {
-    "placeholders": {
-      "honorific": {
-        "type": "String"
-      }
-    }
-  },
-  "buyUsesCopied": "اتنسخ",
-  "buyUsesSenderInvalidWallet": "{honorific, select, ms{اكتبي رقم موبايل مصري مظبوط.} other{اكتب رقم موبايل مصري مظبوط.}}",
-  "@buyUsesSenderInvalidWallet": {
-    "placeholders": {
-      "honorific": {
-        "type": "String"
-      }
-    }
-  },
-  "buyUsesSenderInvalidInstapay": "{honorific, select, ms{اكتبي رقم موبايل مصري أو عنوان إنستاباي بحروف إنجليزي وأرقام من غير مسافات.} other{اكتب رقم موبايل مصري أو عنوان إنستاباي بحروف إنجليزي وأرقام من غير مسافات.}}",
-  "@buyUsesSenderInvalidInstapay": {
-    "placeholders": {
-      "honorific": {
-        "type": "String"
-      }
-    }
-  },
-  "buyUsesScreenshotAdd": "{honorific, select, ms{اختاري سكرين شوت التحويل} other{اختار سكرين شوت التحويل}}",
-  "@buyUsesScreenshotAdd": {
-    "placeholders": {
-      "honorific": {
-        "type": "String"
-      }
-    }
-  },
-  "buyUsesScreenshotChosen": "الصورة اتختارت",
-  "buyUsesScreenshotChange": "غيّرها",
-  "buyUsesScreenshotPreview": "صورة التحويل",
-  "buyUsesSubmit": "{honorific, select, ms{ابعتي للمراجعة} other{ابعت للمراجعة}}",
-  "@buyUsesSubmit": {
-    "placeholders": {
-      "honorific": {
-        "type": "String"
-      }
-    }
-  },
-  "buyUsesSent": "وصلنا التحويل، هنراجعه ونضيف رصيدك",
   "buyUsesUnavailable": "{honorific, select, ms{الشحن مش متاح دلوقتي. جرّبي كمان شوية.} other{الشحن مش متاح دلوقتي. جرّب كمان شوية.}}",
   "@buyUsesUnavailable": {
     "placeholders": {
@@ -3434,56 +3352,8 @@
       }
     }
   },
-  "buyUsesTooManyPending": "{honorific, select, ms{عندك تحويلين لسه بيتراجعوا. استني لما نراجعهم وبعدها ابعتي تحويل تاني.} other{عندك تحويلين لسه بيتراجعوا. استنى لما نراجعهم وبعدها ابعت تحويل تاني.}}",
-  "@buyUsesTooManyPending": {
-    "placeholders": {
-      "honorific": {
-        "type": "String"
-      }
-    }
-  },
   "buyUsesPackGone": "{honorific, select, ms{الباقة دي مبقتش متاحة. اختاري باقة تانية.} other{الباقة دي مبقتش متاحة. اختار باقة تانية.}}",
   "@buyUsesPackGone": {
-    "placeholders": {
-      "honorific": {
-        "type": "String"
-      }
-    }
-  },
-  "buyUsesMethodGone": "{honorific, select, ms{الطريقة دي مش متاحة دلوقتي. جرّبي الطريقة التانية.} other{الطريقة دي مش متاحة دلوقتي. جرّب الطريقة التانية.}}",
-  "@buyUsesMethodGone": {
-    "placeholders": {
-      "honorific": {
-        "type": "String"
-      }
-    }
-  },
-  "buyUsesInvalidSender": "{honorific, select, ms{الرقم أو الحساب اللي كتبتيه مش مظبوط. راجعيه وجرّبي تاني.} other{الرقم أو الحساب اللي كتبته مش مظبوط. راجعه وجرّب تاني.}}",
-  "@buyUsesInvalidSender": {
-    "placeholders": {
-      "honorific": {
-        "type": "String"
-      }
-    }
-  },
-  "buyUsesInvalidScreenshot": "{honorific, select, ms{الصورة ماوصلتش صح. اختاري الصورة تاني وابعتي.} other{الصورة ماوصلتش صح. اختار الصورة تاني وابعت.}}",
-  "@buyUsesInvalidScreenshot": {
-    "placeholders": {
-      "honorific": {
-        "type": "String"
-      }
-    }
-  },
-  "buyUsesUploadLimit": "{honorific, select, ms{رفعتي صور كتير النهارده. جرّبي بكره.} other{رفعت صور كتير النهارده. جرّب بكره.}}",
-  "@buyUsesUploadLimit": {
-    "placeholders": {
-      "honorific": {
-        "type": "String"
-      }
-    }
-  },
-  "buyUsesPhotoRejected": "{honorific, select, ms{الصورة دي مش مقبولة. اختاري صورة JPG أو PNG.} other{الصورة دي مش مقبولة. اختار صورة JPG أو PNG.}}",
-  "@buyUsesPhotoRejected": {
     "placeholders": {
       "honorific": {
         "type": "String"
@@ -5169,7 +5039,7 @@
     }
   },
   "escrowTitle": "ضمان الفلوس",
-  "escrowOfferBody": "{honorific, select, ms{حوّلي {amount} ج.م لصلحلي قبل الشغل. بنحتفظ بيهم لحد ما تأكّدي إن الشغل تمام، والفني بيعرف إن فلوسك مأمّنة.} other{حوّل {amount} ج.م لصلحلي قبل الشغل. بنحتفظ بيهم لحد ما تأكّد إن الشغل تمام، والفني بيعرف إن فلوسك مأمّنة.}}",
+  "escrowOfferBody": "{honorific, select, ms{ادفعي {amount} ج.م لصلحلي أونلاين قبل الشغل. بنحتفظ بيهم لحد ما تأكّدي إن الشغل تمام، والفني بيعرف إنك دفعتي.} other{ادفع {amount} ج.م لصلحلي أونلاين قبل الشغل. بنحتفظ بيهم لحد ما تأكّد إن الشغل تمام، والفني بيعرف إنك دفعت.}}",
   "@escrowOfferBody": {
     "placeholders": {
       "honorific": {
@@ -5188,8 +5058,8 @@
       }
     }
   },
-  "escrowPendingBody": "وصلنا طلب التحويل وبنراجعه. هنبلّغك أول ما نتأكد.",
-  "escrowHeldBody": "{amount} ج.م معانا ومأمّنين. مش هيتحوّلوا للفني غير بعد ما الشغل يخلص وتأكّد.",
+  "escrowPendingBody": "وصلنا تحويل قديم وبنراجعه. هنبلّغك أول ما نتأكد.",
+  "escrowHeldBody": "{amount} ج.م دفعتهم وعندنا. مش هيتحوّلوا للفني غير بعد ما الشغل يخلص وتأكّد.",
   "@escrowHeldBody": {
     "placeholders": {
       "amount": {
@@ -5230,8 +5100,8 @@
   "escrowReleasedBody": "أكّدت الشغل. الفلوس في طريقها للفني.",
   "escrowPaidOutBody": "الفلوس وصلت للفني. شكراً.",
   "escrowDisputedBody": "وصلنا اعتراضك. الفلوس معانا وهنراجع الموضوع ونرد عليك.",
-  "escrowRefundDueBody": "هنرجّع فلوسك على نفس الحساب اللي حوّلت منه.",
-  "escrowRefundedBody": "رجّعنا فلوسك على الحساب اللي حوّلت منه.",
+  "escrowRefundDueBody": "هنرجّع فلوسك.",
+  "escrowRefundedBody": "رجّعنا فلوسك.",
   "escrowRejectedBody": "ما لقيناش التحويل: {reason}",
   "@escrowRejectedBody": {
     "placeholders": {
@@ -5240,7 +5110,7 @@
       }
     }
   },
-  "escrowRetryAction": "{honorific, select, ms{ابعتي التحويل تاني} other{ابعت التحويل تاني}}",
+  "escrowRetryAction": "{honorific, select, ms{ادفعي} other{ادفع}}",
   "@escrowRetryAction": {
     "placeholders": {
       "honorific": {
@@ -5256,7 +5126,7 @@
       }
     }
   },
-  "escrowSecureIntro": "{honorific, select, ms{حوّلي {amount} ج.م لصلحلي وارفعي صورة التحويل. هنراجعه ونبلّغك، وبعدها الفني يبدأ وهو عارف إن فلوسه مضمونة. مش هنحوّل له حاجة غير لما تأكّدي الشغل، أو بعد 3 أيام من ما يخلّص لو ما اعترضتيش.} other{حوّل {amount} ج.م لصلحلي وارفع صورة التحويل. هنراجعه ونبلّغك، وبعدها الفني يبدأ وهو عارف إن فلوسه مضمونة. مش هنحوّل له حاجة غير لما تأكّد الشغل، أو بعد 3 أيام من ما يخلّص لو ما اعترضتش.}}",
+  "escrowSecureIntro": "{honorific, select, ms{ادفعي {amount} ج.م أونلاين بكارت أو محفظة. أول ما الدفع يتأكد الفني بيعرف، وبنحتفظ بالفلوس عندنا ومش بنحوّلها له غير لما تأكّدي الشغل، أو بعد 3 أيام من ما يخلّص لو ما اعترضتيش.} other{ادفع {amount} ج.م أونلاين بكارت أو محفظة. أول ما الدفع يتأكد الفني بيعرف، وبنحتفظ بالفلوس عندنا ومش بنحوّلها له غير لما تأكّد الشغل، أو بعد 3 أيام من ما يخلّص لو ما اعترضتش.}}",
   "@escrowSecureIntro": {
     "placeholders": {
       "honorific": {
@@ -5267,7 +5137,6 @@
       }
     }
   },
-  "escrowSecureSent": "وصلنا التحويل، هنراجعه ونبلّغك",
   "escrowSecureUnavailable": "{honorific, select, ms{الضمان مش متاح للطلب ده دلوقتي.} other{الضمان مش متاح للطلب ده دلوقتي.}}",
   "@escrowSecureUnavailable": {
     "placeholders": {
@@ -5349,7 +5218,7 @@
       }
     }
   },
-  "adminEscrowStatusPending": "مستني مراجعة التحويل",
+  "adminEscrowStatusPending": "تحويل قديم مستني مراجعة",
   "adminEscrowStatusHeld": "الفلوس عندنا",
   "adminEscrowStatusReleased": "مستني دفع للفني",
   "adminEscrowStatusPaidOut": "اتدفع للفني",
@@ -5487,5 +5356,83 @@
     }
   },
   "priceGuideFromOffers": "ده المدى اللي وقعت فيه أغلب العروض اللي اتقبلت. الفني هو اللي بيحدد سعره.",
-  "priceGuideFromCatalog": "ده تقدير من الأسعار اللي الفنيين بيبدأوا بيها. الفني هو اللي بيحدد سعره."
+  "priceGuideFromCatalog": "ده تقدير من الأسعار اللي الفنيين بيبدأوا بيها. الفني هو اللي بيحدد سعره.",
+  "paymentTitle": "الدفع",
+  "paymentAmount": "المبلغ: {amount} ج.م",
+  "@paymentAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentWaitingTitle": "بنستنى تأكيد الدفع",
+  "paymentOpenBody": "كمّل الدفع في صفحة الدفع اللي اتفتحت. أول ما الدفع يتأكد عندنا هتلاقي الشاشة دي بتتحدّث لوحدها.",
+  "paymentWaitingBody": "الدفع لسه مستني تأكيد. لو بتدفع بمحفظة، وافق على العملية من موبايلك. ممكن تقفل الشاشة، وهنبلّغك أول ما يتأكد.",
+  "paymentPaidTitle": "الدفع اتأكد",
+  "paymentPaidBody": "استلمنا فلوسك وسجّلناها.",
+  "paymentFailedTitle": "الدفع ماتمّش",
+  "paymentFailedBody": "العملية اترفضت أو اتلغت، وماتخصمش حاجة منك. تقدر تحاول تاني.",
+  "paymentExpiredBody": "صفحة الدفع انتهت قبل ما الدفع يكتمل. ابدأ من الأول.",
+  "paymentRefundedBody": "الفلوس رجعت لك.",
+  "paymentOpenAgain": "{honorific, select, ms{افتحي صفحة الدفع} other{افتح صفحة الدفع}}",
+  "@paymentOpenAgain": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentLater": "هكمّل بعدين",
+  "paymentDone": "تمام",
+  "paymentBack": "رجوع",
+  "paymentsUnavailable": "{honorific, select, ms{الدفع أونلاين مش متاح دلوقتي. جرّبي كمان شوية.} other{الدفع أونلاين مش متاح دلوقتي. جرّب كمان شوية.}}",
+  "@paymentsUnavailable": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesPay": "{honorific, select, ms{ادفعي {amount} ج.م} other{ادفع {amount} ج.م}}",
+  "@buyUsesPay": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesPayHint": "{honorific, select, ms{هتدفعي بكارت بنكي أو بمحفظة موبايل (زي فودافون كاش) في صفحة دفع آمنة. الرصيد بيتضاف أول ما الدفع يتأكد.} other{هتدفع بكارت بنكي أو بمحفظة موبايل (زي فودافون كاش) في صفحة دفع آمنة. الرصيد بيتضاف أول ما الدفع يتأكد.}}",
+  "@buyUsesPayHint": {
+    "placeholders": {
+      "honorific": {
+        "type": "String"
+      }
+    }
+  },
+  "buyUsesPaid": "الدفع اتأكد وزاد رصيدك",
+  "escrowSecurePaid": "الدفع اتأكد وفلوسك اتسجّلت",
+  "escrowPaymentCheckingBody": "بنتأكد من الدفع. لو خلصت الدفع هنبلّغك أول ما يتأكد.",
+  "adminEscrowRefundByDashboard": "مزوّد الدفع مش بيرجّع بالـ API للحساب ده. رجّع الفلوس من لوحة المزوّد وهتتقفل هنا لوحدها.",
+  "adminEscrowRefundOnlineAction": "رجّع عن طريق مزوّد الدفع",
+  "adminEscrowRefundOnlineBody": "هنطلب من مزوّد الدفع يرجّع {amount} ج.م للعميل على نفس وسيلة دفعه.",
+  "@adminEscrowRefundOnlineBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "adminEscrowRefundOnlineConfirm": "رجّع",
+  "adminEscrowOnline": "دفع أونلاين ({method})",
+  "@adminEscrowOnline": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      }
+    }
+  }
 }

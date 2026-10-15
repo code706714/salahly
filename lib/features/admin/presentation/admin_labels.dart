@@ -26,6 +26,7 @@ String adminFailureMessage(AppLocalizations l10n, Failure failure) =>
       LastActiveFailure() => l10n.adminErrorLastActive,
       CannotSuspendAdminFailure() => l10n.adminErrorCannotSuspendAdmin,
       RecentLoginRequiredFailure() => l10n.adminErrorRecentLogin,
+      RefundByDashboardFailure() => l10n.adminEscrowRefundByDashboard,
       _ => commonFailureMessage(l10n, failure),
     };
 

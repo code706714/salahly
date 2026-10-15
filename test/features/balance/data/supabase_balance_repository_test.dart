@@ -6,13 +6,11 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
-import 'package:salahly/core/error/upload_failures.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/balance/data/repositories/supabase_balance_repository.dart';
 import 'package:salahly/features/balance/domain/entities/ledger_entry.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
-import 'package:salahly/features/balance/domain/failures/balance_failures.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../helpers/balance_fixtures.dart';
@@ -95,41 +93,6 @@ void main() {
         _failure(const NetworkFailure()),
       );
     });
-  });
-
-  test('fetchPaymentAccounts reads where to transfer', () async {
-    server.body = [
-      {
-        'method': 'instapay',
-        'account': 'salahly@instapay',
-        'holder_name': 'شركة صلحلي',
-      },
-      {
-        'method': 'wallet',
-        'account': '01000000000',
-        'holder_name': 'شركة صلحلي',
-      },
-    ];
-
-    final result = await server.repository().fetchPaymentAccounts();
-
-    expect((result as Ok).value, paymentAccounts);
-    expect(server.last.url.path, '/rest/v1/payment_accounts');
-  });
-
-  test('fetchPaymentAccounts says an unknown method is unexpected', () async {
-    server.body = [
-      {'method': 'card', 'account': 'x', 'holder_name': 'y'},
-    ];
-
-    expect(
-      await server.repository().fetchPaymentAccounts(),
-      isA<Err<Object?>>().having(
-        (err) => err.failure,
-        'failure',
-        isA<UnexpectedFailure>(),
-      ),
-    );
   });
 
   group('fetchTopups', () {
@@ -243,95 +206,5 @@ void main() {
       expect(server.last.url.queryParameters['role'], 'eq.technician');
       expect(server.last.url.queryParameters['limit'], '50');
     });
-  });
-
-  group('submitTopup', () {
-    test(
-      'sends only the pack, price, method, sender and screenshot',
-      () async {
-        server.body = 'topup-9';
-
-        final result = await server.repository().submitTopup(
-          packId: 'pack-5',
-          method: TopupMethod.wallet,
-          senderAccount: '01114567720',
-          screenshotPath: 'consumer-1/proof.jpg',
-          expectedPricePiastres: 8000,
-        );
-
-        expect((result as Ok<String>).value, 'topup-9');
-        expect(server.last.url.path, '/rest/v1/rpc/submit_topup');
-        expect(server.lastParams, {
-          'p_pack_id': 'pack-5',
-          'p_method': 'wallet',
-          'p_sender_account': '01114567720',
-          'p_screenshot_path': 'consumer-1/proof.jpg',
-          'p_expected_price_piastres': 8000,
-        });
-      },
-    );
-
-    for (final (message, failure) in <(String, Failure)>[
-      ('pack_not_found', const PackNotFoundFailure()),
-      ('method_unavailable', const MethodUnavailableFailure()),
-      ('invalid_sender', const InvalidSenderFailure()),
-      ('invalid_screenshot', const InvalidScreenshotFailure()),
-      ('price_changed', const PriceChangedFailure()),
-      ('too_many_pending', const TooManyPendingFailure()),
-    ]) {
-      test('maps $message', () async {
-        server.fails(message);
-
-        expect(
-          await server.repository().submitTopup(
-            packId: 'pack-5',
-            method: TopupMethod.instapay,
-            senderAccount: 'a@instapay',
-            screenshotPath: 'consumer-1/proof.jpg',
-            expectedPricePiastres: 8000,
-          ),
-          _failure(failure),
-        );
-      });
-    }
-
-    test('keeps the sender out of an unexpected failure', () async {
-      server.fails('something_else');
-
-      final result = await server.repository().submitTopup(
-        packId: 'pack-5',
-        method: TopupMethod.wallet,
-        senderAccount: '01114567720',
-        screenshotPath: 'consumer-1/proof.jpg',
-        expectedPricePiastres: 8000,
-      );
-
-      final failure = (result as Err<String>).failure;
-      expect(failure, isA<UnexpectedFailure>());
-      expect(failure.toString(), isNot(contains('01114567720')));
-    });
-
-    test('reports a network failure offline', () async {
-      server.offline = true;
-
-      expect(
-        await server.repository().submitTopup(
-          packId: 'pack-5',
-          method: TopupMethod.wallet,
-          senderAccount: '01114567720',
-          screenshotPath: 'consumer-1/proof.jpg',
-          expectedPricePiastres: 8000,
-        ),
-        _failure(const NetworkFailure()),
-      );
-    });
-  });
-
-  test('uploadScreenshot refuses a file that is not an image', () async {
-    expect(
-      await server.repository().uploadScreenshot('/tmp/proof.pdf'),
-      _failure(const UnsupportedPhotoFailure()),
-    );
-    expect(server.requests, isEmpty);
   });
 }

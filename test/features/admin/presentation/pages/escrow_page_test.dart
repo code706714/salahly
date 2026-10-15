@@ -422,6 +422,63 @@ void main() {
     });
   });
 
+  group('an online payment', () {
+    testWidgets('shows how it was paid and no screenshot', (tester) async {
+      stubOne(testEscrowReview(status: EscrowStatus.held, online: true));
+      await pump(tester);
+      await open(tester);
+
+      expect(find.text(l10n.adminEscrowOnline('card')), findsOneWidget);
+      expect(find.byType(Image), findsNothing);
+    });
+
+    testWidgets('is refunded through the provider', (tester) async {
+      stubOne(testEscrowReview(status: EscrowStatus.refundDue, online: true));
+      when(
+        () => h.escrows.refundOnline(any()),
+      ).thenAnswer((_) async => const Ok(null));
+      await pump(tester);
+      await open(tester);
+
+      await tester.tap(find.text(l10n.adminEscrowRefundOnlineAction));
+      await tester.pumpAndSettle();
+      await tester.tap(inDialog(l10n.adminEscrowRefundOnlineConfirm));
+      await tester.pumpAndSettle();
+
+      verify(() => h.escrows.refundOnline('escrow-1')).called(1);
+      expect(find.text(l10n.adminEscrowRefunded), findsOneWidget);
+    });
+
+    testWidgets('says to refund from the provider dashboard when needed', (
+      tester,
+    ) async {
+      stubOne(testEscrowReview(status: EscrowStatus.refundDue, online: true));
+      when(
+        () => h.escrows.refundOnline(any()),
+      ).thenAnswer((_) async => const Err(RefundByDashboardFailure()));
+      await pump(tester);
+      await open(tester);
+
+      await tester.tap(find.text(l10n.adminEscrowRefundOnlineAction));
+      await tester.pumpAndSettle();
+      await tester.tap(inDialog(l10n.adminEscrowRefundOnlineConfirm));
+      await tester.pumpAndSettle();
+
+      expect(find.text(l10n.adminEscrowRefundByDashboard), findsOneWidget);
+    });
+
+    testWidgets('does not offer the provider refund for an old transfer', (
+      tester,
+    ) async {
+      stubOne(testEscrowReview(status: EscrowStatus.refundDue));
+      await pump(tester);
+      await open(tester);
+
+      expect(find.text(l10n.adminEscrowRefundOnlineAction), findsNothing);
+      expect(find.text(l10n.adminEscrowRefundAction), findsOneWidget);
+    });
+  });
+
   testWidgets('shows the reason a transfer was rejected, as plain text', (
     tester,
   ) async {

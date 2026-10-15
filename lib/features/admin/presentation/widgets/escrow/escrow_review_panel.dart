@@ -95,7 +95,7 @@ class _EscrowReviewPanelState extends State<EscrowReviewPanel> {
       title: l10n.adminEscrowRefundTitle(_consumer(l10n)),
       body: l10n.adminEscrowRefundBody(
         formatPounds(_escrow.amountPiastres),
-        _escrow.senderAccount,
+        _escrow.senderAccount ?? '',
       ),
       confirmLabel: l10n.adminEscrowRefundConfirm,
       fieldLabel: l10n.adminEscrowReferenceLabel,
@@ -103,6 +103,19 @@ class _EscrowReviewPanelState extends State<EscrowReviewPanel> {
       destructive: false,
     );
     if (reference != null) await cubit.markRefunded(_escrow.id, reference);
+  }
+
+  Future<void> _refundOnline(AppLocalizations l10n) async {
+    final cubit = context.read<EscrowReviewCubit>();
+    final confirmed = await showConfirmDialog(
+      context,
+      title: l10n.adminEscrowRefundTitle(_consumer(l10n)),
+      body: l10n.adminEscrowRefundOnlineBody(
+        formatPounds(_escrow.amountPiastres),
+      ),
+      confirmLabel: l10n.adminEscrowRefundOnlineConfirm,
+    );
+    if (confirmed) await cubit.refundOnline(_escrow.id);
   }
 
   Future<void> _resolve(
@@ -184,26 +197,28 @@ class _EscrowReviewPanelState extends State<EscrowReviewPanel> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: 240,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      l10n.adminEscrowScreenshot,
-                      style: TextStyle(fontSize: 13, color: colors.inkMuted),
-                    ),
-                    const SizedBox(height: 6),
-                    SecureImage(
-                      bucket: AdminBucket.transferProofs,
-                      path: escrow.screenshotPath,
-                      label: l10n.adminEscrowScreenshot,
-                      aspectRatio: 0.8,
-                    ),
-                  ],
+              if (escrow.screenshotPath case final screenshot?) ...[
+                SizedBox(
+                  width: 240,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        l10n.adminEscrowScreenshot,
+                        style: TextStyle(fontSize: 13, color: colors.inkMuted),
+                      ),
+                      const SizedBox(height: 6),
+                      SecureImage(
+                        bucket: AdminBucket.transferProofs,
+                        path: screenshot,
+                        label: l10n.adminEscrowScreenshot,
+                        aspectRatio: 0.8,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 24),
+                const SizedBox(width: 24),
+              ],
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -217,14 +232,27 @@ class _EscrowReviewPanelState extends State<EscrowReviewPanel> {
                             '${l10n.currencyEgp}',
                           ),
                         ),
-                        AdminFact(
-                          label: l10n.adminTopupsMethod,
-                          value: Text(topupMethodLabel(l10n, escrow.method)),
-                        ),
-                        AdminFact(
-                          label: l10n.adminEscrowFrom,
-                          value: _ltr(escrow.senderAccount),
-                        ),
+                        if (escrow.isOnline)
+                          AdminFact(
+                            label: l10n.adminTopupsMethod,
+                            value: Text(
+                              l10n.adminEscrowOnline(
+                                escrow.onlineMethod ?? '-',
+                              ),
+                            ),
+                          )
+                        else ...[
+                          AdminFact(
+                            label: l10n.adminTopupsMethod,
+                            value: Text(
+                              topupMethodLabel(l10n, escrow.method!),
+                            ),
+                          ),
+                          AdminFact(
+                            label: l10n.adminEscrowFrom,
+                            value: _ltr(escrow.senderAccount!),
+                          ),
+                        ],
                         AdminFact(
                           label: l10n.adminEscrowConsumer,
                           value: _person(
@@ -328,11 +356,23 @@ class _EscrowReviewPanelState extends State<EscrowReviewPanel> {
         ),
       ],
       EscrowStatus.refundDue => [
-        BusyFilledButton(
-          label: l10n.adminEscrowRefundAction,
-          isBusy: isBusy,
-          onPressed: () => _markRefunded(l10n),
-        ),
+        if (escrow.isOnline) ...[
+          BusyFilledButton(
+            label: l10n.adminEscrowRefundOnlineAction,
+            isBusy: isBusy,
+            onPressed: () => _refundOnline(l10n),
+          ),
+          const SizedBox(height: 8),
+          OutlinedButton(
+            onPressed: isBusy ? null : () => _markRefunded(l10n),
+            child: Text(l10n.adminEscrowRefundAction),
+          ),
+        ] else
+          BusyFilledButton(
+            label: l10n.adminEscrowRefundAction,
+            isBusy: isBusy,
+            onPressed: () => _markRefunded(l10n),
+          ),
       ],
       EscrowStatus.paidOut ||
       EscrowStatus.refunded ||

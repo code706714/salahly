@@ -46,4 +46,10 @@ class EscrowReviewCubit extends ActionCubit {
     () => _repository.markRefunded(escrowId, reference),
     outcome: AdminOutcome.escrowRefunded,
   );
+
+  /// Returns an online payment to the consumer through the provider.
+  Future<void> refundOnline(String escrowId) => perform(
+    () => _repository.refundOnline(escrowId),
+    outcome: AdminOutcome.escrowRefunded,
+  );
 }

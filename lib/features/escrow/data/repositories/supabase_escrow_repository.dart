@@ -2,8 +2,6 @@ import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/error/supabase_errors.dart';
 import 'package:salahly/core/serialization/wire.dart';
-import 'package:salahly/features/balance/data/repositories/balance_errors.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/escrow/data/models/escrow_models.dart';
 import 'package:salahly/features/escrow/domain/entities/escrow.dart';
 import 'package:salahly/features/escrow/domain/failures/escrow_failures.dart';
@@ -23,24 +21,6 @@ class SupabaseEscrowRepository implements EscrowRepository {
     );
     return json == null ? null : EscrowModels.info(json);
   });
-
-  @override
-  Future<Result<void>> secure({
-    required String requestId,
-    required TopupMethod method,
-    required String senderAccount,
-    required String screenshotPath,
-  }) => _call(
-    () => _client.rpc<void>(
-      'secure_payment',
-      params: {
-        'p_request_id': requestId,
-        'p_method': toWire(method),
-        'p_sender_account': senderAccount,
-        'p_screenshot_path': screenshotPath,
-      },
-    ),
-  );
 
   @override
   Future<Result<void>> confirmWork(String requestId) => _call(
@@ -111,6 +91,6 @@ class SupabaseEscrowRepository implements EscrowRepository {
           return const RateLimitedFailure();
       }
     }
-    return balanceFailureFrom(error) ?? commonFailureFrom(error);
+    return commonFailureFrom(error);
   }
 }

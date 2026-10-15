@@ -5,6 +5,7 @@ import 'package:salahly/core/error/result.dart';
 import 'package:salahly/features/account/domain/failures/account_failures.dart';
 import 'package:salahly/features/admin/domain/entities/escrow_review.dart';
 import 'package:salahly/features/admin/domain/entities/paged_result.dart';
+import 'package:salahly/features/admin/domain/failures/admin_failures.dart';
 import 'package:salahly/features/admin/presentation/cubit/action_cubit.dart';
 import 'package:salahly/features/admin/presentation/cubit/escrow_review_cubit.dart';
 import 'package:salahly/features/admin/presentation/cubit/escrows_cubit.dart';
@@ -139,6 +140,32 @@ void main() {
         ActionState(isBusy: true),
         ActionState(completed: 1, outcome: AdminOutcome.escrowRefunded),
       ],
+    );
+
+    blocTest<EscrowReviewCubit, ActionState>(
+      'returns an online payment through the provider',
+      setUp: () => when(
+        () => repository.refundOnline('escrow-1'),
+      ).thenAnswer((_) async => const Ok(null)),
+      build: () => EscrowReviewCubit(repository),
+      act: (cubit) => cubit.refundOnline('escrow-1'),
+      expect: () => const [
+        ActionState(isBusy: true),
+        ActionState(completed: 1, outcome: AdminOutcome.escrowRefunded),
+      ],
+    );
+
+    blocTest<EscrowReviewCubit, ActionState>(
+      'tells when the provider can only refund from its dashboard',
+      setUp: () => when(
+        () => repository.refundOnline('escrow-1'),
+      ).thenAnswer((_) async => const Err(RefundByDashboardFailure())),
+      build: () => EscrowReviewCubit(repository),
+      act: (cubit) => cubit.refundOnline('escrow-1'),
+      verify: (cubit) {
+        expect(cubit.state.failure, isA<RefundByDashboardFailure>());
+        expect(cubit.state.isBusy, isFalse);
+      },
     );
 
     blocTest<EscrowReviewCubit, ActionState>(

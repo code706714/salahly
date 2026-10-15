@@ -38,3 +38,9 @@ final class LastActiveFailure extends Failure {
 final class CannotSuspendAdminFailure extends Failure {
   const CannotSuspendAdminFailure();
 }
+
+/// The payment provider can't refund through the API: the money is returned
+/// from the provider's dashboard.
+final class RefundByDashboardFailure extends Failure {
+  const RefundByDashboardFailure();
+}

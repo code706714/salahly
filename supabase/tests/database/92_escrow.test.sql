@@ -1,6 +1,14 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
+-- Sending a transfer by screenshot is closed to the API since the payments
+-- migration (20261015090000); these tests keep covering how a transfer that
+-- is already waiting is reviewed, so they open the calls for this transaction.
+grant execute on function
+  public.submit_topup(uuid, public.topup_method, text, text, bigint),
+  public.secure_payment(uuid, public.topup_method, text, text)
+to authenticated;
+
 select plan(60);
 
 -- Admin ad; consumers c1 (pays) and c2 (a stranger); technicians a1 (picked,
@@ -140,8 +148,8 @@ select is(
   true, 'and she can secure it'
 );
 select is(
-  jsonb_array_length(public.escrow_info((select id from pg_temp.ids where name = 'request')) -> 'accounts') > 0,
-  true, 'she is told where to transfer'
+  public.escrow_info((select id from pg_temp.ids where name = 'request')) -> 'accounts',
+  null::jsonb, 'she is no longer told where to transfer: she pays online'
 );
 
 select pg_temp.sign_in_as(pg_temp.u('c2'));

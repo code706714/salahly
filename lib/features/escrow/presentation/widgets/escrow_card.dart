@@ -144,6 +144,7 @@ class _Body extends StatelessWidget {
     final amount = formatPounds(info.amountPiastres);
     final autoRelease = escrow?.autoReleaseAt;
     final body = switch (status) {
+      null when info.paymentInProgress => l10n.escrowPaymentCheckingBody,
       null => l10n.escrowOfferBody(honorific, amount),
       EscrowStatus.pending => l10n.escrowPendingBody,
       EscrowStatus.held => l10n.escrowHeldBody(amount),
@@ -156,7 +157,8 @@ class _Body extends StatelessWidget {
         escrow?.rejectReason ?? '',
       ),
     };
-    final secureLabel = status == EscrowStatus.rejected
+    final secureLabel =
+        status == EscrowStatus.rejected || info.paymentInProgress
         ? l10n.escrowRetryAction(honorific)
         : l10n.escrowSecureAction(honorific);
     return AppCard(

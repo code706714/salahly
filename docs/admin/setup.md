@@ -159,3 +159,9 @@ the code is accepted.
 **Not in the console** (the backend has no support yet): complaints by
 technicians about consumers, and asking a technician to upload a clearer ID
 photo. Both are future backend work.
+
+## Payments
+
+Online payments and their secrets are described in
+`docs/payments/README.md`. The transfers queue now holds only old manual
+transfers; new payments arrive already confirmed by the provider.

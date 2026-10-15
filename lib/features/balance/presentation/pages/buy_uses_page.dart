@@ -1,31 +1,25 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:salahly/core/media/photo_picker.dart';
-import 'package:salahly/core/text/digit_input_formatters.dart';
 import 'package:salahly/core/text/money.dart';
 import 'package:salahly/core/theme/app_colors.dart';
 import 'package:salahly/core/theme/app_radii.dart';
 import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/busy_filled_button.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
-import 'package:salahly/core/widgets/segmented_tabs.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/presentation/cubit/consumer_session.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/balance/presentation/buy_uses_failure_message.dart';
 import 'package:salahly/features/balance/presentation/cubit/buy_uses_cubit.dart';
 import 'package:salahly/features/balance/presentation/uses_left.dart';
 import 'package:salahly/features/balance/presentation/widgets/pack_tile.dart';
 import 'package:salahly/features/balance/presentation/widgets/step_label.dart';
-import 'package:salahly/features/balance/presentation/widgets/transfer_account_card.dart';
-import 'package:salahly/features/balance/presentation/widgets/transfer_screenshot_field.dart';
+import 'package:salahly/features/payments/domain/repositories/payment_repository.dart';
+import 'package:salahly/features/payments/presentation/pages/payment_page.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
-/// Buying uses by transfer. Pops `true` once the transfer is sent for
-/// review.
+/// Buying uses online. Pops `true` once the server confirmed the payment.
 class BuyUsesPage extends StatelessWidget {
   const BuyUsesPage({required this.role, super.key});
 
@@ -37,7 +31,7 @@ class BuyUsesPage extends StatelessWidget {
       create: (context) {
         final cubit = BuyUsesCubit(
           balance: context.read(),
-          photos: context.read(),
+          payments: context.read<PaymentRepository>(),
           role: role,
         );
         unawaited(cubit.load());
@@ -48,50 +42,26 @@ class BuyUsesPage extends StatelessWidget {
   }
 }
 
-/// The steps: the pack, where to send the money, where it came from and
-/// the screenshot.
-class BuyUsesView extends StatefulWidget {
+/// The pack to buy and the button that pays for it.
+class BuyUsesView extends StatelessWidget {
   const BuyUsesView({required this.role, super.key});
 
   final UserRole role;
 
-  @override
-  State<BuyUsesView> createState() => _BuyUsesViewState();
-}
-
-class _BuyUsesViewState extends State<BuyUsesView> {
-  final _sender = TextEditingController();
-  final _senderFocus = FocusNode();
-
-  /// Whether the sender field was left once, so a half-typed number isn't
-  /// called wrong while it is typed.
-  bool _senderTouched = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _senderFocus.addListener(() {
-      if (!_senderFocus.hasFocus && _sender.text.isNotEmpty) {
-        setState(() => _senderTouched = true);
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _sender.dispose();
-    _senderFocus.dispose();
-    super.dispose();
-  }
-
-  void _onState(BuildContext context, BuyUsesState state) {
+  Future<void> _onState(BuildContext context, BuyUsesState state) async {
     final l10n = AppLocalizations.of(context);
     final messenger = ScaffoldMessenger.of(context);
-    if (state.status == BuyUsesStatus.submitted) {
-      messenger
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(l10n.buyUsesSent)));
-      Navigator.of(context).pop(true);
+    final cubit = context.read<BuyUsesCubit>();
+    final checkout = state.checkout;
+    if (state.status == BuyUsesStatus.paying && checkout != null) {
+      final paid = await PaymentPage.open(context, checkout);
+      cubit.paymentClosed();
+      if (paid && context.mounted) {
+        messenger
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(content: Text(l10n.buyUsesPaid)));
+        Navigator.of(context).pop(true);
+      }
     } else if (state.failure != null && state.status == BuyUsesStatus.editing) {
       messenger
         ..hideCurrentSnackBar()
@@ -101,7 +71,7 @@ class _BuyUsesViewState extends State<BuyUsesView> {
               buyUsesFailureMessage(
                 l10n,
                 state.failure!,
-                role: widget.role,
+                role: role,
                 honorific: context.readHonorific(),
               ),
             ),
@@ -114,7 +84,6 @@ class _BuyUsesViewState extends State<BuyUsesView> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final honorific = context.watchHonorific();
-    final role = widget.role;
     final cubit = context.read<BuyUsesCubit>();
     final title = switch (role) {
       UserRole.consumer => l10n.buyUsesTitleConsumer(honorific),
@@ -124,14 +93,14 @@ class _BuyUsesViewState extends State<BuyUsesView> {
       listenWhen: (previous, current) =>
           previous.status != current.status ||
           previous.failure != current.failure,
-      listener: _onState,
+      listener: (context, state) => unawaited(_onState(context, state)),
       builder: (context, state) {
         final loaded = switch (state.status) {
           BuyUsesStatus.loading || BuyUsesStatus.failed => false,
           _ => true,
         };
         return PopScope(
-          canPop: state.status != BuyUsesStatus.submitting,
+          canPop: state.status != BuyUsesStatus.starting,
           child: Scaffold(
             appBar: DetailHeader(title: title),
             body: switch (state.status) {
@@ -142,21 +111,17 @@ class _BuyUsesViewState extends State<BuyUsesView> {
                 honorific: honorific,
                 onRetry: cubit.load,
               ),
-              _ => _Steps(
-                role: role,
-                state: state,
-                honorific: honorific,
-                sender: _sender,
-                senderFocus: _senderFocus,
-                senderTouched: _senderTouched,
-              ),
+              _ => _Steps(role: role, state: state, honorific: honorific),
             },
             bottomNavigationBar: loaded
                 ? BottomActionBar(
                     child: BusyFilledButton(
-                      label: l10n.buyUsesSubmit(honorific),
-                      isBusy: state.status == BuyUsesStatus.submitting,
-                      onPressed: state.canSubmit ? cubit.submit : null,
+                      label: l10n.buyUsesPay(
+                        honorific,
+                        formatPounds(state.pack?.pricePiastres ?? 0),
+                      ),
+                      isBusy: state.status == BuyUsesStatus.starting,
+                      onPressed: state.canPay ? cubit.pay : null,
                     ),
                   )
                 : null,
@@ -201,32 +166,16 @@ class _Steps extends StatelessWidget {
     required this.role,
     required this.state,
     required this.honorific,
-    required this.sender,
-    required this.senderFocus,
-    required this.senderTouched,
   });
 
   final UserRole role;
   final BuyUsesState state;
   final String honorific;
-  final TextEditingController sender;
-  final FocusNode senderFocus;
-  final bool senderTouched;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final cubit = context.read<BuyUsesCubit>();
-    final pack = state.pack;
-    final account = state.account;
-    final method = state.method;
-    final methods = [
-      for (final method in TopupMethod.values)
-        if (state.accounts.any((account) => account.method == method)) method,
-    ];
-    final wallet = method == TopupMethod.wallet;
-    final senderWrong =
-        senderTouched && sender.text.isNotEmpty && state.validSender == null;
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
@@ -246,65 +195,13 @@ class _Steps extends StatelessWidget {
           ),
         ],
         const SizedBox(height: 16),
-        StepLabel(
-          number: 2,
-          label: l10n.buyUsesStepTransfer(
-            honorific,
-            formatPounds(pack?.pricePiastres ?? 0),
+        Text(
+          l10n.buyUsesPayHint(honorific),
+          style: TextStyle(
+            fontSize: 14,
+            height: 1.6,
+            color: context.appColors.inkMuted,
           ),
-        ),
-        const SizedBox(height: 8),
-        SegmentedTabs(
-          labels: [
-            for (final method in methods)
-              switch (method) {
-                TopupMethod.instapay => l10n.buyUsesMethodInstapay,
-                TopupMethod.wallet => l10n.buyUsesMethodWallet,
-              },
-          ],
-          selected: methods.indexOf(method!),
-          onSelected: (index) => cubit.pickMethod(methods[index]),
-        ),
-        if (account != null) ...[
-          const SizedBox(height: 8),
-          TransferAccountCard(account: account, honorific: honorific),
-        ],
-        const SizedBox(height: 16),
-        StepLabel(number: 3, label: l10n.buyUsesStepSender(honorific)),
-        const SizedBox(height: 8),
-        TextField(
-          controller: sender,
-          focusNode: senderFocus,
-          onChanged: cubit.setSender,
-          textDirection: TextDirection.ltr,
-          keyboardType: wallet ? TextInputType.phone : TextInputType.text,
-          inputFormatters: wallet
-              ? [
-                  ...digitInputFormatters(maxLength: 20),
-                  FilteringTextInputFormatter.deny(' '),
-                ]
-              : [LengthLimitingTextInputFormatter(64)],
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-          decoration: InputDecoration(
-            errorText: senderWrong
-                ? (wallet
-                      ? l10n.buyUsesSenderInvalidWallet(honorific)
-                      : l10n.buyUsesSenderInvalidInstapay(honorific))
-                : null,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 16,
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        StepLabel(number: 4, label: l10n.buyUsesStepScreenshot(honorific)),
-        const SizedBox(height: 8),
-        TransferScreenshotField(
-          photoPicker: context.read<PhotoPicker>(),
-          honorific: honorific,
-          path: state.screenshot,
-          onPicked: cubit.attachScreenshot,
         ),
       ],
     );

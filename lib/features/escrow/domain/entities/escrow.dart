@@ -1,12 +1,15 @@
 import 'package:equatable/equatable.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
+import 'package:salahly/features/payments/domain/entities/payment.dart';
 
 /// Where a guaranteed payment stands.
 enum EscrowStatus {
-  /// The consumer says she transferred; Salahly checks it.
+  /// A transfer made the old way (by screenshot) that Salahly is still
+  /// checking. Online payments are only recorded once confirmed.
   pending,
 
-  /// The money reached Salahly and is kept until the work is confirmed.
+  /// The payment was confirmed by the provider and the money is kept by
+  /// Salahly until the work is confirmed.
   held,
 
   /// The work is confirmed; the technician is owed the money.
@@ -30,14 +33,16 @@ enum EscrowStatus {
 final class Escrow extends Equatable {
   const Escrow({
     required this.status,
-    required this.method,
     required this.createdAt,
+    this.method,
     this.rejectReason,
     this.autoReleaseAt,
   });
 
   final EscrowStatus status;
-  final TopupMethod method;
+
+  /// How an old-style transfer was made; null for an online payment.
+  final TopupMethod? method;
   final String? rejectReason;
   final DateTime createdAt;
 
@@ -54,15 +59,15 @@ final class Escrow extends Equatable {
   ];
 }
 
-/// What the consumer sees of a request's guarantee: the amount, where to
-/// transfer it and what she can do now.
+/// What the consumer sees of a request's guarantee: the amount, how her
+/// online payment stands and what she can do now.
 final class EscrowInfo extends Equatable {
   const EscrowInfo({
     required this.amountPiastres,
     required this.canSecure,
     required this.canConfirm,
     required this.canDispute,
-    required this.accounts,
+    this.paymentStatus,
     this.escrow,
   });
 
@@ -70,8 +75,13 @@ final class EscrowInfo extends Equatable {
   final bool canSecure;
   final bool canConfirm;
   final bool canDispute;
-  final List<PaymentAccount> accounts;
+
+  /// The latest online payment for the request, if one was started.
+  final PaymentStatus? paymentStatus;
   final Escrow? escrow;
+
+  /// Whether a payment was started and the provider has not decided yet.
+  bool get paymentInProgress => paymentStatus?.isOpen ?? false;
 
   /// Whether the card has anything to say: a payment, or the offer to make
   /// one.
@@ -83,7 +93,7 @@ final class EscrowInfo extends Equatable {
     canSecure,
     canConfirm,
     canDispute,
-    accounts,
+    paymentStatus,
     escrow,
   ];
 }

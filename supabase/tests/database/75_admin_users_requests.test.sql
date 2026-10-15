@@ -1,6 +1,14 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
+-- Sending a transfer by screenshot is closed to the API since the payments
+-- migration (20261015090000); these tests keep covering how a transfer that
+-- is already waiting is reviewed, so they open the calls for this transaction.
+grant execute on function
+  public.submit_topup(uuid, public.topup_method, text, text, bigint),
+  public.secure_payment(uuid, public.topup_method, text, text)
+to authenticated;
+
 select plan(93);
 
 -- Admins AD and AD2. Consumers C1 (has requests, an address and a complaint),

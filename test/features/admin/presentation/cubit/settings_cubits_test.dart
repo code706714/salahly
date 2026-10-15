@@ -10,7 +10,7 @@ import 'package:salahly/features/admin/presentation/cubit/action_cubit.dart';
 import 'package:salahly/features/admin/presentation/cubit/settings_actions_cubit.dart';
 import 'package:salahly/features/admin/presentation/cubit/settings_cubit.dart';
 import 'package:salahly/features/admin/presentation/cubit/settings_form_cubit.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 
 import '../../../../helpers/admin_fixtures.dart';
 import '../../../../helpers/admin_harness.dart';
