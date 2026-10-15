@@ -1,5 +1,5 @@
 import { assertEquals } from "jsr:@std/assert@1";
-import { cleanServers, fallbackServers } from "./ice.ts";
+import { cleanServers, fallbackServers, meteredServers } from "./ice.ts";
 
 Deno.test("keeps the STUN and TURN servers of the relay's answer", () => {
   const servers = cleanServers({
@@ -48,4 +48,21 @@ Deno.test("answers null when there is nothing usable", () => {
 
 Deno.test("falls back to a public STUN server", () => {
   assertEquals(fallbackServers.length, 1);
+});
+
+Deno.test("builds Metered's servers around the fixed login", () => {
+  const servers = meteredServers("user", "secret");
+
+  assertEquals(servers.length, 5);
+  assertEquals(servers[0], { urls: "stun:stun.relay.metered.ca:80" });
+  assertEquals(
+    servers.slice(1).every((s) =>
+      s.username === "user" && s.credential === "secret"
+    ),
+    true,
+  );
+  assertEquals(
+    servers[4].urls,
+    "turns:global.relay.metered.ca:443?transport=tcp",
+  );
 });
