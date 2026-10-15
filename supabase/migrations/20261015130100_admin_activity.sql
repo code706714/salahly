@@ -129,7 +129,6 @@ $$;
 create function public.admin_money_summary(p_period text default 'today')
 returns jsonb
 language plpgsql
-stable
 security definer
 set search_path = ''
 as $$
@@ -231,7 +230,6 @@ create function public.admin_technician_activity(
 )
 returns jsonb
 language plpgsql
-stable
 security definer
 set search_path = ''
 as $$
