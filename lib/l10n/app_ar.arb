@@ -3689,7 +3689,7 @@
       }
     }
   },
-  "acctDeleteRelogBody": "{honorific, select, ms{عشان نتأكد إنك إنتي، سجّلي خروج وادخلي تاني بكود جديد، وبعدها ارجعي امسحي الحساب.} other{عشان نتأكد إنك إنت، سجّل خروج وادخل تاني بكود جديد، وبعدها ارجع امسح الحساب.}}",
+  "acctDeleteRelogBody": "{honorific, select, ms{عشان نتأكد إنك إنتي، سجّلي خروج وادخلي تاني برسالة واتساب جديدة، وبعدها ارجعي امسحي الحساب.} other{عشان نتأكد إنك إنت، سجّل خروج وادخل تاني برسالة واتساب جديدة، وبعدها ارجع امسح الحساب.}}",
   "@acctDeleteRelogBody": {
     "placeholders": {
       "honorific": {
@@ -5459,6 +5459,7 @@
   "adminAuditRejectEscrow": "رفض تحويل ضمان",
   "adminAuditPayEscrow": "دفع فني من الضمان",
   "adminAuditPayWithdrawal": "تحويل سحب فني",
+  "adminAuditRefundPayment": "استرداد دفع أونلاين",
   "adminAuditRejectWithdrawal": "رفض سحب فني",
   "adminAuditResolveEscrow": "قرار اعتراض ضمان",
   "adminAuditRefundEscrow": "رد فلوس ضمان",

@@ -203,6 +203,7 @@ String auditActionLabel(AppLocalizations l10n, String action) =>
       'reject_withdrawal' => l10n.adminAuditRejectWithdrawal,
       'resolve_escrow' => l10n.adminAuditResolveEscrow,
       'refund_escrow' => l10n.adminAuditRefundEscrow,
+      'refund_payment' => l10n.adminAuditRefundPayment,
       'resolve_complaint' => l10n.adminAuditResolveComplaint,
       'suspend_user' => l10n.adminAuditSuspendUser,
       'restore_user' => l10n.adminAuditRestoreUser,
