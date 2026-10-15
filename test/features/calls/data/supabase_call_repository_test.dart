@@ -91,7 +91,7 @@ void main() {
     });
 
     test('are a public STUN server when the answer has none', () async {
-      body = {'iceServers': []};
+      body = {'iceServers': <Object>[]};
 
       expect(await repository().iceServers(), hasLength(1));
     });
