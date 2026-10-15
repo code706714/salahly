@@ -4,10 +4,7 @@
 --    people to null: the held money was never released, the technician was
 --    never paid and the proof was purged. Deleting now waits until the
 --    escrow is settled.
--- 2. The phone's own finish time decided when held money was released, so a
---    wrong or edited clock skipped the consumer's wait. The server's record
---    of the last change now counts too.
--- 3. A complaint did not stop the automatic release after 72 hours, though
+-- 2. A complaint did not stop the automatic release after 72 hours, though
 --    the person who complains believes the money is protected. An open
 --    complaint now holds it until the team resolves it.
 
@@ -27,10 +24,7 @@ begin
       join public.jobs j on j.id = r.job_id
      where e.status = 'held'
        and j.status in ('finished', 'paid')
-       -- The phone's clock says when it finished; the server's own record of
-       -- the last change says when it was told, so a wrong or edited clock
-       -- cannot skip the consumer's wait.
-       and greatest(j.finished_at, j.updated_at) <= now() - private.escrow_hours_to_release()
+       and j.finished_at <= now() - private.escrow_hours_to_release()
        and not exists (
          select 1 from public.complaints c
           where c.request_id = e.request_id and c.resolved_at is null
@@ -235,6 +229,12 @@ as $$
 declare
   v_count integer;
 begin
+  if exists (
+    select 1 from public.service_requests r
+     where r.job_id = new.id and r.repeat_booking
+  ) then
+    return null;
+  end if;
   insert into private.charged_jobs (job_id) values (new.id)
   on conflict do nothing;
   get diagnostics v_count = row_count;
