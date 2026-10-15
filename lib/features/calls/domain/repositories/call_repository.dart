@@ -5,6 +5,11 @@ import 'package:salahly/features/calls/domain/entities/call.dart';
 /// the chat's two ids. The voice itself goes phone to phone; the server only
 /// rings the other side and carries the handshake.
 abstract interface class CallRepository {
+  /// The servers the phones use to find each other, in the shape WebRTC
+  /// takes. Never fails: without the server's answer it is a public STUN
+  /// server, which is enough on many networks.
+  Future<List<Map<String, dynamic>>> iceServers();
+
   /// Rings the other side; the new call's id.
   Future<Result<String>> start(String requestId, String technicianId);
 

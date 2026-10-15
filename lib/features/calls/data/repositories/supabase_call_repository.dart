@@ -22,6 +22,28 @@ class SupabaseCallRepository implements CallRepository {
   /// Realtime tells of new rows at once; this catches up on any it missed.
   final Duration _pollEvery;
 
+  static const _publicStun = [
+    {'urls': 'stun:stun.l.google.com:19302'},
+  ];
+
+  @override
+  Future<List<Map<String, dynamic>>> iceServers() async {
+    try {
+      final response = await _client.functions.invoke('call-ice-servers');
+      final data = response.data;
+      if (data is Map<String, dynamic> && data['iceServers'] is List) {
+        final servers = [
+          for (final item in data['iceServers'] as List<dynamic>)
+            if (item is Map<String, dynamic>) item,
+        ];
+        if (servers.isNotEmpty) return servers;
+      }
+    } on Object {
+      // Fall back to the public server.
+    }
+    return _publicStun;
+  }
+
   @override
   Future<Result<String>> start(String requestId, String technicianId) =>
       _call(() async {

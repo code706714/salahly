@@ -5,7 +5,7 @@ import 'package:salahly/features/calls/domain/entities/call.dart';
 import 'package:salahly/features/calls/domain/services/call_engine.dart';
 
 /// The voice link over WebRTC. The audio goes straight between the two
-/// phones; Google's free STUN server only helps them find each other.
+/// phones when they can reach each other; otherwise a relay carries it.
 class WebRtcCallEngine implements CallEngine {
   final _outgoing = StreamController<CallSignalDraft>.broadcast();
   final _link = StreamController<CallLink>.broadcast();
@@ -21,7 +21,7 @@ class WebRtcCallEngine implements CallEngine {
   Stream<CallLink> get link => _link.stream;
 
   @override
-  Future<bool> open() async {
+  Future<bool> open(List<Map<String, dynamic>> iceServers) async {
     try {
       _microphone = await navigator.mediaDevices.getUserMedia({
         'audio': true,
@@ -30,11 +30,7 @@ class WebRtcCallEngine implements CallEngine {
     } on Object {
       return false;
     }
-    final peer = await createPeerConnection({
-      'iceServers': [
-        {'urls': 'stun:stun.l.google.com:19302'},
-      ],
-    });
+    final peer = await createPeerConnection({'iceServers': iceServers});
     _peer = peer;
     for (final track in _microphone!.getAudioTracks()) {
       await peer.addTrack(track, _microphone!);

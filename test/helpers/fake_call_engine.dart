@@ -12,6 +12,9 @@ class FakeCallEngine implements CallEngine {
   /// What [open] answers; false is a microphone that is not allowed.
   bool microphoneAllowed = true;
   bool opened = false;
+
+  /// The servers [open] was given.
+  List<Map<String, dynamic>>? iceServers;
   bool offered = false;
   bool closed = false;
   bool? muted;
@@ -24,7 +27,10 @@ class FakeCallEngine implements CallEngine {
   Stream<CallLink> get link => linkController.stream;
 
   @override
-  Future<bool> open() async => opened = microphoneAllowed;
+  Future<bool> open(List<Map<String, dynamic>> iceServers) async {
+    this.iceServers = iceServers;
+    return opened = microphoneAllowed;
+  }
 
   @override
   Future<void> offer() async => offered = true;

@@ -31,6 +31,11 @@ void main() {
     ringer = FakeCallRinger();
     signals = StreamController<CallSignal>.broadcast();
     statuses = StreamController<CallStatus>.broadcast();
+    when(calls.iceServers).thenAnswer(
+      (_) async => const [
+        {'urls': 'stun:test'},
+      ],
+    );
     when(
       () => calls.start(any(), any()),
     ).thenAnswer((_) async => const Ok('c1'));
@@ -83,6 +88,16 @@ void main() {
       expect(cubit.state.phase, CallPhase.ringing);
       expect(engine.offered, isTrue);
       verify(() => calls.start('r1', 't1')).called(1);
+      await cubit.close();
+    });
+
+    test('opens the engine with the servers the repository gives', () async {
+      final cubit = making();
+      await cubit.start();
+
+      expect(engine.iceServers, [
+        {'urls': 'stun:test'},
+      ]);
       await cubit.close();
     });
 
