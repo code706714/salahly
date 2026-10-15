@@ -25,7 +25,9 @@ class WhatsappLoginPage extends StatelessWidget {
     final cubit = context.read<WhatsappLoginCubit>();
     final state = context.watch<WhatsappLoginCubit>().state;
     final isWaiting = state.phase == WhatsappLoginPhase.waiting;
-    final isSigningIn = state.phase == WhatsappLoginPhase.signingIn;
+    final isSigningIn =
+        state.phase == WhatsappLoginPhase.signingIn ||
+        state.phase == WhatsappLoginPhase.signedIn;
     final error = _errorText(l10n, state);
 
     return Scaffold(
@@ -195,7 +197,9 @@ class _Waiting extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final colors = context.appColors;
     final textTheme = Theme.of(context).textTheme;
-    final isSigningIn = state.phase == WhatsappLoginPhase.signingIn;
+    final isSigningIn =
+        state.phase == WhatsappLoginPhase.signingIn ||
+        state.phase == WhatsappLoginPhase.signedIn;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

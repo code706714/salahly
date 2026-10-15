@@ -1,3 +1,4 @@
+import 'package:salahly/core/launch/external_apps.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_admin_files_repository.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_audit_repository.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_escrow_review_repository.dart';
@@ -34,6 +35,7 @@ class AdminDependencies {
     required this.settingsRepository,
     required this.auditRepository,
     required this.filesRepository,
+    required this.externalApps,
   });
 
   /// Every repository backed by [client]'s session. The admin's own session
@@ -50,6 +52,7 @@ class AdminDependencies {
       settingsRepository: SupabaseSettingsRepository(client),
       auditRepository: SupabaseAuditRepository(client),
       filesRepository: SupabaseAdminFilesRepository(client),
+      externalApps: const SystemExternalApps(),
     );
   }
 
@@ -63,4 +66,5 @@ class AdminDependencies {
   final SettingsRepository settingsRepository;
   final AuditRepository auditRepository;
   final AdminFilesRepository filesRepository;
+  final ExternalApps externalApps;
 }

@@ -13,6 +13,9 @@ enum WhatsappLoginPhase {
   /// The message arrived; signing in.
   signingIn,
 
+  /// Signed in; the session change moves the app on.
+  signedIn,
+
   /// Nobody sent the code in time.
   expired,
 }

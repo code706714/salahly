@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/core/launch/external_apps.dart';
+import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/features/auth/domain/entities/whatsapp_login.dart';
 import 'package:salahly/features/auth/domain/failures/auth_failures.dart';
 import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
@@ -19,12 +20,16 @@ class WhatsappLoginCubit extends Cubit<WhatsappLoginState> {
   WhatsappLoginCubit({
     required this._authRepository,
     required this._externalApps,
+    this.onlyFor,
     this.pollInterval = const Duration(seconds: 3),
   }) : super(const WhatsappLoginState());
 
   final AuthRepository _authRepository;
   final ExternalApps _externalApps;
   final Duration pollInterval;
+
+  /// When set, only this number may sign in; any other is signed out again.
+  final PhoneNumber? onlyFor;
 
   Timer? _poll;
   var _isPolling = false;
@@ -111,13 +116,37 @@ class WhatsappLoginCubit extends Cubit<WhatsappLoginState> {
     if (isClosed) return;
     switch (result) {
       case Ok():
+        if (_isOtherNumber()) {
+          await _authRepository.signOut();
+          if (isClosed) return;
+          emit(
+            const WhatsappLoginState(
+              failure: WhatsappLoginWrongNumberFailure(),
+            ),
+          );
+          return;
+        }
         // The session change moves the app on; keep the spinner until then.
-        break;
+        emit(
+          WhatsappLoginState(
+            phase: WhatsappLoginPhase.signedIn,
+            challenge: challenge,
+          ),
+        );
       case Err(failure: WhatsappLoginExpiredFailure()):
         _expire();
       case Err(:final failure):
         emit(WhatsappLoginState(failure: failure));
     }
+  }
+
+  bool _isOtherNumber() {
+    final expected = onlyFor;
+    if (expected == null) return false;
+    final signedIn = PhoneNumber.tryParse(
+      _authRepository.currentUser?.phone ?? '',
+    );
+    return signedIn?.e164 != expected.e164;
   }
 
   void _expire() {

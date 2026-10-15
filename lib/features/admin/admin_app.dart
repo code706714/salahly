@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:salahly/core/launch/external_apps.dart';
 import 'package:salahly/core/router/session_refresh.dart';
 import 'package:salahly/core/time/clock_cubit.dart';
 import 'package:salahly/features/admin/admin_dependencies.dart';
@@ -54,6 +55,9 @@ class _AdminAppState extends State<AdminApp> {
         RepositoryProvider.value(value: dependencies.settingsRepository),
         RepositoryProvider.value(value: dependencies.auditRepository),
         RepositoryProvider.value(value: dependencies.filesRepository),
+        RepositoryProvider<ExternalApps>.value(
+          value: dependencies.externalApps,
+        ),
       ],
       child: MultiBlocProvider(
         providers: [

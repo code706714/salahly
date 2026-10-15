@@ -42,27 +42,7 @@
   "whatsappLoginRetry": "جرّب تاني",
   "whatsappLoginOpenFailed": "مقدرناش نفتح الواتساب. اتأكد إنه متثبّت على موبايلك وجرّب تاني.",
   "whatsappLoginUnavailable": "الدخول بالواتساب مش شغال دلوقتي. جرّب تاني بعد شوية.",
-  "phoneLabel": "رقم الموبايل",
   "phoneInvalid": "اكتب رقم موبايل مصري صح، زي 100 234 5678",
-  "phoneSendWhatsapp": "ابعتلي الكود على الواتساب",
-  "phoneSendSms": "معنديش واتساب، ابعتوه رسالة SMS",
-  "otpTooSoon": "استنى دقيقة قبل ما تطلب كود تاني.",
-  "otpDeliveryFailedWhatsapp": "مقدرناش نبعت الكود على الواتساب. اتأكد إن الرقم عليه واتساب، أو ابعته رسالة SMS.",
-  "otpDeliveryFailedSms": "مقدرناش نبعت الرسالة. اتأكد من الرقم وجرّب تاني بعد شوية.",
-  "otpSentWhatsapp": "بعتنالك كود من 6 أرقام على الواتساب على رقم ",
-  "otpSentSms": "بعتنالك كود من 6 أرقام في رسالة على رقم ",
-  "otpChangeNumber": "غيّر الرقم",
-  "otpResendIn": "ابعت الكود تاني بعد {time}",
-  "@otpResendIn": {
-    "placeholders": {
-      "time": {
-        "type": "String",
-        "example": "0:42"
-      }
-    }
-  },
-  "otpResend": "ابعت الكود تاني",
-  "otpInvalid": "الكود غلط أو خلص وقته. اتأكد منه أو اطلب كود جديد.",
   "welcomeTitle": "أهلاً بيك\nهتستخدم الأبلكيشن إزاي؟",
   "welcomeSubtitle": "اختار اللي يناسبك دلوقتي، وتقدر تغيّره بعدين من حسابك.",
   "roleConsumerTitle": "محتاج فني",
@@ -3839,16 +3819,15 @@
   "adminNavAudit": "سجل العمليات",
   "adminSignOut": "تسجيل الخروج",
   "adminLoginTitle": "دخول فريق المنصة",
-  "adminLoginSubtitle": "ادخل برقم موبايلك المسجّل كأدمن. هنبعتلك كود تأكيد، ومفيش باسورد.",
-  "adminCodeLabel": "كود التأكيد",
-  "adminCodeHint": "6 أرقام",
+  "adminLoginSubtitle": "ادخل برقم موبايلك المسجّل كأدمن. بتبعتلنا رسالة واتساب واحدة وتدخل، ومفيش باسورد.",
   "adminChecking": "بنتأكد من صلاحياتك...",
   "adminNoAccessTitle": "الحساب ده مالوش صلاحية",
   "adminNoAccessBody": "الرقم ده مش مضاف كأدمن، فخرّجناك من اللوحة. لو المفروض يكون عندك صلاحية، كلّم صاحب المنصة.",
   "adminNoAccessBack": "رجوع لتسجيل الدخول",
   "adminUnavailableTitle": "مقدرناش نتأكد من حسابك",
+  "adminWrongNumber": "الرسالة اتبعتت من رقم تاني. ابعتها من رقمك المسجّل.",
   "adminReloginTitle": "اتأكد إن ده إنت",
-  "adminReloginBody": "الفلوس والأسعار محتاجة دخول جديد في آخر 15 دقيقة. هنبعتلك كود على {phone} وبعدها نكمّل اللي كنت بتعمله.",
+  "adminReloginBody": "الفلوس والأسعار محتاجة دخول جديد في آخر 15 دقيقة. ابعت رسالة واتساب من رقمك {phone} وبعدها نكمّل اللي كنت بتعمله.",
   "@adminReloginBody": {
     "placeholders": {
       "phone": {
