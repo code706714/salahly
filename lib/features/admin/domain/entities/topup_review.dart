@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 
 final _mobile = RegExp(r'^01[0125][0-9]{8}$');
 

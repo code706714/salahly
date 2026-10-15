@@ -1,8 +1,8 @@
 import 'package:salahly/core/widgets/status_pill.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/balance/domain/entities/ledger_entry.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
 String topupMethodLabel(AppLocalizations l10n, TopupMethod method) =>

@@ -68,6 +68,7 @@ class ConsumerApp {
     ).thenAnswer((_) async => const Ok(null));
     stubNotifications(notifications);
     when(() => photoPicker.discard(any())).thenAnswer((_) async {});
+    when(() => apps.openLink(any())).thenAnswer((_) async => true);
     when(requests.fetchRequests).thenAnswer((_) async => const Ok([]));
     when(requests.fetchAddresses).thenAnswer((_) async => const Ok([]));
     when(
@@ -128,6 +129,7 @@ class ConsumerApp {
   final notifications = MockNotificationsRepository();
   final live = FakeLiveUpdates();
   final apps = MockExternalApps();
+  final payments = MockPaymentRepository();
   final speech = MockSpeechInput();
   final photoPicker = MockPhotoPicker();
   final location = MockLocationService();
@@ -148,6 +150,7 @@ class ConsumerApp {
     callEngineFactory: FakeCallEngine.new,
     callRinger: FakeCallRinger(),
     escrowRepository: escrow,
+    paymentRepository: payments,
     notificationsRepository: notifications,
     liveUpdates: live,
     pushService: FakePushService(),

@@ -1,4 +1,4 @@
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 
 final _whitespace = RegExp(r'\s');
 final _mobile = RegExp(r'^01[0125][0-9]{8}$');

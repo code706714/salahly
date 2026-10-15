@@ -1,19 +1,17 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/failure.dart';
-import 'package:salahly/core/error/upload_failures.dart';
-import 'package:salahly/core/media/photo_picker.dart';
-import 'package:salahly/core/widgets/dashed_rrect_border.dart';
+import 'package:salahly/core/error/result.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/balance/domain/entities/credit_pack.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/balance/domain/failures/balance_failures.dart';
 import 'package:salahly/features/balance/presentation/cubit/buy_uses_cubit.dart';
 import 'package:salahly/features/balance/presentation/pages/buy_uses_page.dart';
+import 'package:salahly/features/payments/domain/entities/payment.dart';
+import 'package:salahly/features/payments/domain/failures/payment_failures.dart';
 
 import '../../../../helpers/balance_fixtures.dart';
 import '../../../../helpers/balance_harness.dart';
@@ -23,22 +21,22 @@ void main() {
   setUpAll(() async {
     await loadAppFonts();
     BalanceHarness.registerFallbacks();
+    registerFallbackValue(Uri());
   });
 
   const consumerState = BuyUsesState(
     status: BuyUsesStatus.editing,
     packs: consumerPacks,
-    accounts: paymentAccounts,
     packId: 'pack-5',
-    method: TopupMethod.instapay,
   );
   final technicianState = consumerState.copyWith(
     packs: technicianPacks,
     packId: 'pack-t10',
   );
-  final filled = consumerState.copyWith(
-    sender: '0111 456 7720',
-    screenshot: () => '/tmp/proof.jpg',
+  final checkout = PaymentCheckout(
+    orderId: 'order-1',
+    url: Uri.parse('https://pay.example/checkout'),
+    amountPiastres: 8000,
   );
 
   BalanceHarness consumer({
@@ -67,23 +65,16 @@ void main() {
     );
   }
 
-  Finder submit(String label) => find.widgetWithText(FilledButton, label);
+  Finder payButton(String label) => find.widgetWithText(FilledButton, label);
 
   group('for a consumer', () {
-    testWidgets('shows the steps, the packs and where to send the money', (
-      tester,
-    ) async {
+    testWidgets('shows the packs and how the payment goes', (tester) async {
       await pump(tester, consumer(), consumerState);
 
       expect(tester.takeException(), isNull);
       expect(find.text(l10n.buyUsesTitleConsumer('ms')), findsOneWidget);
       expect(find.text(l10n.buyUsesStepPack('ms')), findsOneWidget);
-      expect(find.text(l10n.buyUsesStepTransfer('ms', '80')), findsOneWidget);
-      expect(find.text(l10n.buyUsesStepSender('ms')), findsOneWidget);
-      expect(find.text(l10n.buyUsesStepScreenshot('ms')), findsOneWidget);
-      for (final number in ['1', '2', '3', '4']) {
-        expect(find.text(number), findsOneWidget);
-      }
+      expect(find.text('1'), findsOneWidget);
       expect(find.text(l10n.buyUsesPackConsumer(1)), findsOneWidget);
       expect(find.text(l10n.buyUsesPackConsumer(5)), findsOneWidget);
       expect(find.text(l10n.pounds('20')), findsOneWidget);
@@ -93,9 +84,7 @@ void main() {
         find.text(l10n.buyUsesNoteSavingConsumer('ms', '16', '20')),
         findsOneWidget,
       );
-      expect(find.text('salahly@instapay'), findsOneWidget);
-      expect(find.text(l10n.buyUsesHolder('شركة صلحلي')), findsOneWidget);
-      expect(find.text(l10n.buyUsesAccountInstapay), findsOneWidget);
+      expect(find.text(l10n.buyUsesPayHint('ms')), findsOneWidget);
     });
 
     testWidgets('says all the free requests are used when none are left', (
@@ -130,7 +119,7 @@ void main() {
         find.text(l10n.buyUsesNoteSavingConsumer('mr', '16', '20')),
         findsOneWidget,
       );
-      expect(find.text(l10n.buyUsesSubmit('mr')), findsOneWidget);
+      expect(payButton(l10n.buyUsesPay('mr', '80')), findsOneWidget);
       expect(find.text(l10n.buyUsesTitleConsumer('ms')), findsNothing);
     });
 
@@ -157,7 +146,7 @@ void main() {
       ('consumer', UserRole.consumer),
       ('technician', UserRole.technician),
     ]) {
-      testWidgets('fits for a $name, down to the screenshot', (tester) async {
+      testWidgets('fits for a $name, down to the pay button', (tester) async {
         final harness = role == UserRole.consumer ? consumer() : technician();
         await pump(
           tester,
@@ -165,11 +154,6 @@ void main() {
           role == UserRole.consumer ? consumerState : technicianState,
           role: role,
           surfaceSize: smallPhone,
-        );
-        await tester.scrollUntilVisible(
-          find.byType(DashedRRectBorder),
-          200,
-          scrollable: find.byType(Scrollable).first,
         );
 
         expect(tester.takeException(), isNull);
@@ -179,7 +163,7 @@ void main() {
   });
 
   group('for a technician', () {
-    testWidgets('shows the same steps in the technician words', (
+    testWidgets('shows the packs in the technician words', (
       tester,
     ) async {
       await pump(
@@ -199,11 +183,7 @@ void main() {
         find.text(l10n.buyUsesNoteSavingTechnician('25', '50')),
         findsOneWidget,
       );
-      expect(
-        find.text(l10n.buyUsesStepTransfer('other', '250')),
-        findsOneWidget,
-      );
-      expect(find.text(l10n.buyUsesSubmit('other')), findsOneWidget);
+      expect(payButton(l10n.buyUsesPay('other', '250')), findsOneWidget);
     });
 
     testWidgets('says the free jobs are gone and the balance is zero', (
@@ -243,7 +223,7 @@ void main() {
     });
   });
 
-  group('the transfer', () {
+  group('paying', () {
     testWidgets('picks a pack', (tester) async {
       final harness = consumer();
       await pump(tester, harness, consumerState);
@@ -253,282 +233,50 @@ void main() {
       verify(() => harness.buyUses.pickPack('pack-1')).called(1);
     });
 
-    testWidgets('switches between InstaPay and the wallet', (tester) async {
-      final harness = consumer();
-      await pump(tester, harness, consumerState);
-
-      await tester.tap(find.text(l10n.buyUsesMethodWallet));
-
-      verify(() => harness.buyUses.pickMethod(TopupMethod.wallet)).called(1);
-    });
-
-    testWidgets('shows the wallet account when it is picked', (tester) async {
-      await pump(
-        tester,
-        consumer(),
-        consumerState.copyWith(method: TopupMethod.wallet),
-      );
-
-      expect(find.text('01000000000'), findsOneWidget);
-      expect(find.text(l10n.buyUsesAccountWallet), findsOneWidget);
-    });
-
-    testWidgets('offers only the methods that have an account', (
+    testWidgets('shows the price of the picked pack on the button', (
       tester,
     ) async {
-      await pump(
-        tester,
-        consumer(),
-        consumerState.copyWith(accounts: [paymentAccounts.first]),
-      );
-
-      expect(find.text(l10n.buyUsesMethodInstapay), findsOneWidget);
-      expect(find.text(l10n.buyUsesMethodWallet), findsNothing);
-    });
-
-    testWidgets('copies the account and says so', (tester) async {
-      String? copied;
-      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-        SystemChannels.platform,
-        (call) async {
-          if (call.method == 'Clipboard.setData') {
-            copied =
-                (call.arguments as Map<Object?, Object?>)['text']! as String;
-          }
-          return null;
-        },
-      );
-      addTearDown(
-        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-          SystemChannels.platform,
-          null,
-        ),
-      );
       await pump(tester, consumer(), consumerState);
 
-      await tester.tap(find.text(l10n.buyUsesCopy('ms')));
-      await tester.pump();
-
-      expect(copied, 'salahly@instapay');
-      expect(find.text(l10n.buyUsesCopied), findsOneWidget);
+      expect(payButton(l10n.buyUsesPay('ms', '80')), findsOneWidget);
     });
 
-    testWidgets('passes what is typed as the sender', (tester) async {
+    testWidgets('starts the payment from the button', (tester) async {
       final harness = consumer();
       await pump(tester, harness, consumerState);
 
-      await tester.enterText(find.byType(TextField), '٠١١١٤٥٦٧٧٢٠');
+      await tester.tap(payButton(l10n.buyUsesPay('ms', '80')));
 
-      verify(() => harness.buyUses.setSender('٠١١١٤٥٦٧٧٢٠')).called(1);
+      verify(harness.buyUses.pay).called(1);
     });
 
-    testWidgets('lets only digits into a wallet number', (tester) async {
-      final harness = consumer();
-      await pump(
-        tester,
-        harness,
-        consumerState.copyWith(method: TopupMethod.wallet),
-      );
-
-      await tester.enterText(find.byType(TextField), '01a1 4-5');
-
-      verify(() => harness.buyUses.setSender('01145')).called(1);
-    });
-
-    testWidgets('says a wrong wallet number only after leaving the field', (
+    testWidgets('shows the payment being started and cannot pay twice', (
       tester,
     ) async {
       final harness = consumer();
       await pump(
         tester,
         harness,
-        consumerState.copyWith(method: TopupMethod.wallet, sender: '0111'),
-      );
-      await tester.enterText(find.byType(TextField), '0111');
-      expect(find.text(l10n.buyUsesSenderInvalidWallet('ms')), findsNothing);
-
-      await tester.testTextInput.receiveAction(TextInputAction.done);
-      FocusManager.instance.primaryFocus?.unfocus();
-      await tester.pump();
-
-      expect(find.text(l10n.buyUsesSenderInvalidWallet('ms')), findsOneWidget);
-    });
-
-    testWidgets('says a wrong InstaPay account the InstaPay way', (
-      tester,
-    ) async {
-      final harness = consumer();
-      await pump(
-        tester,
-        harness,
-        consumerState.copyWith(sender: 'ab'),
-      );
-      await tester.enterText(find.byType(TextField), 'ab');
-      FocusManager.instance.primaryFocus?.unfocus();
-      await tester.pump();
-
-      expect(
-        find.text(l10n.buyUsesSenderInvalidInstapay('ms')),
-        findsOneWidget,
-      );
-    });
-  });
-
-  group('the screenshot', () {
-    testWidgets('is picked from the gallery and handed over', (tester) async {
-      final harness = consumer();
-      await pump(tester, harness, consumerState);
-
-      await tester.tap(find.text(l10n.buyUsesScreenshotAdd('ms')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(l10n.complaintPhotoChoose('ms')));
-      await tester.pumpAndSettle();
-
-      verify(
-        () => harness.photoPicker.pick(
-          source: PhotoSource.gallery,
-          purpose: PhotoPurpose.transfer,
-        ),
-      ).called(1);
-      verify(
-        () => harness.buyUses.attachScreenshot('/tmp/proof.jpg'),
-      ).called(1);
-    });
-
-    testWidgets('can be taken with the camera', (tester) async {
-      final harness = consumer();
-      await pump(tester, harness, consumerState);
-
-      await tester.tap(find.text(l10n.buyUsesScreenshotAdd('ms')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(l10n.complaintPhotoTake('ms')));
-      await tester.pumpAndSettle();
-
-      verify(
-        () => harness.photoPicker.pick(
-          source: PhotoSource.camera,
-          purpose: PhotoPurpose.transfer,
-        ),
-      ).called(1);
-    });
-
-    testWidgets('attaches nothing when picking is cancelled', (tester) async {
-      final harness = consumer();
-      when(
-        () => harness.photoPicker.pick(
-          source: any(named: 'source'),
-          purpose: any(named: 'purpose'),
-        ),
-      ).thenAnswer((_) async => null);
-      await pump(tester, harness, consumerState);
-
-      await tester.tap(find.text(l10n.buyUsesScreenshotAdd('ms')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(l10n.complaintPhotoChoose('ms')));
-      await tester.pumpAndSettle();
-
-      verifyNever(() => harness.buyUses.attachScreenshot(any()));
-    });
-
-    testWidgets('says when the camera is not allowed', (tester) async {
-      final harness = consumer();
-      when(
-        () => harness.photoPicker.pick(
-          source: any(named: 'source'),
-          purpose: any(named: 'purpose'),
-        ),
-      ).thenThrow(PlatformException(code: 'camera_access_denied'));
-      await pump(tester, harness, consumerState);
-
-      await tester.tap(find.text(l10n.buyUsesScreenshotAdd('ms')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(l10n.complaintPhotoTake('ms')));
-      await tester.pumpAndSettle();
-
-      expect(find.text(l10n.complaintPhotoDenied('ms')), findsOneWidget);
-    });
-
-    testWidgets('shows what was picked, with a way to change it', (
-      tester,
-    ) async {
-      final harness = consumer();
-      await pump(tester, harness, filled);
-
-      expect(find.text(l10n.buyUsesScreenshotChosen), findsOneWidget);
-      expect(find.text(l10n.buyUsesScreenshotAdd('ms')), findsNothing);
-
-      await tester.tap(find.text(l10n.buyUsesScreenshotChange));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(l10n.complaintPhotoChoose('ms')));
-      await tester.pumpAndSettle();
-
-      verify(
-        () => harness.buyUses.attachScreenshot('/tmp/proof.jpg'),
-      ).called(1);
-    });
-  });
-
-  group('sending', () {
-    testWidgets('waits until everything is filled in', (tester) async {
-      final harness = consumer();
-      await pump(tester, harness, consumerState);
-
-      final button = tester.widget<FilledButton>(
-        submit(l10n.buyUsesSubmit('ms')),
-      );
-      expect(button.onPressed, isNull);
-    });
-
-    testWidgets('sends for review once everything is filled in', (
-      tester,
-    ) async {
-      final harness = consumer();
-      await pump(tester, harness, filled);
-
-      await tester.tap(submit(l10n.buyUsesSubmit('ms')));
-
-      verify(harness.buyUses.submit).called(1);
-    });
-
-    testWidgets('shows the transfer being sent', (tester) async {
-      final harness = consumer();
-      await pump(
-        tester,
-        harness,
-        filled.copyWith(status: BuyUsesStatus.submitting),
+        consumerState.copyWith(status: BuyUsesStatus.starting),
       );
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
       await tester.tap(find.byType(FilledButton));
-      verifyNever(harness.buyUses.submit);
+      verifyNever(harness.buyUses.pay);
     });
 
-    testWidgets('cannot be left while the transfer is being sent', (
+    testWidgets('cannot be left while the payment is being started', (
       tester,
     ) async {
       final harness = consumer();
-      final sending = filled.copyWith(status: BuyUsesStatus.submitting);
-      when(() => harness.buyUses.state).thenReturn(sending);
+      final starting = consumerState.copyWith(status: BuyUsesStatus.starting);
+      when(() => harness.buyUses.state).thenReturn(starting);
       whenListen(
         harness.buyUses,
         const Stream<BuyUsesState>.empty(),
-        initialState: sending,
+        initialState: starting,
       );
-      await harness.pump(
-        tester,
-        Scaffold(
-          body: Builder(
-            builder: (context) => TextButton(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute<bool>(
-                  builder: (_) => const BuyUsesView(role: UserRole.consumer),
-                ),
-              ),
-              child: const Text('open'),
-            ),
-          ),
-        ),
-      );
+      await harness.pump(tester, _openingView());
       await tester.tap(find.text('open'));
       await tester.pump(const Duration(seconds: 1));
 
@@ -538,29 +286,15 @@ void main() {
       expect(find.byType(BuyUsesView), findsOneWidget);
     });
 
-    testWidgets('can be left while it is being filled in', (tester) async {
+    testWidgets('can be left while choosing', (tester) async {
       final harness = consumer();
-      when(() => harness.buyUses.state).thenReturn(filled);
+      when(() => harness.buyUses.state).thenReturn(consumerState);
       whenListen(
         harness.buyUses,
         const Stream<BuyUsesState>.empty(),
-        initialState: filled,
+        initialState: consumerState,
       );
-      await harness.pump(
-        tester,
-        Scaffold(
-          body: Builder(
-            builder: (context) => TextButton(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute<bool>(
-                  builder: (_) => const BuyUsesView(role: UserRole.consumer),
-                ),
-              ),
-              child: const Text('open'),
-            ),
-          ),
-        ),
-      );
+      await harness.pump(tester, _openingView());
       await tester.tap(find.text('open'));
       await tester.pumpAndSettle();
 
@@ -570,65 +304,93 @@ void main() {
       expect(find.byType(BuyUsesView), findsNothing);
     });
 
-    testWidgets('thanks and closes once sent', (
+    testWidgets('thanks and closes once the server confirmed the payment', (
       tester,
     ) async {
       final harness = consumer();
-      when(() => harness.buyUses.state).thenReturn(filled);
+      when(() => harness.buyUses.state).thenReturn(consumerState);
+      when(harness.buyUses.paymentClosed).thenReturn(null);
+      when(() => harness.apps.openLink(any())).thenAnswer((_) async => true);
+      when(() => harness.payments.fetchOrder('order-1')).thenAnswer(
+        (_) async => const Ok(
+          PaymentOrder(id: 'order-1', status: PaymentStatus.succeeded),
+        ),
+      );
       whenListen(
         harness.buyUses,
-        Stream.value(filled.copyWith(status: BuyUsesStatus.submitted)),
-        initialState: filled,
-      );
-      bool? result;
-      await harness.pump(
-        tester,
-        Scaffold(
-          body: Builder(
-            builder: (context) => TextButton(
-              onPressed: () async => result = await Navigator.of(context).push(
-                MaterialPageRoute<bool>(
-                  builder: (_) => const BuyUsesView(role: UserRole.consumer),
-                ),
-              ),
-              child: const Text('open'),
-            ),
+        Stream.value(
+          consumerState.copyWith(
+            status: BuyUsesStatus.paying,
+            checkout: () => checkout,
           ),
         ),
+        initialState: consumerState,
+      );
+      final result = ValueNotifier<bool?>(null);
+      await harness.pump(
+        tester,
+        _openingView(result: result),
       );
 
       await tester.tap(find.text('open'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 3));
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.tap(find.text(l10n.paymentDone));
       await tester.pumpAndSettle();
 
-      expect(result, isTrue);
-      expect(find.text(l10n.buyUsesSent), findsOneWidget);
+      expect(result.value, isTrue);
+      expect(find.text(l10n.buyUsesPaid), findsOneWidget);
+      verify(harness.buyUses.paymentClosed).called(1);
+      verify(() => harness.apps.openLink(checkout.url)).called(1);
+    });
+
+    testWidgets('stays when the payment screen is left unpaid', (
+      tester,
+    ) async {
+      final harness = consumer();
+      when(() => harness.buyUses.state).thenReturn(consumerState);
+      when(harness.buyUses.paymentClosed).thenReturn(null);
+      when(() => harness.apps.openLink(any())).thenAnswer((_) async => true);
+      when(() => harness.payments.fetchOrder('order-1')).thenAnswer(
+        (_) async => const Ok(
+          PaymentOrder(id: 'order-1', status: PaymentStatus.pending),
+        ),
+      );
+      whenListen(
+        harness.buyUses,
+        Stream.value(
+          consumerState.copyWith(
+            status: BuyUsesStatus.paying,
+            checkout: () => checkout,
+          ),
+        ),
+        initialState: consumerState,
+      );
+      final result = ValueNotifier<bool?>(null);
+      await harness.pump(
+        tester,
+        _openingView(result: result),
+      );
+
+      await tester.tap(find.text('open'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.tap(find.text(l10n.paymentLater));
+      await tester.pumpAndSettle();
+
+      expect(result.value, isNull);
+      expect(find.text(l10n.buyUsesPaid), findsNothing);
+      verify(harness.buyUses.paymentClosed).called(1);
     });
 
     for (final (name, failure, message) in <(String, Failure, String)>[
       (
-        'too many waiting',
-        const TooManyPendingFailure(),
-        l10n.buyUsesTooManyPending('ms'),
-      ),
-      (
         'a pack that is gone',
         const PackNotFoundFailure(),
         l10n.buyUsesPackGone('ms'),
-      ),
-      (
-        'a method that is gone',
-        const MethodUnavailableFailure(),
-        l10n.buyUsesMethodGone('ms'),
-      ),
-      (
-        'a refused sender',
-        const InvalidSenderFailure(),
-        l10n.buyUsesInvalidSender('ms'),
-      ),
-      (
-        'a refused screenshot',
-        const InvalidScreenshotFailure(),
-        l10n.buyUsesInvalidScreenshot('ms'),
       ),
       (
         'a changed price',
@@ -636,14 +398,9 @@ void main() {
         l10n.buyUsesPriceChanged('ms'),
       ),
       (
-        'the upload limit',
-        const UploadLimitFailure(),
-        l10n.buyUsesUploadLimit('ms'),
-      ),
-      (
-        'a file that is not an image',
-        const UnsupportedPhotoFailure(),
-        l10n.buyUsesPhotoRejected('ms'),
+        'payment that is not available',
+        const PaymentsUnavailableFailure(),
+        l10n.paymentsUnavailable('ms'),
       ),
       ('no network', const NetworkFailure(), l10n.consumerErrorNetwork('ms')),
       (
@@ -654,11 +411,11 @@ void main() {
     ]) {
       testWidgets('tells a consumer about $name', (tester) async {
         final harness = consumer();
-        when(() => harness.buyUses.state).thenReturn(filled);
+        when(() => harness.buyUses.state).thenReturn(consumerState);
         whenListen(
           harness.buyUses,
-          Stream.value(filled.copyWith(failure: () => failure)),
-          initialState: filled,
+          Stream.value(consumerState.copyWith(failure: () => failure)),
+          initialState: consumerState,
         );
         await harness.pump(tester, const BuyUsesView(role: UserRole.consumer));
         await tester.pump();
@@ -716,3 +473,20 @@ void main() {
     });
   });
 }
+
+/// A button that opens the buy screen, reporting what it popped with.
+Widget _openingView({ValueNotifier<bool?>? result}) => Scaffold(
+  body: Builder(
+    builder: (context) => TextButton(
+      onPressed: () async {
+        final popped = await Navigator.of(context).push<bool>(
+          MaterialPageRoute<bool>(
+            builder: (_) => const BuyUsesView(role: UserRole.consumer),
+          ),
+        );
+        result?.value = popped;
+      },
+      child: const Text('open'),
+    ),
+  ),
+);

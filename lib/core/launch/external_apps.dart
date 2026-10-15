@@ -14,6 +14,9 @@ abstract interface class ExternalApps {
   Future<bool> map(String address);
 
   Future<bool> shareFile(String path, {required String name});
+
+  /// Opens a web page (the payment provider's) in the browser.
+  Future<bool> openLink(Uri uri);
 }
 
 class SystemExternalApps implements ExternalApps {
@@ -45,6 +48,9 @@ class SystemExternalApps implements ExternalApps {
     );
     return result.status != ShareResultStatus.unavailable;
   }
+
+  @override
+  Future<bool> openLink(Uri uri) => _open(uri);
 
   Future<bool> _open(Uri uri) async {
     try {

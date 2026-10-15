@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/balance/domain/entities/sender_account.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 
 void main() {
   group('a wallet', () {

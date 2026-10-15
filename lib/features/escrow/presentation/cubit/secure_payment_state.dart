@@ -1,76 +1,41 @@
 part of 'secure_payment_cubit.dart';
 
-enum SecurePaymentStatus { loading, failed, editing, submitting, submitted }
+enum SecurePaymentStatus { loading, failed, editing, starting, paying }
 
 final class SecurePaymentState extends Equatable {
   const SecurePaymentState({
     this.status = SecurePaymentStatus.loading,
     this.amountPiastres = 0,
-    this.accounts = const [],
-    this.method,
-    this.sender = '',
-    this.screenshot,
+    this.checkout,
     this.failure,
   });
 
   final SecurePaymentStatus status;
 
-  /// What to transfer.
+  /// What will be charged: the agreed price, decided by the server.
   final int amountPiastres;
-  final List<PaymentAccount> accounts;
-  final TopupMethod? method;
 
-  /// The account the money comes from, as typed.
-  final String sender;
+  /// The payment page to pay on, while [status] is `paying`.
+  final PaymentCheckout? checkout;
 
-  /// The local path of the transfer's screenshot.
-  final String? screenshot;
-
-  /// Why loading or the last send failed.
+  /// Why loading or the last start failed.
   final Failure? failure;
 
-  /// The account to transfer to by the picked method.
-  PaymentAccount? get account =>
-      accounts.where((account) => account.method == method).firstOrNull;
-
-  /// The sender as the server takes it, or null while it is not valid.
-  String? get validSender {
-    final method = this.method;
-    return method == null ? null : normalizedSender(method, sender);
-  }
-
-  bool get canSubmit =>
-      status == SecurePaymentStatus.editing &&
-      account != null &&
-      validSender != null &&
-      screenshot != null;
+  bool get canPay => status == SecurePaymentStatus.editing;
 
   SecurePaymentState copyWith({
     SecurePaymentStatus? status,
-    TopupMethod? method,
-    String? sender,
-    String? Function()? screenshot,
+    PaymentCheckout? Function()? checkout,
     Failure? Function()? failure,
   }) {
     return SecurePaymentState(
       status: status ?? this.status,
       amountPiastres: amountPiastres,
-      accounts: accounts,
-      method: method ?? this.method,
-      sender: sender ?? this.sender,
-      screenshot: screenshot != null ? screenshot() : this.screenshot,
+      checkout: checkout != null ? checkout() : this.checkout,
       failure: failure != null ? failure() : this.failure,
     );
   }
 
   @override
-  List<Object?> get props => [
-    status,
-    amountPiastres,
-    accounts,
-    method,
-    sender,
-    screenshot,
-    failure,
-  ];
+  List<Object?> get props => [status, amountPiastres, checkout, failure];
 }

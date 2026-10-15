@@ -55,6 +55,8 @@ import 'package:salahly/features/notifications/domain/repositories/push_service.
 import 'package:salahly/features/notifications/domain/repositories/push_transport.dart';
 import 'package:salahly/features/onboarding/data/repositories/supabase_onboarding_repository.dart';
 import 'package:salahly/features/onboarding/domain/repositories/onboarding_repository.dart';
+import 'package:salahly/features/payments/data/repositories/supabase_payment_repository.dart';
+import 'package:salahly/features/payments/domain/repositories/payment_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Everything the app talks to outside itself, built once in `main` and
@@ -75,6 +77,7 @@ class AppDependencies {
     required this.callEngineFactory,
     required this.callRinger,
     required this.escrowRepository,
+    required this.paymentRepository,
     required this.notificationsRepository,
     required this.liveUpdates,
     required this.pushService,
@@ -143,6 +146,7 @@ class AppDependencies {
       callEngineFactory: WebRtcCallEngine.new,
       callRinger: DeviceCallRinger(),
       escrowRepository: SupabaseEscrowRepository(client),
+      paymentRepository: SupabasePaymentRepository(client),
       notificationsRepository: SupabaseNotificationsRepository(client),
       liveUpdates: SupabaseLiveUpdates(client),
       pushService: MessagingPushService(
@@ -181,6 +185,7 @@ class AppDependencies {
   final CallEngineFactory callEngineFactory;
   final CallRinger callRinger;
   final EscrowRepository escrowRepository;
+  final PaymentRepository paymentRepository;
   final NotificationsRepository notificationsRepository;
   final LiveUpdates liveUpdates;
   final PushService pushService;

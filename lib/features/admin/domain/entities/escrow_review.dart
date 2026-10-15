@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 import 'package:salahly/features/escrow/domain/entities/escrow.dart';
 
 /// A guaranteed payment as the team works through it: checking the
@@ -11,10 +11,11 @@ final class EscrowReview extends Equatable {
     required this.requestCode,
     required this.status,
     required this.amountPiastres,
-    required this.method,
-    required this.senderAccount,
-    required this.screenshotPath,
     required this.createdAt,
+    this.method,
+    this.senderAccount,
+    this.screenshotPath,
+    this.onlineMethod,
     this.consumerName,
     this.consumerPhone,
     this.technicianName,
@@ -36,14 +37,21 @@ final class EscrowReview extends Equatable {
   final EscrowStatus status;
   final int amountPiastres;
 
-  /// How the consumer paid Salahly, and the number or address the money
-  /// came from: also where a refund goes.
-  final TopupMethod method;
-  final String senderAccount;
+  /// For a transfer made the old way: how the consumer paid Salahly, the
+  /// number or address the money came from (also where a refund goes) and
+  /// the screenshot in the `transfer-proofs` bucket. All null for a payment
+  /// made online.
+  final TopupMethod? method;
+  final String? senderAccount;
+  final String? screenshotPath;
 
-  /// The screenshot in the `transfer-proofs` bucket.
-  final String screenshotPath;
+  /// How an online payment was made ("card", "wallet"); null when the
+  /// provider did not say, or for an old-style transfer.
+  final String? onlineMethod;
   final DateTime createdAt;
+
+  /// Whether the consumer paid online, through the payment provider.
+  bool get isOnline => screenshotPath == null;
 
   /// Null when the person deleted their account.
   final String? consumerName;
@@ -74,6 +82,7 @@ final class EscrowReview extends Equatable {
     method,
     senderAccount,
     screenshotPath,
+    onlineMethod,
     createdAt,
     consumerName,
     consumerPhone,

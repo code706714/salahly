@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 
 /// A pack of uses on sale, or switched off.
 final class CreditPackSetting extends Equatable {

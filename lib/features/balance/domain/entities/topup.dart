@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 
 /// Where a transfer stands.
 enum TopupStatus { pending, approved, rejected }

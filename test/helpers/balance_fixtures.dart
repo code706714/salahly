@@ -2,8 +2,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/result.dart';
 import 'package:salahly/features/balance/domain/entities/credit_pack.dart';
 import 'package:salahly/features/balance/domain/entities/ledger_entry.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 
 import 'mocks.dart';
 
@@ -15,19 +15,6 @@ const consumerPacks = [
 const technicianPacks = [
   CreditPack(id: 'pack-t1', uses: 1, pricePiastres: 3000),
   CreditPack(id: 'pack-t10', uses: 10, pricePiastres: 25000),
-];
-
-const paymentAccounts = [
-  PaymentAccount(
-    method: TopupMethod.instapay,
-    account: 'salahly@instapay',
-    holderName: 'شركة صلحلي',
-  ),
-  PaymentAccount(
-    method: TopupMethod.wallet,
-    account: '01000000000',
-    holderName: 'شركة صلحلي',
-  ),
 ];
 
 Topup testTopup({
@@ -60,14 +47,11 @@ LedgerEntry testLedgerEntry({
   createdAt: createdAt ?? DateTime(2026, 10, 3, 9),
 );
 
-/// Packs and accounts on sale, and no transfers or movements yet.
+/// Packs on sale, and no transfers or movements yet.
 void stubBalance(MockBalanceRepository balance, {bool consumer = true}) {
   when(() => balance.fetchPacks(any())).thenAnswer(
     (_) async => Ok(consumer ? consumerPacks : technicianPacks),
   );
-  when(
-    balance.fetchPaymentAccounts,
-  ).thenAnswer((_) async => const Ok(paymentAccounts));
   when(() => balance.fetchTopups(any())).thenAnswer((_) async => const Ok([]));
   when(() => balance.fetchLedger(any())).thenAnswer((_) async => const Ok([]));
 }

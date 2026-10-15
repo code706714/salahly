@@ -10,8 +10,8 @@ import 'package:salahly/features/admin/domain/entities/audit_entry.dart';
 import 'package:salahly/features/admin/domain/entities/escrow_review.dart';
 import 'package:salahly/features/admin/domain/entities/topup_review.dart';
 import 'package:salahly/features/admin/domain/entities/verification.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 import 'package:salahly/features/escrow/domain/entities/escrow.dart';
 import 'package:salahly/features/marketplace/domain/entities/complaint.dart';
 import 'package:salahly/features/marketplace/domain/entities/request_issue.dart';
@@ -204,15 +204,17 @@ EscrowReview testEscrowReview({
   String? rejectReason,
   String? payoutReference,
   String? resolutionNote,
+  bool online = false,
 }) {
   return EscrowReview(
     id: id,
     requestCode: 'R-1048',
     status: status,
     amountPiastres: 35000,
-    method: TopupMethod.instapay,
-    senderAccount: 'norhan@instapay',
-    screenshotPath: 'consumer/proof.jpg',
+    method: online ? null : TopupMethod.instapay,
+    senderAccount: online ? null : 'norhan@instapay',
+    screenshotPath: online ? null : 'consumer/proof.jpg',
+    onlineMethod: online ? 'card' : null,
     createdAt: adminNow.subtract(const Duration(hours: 3)),
     consumerName: consumerName,
     consumerPhone: '01114567720',

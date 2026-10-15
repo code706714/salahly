@@ -31,7 +31,7 @@ import 'package:salahly/features/admin/presentation/router/admin_routes.dart';
 import 'package:salahly/features/admin/presentation/widgets/admin_shell.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
 import 'package:salahly/features/auth/domain/repositories/auth_repository.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
 import 'admin_fixtures.dart';

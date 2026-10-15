@@ -11,7 +11,8 @@ bool isNetworkError(Object error) =>
     error is SocketException ||
     error is HttpException ||
     error is TimeoutException ||
-    error is AuthRetryableFetchException;
+    error is AuthRetryableFetchException ||
+    error is FunctionsFetchException;
 
 /// Maps errors every Supabase call can throw. Repositories handle their
 /// feature-specific errors first and delegate the rest here.

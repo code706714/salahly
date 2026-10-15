@@ -19,7 +19,6 @@ import 'package:salahly/features/account/domain/entities/user_profile.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/account/domain/entities/verification_status.dart';
 import 'package:salahly/features/auth/domain/entities/auth_user.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/customers/data/repositories/drift_customers_repository.dart';
 import 'package:salahly/features/jobs/data/repositories/drift_jobs_repository.dart';
 import 'package:salahly/features/marketplace/domain/entities/technician_card.dart';
@@ -85,6 +84,7 @@ class TechnicianApp {
     ).thenAnswer((_) async => const Ok(null));
     stubNotifications(notifications);
     when(() => photoPicker.discard(any())).thenAnswer((_) async {});
+    when(() => apps.openLink(any())).thenAnswer((_) async => true);
     when(requests.fetchNewRequests).thenAnswer((_) async => const Ok([]));
     when(requests.fetchMyServices).thenAnswer((_) async => const Ok([]));
     when(requests.fetchAvailability).thenAnswer((_) async => const Ok(null));
@@ -124,7 +124,7 @@ class TechnicianApp {
     final phone = PhoneNumber.tryParse('01000000000')!;
     registerFallbackValue(phone);
     registerFallbackValue(UserRole.consumer);
-    registerFallbackValue(TopupMethod.instapay);
+    registerFallbackValue(Uri());
     registerFallbackValue(TechnicianSort.rating);
   }
 
@@ -137,6 +137,7 @@ class TechnicianApp {
   final userData = MockUserScopedData();
   final catalog = MockCatalogRepository();
   final apps = MockExternalApps();
+  final payments = MockPaymentRepository();
   final speech = MockSpeechInput();
   final contacts = MockContactPicker();
   final photoPicker = MockPhotoPicker();
@@ -188,6 +189,7 @@ class TechnicianApp {
     callEngineFactory: FakeCallEngine.new,
     callRinger: FakeCallRinger(),
     escrowRepository: escrow,
+    paymentRepository: payments,
     notificationsRepository: notifications,
     liveUpdates: live,
     pushService: FakePushService(),

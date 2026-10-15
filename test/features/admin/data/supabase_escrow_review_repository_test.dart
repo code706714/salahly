@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:salahly/core/error/failure.dart';
+import 'package:salahly/core/error/result.dart';
+import 'package:salahly/features/account/domain/failures/account_failures.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_escrow_review_repository.dart';
 import 'package:salahly/features/admin/domain/failures/admin_failures.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 import 'package:salahly/features/escrow/domain/entities/escrow.dart';
 
 import '../../../helpers/admin_server.dart';
@@ -163,6 +165,58 @@ void main() {
         'p_escrow_id': 'escrow-1',
         'p_reference': 'IP-999',
       });
+    });
+  });
+
+  group('refundOnline', () {
+    test('asks the refund function for the escrow, nothing else', () async {
+      server.body = {'status': 'refunded'};
+
+      final result = await repository.refundOnline('escrow-1');
+
+      expect(result, isA<Ok<void>>());
+      expect(server.last.url.path, '/functions/v1/payment-refund');
+      expect(server.lastParams, {'escrow_id': 'escrow-1'});
+    });
+
+    for (final (name, failure) in <(String, Failure)>[
+      ('refund_by_dashboard', const RefundByDashboardFailure()),
+      ('admin_required', const AdminRequiredFailure()),
+      ('recent_login_required', const RecentLoginRequiredFailure()),
+      ('not_refund_due', const NotPendingFailure()),
+      ('escrow_not_found', const AdminNotFoundFailure()),
+    ]) {
+      test('$name is a named failure', () async {
+        server
+          ..status = 400
+          ..body = {'error': name};
+
+        expect(await repository.refundOnline('escrow-1'), failsWith(failure));
+      });
+    }
+
+    test('an unknown refusal is unexpected', () async {
+      server
+        ..status = 502
+        ..body = {'error': 'provider_error'};
+
+      expect(
+        await repository.refundOnline('escrow-1'),
+        isA<Err<Object?>>().having(
+          (err) => err.failure,
+          'failure',
+          isA<UnexpectedFailure>(),
+        ),
+      );
+    });
+
+    test('says the network is down offline', () async {
+      server.offline = true;
+
+      expect(
+        await repository.refundOnline('escrow-1'),
+        failsWith(const NetworkFailure()),
+      );
     });
   });
 

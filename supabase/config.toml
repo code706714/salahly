@@ -439,3 +439,12 @@ verify_jwt = false
 
 [functions.whatsapp-login]
 verify_jwt = false
+
+# The payment provider calls the webhook with its own signature, and the
+# database wakes the reconciler with a shared secret; neither carries a user's
+# token. payment-create and payment-refund keep JWT verification on.
+[functions.payment-webhook]
+verify_jwt = false
+
+[functions.payment-reconcile]
+verify_jwt = false

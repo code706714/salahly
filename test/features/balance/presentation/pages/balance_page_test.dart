@@ -8,8 +8,8 @@ import 'package:salahly/core/time/time_labels.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/account/domain/entities/user_role.dart';
 import 'package:salahly/features/balance/domain/entities/ledger_entry.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
 import 'package:salahly/features/balance/domain/entities/topup.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 import 'package:salahly/features/balance/presentation/cubit/balance_cubit.dart';
 import 'package:salahly/features/balance/presentation/pages/balance_page.dart';
 

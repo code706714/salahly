@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salahly/core/text/digits.dart';
 import 'package:salahly/core/text/money.dart';
 import 'package:salahly/features/admin/domain/entities/admin_settings.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 
 part 'settings_form_state.dart';
 

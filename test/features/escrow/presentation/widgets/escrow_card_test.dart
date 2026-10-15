@@ -12,6 +12,7 @@ import 'package:salahly/features/escrow/domain/failures/escrow_failures.dart';
 import 'package:salahly/features/escrow/domain/repositories/escrow_repository.dart';
 import 'package:salahly/features/escrow/presentation/widgets/escrow_card.dart';
 import 'package:salahly/features/marketplace/presentation/request_follow_up.dart';
+import 'package:salahly/features/payments/domain/entities/payment.dart';
 
 import '../../../../helpers/fake_live_updates.dart';
 import '../../../../helpers/follow_up_harness.dart';
@@ -127,6 +128,55 @@ void main() {
         expect(find.byType(FilledButton), findsNothing);
       });
     }
+
+    for (final status in [PaymentStatus.created, PaymentStatus.pending]) {
+      testWidgets('says it is checking while a $status payment is open', (
+        tester,
+      ) async {
+        shows(testEscrowInfo(canSecure: true, paymentStatus: status));
+
+        await pump(tester);
+
+        expect(find.text(l10n.escrowPaymentCheckingBody), findsOneWidget);
+        expect(find.text(l10n.escrowOfferBody('ms', '350')), findsNothing);
+        expect(
+          find.widgetWithText(FilledButton, l10n.escrowRetryAction('ms')),
+          findsOneWidget,
+        );
+      });
+    }
+
+    for (final status in [
+      PaymentStatus.failed,
+      PaymentStatus.cancelled,
+      PaymentStatus.expired,
+    ]) {
+      testWidgets('offers the payment again after a $status one', (
+        tester,
+      ) async {
+        shows(testEscrowInfo(canSecure: true, paymentStatus: status));
+
+        await pump(tester);
+
+        expect(find.text(l10n.escrowPaymentCheckingBody), findsNothing);
+        expect(find.text(l10n.escrowOfferBody('ms', '350')), findsOneWidget);
+      });
+    }
+
+    testWidgets('shows an online payment held, with no transfer method', (
+      tester,
+    ) async {
+      shows(
+        testEscrowInfo(
+          paymentStatus: PaymentStatus.succeeded,
+          escrow: testEscrow(EscrowStatus.held, method: null),
+        ),
+      );
+
+      await pump(tester);
+
+      expect(find.text(l10n.escrowHeldBody('350')), findsOneWidget);
+    });
 
     testWidgets('says why a transfer was rejected and offers to send again', (
       tester,

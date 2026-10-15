@@ -10,7 +10,7 @@ import 'package:salahly/core/widgets/bottom_action_bar.dart';
 import 'package:salahly/core/widgets/busy_filled_button.dart';
 import 'package:salahly/core/widgets/detail_header.dart';
 import 'package:salahly/core/widgets/segmented_tabs.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 import 'package:salahly/features/escrow/domain/failures/escrow_failures.dart';
 import 'package:salahly/features/escrow/presentation/cubit/payout_account_cubit.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';

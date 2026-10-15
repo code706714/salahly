@@ -5,7 +5,7 @@ import 'package:salahly/features/account/domain/failures/account_failures.dart';
 import 'package:salahly/features/admin/data/repositories/supabase_settings_repository.dart';
 import 'package:salahly/features/admin/domain/entities/admin_settings.dart';
 import 'package:salahly/features/admin/domain/failures/admin_failures.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 
 import '../../../helpers/admin_fixtures.dart';
 import '../../../helpers/admin_server.dart';

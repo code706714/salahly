@@ -4,16 +4,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:salahly/core/error/failure.dart';
-import 'package:salahly/core/media/photo_picker.dart';
+import 'package:salahly/core/error/result.dart';
+import 'package:salahly/core/launch/external_apps.dart';
 import 'package:salahly/features/account/domain/entities/honorific.dart';
 import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
-import 'package:salahly/features/balance/domain/failures/balance_failures.dart';
 import 'package:salahly/features/escrow/domain/failures/escrow_failures.dart';
 import 'package:salahly/features/escrow/presentation/cubit/secure_payment_cubit.dart';
 import 'package:salahly/features/escrow/presentation/pages/secure_payment_page.dart';
+import 'package:salahly/features/payments/domain/entities/payment.dart';
+import 'package:salahly/features/payments/domain/failures/payment_failures.dart';
+import 'package:salahly/features/payments/domain/repositories/payment_repository.dart';
 
-import '../../../../helpers/balance_fixtures.dart';
 import '../../../../helpers/follow_up_harness.dart';
 import '../../../../helpers/mocks.dart';
 import '../../../../helpers/pushed_view.dart';
@@ -25,29 +26,36 @@ class MockSecurePaymentCubit extends MockCubit<SecurePaymentState>
 void main() {
   late MockSecurePaymentCubit cubit;
   late MockSessionCubit session;
-  late MockPhotoPicker photoPicker;
+  late MockPaymentRepository payments;
+  late MockExternalApps apps;
+
+  final checkout = PaymentCheckout(
+    orderId: 'order-1',
+    url: Uri.parse('https://pay.example/checkout'),
+    amountPiastres: 35000,
+  );
 
   setUpAll(() async {
     await loadAppFonts();
     FollowUpHarness.registerFallbacks();
-    registerFallbackValue(PhotoSource.camera);
-    registerFallbackValue(PhotoPurpose.transfer);
+    registerFallbackValue(Uri());
   });
 
   setUp(() {
     cubit = MockSecurePaymentCubit();
     session = MockSessionCubit();
-    photoPicker = MockPhotoPicker();
+    payments = MockPaymentRepository();
+    apps = MockExternalApps();
     when(() => session.state).thenReturn(consumerSession());
     when(() => cubit.isClosed).thenReturn(false);
-    when(() => cubit.submit()).thenAnswer((_) async {});
+    when(() => cubit.pay()).thenAnswer((_) async {});
+    when(cubit.paymentClosed).thenReturn(null);
+    when(() => apps.openLink(any())).thenAnswer((_) async => true);
   });
 
   const editing = SecurePaymentState(
     status: SecurePaymentStatus.editing,
     amountPiastres: 35000,
-    accounts: paymentAccounts,
-    method: TopupMethod.instapay,
   );
 
   Future<void> pump(
@@ -62,7 +70,10 @@ void main() {
       pushed
           ? const PushedView(SecurePaymentView())
           : const SecurePaymentView(),
-      repositories: [RepositoryProvider<PhotoPicker>.value(value: photoPicker)],
+      repositories: [
+        RepositoryProvider<PaymentRepository>.value(value: payments),
+        RepositoryProvider<ExternalApps>.value(value: apps),
+      ],
       blocs: [
         BlocProvider<SessionCubit>.value(value: session),
         BlocProvider<SecurePaymentCubit>.value(value: cubit),
@@ -76,10 +87,10 @@ void main() {
     }
   }
 
-  Finder submit() =>
-      find.widgetWithText(FilledButton, l10n.buyUsesSubmit('ms'));
+  Finder pay() =>
+      find.widgetWithText(FilledButton, l10n.buyUsesPay('ms', '350'));
 
-  testWidgets('shows what to transfer and where, in three steps', (
+  testWidgets('shows what the guarantee is and what will be charged', (
     tester,
   ) async {
     await pump(tester, editing);
@@ -87,13 +98,7 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(find.text(l10n.escrowSecureTitle('ms')), findsOneWidget);
     expect(find.text(l10n.escrowSecureIntro('ms', '350')), findsOneWidget);
-    expect(find.text(l10n.buyUsesStepTransfer('ms', '350')), findsOneWidget);
-    expect(find.text(l10n.buyUsesStepSender('ms')), findsOneWidget);
-    expect(find.text(l10n.buyUsesStepScreenshot('ms')), findsOneWidget);
-    for (final number in ['1', '2', '3']) {
-      expect(find.text(number), findsOneWidget);
-    }
-    expect(find.text('salahly@instapay'), findsOneWidget);
+    expect(pay(), findsOneWidget);
   });
 
   testWidgets('speaks to a man as a man', (tester) async {
@@ -103,48 +108,25 @@ void main() {
     expect(find.text(l10n.escrowSecureIntro('mr', '350')), findsOneWidget);
   });
 
-  testWidgets('switches to the wallet', (tester) async {
+  testWidgets('starts the payment from the button', (tester) async {
     await pump(tester, editing);
 
-    await tester.tap(find.text(l10n.buyUsesMethodWallet));
+    await tester.tap(pay());
 
-    verify(() => cubit.pickMethod(TopupMethod.wallet)).called(1);
+    verify(() => cubit.pay()).called(1);
   });
 
-  testWidgets('passes what is typed as the sender', (tester) async {
-    await pump(tester, editing);
-
-    await tester.enterText(find.byType(TextField), '٠١١١٤٥٦٧٧٢٠');
-
-    verify(() => cubit.setSender('٠١١١٤٥٦٧٧٢٠')).called(1);
-  });
-
-  testWidgets('can not be sent before the form is complete', (tester) async {
-    await pump(tester, editing);
-
-    expect(tester.widget<FilledButton>(submit()).onPressed, isNull);
-  });
-
-  testWidgets('sends once the form is complete', (tester) async {
+  testWidgets('shows the payment being started and cannot pay twice', (
+    tester,
+  ) async {
     await pump(
       tester,
-      editing.copyWith(sender: '01114567720', screenshot: () => '/tmp/p.jpg'),
-    );
-
-    await tester.tap(submit());
-
-    verify(() => cubit.submit()).called(1);
-  });
-
-  testWidgets('shows the payment being sent', (tester) async {
-    await pump(
-      tester,
-      editing
-          .copyWith(sender: '01114567720', screenshot: () => '/tmp/p.jpg')
-          .copyWith(status: SecurePaymentStatus.submitting),
+      editing.copyWith(status: SecurePaymentStatus.starting),
     );
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    await tester.tap(find.byType(FilledButton));
+    verifyNever(() => cubit.pay());
   });
 
   testWidgets('says it is unavailable when the payment can not be made', (
@@ -156,7 +138,7 @@ void main() {
     );
 
     expect(find.text(l10n.escrowSecureUnavailable('ms')), findsOneWidget);
-    expect(submit(), findsNothing);
+    expect(find.byType(FilledButton), findsNothing);
   });
 
   testWidgets('shows a loading mark while it loads', (tester) async {
@@ -168,8 +150,7 @@ void main() {
   for (final (failure, text) in <(Failure, String)>[
     (const EscrowUnavailableFailure(), l10n.escrowFailureUnavailable),
     (const AlreadySecuredFailure(), l10n.escrowFailureAlreadySecured),
-    (const InvalidSenderFailure(), l10n.buyUsesInvalidSender('ms')),
-    (const InvalidScreenshotFailure(), l10n.buyUsesInvalidScreenshot('ms')),
+    (const PaymentsUnavailableFailure(), l10n.paymentsUnavailable('ms')),
   ]) {
     testWidgets('says why it was refused: $failure', (tester) async {
       whenListen(
@@ -184,15 +165,48 @@ void main() {
     });
   }
 
-  testWidgets('closes with a thank-you once the transfer is sent', (
+  testWidgets('closes with a thank-you once the server confirmed it', (
     tester,
   ) async {
-    final sent = editing.copyWith(status: SecurePaymentStatus.submitted);
-    whenListen(cubit, Stream.value(sent), initialState: editing);
+    when(() => payments.fetchOrder('order-1')).thenAnswer(
+      (_) async => const Ok(
+        PaymentOrder(id: 'order-1', status: PaymentStatus.succeeded),
+      ),
+    );
+    final paying = editing.copyWith(
+      status: SecurePaymentStatus.paying,
+      checkout: () => checkout,
+    );
+    whenListen(cubit, Stream.value(paying), initialState: editing);
     await pump(tester, editing, pushed: true);
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.tap(find.text(l10n.paymentDone));
     await tester.pumpAndSettle();
 
     expect(find.text(PushedView.launcher), findsOneWidget);
-    expect(find.text(l10n.escrowSecureSent), findsOneWidget);
+    expect(find.text(l10n.escrowSecurePaid), findsOneWidget);
+    verify(() => cubit.paymentClosed()).called(1);
+  });
+
+  testWidgets('stays when the payment screen is left unpaid', (tester) async {
+    when(() => payments.fetchOrder('order-1')).thenAnswer(
+      (_) async =>
+          const Ok(PaymentOrder(id: 'order-1', status: PaymentStatus.pending)),
+    );
+    final paying = editing.copyWith(
+      status: SecurePaymentStatus.paying,
+      checkout: () => checkout,
+    );
+    whenListen(cubit, Stream.value(paying), initialState: editing);
+    await pump(tester, editing, pushed: true);
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.tap(find.text(l10n.paymentLater));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(SecurePaymentView), findsOneWidget);
+    expect(find.text(l10n.escrowSecurePaid), findsNothing);
+    verify(() => cubit.paymentClosed()).called(1);
   });
 }

@@ -52,7 +52,7 @@ The admin console still signs in with a Twilio OTP, so it needs a provider until
    - `supabase secrets set PURGE_STORAGE_SECRET=<random value, at least 32 characters>`
    - SQL editor: `select vault.create_secret('https://<ref>.supabase.co/functions/v1/purge-storage', 'purge_storage_url');` and `select vault.create_secret('<same random value>', 'purge_storage_secret');`
    - Check: delete a test account, then within 15 minutes `select count(*) from private.storage_purge` returns 0 and the bucket files are gone. Also wire an alert on `select private.purge_backlog()` (age of the oldest file still waiting; alert above 1 hour) and add the secret `free_credit_pepper` (`select vault.create_secret('<long random value>', 'free_credit_pepper');`) before launch. Keep it forever: losing it re-opens the free uses for deleted accounts.
-5. Seed what the app needs on hosted: payment accounts (Vodafone Cash / InstaPay numbers), credit packs, app_settings free-use counts, and at least one staff account allowed to approve technicians and top-ups.
+5. Seed what the app needs on hosted: credit packs (payments are online through the provider, see `docs/payments/README.md`; `payment_accounts` is only used by old manual transfers), app_settings free-use counts, and at least one staff account allowed to approve technicians and top-ups.
 6. Check the Security Advisor shows no table without RLS, and add a billing alert.
 
 ## Firebase (push, later)

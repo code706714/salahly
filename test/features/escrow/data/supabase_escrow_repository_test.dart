@@ -6,11 +6,11 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:salahly/core/error/failure.dart';
 import 'package:salahly/core/error/result.dart';
-import 'package:salahly/features/balance/domain/entities/payment_account.dart';
-import 'package:salahly/features/balance/domain/failures/balance_failures.dart';
+import 'package:salahly/features/balance/domain/entities/topup_method.dart';
 import 'package:salahly/features/escrow/data/repositories/supabase_escrow_repository.dart';
 import 'package:salahly/features/escrow/domain/entities/escrow.dart';
 import 'package:salahly/features/escrow/domain/failures/escrow_failures.dart';
+import 'package:salahly/features/payments/domain/entities/payment.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() {
@@ -49,12 +49,6 @@ void main() {
   }
 
   Future<Result<void>> Function() call(String name) => switch (name) {
-    'secure' => () => repository().secure(
-      requestId: 'request-1',
-      method: TopupMethod.wallet,
-      senderAccount: '01114567720',
-      screenshotPath: 'consumer-1/proof.jpg',
-    ),
     'confirm' => () => repository().confirmWork('request-1'),
     'dispute' => () => repository().dispute('request-1', 'ماجاش'),
     _ => () => repository().savePayoutAccount(
@@ -73,13 +67,7 @@ void main() {
         'can_secure': false,
         'can_confirm': true,
         'can_dispute': true,
-        'accounts': [
-          {
-            'method': 'instapay',
-            'account': 'salahly@instapay',
-            'holder_name': 'شركة صلحلي',
-          },
-        ],
+        'payment': {'status': 'succeeded'},
         'escrow': {
           'id': 'escrow-1',
           'status': 'held',
@@ -100,7 +88,8 @@ void main() {
       expect(info.canSecure, isFalse);
       expect(info.canConfirm, isTrue);
       expect(info.canDispute, isTrue);
-      expect(info.accounts.single.account, 'salahly@instapay');
+      expect(info.paymentStatus, PaymentStatus.succeeded);
+      expect(info.paymentInProgress, isFalse);
       expect(info.escrow!.status, EscrowStatus.held);
       expect(info.escrow!.method, TopupMethod.instapay);
       expect(
@@ -115,7 +104,7 @@ void main() {
         'can_secure': true,
         'can_confirm': false,
         'can_dispute': false,
-        'accounts': <Object?>[],
+        'payment': null,
         'escrow': null,
       };
 
@@ -133,7 +122,7 @@ void main() {
         'can_secure': true,
         'can_confirm': false,
         'can_dispute': false,
-        'accounts': <Object?>[],
+        'payment': null,
         'escrow': {
           'id': 'escrow-1',
           'status': 'rejected',
@@ -223,22 +212,6 @@ void main() {
   });
 
   group('writing', () {
-    test('secures the payment with the transfer', () async {
-      body = null;
-      status = 204;
-
-      final result = await call('secure')();
-
-      expect(result, isA<Ok<void>>());
-      expect(requests.single.url.path, '/rest/v1/rpc/secure_payment');
-      expect(jsonDecode(requests.single.body), {
-        'p_request_id': 'request-1',
-        'p_method': 'wallet',
-        'p_sender_account': '01114567720',
-        'p_screenshot_path': 'consumer-1/proof.jpg',
-      });
-    });
-
     test('confirms the work, disputes it and saves the account', () async {
       status = 204;
 
@@ -264,27 +237,6 @@ void main() {
 
     for (final (action, message, code, failure)
         in <(String, String, String, Failure)>[
-          (
-            'secure',
-            'escrow_unavailable',
-            'P0001',
-            const EscrowUnavailableFailure(),
-          ),
-          ('secure', 'not_found', 'P0002', const EscrowUnavailableFailure()),
-          ('secure', 'already_secured', 'P0001', const AlreadySecuredFailure()),
-          (
-            'secure',
-            'method_unavailable',
-            '22023',
-            const MethodUnavailableFailure(),
-          ),
-          ('secure', 'invalid_sender', '22023', const InvalidSenderFailure()),
-          (
-            'secure',
-            'invalid_screenshot',
-            '22023',
-            const InvalidScreenshotFailure(),
-          ),
           (
             'confirm',
             'escrow_unavailable',

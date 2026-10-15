@@ -31,4 +31,10 @@ abstract interface class EscrowReviewRepository {
   /// The consumer got her money back; [reference] is the transfer's
   /// reference.
   Future<Result<void>> markRefunded(String escrowId, String reference);
+
+  /// Asks the payment provider to return an online payment to the consumer.
+  /// Fails with `RefundByDashboardFailure` when the provider can't do it
+  /// through the API: the refund is then made in the provider's dashboard and
+  /// closes the guarantee by itself.
+  Future<Result<void>> refundOnline(String escrowId);
 }
