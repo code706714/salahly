@@ -31,6 +31,8 @@ final class InvoiceState extends Equatable {
     this.isRecording = false,
     this.recorded,
     this.isSharing = false,
+    this.isAddingItem = false,
+    this.suggestions = const [],
     this.failure,
   });
 
@@ -43,6 +45,10 @@ final class InvoiceState extends Equatable {
   /// The payment recorded on this screen, if any.
   final RecordedPayment? recorded;
   final bool isSharing;
+  final bool isAddingItem;
+
+  /// Lines used before, offered when adding one.
+  final List<ItemSuggestion> suggestions;
 
   /// Why the last action failed.
   final Failure? failure;
@@ -53,6 +59,8 @@ final class InvoiceState extends Equatable {
     bool? isRecording,
     RecordedPayment? Function()? recorded,
     bool? isSharing,
+    bool? isAddingItem,
+    List<ItemSuggestion>? suggestions,
     Failure? Function()? failure,
   }) {
     return InvoiceState(
@@ -62,6 +70,8 @@ final class InvoiceState extends Equatable {
       isRecording: isRecording ?? this.isRecording,
       recorded: recorded != null ? recorded() : this.recorded,
       isSharing: isSharing ?? this.isSharing,
+      isAddingItem: isAddingItem ?? this.isAddingItem,
+      suggestions: suggestions ?? this.suggestions,
       failure: failure != null ? failure() : this.failure,
     );
   }
@@ -74,6 +84,8 @@ final class InvoiceState extends Equatable {
     isRecording,
     recorded,
     isSharing,
+    isAddingItem,
+    suggestions,
     failure,
   ];
 }

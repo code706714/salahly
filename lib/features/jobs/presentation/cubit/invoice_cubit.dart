@@ -9,6 +9,7 @@ import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/core/storage/shared_files.dart';
 import 'package:salahly/core/time/calendar_date.dart';
 import 'package:salahly/features/jobs/domain/entities/job_details.dart';
+import 'package:salahly/features/jobs/domain/entities/job_item.dart';
 import 'package:salahly/features/jobs/domain/entities/payment.dart';
 import 'package:salahly/features/jobs/domain/repositories/jobs_repository.dart';
 import 'package:salahly/features/jobs/presentation/cubit/job_details_status.dart';
@@ -40,10 +41,17 @@ class InvoiceCubit extends Cubit<InvoiceState> {
   StreamSubscription<JobDetails?>? _subscription;
   bool _numbering = false;
 
-  void start() {
+  Future<void> start() async {
     _subscription = _jobs
         .watchJob(_jobId)
         .listen(_onDetails, onError: addError);
+    try {
+      final suggestions = await _jobs.itemSuggestions();
+      if (!isClosed) emit(state.copyWith(suggestions: suggestions));
+    } on Object catch (error, stackTrace) {
+      // Lines are typed out without suggestions then.
+      addError(error, stackTrace);
+    }
   }
 
   void _onDetails(JobDetails? details) {
@@ -113,6 +121,50 @@ class InvoiceCubit extends Cubit<InvoiceState> {
         emit(state.copyWith(isRecording: false, failure: () => failure));
         return false;
     }
+  }
+
+  /// Adds a line (a part bought, an extra job) to the invoice before it is
+  /// sent, or one more of a line with the same title and price. Returns
+  /// whether it was saved.
+  Future<bool> addItem(JobItemDraft item) async {
+    final job = state.details?.job;
+    final items = state.details?.items;
+    if (job == null || items == null || state.isAddingItem) return false;
+    final drafts = [
+      for (final line in items)
+        JobItemDraft(
+          id: line.id,
+          title: line.title,
+          unitPricePiastres: line.unitPricePiastres,
+          quantity: line.quantity,
+        ),
+    ];
+    final index = drafts.indexWhere(
+      (line) =>
+          line.title == item.title &&
+          line.unitPricePiastres == item.unitPricePiastres,
+    );
+    if (index >= 0) {
+      if (drafts[index].quantity >= JobItem.maxQuantity) return false;
+      drafts[index] = drafts[index].withQuantity(drafts[index].quantity + 1);
+    } else {
+      drafts.add(item);
+    }
+    emit(state.copyWith(isAddingItem: true, failure: () => null));
+    final result = await _jobs.saveQuote(
+      _jobId,
+      items: drafts,
+      validDays: job.quoteValidDays,
+      status: job.quoteStatus,
+    );
+    if (isClosed) return false;
+    emit(
+      state.copyWith(
+        isAddingItem: false,
+        failure: result is Err<void> ? () => result.failure : null,
+      ),
+    );
+    return result is Ok<void>;
   }
 
   /// The day the customer promised to pay, or null to forget the promise.

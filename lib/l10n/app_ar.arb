@@ -1014,6 +1014,7 @@
   "jobPageMissing": "الشغلانة دي مش موجودة. ممكن تكون اتمسحت.",
   "quoteTitle": "عرض سعر",
   "quoteAddItem": "ضيف بند",
+  "invoiceAddItem": "ضيف حاجة للفاتورة (قطعة غيار أو شغل زيادة)",
   "quoteIncrease": "زوّد",
   "quoteDecrease": "قلّل",
   "quoteRemoveItem": "شيل البند",

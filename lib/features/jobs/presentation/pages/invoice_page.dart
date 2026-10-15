@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -29,6 +31,7 @@ import 'package:salahly/features/jobs/presentation/widgets/invoice_promise_card.
 import 'package:salahly/features/jobs/presentation/widgets/invoice_record_card.dart';
 import 'package:salahly/features/jobs/presentation/widgets/job_card_label.dart';
 import 'package:salahly/features/jobs/presentation/widgets/job_missing_view.dart';
+import 'package:salahly/features/jobs/presentation/widgets/quote_add_item_sheet.dart';
 import 'package:salahly/l10n/generated/app_localizations.dart';
 
 /// A job's invoice: what it comes to, the money received, recording more
@@ -41,12 +44,16 @@ class InvoicePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => InvoiceCubit(
-        jobs: context.read(),
-        apps: context.read(),
-        sharedFiles: context.read(),
-        jobId: jobId,
-      )..start(),
+      create: (context) {
+        final cubit = InvoiceCubit(
+          jobs: context.read(),
+          apps: context.read(),
+          sharedFiles: context.read(),
+          jobId: jobId,
+        );
+        unawaited(cubit.start());
+        return cubit;
+      },
       child: const InvoiceView(),
     );
   }
@@ -171,6 +178,15 @@ class _InvoiceScreenState extends State<_InvoiceScreen> {
   void _onAmountChanged(String text) =>
       setState(() => _isFullAmount = parsePounds(text) == _balance);
 
+  Future<void> _addItem() async {
+    final cubit = context.read<InvoiceCubit>();
+    final item = await showQuoteAddItemSheet(
+      context,
+      suggestions: widget.state.suggestions,
+    );
+    if (item != null) await cubit.addItem(item);
+  }
+
   Future<void> _record(int amount) async {
     _amountFocus.unfocus();
     await context.read<InvoiceCubit>().recordPayment(
@@ -246,6 +262,18 @@ class _InvoiceScreenState extends State<_InvoiceScreen> {
               technicianPhone: technicianPhone,
               issuedOn: job.finishedAt ?? state.today,
             ),
+          // A platform job's price is agreed with its consumer in the app.
+          if (!needsPrice && job.source == JobSource.manual) ...[
+            const SizedBox(height: 10),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: TextButton.icon(
+                onPressed: state.isAddingItem ? null : _addItem,
+                icon: const Icon(Icons.add),
+                label: Text(l10n.invoiceAddItem),
+              ),
+            ),
+          ],
           if (details.payments.isNotEmpty) ...[
             const SizedBox(height: 14),
             _PaymentsCard(payments: details.payments),
