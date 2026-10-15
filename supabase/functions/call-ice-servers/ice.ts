@@ -34,3 +34,20 @@ export function cleanServers(body: unknown): IceServer[] | null {
   }
   return servers.length > 0 ? servers : null;
 }
+
+/// Metered's relay servers for an app's fixed TURN username and password.
+export function meteredServers(
+  username: string,
+  credential: string,
+): IceServer[] {
+  const host = "global.relay.metered.ca";
+  return [
+    { urls: "stun:stun.relay.metered.ca:80" },
+    ...[
+      `turn:${host}:80`,
+      `turn:${host}:80?transport=tcp`,
+      `turn:${host}:443`,
+      `turns:${host}:443?transport=tcp`,
+    ].map((url): IceServer => ({ urls: url, username, credential })),
+  ];
+}

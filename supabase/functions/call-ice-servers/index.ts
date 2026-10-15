@@ -7,10 +7,25 @@
 // function. Without one, or if the relay fails, the answer is the public
 // STUN server: the call just may not connect on some networks.
 //
+// A Metered app can also use its fixed TURN login instead (secrets
+// METERED_TURN_USERNAME and METERED_TURN_CREDENTIAL), tried first.
+//
 // Signed-in callers only (the platform checks the JWT).
-import { cleanServers, fallbackServers, type IceServer } from "./ice.ts";
+import {
+  cleanServers,
+  fallbackServers,
+  type IceServer,
+  meteredServers,
+} from "./ice.ts";
 
 const ttlSeconds = 3600;
+
+/// Servers from Metered's fixed TURN login when it is set.
+function fromMeteredLogin(): IceServer[] | null {
+  const username = Deno.env.get("METERED_TURN_USERNAME");
+  const credential = Deno.env.get("METERED_TURN_CREDENTIAL");
+  return username && credential ? meteredServers(username, credential) : null;
+}
 
 /// Servers from Cloudflare when its TURN key is set.
 async function fromCloudflare(): Promise<IceServer[] | null> {
@@ -50,7 +65,7 @@ async function fromMetered(): Promise<IceServer[] | null> {
 
 Deno.serve(async () => {
   let servers = fallbackServers;
-  for (const provider of [fromCloudflare, fromMetered]) {
+  for (const provider of [fromMeteredLogin, fromCloudflare, fromMetered]) {
     try {
       const found = await provider();
       if (found !== null) {
