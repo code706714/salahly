@@ -41,6 +41,7 @@ void main() {
       );
 
       await tester.ensureVisible(find.text(l10n.roleUseAnotherNumber));
+      await tester.pumpAndSettle();
       await tester.tap(find.text(l10n.roleUseAnotherNumber));
 
       verify(session.signOut).called(1);
