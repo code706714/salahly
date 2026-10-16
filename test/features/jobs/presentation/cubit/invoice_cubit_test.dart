@@ -10,6 +10,7 @@ import 'package:salahly/core/phone/phone_number.dart';
 import 'package:salahly/core/storage/shared_files.dart';
 import 'package:salahly/features/jobs/domain/entities/job.dart';
 import 'package:salahly/features/jobs/domain/entities/job_details.dart';
+import 'package:salahly/features/jobs/domain/entities/job_item.dart';
 import 'package:salahly/features/jobs/domain/entities/payment.dart';
 import 'package:salahly/features/jobs/presentation/cubit/invoice_cubit.dart';
 import 'package:salahly/features/jobs/presentation/invoice/invoice_pdf.dart';
@@ -35,6 +36,8 @@ void main() {
     registerFallbackValue(l10n);
     registerFallbackValue(testDetails());
     registerFallbackValue(DateTime(2026));
+    registerFallbackValue(<JobItemDraft>[]);
+    registerFallbackValue(QuoteStatus.none);
   });
 
   setUp(() {
@@ -45,6 +48,7 @@ void main() {
     details = StreamController.broadcast();
     when(() => jobs.watchJob('job-1')).thenAnswer((_) => details.stream);
     when(() => jobs.issueInvoice('job-1')).thenAnswer((_) async => const Ok(7));
+    when(() => jobs.itemSuggestions()).thenAnswer((_) async => const []);
   });
 
   tearDown(() async {
@@ -60,7 +64,8 @@ void main() {
       pdf: pdf,
       sharedFiles: SharedFiles(temporary),
       clock: () => today,
-    )..start();
+    );
+    unawaited(cubit.start());
     details.add(first);
     await pumpEventQueue();
     return cubit;
@@ -217,6 +222,74 @@ void main() {
       expect(saved, isFalse);
       expect(cubit.state.failure, failure);
       expect(cubit.state.recorded, isNull);
+      await cubit.close();
+    });
+  });
+
+  group('addItem', () {
+    void saves(Result<void> result) => when(
+      () => jobs.saveQuote(
+        'job-1',
+        items: any(named: 'items'),
+        validDays: any(named: 'validDays'),
+        status: any(named: 'status'),
+      ),
+    ).thenAnswer((_) async => result);
+
+    List<JobItemDraft> saved() =>
+        verify(
+              () => jobs.saveQuote(
+                'job-1',
+                items: captureAny(named: 'items'),
+                validDays: any(named: 'validDays'),
+                status: any(named: 'status'),
+              ),
+            ).captured.single
+            as List<JobItemDraft>;
+
+    test('puts the new line after the saved ones', () async {
+      saves(const Ok(null));
+      final cubit = await started(finished());
+      const brazing = JobItemDraft(title: 'لحام', unitPricePiastres: 5000);
+
+      expect(await cubit.addItem(brazing), isTrue);
+
+      final lines = saved();
+      expect(lines, hasLength(sampleItems.length + 1));
+      expect(lines.last, brazing);
+      expect(lines.first.id, sampleItems.first.id);
+      await cubit.close();
+    });
+
+    test('adds one more of a line with the same title and price', () async {
+      saves(const Ok(null));
+      final cubit = await started(finished());
+      final first = sampleItems.first;
+
+      await cubit.addItem(
+        JobItemDraft(
+          title: first.title,
+          unitPricePiastres: first.unitPricePiastres,
+        ),
+      );
+
+      final lines = saved();
+      expect(lines, hasLength(sampleItems.length));
+      expect(lines.first.quantity, first.quantity + 1);
+      await cubit.close();
+    });
+
+    test('reports a failure', () async {
+      saves(const Err(failure));
+      final cubit = await started(finished());
+
+      final added = await cubit.addItem(
+        const JobItemDraft(title: 'لحام', unitPricePiastres: 5000),
+      );
+
+      expect(added, isFalse);
+      expect(cubit.state.failure, failure);
+      expect(cubit.state.isAddingItem, isFalse);
       await cubit.close();
     });
   });

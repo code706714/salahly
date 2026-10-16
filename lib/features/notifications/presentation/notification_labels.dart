@@ -181,6 +181,10 @@ NotificationText notificationText(
       title: l10n.notifEscrowReleaseScheduled,
       body: l10n.notifEscrowReleaseScheduledBody,
     ),
+    NotificationKind.complaintResolved => (
+      title: l10n.notifComplaintResolved,
+      body: notification.resolutionNote ?? l10n.notifComplaintResolvedBody,
+    ),
     NotificationKind.withdrawalPaid => (
       title: l10n.notifWithdrawalPaid,
       body: l10n.notifWithdrawalPaidBody,

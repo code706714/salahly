@@ -19,6 +19,7 @@ enum NotificationKind {
   counterAccepted,
   loyaltyReward,
   maintenanceReminder,
+  complaintResolved,
 
   // The technician's.
   newRequest,
@@ -86,6 +87,7 @@ final class AppNotification extends Equatable {
     this.consumerHonorific,
     this.distanceKm,
     this.topupUses,
+    this.resolutionNote,
   });
 
   final String id;
@@ -121,6 +123,9 @@ final class AppNotification extends Equatable {
   /// The uses a transfer bought.
   final int? topupUses;
 
+  /// What the team wrote back to a complaint.
+  final String? resolutionNote;
+
   bool get isRead => readAt != null;
 
   AppNotification markedRead(DateTime at) => isRead
@@ -144,6 +149,7 @@ final class AppNotification extends Equatable {
           consumerHonorific: consumerHonorific,
           distanceKm: distanceKm,
           topupUses: topupUses,
+          resolutionNote: resolutionNote,
         );
 
   @override
@@ -166,5 +172,6 @@ final class AppNotification extends Equatable {
     consumerHonorific,
     distanceKm,
     topupUses,
+    resolutionNote,
   ];
 }

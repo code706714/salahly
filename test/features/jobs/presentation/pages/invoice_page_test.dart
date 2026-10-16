@@ -13,10 +13,12 @@ import 'package:salahly/features/account/presentation/cubit/session_cubit.dart';
 import 'package:salahly/features/catalog/presentation/cubit/areas_cubit.dart';
 import 'package:salahly/features/jobs/domain/entities/job.dart';
 import 'package:salahly/features/jobs/domain/entities/job_details.dart';
+import 'package:salahly/features/jobs/domain/entities/job_item.dart';
 import 'package:salahly/features/jobs/domain/entities/payment.dart';
 import 'package:salahly/features/jobs/presentation/cubit/invoice_cubit.dart';
 import 'package:salahly/features/jobs/presentation/invoice/invoice_message.dart';
 import 'package:salahly/features/jobs/presentation/pages/invoice_page.dart';
+import 'package:salahly/features/jobs/presentation/widgets/quote_add_item_sheet.dart';
 
 import '../../../../helpers/fixtures.dart';
 import '../../../../helpers/job_details_fixtures.dart';
@@ -42,6 +44,7 @@ void main() {
     registerFallbackValue(phone);
     registerFallbackValue(l10n);
     registerFallbackValue(PaymentMethod.cash);
+    registerFallbackValue(const JobItemDraft(title: '', unitPricePiastres: 0));
   });
 
   setUp(() {
@@ -152,6 +155,52 @@ void main() {
         find.text('م. شريف عادل · ${l10n.platformJobQuoteDeclined}'),
         findsOneWidget,
       );
+    });
+
+    testWidgets('lets the technician add a line before sending', (
+      tester,
+    ) async {
+      when(() => cubit.addItem(any())).thenAnswer((_) async => true);
+      show(ready(finished()));
+      await pumpPage(tester);
+
+      await tester.tap(find.text(l10n.invoiceAddItem));
+      await tester.pumpAndSettle();
+      final fields = find.descendant(
+        of: find.byType(QuoteAddItemSheet),
+        matching: find.byType(TextField),
+      );
+      await tester.enterText(fields.at(0), 'لحام');
+      await tester.enterText(fields.at(1), '50');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.quoteItemAdd));
+      await tester.pumpAndSettle();
+
+      verify(
+        () => cubit.addItem(
+          const JobItemDraft(title: 'لحام', unitPricePiastres: 5000),
+        ),
+      ).called(1);
+    });
+
+    testWidgets('leaves a platform job priced by its consumer', (
+      tester,
+    ) async {
+      show(
+        ready(
+          testDetails(
+            job: testJob(
+              status: JobStatus.finished,
+              invoiceNumber: 127,
+              source: JobSource.platform,
+            ),
+            items: sampleItems,
+          ),
+        ),
+      );
+      await pumpPage(tester);
+
+      expect(find.text(l10n.invoiceAddItem), findsNothing);
     });
 
     testWidgets('says when the job is not on this phone', (tester) async {

@@ -334,6 +334,17 @@ void main() {
 
       verify(home.refresh).called(1);
       verify(blocs.myRequests.load).called(1);
+      verify(blocs.categories.load).called(1);
+    });
+
+    testWidgets('offers a retry when the services could not be fetched', (
+      tester,
+    ) async {
+      final blocs = await pumpView(tester, state: const ConsumerHomeState());
+
+      await tester.tap(find.text(l10n.retry));
+
+      verify(blocs.categories.load).called(1);
     });
 
     testWidgets('takes the catalog when it arrives', (tester) async {

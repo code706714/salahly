@@ -41,10 +41,32 @@ class ConsumerHomePage extends StatelessWidget {
   }
 }
 
+/// Shown when the service list could not be fetched (first launch with a bad
+/// network): without it the home has no way to start a request.
+class _CategoriesRetry extends StatelessWidget {
+  const _CategoriesRetry();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Column(
+      children: [
+        Text(l10n.errorNetwork, textAlign: TextAlign.center),
+        const SizedBox(height: 8),
+        OutlinedButton(
+          onPressed: () => context.read<CategoriesCubit>().load(),
+          child: Text(l10n.retry),
+        ),
+      ],
+    );
+  }
+}
+
 class ConsumerHomeView extends StatelessWidget {
   const ConsumerHomeView({super.key});
 
   Future<void> _refresh(BuildContext context) => Future.wait([
+    context.read<CategoriesCubit>().load(),
     context.read<ConsumerHomeCubit>().refresh(),
     context.read<MyRequestsCubit>().load(),
   ]);
@@ -99,6 +121,10 @@ class ConsumerHomeView extends StatelessWidget {
                     if (latest != null) ...[
                       const SizedBox(height: 18),
                       _LatestRequest(request: latest),
+                    ],
+                    if (state.categories.isEmpty) ...[
+                      const SizedBox(height: 18),
+                      const _CategoriesRetry(),
                     ],
                     if (state.categories.isNotEmpty) ...[
                       const SizedBox(height: 18),

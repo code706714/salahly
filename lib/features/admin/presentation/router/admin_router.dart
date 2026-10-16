@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:salahly/features/admin/presentation/cubit/admin_session_cubit.dart';
 import 'package:salahly/features/admin/presentation/cubit/overview_cubit.dart';
+import 'package:salahly/features/admin/presentation/pages/activity_page.dart';
 import 'package:salahly/features/admin/presentation/pages/admin_checking_page.dart';
 import 'package:salahly/features/admin/presentation/pages/admin_login_page.dart';
 import 'package:salahly/features/admin/presentation/pages/admin_unavailable_page.dart';
@@ -87,6 +88,10 @@ GoRouter createAdminRouter(
           GoRoute(
             path: AdminRoutes.overview,
             pageBuilder: (context, state) => page(const OverviewPage()),
+          ),
+          GoRoute(
+            path: AdminRoutes.activity,
+            pageBuilder: (context, state) => page(const ActivityPage()),
           ),
           GoRoute(
             path: AdminRoutes.verification,

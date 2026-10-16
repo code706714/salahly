@@ -162,7 +162,9 @@ declare
     $q$select public.admin_list_payments(null, 10, 0)$q$,
     $q$select public.admin_list_withdrawals('requested', 10, 0)$q$,
     $q$select public.admin_mark_withdrawal_paid(gen_random_uuid(), 'VC-123')$q$,
-    $q$select public.admin_reject_withdrawal(gen_random_uuid(), 'الرقم غلط')$q$
+    $q$select public.admin_reject_withdrawal(gen_random_uuid(), 'الرقم غلط')$q$,
+    $q$select public.admin_money_summary('week')$q$,
+    $q$select public.admin_technician_activity('week', 10)$q$
   ];
 begin
   if p_hostile then
@@ -199,8 +201,8 @@ select is_empty(
 );
 select is(
   (select count(*)::int from pg_proc where pronamespace = 'public'::regnamespace and proname like 'admin\_%'),
-  32,
-  'there are 32 admin functions (update the lists in this file when adding one)'
+  34,
+  'there are 34 admin functions (update the lists in this file when adding one)'
 );
 select ok(
   not has_table_privilege('authenticated', 'private.admins', 'select')

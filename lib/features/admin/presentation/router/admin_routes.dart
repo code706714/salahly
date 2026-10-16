@@ -5,6 +5,7 @@ abstract final class AdminRoutes {
   static const noAccess = '/no-access';
   static const unavailable = '/unavailable';
   static const overview = '/overview';
+  static const activity = '/activity';
   static const verification = '/verification';
   static const transfers = '/transfers';
   static const escrow = '/escrow';
@@ -17,6 +18,7 @@ abstract final class AdminRoutes {
   /// The screens only a signed-in admin can open.
   static const List<String> console = [
     overview,
+    activity,
     verification,
     transfers,
     escrow,
